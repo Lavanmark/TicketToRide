@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride;
 
+import com.google.gson.Gson;
+
 /**
  * Created by mgard on 2/1/2017.
  */
@@ -26,11 +28,11 @@ public class Serializer {
     /**
      * This method converts a String into a corresponding Results object.
      *
-     * @param results The String representing the results
+     * @param resultsJson The String representing the results
      * @return      a Results object representing the input String
      */
-    public Results deserializeResults(String results){
-        Results resultsDeserialized = gson.fromJson(json, Results.class);
+    public Results deserializeResults(String resultsJson){
+        Results resultsDeserialized = gson.fromJson(resultsJson, Results.class);
         return resultsDeserialized;
     }
 
