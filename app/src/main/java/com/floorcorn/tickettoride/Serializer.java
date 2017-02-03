@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride;
 
+import com.floorcorn.tickettoride.communication.Results;
 import com.google.gson.Gson;
 
 /**

@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride;
 
+import com.floorcorn.tickettoride.communication.Results;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -57,16 +59,10 @@ public class ClientCommunicator {
                 Results results = serializer.deserializeResults(respData);
                 return results;
 
+            } else {
+                return new Results(false, http.getResponseMessage());
             }
-            else {
-                ArrayList<Object> errorList = new ArrayList<Object>();
-                errorList.add("Unable to reach server");
-                Results results = new Results(false, errorList);
-                return results;
-            }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             ArrayList<Object> errorList = new ArrayList<Object>();
             errorList.add(e);

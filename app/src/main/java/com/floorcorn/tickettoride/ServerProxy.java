@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride;
 
+import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.interfaces.IServer;
 import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.model.Player;
@@ -13,8 +14,16 @@ import java.util.Set;
 
 public class ServerProxy implements IServer {
 
+	private ClientCommunicator clientComm = new ClientCommunicator();
+
 	@Override
 	public User login(User user) {
+		Results res = clientComm.send("/login", user);
+		if(res.isSuccess()) {
+			Object obj = res.getResults().get(0);
+			if(obj instanceof User)
+				return (User)obj;
+		}
 		return null;
 	}
 
@@ -41,5 +50,13 @@ public class ServerProxy implements IServer {
 	@Override
 	public boolean leaveGame(User user, int gameID) {
 		return false;
+	}
+
+	public void setHost(String host) {
+		clientComm.setHost(host);
+	}
+
+	public void setPort(String port) {
+		clientComm.setPort(port);
 	}
 }
