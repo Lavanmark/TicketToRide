@@ -22,22 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".GameListActivity"
-            android:label="@string/title_game_list"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".GameDetailActivity"
-            android:label="@string/title_game_detail"
-            android:parentActivityName=".GameListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.floorcorn.tickettoride.GameListActivity" />
-        </activity>
-        <activity android:name=".CreateGameActivity"
-            android:theme="@android:style/Theme.Holo.Dialog" >
-        </activity>
     </application>
 
 </manifest>
