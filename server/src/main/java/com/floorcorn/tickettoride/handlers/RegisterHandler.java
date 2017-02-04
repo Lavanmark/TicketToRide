@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 
 /**
- * Created by Tyler on 1/31/2017.
+ * Created by Tyler on 2/2/2017.
  */
 
-public class LoginHandler extends HandlerBase {
+public class RegisterHandler extends HandlerBase {
 
 	@Override
 	public void handle(HttpExchange httpExchange) throws IOException {
@@ -25,12 +25,12 @@ public class LoginHandler extends HandlerBase {
 			}
 			User userInfo = Serializer.getInstance().deserializeUser(reqBody);
 
-			userInfo = ServerFacade.getInstance().login(userInfo);
+			userInfo = ServerFacade.getInstance().register(userInfo);
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			sendResponseBody(httpExchange, new Results(true, userInfo));
 
-		} catch(IOException e){
+		} catch(IOException e) {
 			e.printStackTrace();
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
 		}

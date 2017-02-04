@@ -33,6 +33,10 @@ public class ServerCommunicator {
 
 	private void createContexts() {
 		server.createContext("/login", new LoginHandler());
+		server.createContext("/register", new LoginHandler());
+		server.createContext("/getGames", new LoginHandler());
+		server.createContext("/leaveGame", new LoginHandler());
+		server.createContext("/joinGame", new LoginHandler());
 	}
 
 	public static void main(String[] args) {
