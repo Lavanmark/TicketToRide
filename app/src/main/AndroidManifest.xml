@@ -35,8 +35,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.floorcorn.tickettoride.GameListActivity" />
         </activity>
-        <activity android:name=".CreateGameActivity"
-            android:theme="@android:style/Theme.Holo.Dialog" >
+        <activity android:name=".CreateGameActivity" android:theme="@android:style/Theme.Holo.Dialog" >
         </activity>
     </application>
 

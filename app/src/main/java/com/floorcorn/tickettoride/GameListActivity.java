@@ -45,9 +45,12 @@ public class GameListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //startActivity(new Intent(view.getContext(), CreateGameActivity.class));
                 Snackbar.make(view, "Create New Game Action not yet implemented", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                    .setAction("Action", null).show();
             }
+
+
         });
 
         FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
