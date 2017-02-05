@@ -16,16 +16,18 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name">
+
+        </activity>
+        <activity
+            android:name=".GameListActivity"
+            android:label="@string/title_game_list"
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".GameListActivity"
-            android:label="@string/title_game_list"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".GameDetailActivity"
             android:label="@string/title_game_detail"
@@ -35,7 +37,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.floorcorn.tickettoride.GameListActivity" />
         </activity>
-        <activity android:name=".CreateGameActivity" android:theme="@android:style/Theme.Holo.Dialog" >
+        <activity
+            android:name=".CreateGameActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" >
         </activity>
     </application>
 

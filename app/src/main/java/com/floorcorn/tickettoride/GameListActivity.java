@@ -46,8 +46,9 @@ public class GameListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //startActivity(new Intent(view.getContext(), CreateGameActivity.class));
-                Snackbar.make(view, "Create New Game Action not yet implemented", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+                startActivity(new Intent(view.getContext(),CreateGameActivity.class));
+                //Snackbar.make(view, "Create New Game Action not yet implemented", Snackbar.LENGTH_LONG)
+                //    .setAction("Action", null).show();
             }
 
 
