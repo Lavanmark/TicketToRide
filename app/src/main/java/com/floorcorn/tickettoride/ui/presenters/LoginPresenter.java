@@ -26,4 +26,12 @@ public class LoginPresenter implements IPresenter {
             throw new IllegalArgumentException();
         }
     }
+
+    public void loginClicked() {
+
+    }
+
+    public void registerClicked(){
+
+    }
 }
