@@ -2,6 +2,7 @@ package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.model.Player;
@@ -42,7 +43,13 @@ public class ServerProxyUnitTest {
 			assertTrue(false);
 		}
 		goodUser = new User("tyler", "dragonman");
-		IUser res = sp.login(goodUser);
+		IUser res = null;
+		try {
+			res = sp.login(goodUser);
+		} catch(BadUserException e) {
+			e.printStackTrace();
+			assertFalse(true);
+		}
 		assertNotEquals(res, null);
 		assertEquals(res.getUsername(), "tyler");
 		assertEquals(res.getPassword(), "dragonman");
@@ -53,9 +60,21 @@ public class ServerProxyUnitTest {
 
 	@Test
 	public void testGameOperations() {
-		IUser login = sp.login(new User("tyler","dragonman"));
+		IUser login = null;
+		try {
+			login = sp.login(new User("tyler","dragonman"));
+		} catch(BadUserException e) {
+			e.printStackTrace();
+			assertFalse(true);
+		}
 		//TODO bad params gives end of file from server.
-		IGame game = sp.createGame(login, "Test", 3);
+		IGame game = null;
+		try {
+			game = sp.createGame(login, "Test", 3);
+		} catch(BadUserException e) {
+			e.printStackTrace();
+			assertFalse(true);
+		}
 		assertNotEquals(game, null);
 		assertNotEquals(game.getGameID(), -1);
 		assertEquals(game.getName(), "Test");
@@ -64,7 +83,13 @@ public class ServerProxyUnitTest {
 		//
 		//CHECK GAME LIST
 		//
-		Set<IGame> games = sp.getGames(login);
+		Set<IGame> games = null;
+		try {
+			games = sp.getGames(login);
+		} catch(BadUserException e) {
+			e.printStackTrace();
+			assertFalse(true);
+		}
 		assertNotEquals(games, null);
 		assertEquals(games.size(), 1);
 		int gameID = -1;
@@ -78,7 +103,12 @@ public class ServerProxyUnitTest {
 		//
 		//JOIN GAME
 		//
-		game = sp.joinGame(login, gameID, Player.PlayerColor.BLACK);
+		try {
+			game = sp.joinGame(login, gameID, Player.PlayerColor.BLACK);
+		} catch(BadUserException | GameActionException e) {
+			e.printStackTrace();
+			assertFalse(true);
+		}
 		assertNotEquals(game, null);
 		assertEquals(game.getGameID(), gameID);
 		assertFalse(game.hasStarted());
@@ -93,7 +123,12 @@ public class ServerProxyUnitTest {
 		}
 
 		assertTrue(game.isPlayer(login.getUserID()));
-		assertFalse(game.userCanJoin(login));
+		try {
+			assertFalse(game.userCanJoin(login));
+		} catch(BadUserException | GameActionException e) {
+			e.printStackTrace();
+			assertFalse(true);
+		}
 		assertEquals(game.getPlayer(login).getUserID(), login.getUserID());
 		assertEquals(game.getPlayer(login).getColor(), Player.PlayerColor.BLACK);
 
@@ -103,14 +138,19 @@ public class ServerProxyUnitTest {
 		boolean left = false;
 		try {
 			left = sp.leaveGame(login, gameID);
-		} catch(BadUserException e) {
+		} catch(BadUserException | GameActionException e) {
 			e.printStackTrace();
 			assertFalse(true);
 		}
 		assertTrue(left);
 
 		games = null;
-		games = sp.getGames(login);
+		try {
+			games = sp.getGames(login);
+		} catch(BadUserException e) {
+			e.printStackTrace();
+			assertFalse(true);
+		}
 		assertNotEquals(games, null);
 		assertEquals(games.size(), 1);
 		for(IGame g : games) {
