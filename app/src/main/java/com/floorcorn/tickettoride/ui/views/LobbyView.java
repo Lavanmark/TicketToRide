@@ -13,7 +13,7 @@ import java.util.Set;
  * Created by Kaylee on 2/4/2017.
  */
 
-public class LobbyView {
+public class LobbyView implements IView{
 
     private IPresenter presenter;
     private Button createGameButton;
@@ -49,4 +49,8 @@ public class LobbyView {
 
     }
 
+    @Override
+    public void setPresenter(IPresenter presenter) {
+        
+    }
 }
