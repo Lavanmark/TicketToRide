@@ -26,6 +26,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
@@ -155,13 +156,20 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, IVie
 
 	@Override
 	public void displayMessage(String message) {
-        //TODO: display a toast with the message
+        Toast.makeText(this, message,
+                Toast.LENGTH_LONG).show();
 
 	}
 
 	@Override
 	public void clearView() {
-        //TODO: clear text from views.
+		this.mUserView.setText(null);
+		this.mPasswordView.setText(null);
+		this.mFirstNameView.setText(null);
+		this.mLastNameView.setText(null);
+		this.mNewUsernameView.setText(null);
+		this.mNewPasswordView.setText(null);
+		this.mConfirmPasswordView.setText(null);
 
 	}
 
@@ -173,16 +181,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, IVie
             throw new IllegalArgumentException();
     }
 
-
-    private interface ProfileQuery {
-		String[] PROJECTION = {
-				ContactsContract.CommonDataKinds.Email.ADDRESS,
-				ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-		};
-
-		int ADDRESS = 0;
-		int IS_PRIMARY = 1;
-	}
 
 }
 

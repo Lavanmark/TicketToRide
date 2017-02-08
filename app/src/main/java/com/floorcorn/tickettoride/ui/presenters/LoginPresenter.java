@@ -29,7 +29,6 @@ public class LoginPresenter implements IPresenter {
     }
 
     public void loginClicked() {
-
         String userName = this.loginView.getUsername();
         String password = this.loginView.getPassword();
 
@@ -38,16 +37,13 @@ public class LoginPresenter implements IPresenter {
     }
 
     public void registerClicked(){
-
         String firstName = this.loginView.getFirstName();
         String lastName = this.loginView.getLastName();
         String username = this.loginView.getNewUsername();
         String password;
         if(passwordsMatch()) {
             password = this.loginView.getNewPassword();
-        }
-        else
-        {
+        } else {
             this.loginView.displayMessage("Passwords do not match");
             return;
         }
@@ -66,8 +62,7 @@ public class LoginPresenter implements IPresenter {
      *
      * @post the passwords do match, or false was returned.
      */
-    private boolean passwordsMatch()
-    {
+    private boolean passwordsMatch() {
         if(this.loginView.getNewPassword().equals(this.loginView.getConfirmPassword()))
             return true;
         return false;
