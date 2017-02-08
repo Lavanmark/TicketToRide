@@ -1,4 +1,4 @@
-package com.floorcorn.tickettoride;
+package com.floorcorn.tickettoride.ui.views;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.floorcorn.tickettoride;
+package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.floorcorn.tickettoride.ui.views.fragments.GameDetailFragment;
+import com.floorcorn.tickettoride.ui.views.GameListContent;
+import com.floorcorn.tickettoride.R;
 
 import java.util.List;
 

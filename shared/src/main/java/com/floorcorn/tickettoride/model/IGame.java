@@ -13,9 +13,9 @@ public abstract class IGame {
 	protected int gameSize = -1;
 	protected String name = null;
 
-	protected boolean finsihed = false;
+	protected boolean finished = false;
 
-	public Player addPlayer(User user, Player.PlayerColor color) {
+	public Player addPlayer(IUser user, Player.PlayerColor color) {
 		if(user == null) return null;
 		Player np = getPlayer(user);
 		if(np == null && !hasStarted()) {
@@ -26,13 +26,13 @@ public abstract class IGame {
 		return np;
 	}
 
-	public boolean removePlayer(User user) {
+	public boolean removePlayer(IUser user) {
 		Player player = getPlayer(user);
 		if(player != null) {
 			if(!hasStarted()) {
 				if(player.isConductor()) {
 					playerList.clear();
-					this.finsihed = true;
+					this.finished = true;
 					return true;
 				}
 				ArrayList<Player> newlist = new ArrayList<Player>();
@@ -49,7 +49,7 @@ public abstract class IGame {
 		return false;
 	}
 
-	public boolean userCanJoin(User user) {
+	public boolean userCanJoin(IUser user) {
 		if(user == null) return false;
 		if(hasStarted()) return false;
 		for(Player p : playerList) {
@@ -67,7 +67,7 @@ public abstract class IGame {
 		return false;
 	}
 
-	public Player getPlayer(User user) {
+	public Player getPlayer(IUser user) {
 		if(user == null) return null;
 		for(Player p : playerList) {
 			if(p.getUserID() == user.getUserID())
@@ -97,7 +97,7 @@ public abstract class IGame {
 	}
 
 	public boolean isFinsihed() {
-		return finsihed;
+		return finished;
 	}
 
 	@Override

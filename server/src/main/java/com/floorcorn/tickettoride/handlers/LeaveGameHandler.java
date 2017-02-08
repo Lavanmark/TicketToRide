@@ -4,7 +4,7 @@ import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.model.User;
+import com.floorcorn.tickettoride.serverModel.User;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
@@ -41,7 +41,7 @@ public class LeaveGameHandler extends HandlerBase {
 			boolean left = ServerFacade.getInstance().leaveGame(new User(token), iGame.getGameID());
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			sendResponseBody(httpExchange, new Results(true, left));
+			sendResponseBody(httpExchange, new Results(left, null));
 		} catch(IOException e) {
 			e.printStackTrace();
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
