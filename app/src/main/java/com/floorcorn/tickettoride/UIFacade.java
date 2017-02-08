@@ -1,8 +1,9 @@
 package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.clientModel.ClientModel;
+import com.floorcorn.tickettoride.clientModel.User;
+import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.model.Player;
-import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.IGame;
 
 import java.util.List;
@@ -85,8 +86,9 @@ public class UIFacade {
      * @param user User object
      * @return Set of IGame objects from the ClientModel
      */
-    public Set<IGame> getGames(User user) {
-        return clientModelRoot.getGames(user);
+    public Set<IGame> getGames(IUser user) {
+        User user2 = new User(user);
+        return clientModelRoot.getGames(user2);
     }
 
     /**
@@ -117,8 +119,9 @@ public class UIFacade {
      * @param sortStyle GameSortStyle enum designates what order of sort to do
      * @return List of IGame objects from the ClientModel, sorted
      */
-    public List<IGame> getGames(User user, GameSortStyle sortStyle) {
-        Set<IGame> gamesSet = getGames(user);
+    public List<IGame> getGames(IUser user, GameSortStyle sortStyle) {
+        User user2 = new User(user);
+        Set<IGame> gamesSet = getGames(user2);
         return sortGames(gamesSet, sortStyle);
     }
 

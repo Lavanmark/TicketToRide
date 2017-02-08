@@ -1,11 +1,9 @@
 package com.floorcorn.tickettoride.clientModel;
 
-<<<<<<< HEAD
 import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.model.User;
+import com.floorcorn.tickettoride.model.IUser;
+import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.clientModel.Game;
-=======
->>>>>>> master
 import java.util.Set;
 
 /**
