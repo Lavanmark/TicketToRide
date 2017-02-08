@@ -165,9 +165,11 @@ public class UIFacade {
         clientModelRoot.setCurrentGame(game);
     }
 
+    /**
+     * Gets games from the ServerProxy and updates the games in the ClientModel.
+     */
     public void requestGames() {
-        // Not implemented yet.
-        throw new UnsupportedOperationException();
+        clientModelRoot.setGames(serverProxy.getGames(getUser()));
     }
 
     /**
@@ -194,9 +196,13 @@ public class UIFacade {
         return serverProxy.createGame(getUser(), gameName, playerCount);
     }
 
-    public void joinGame(int userID, int gameID, Player.PlayerColor color) {
-        // Not implemented yet.
-        throw new UnsupportedOperationException();
+    /**
+     * Joins the game that matches the gameID and selects the specified color for the user.
+     * @param gameID int game ID
+     * @param color PlayerColor color
+     */
+    public void joinGame(int gameID, Player.PlayerColor color) {
+        serverProxy.joinGame(getUser(), gameID, color);
     }
 
     // Observer things.
