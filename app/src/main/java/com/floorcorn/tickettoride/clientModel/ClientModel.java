@@ -1,5 +1,9 @@
 package com.floorcorn.tickettoride.clientModel;
 
+import com.floorcorn.tickettoride.model.IGame;
+import com.floorcorn.tickettoride.model.IUser;
+import com.floorcorn.tickettoride.clientModel.User;
+import com.floorcorn.tickettoride.clientModel.Game;
 import java.util.Set;
 
 /**
@@ -9,21 +13,21 @@ import java.util.Set;
 public class ClientModel {
 
     private User currentUser;
-    private Set<Game> gameList;
-    private Game currentGame;
+    private Set<IGame> gameList;
+    private IGame currentGame;
 
     public User getCurrentUser(){
         return currentUser;
     }
 
-    public Set<Game> getGames(){
+    public Set<IGame> getGames(){
         return gameList;
     }
 
-    public Set<Game> getGames(User user){
+    public Set<IGame> getGames(User user){
         if(user==null) return null;
-        Set<Game> gameSet = null;
-        for(Game g: gameList){
+        Set<IGame> gameSet = null;
+        for(IGame g: gameList){
             if(g.getPlayer(user)!=null){ // found the player inside of the list
                 gameSet.add(g);
             }
@@ -31,17 +35,17 @@ public class ClientModel {
         return gameSet;
     }
 
-    public Set<Game> getGames(Set<Game> gList){
+    public Set<IGame> getGames(Set<IGame> gList){
         //not entirely sure what this one does...
 
         return null;
     }
 
-    public Game getCurrentGame(){
+    public IGame getCurrentGame(){
         return currentGame;
     }
 
-    public void setGames(Set<Game> gList){
+    public void setGames(Set<IGame> gList){
         gameList = gList;
     }
 
@@ -49,7 +53,7 @@ public class ClientModel {
         currentUser = user;
     }
 
-    public void setCurrentGame(Game game){
+    public void setCurrentGame(IGame game){
         currentGame = game;
     }
 }
