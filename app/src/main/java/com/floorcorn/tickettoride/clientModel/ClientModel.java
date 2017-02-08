@@ -1,9 +1,6 @@
 package com.floorcorn.tickettoride.clientModel;
 
-import com.floorcorn.tickettoride.model.User;
-import com.floorcorn.tickettoride.clientModel.Game;
 import java.util.Set;
-import java.util.SortedSet;
 
 /**
  * Created by Kaylee on 2/4/2017.
