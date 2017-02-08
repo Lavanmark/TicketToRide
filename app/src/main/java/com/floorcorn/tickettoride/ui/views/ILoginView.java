@@ -1,4 +1,4 @@
-package com.floorcorn.tickettoride;
+package com.floorcorn.tickettoride.ui.views;
 
 /**
  * Created by mgard on 2/4/2017.
