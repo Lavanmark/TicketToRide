@@ -17,7 +17,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -77,12 +79,15 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, IVie
 	private View mProgressView;
 	private View mLoginFormView;
 
+    private boolean passwordEntered;
+    private boolean usernameEntered;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		// Set up the login form.
-//		mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+
         mUserView = (EditText) findViewById(R.id.username);
         mPasswordView = (EditText) findViewById(R.id.password);
         mFirstNameView = (EditText) findViewById(R.id.register_name_first);
@@ -91,13 +96,10 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, IVie
         mNewPasswordView = (EditText) findViewById(R.id.register_password);
         mConfirmPasswordView = (EditText) findViewById(R.id.register_password_confirm);
 
+        passwordEntered = false;
+        usernameEntered = false;
 
-        LoginPresenter mPresenter = new LoginPresenter();
-        setPresenter(mPresenter);
-
-        presenter.setView(this);
-
-
+        //Set listeners for buttons and form fields
         mSignInButton = (Button) findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,9 +116,158 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, IVie
             }
         });
 
-		mLoginFormView = findViewById(R.id.login_form);
-		mProgressView = findViewById(R.id.login_progress);
+        mUserView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                usernameEntered = true;
+                if(mUserView.getText().toString().length() < 1){
+                    usernameEntered = false;
+                }
+                mSignInButton.setEnabled(usernameEntered && passwordEntered);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mPasswordView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                passwordEntered = true;
+                if(mPasswordView.getText().toString().length() < 1){
+                    passwordEntered = false;
+                }
+                mSignInButton.setEnabled(usernameEntered && passwordEntered);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mFirstNameView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mRegisterButton.setEnabled(registerFormComplete());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mLastNameView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mRegisterButton.setEnabled(registerFormComplete());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mNewUsernameView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mRegisterButton.setEnabled(registerFormComplete());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mNewPasswordView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mRegisterButton.setEnabled(registerFormComplete());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mConfirmPasswordView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mRegisterButton.setEnabled(registerFormComplete());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        //Disable buttons at first
+        mSignInButton.setEnabled(false);
+        mRegisterButton.setEnabled(false);
+
+        LoginPresenter mPresenter = new LoginPresenter();
+        setPresenter(mPresenter);
+
+        presenter.setView(this);
+
 	}
+
+    private boolean registerFormComplete()
+    {
+        if(mFirstNameView.getText().toString().length() < 1)
+            return false;
+        if(mLastNameView.getText().toString().length()< 1)
+            return false;
+        if(mNewUsernameView.getText().toString().length() < 1)
+            return false;
+        if(mNewPasswordView.getText().toString().length() < 1)
+            return false;
+        if(mConfirmPasswordView.getText().toString().length() < 1)
+            return false;
+        return true;
+    }
 
 	@Override
 	public String getUsername() {
