@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.clientModel.Game;
+import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
@@ -21,72 +22,71 @@ public class ServerProxy implements IServer {
 	private ClientCommunicator clientComm = new ClientCommunicator();
 
 	@Override
-	public IUser login(IUser user) {
+	public IUser login(IUser user) throws BadUserException {
 		Results res = clientComm.send(LOGIN, user, null);
 		String reser = Serializer.getInstance().serialize(res.getResult());
 		if(res.isSuccess()) {
 			return Serializer.getInstance().deserializeUser(reser);
-		} else {
-			System.err.println(((BadUserException)Serializer.getInstance().deserialze(reser, BadUserException.class)).getMessage());
-		}
+		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
+			throw (BadUserException)res.getException(BadUserException.class.getSimpleName());
 		return null;
 	}
 
 	@Override
-	public IUser register(IUser user) {
+	public IUser register(IUser user) throws UserCreationException {
 		Results res = clientComm.send(REGISTER, user, null);
 		String reser = Serializer.getInstance().serialize(res.getResult());
 		if(res.isSuccess()) {
 			return Serializer.getInstance().deserializeUser(reser);
-		} else {
-			System.err.println(((UserCreationException)Serializer.getInstance().deserialze(reser, UserCreationException.class)).getMessage());
-		}
+		} else if(res.getException(UserCreationException.class.getSimpleName()) != null)
+			throw (UserCreationException)res.getException(UserCreationException.class.getSimpleName());
 		return null;
 	}
 
 	@Override
-	public Set<IGame> getGames(IUser user) {
+	public Set<IGame> getGames(IUser user) throws BadUserException {
 		Results res = clientComm.send(GET_GAMES, null, user);
 		String reser = Serializer.getInstance().serialize(res.getResult());
 		if(res.isSuccess()) {
 			return Serializer.getInstance().deserializeGameList(reser);
-		} else {
-			System.err.println(((BadUserException)Serializer.getInstance().deserialze(reser, BadUserException.class)).getMessage());
-		}
+		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
+			throw (BadUserException)res.getException(BadUserException.class.getSimpleName());
 		return null;
 	}
 
 	@Override
-	public IGame createGame(IUser user, String name, int gameSize) {
+	public IGame createGame(IUser user, String name, int gameSize) throws BadUserException {
 		Results res = clientComm.send(CREATE_GAME, new Game(name, gameSize), user);
 		String reser = Serializer.getInstance().serialize(res.getResult());
 		if(res.isSuccess()) {
 			return Serializer.getInstance().deserializeIGame(reser);
-		} else {
-			System.err.println(((BadUserException)Serializer.getInstance().deserialze(reser, BadUserException.class)).getMessage());
-		}
+		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
+			throw (BadUserException)res.getException(BadUserException.class.getSimpleName());
 		return null;
 	}
 
 	@Override
-	public IGame joinGame(IUser user, int gameID, Player.PlayerColor color) {
+	public IGame joinGame(IUser user, int gameID, Player.PlayerColor color) throws BadUserException, GameActionException {
 		Results res = clientComm.send(JOIN_GAME, new Player(user.getUserID(), gameID, color), user);
 		String reser = Serializer.getInstance().serialize(res.getResult());
 		if(res.isSuccess()) {
 			return Serializer.getInstance().deserializeIGame(reser);
-		} else {
-			System.err.println(((BadUserException)Serializer.getInstance().deserialze(reser, BadUserException.class)).getMessage());
-		}
+		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
+			throw (BadUserException)res.getException(BadUserException.class.getSimpleName());
+		else if(res.getException(GameActionException.class.getSimpleName()) != null)
+			throw (GameActionException)res.getException(GameActionException.class.getSimpleName());
 		return null;
 	}
 
 	@Override
-	public boolean leaveGame(IUser user, int gameID) throws BadUserException {
+	public boolean leaveGame(IUser user, int gameID) throws BadUserException, GameActionException {
 		Results res = clientComm.send(LEAVE_GAME, new Game(gameID), user);
 		if(res.isSuccess())
 			return true;
-		else if(res.getBadUserException() != null)
-			throw res.getBadUserException();
+		else if(res.getException(BadUserException.class.getSimpleName()) != null)
+			throw (BadUserException)res.getException(BadUserException.class.getSimpleName());
+		else if(res.getException(GameActionException.class.getSimpleName()) != null)
+			throw (GameActionException)res.getException(GameActionException.class.getSimpleName());
 		return false;
 	}
 

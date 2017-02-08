@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride;
 
+import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.model.IUser;
@@ -74,23 +75,23 @@ public class ServerModel {
 		return newUser;
 	}
 
-	public IGame joinGame(IUser user, int gameID, Player.PlayerColor color) {
+	public IGame joinGame(IUser user, int gameID, Player.PlayerColor color) throws GameActionException {
 		for(IGame g : games) {
 			if(g.getGameID() == gameID) {
 				g.addPlayer(user, color);
 				return g;
 			}
 		}
-		return null;
+		throw new GameActionException("Could not join game!");
 	}
 
-	public boolean removePlayer(IUser user, int gameID) {
+	public boolean removePlayer(IUser user, int gameID) throws GameActionException {
 		for(IGame g : games) {
 			if(g.getGameID() == gameID) {
 				return g.removePlayer(user);
 			}
 		}
-		return false;
+		throw new GameActionException("Game does not exist!");
 	}
 
 	public IGame getGame(int gameID) {
