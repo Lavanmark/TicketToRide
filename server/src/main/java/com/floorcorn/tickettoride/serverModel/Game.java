@@ -19,7 +19,7 @@ public class Game extends IGame{
 		this.gameSize = game.getGameSize();
 		this.name = game.getName();
 		this.playerList = new ArrayList<Player>(game.getPlayerList());
-		this.finsihed = game.isFinsihed();
+		this.finished = game.isFinsihed();
 	}
 
 	public Game(String name, int size) {

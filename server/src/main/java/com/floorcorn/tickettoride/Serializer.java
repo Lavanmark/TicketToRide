@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride;
 import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
+import com.floorcorn.tickettoride.serverModel.Game;
 import com.google.gson.Gson;
 
 /**
@@ -32,7 +33,7 @@ public class Serializer {
 	}
 
 	public IGame deserializeGame(String str) {
-		return gson.fromJson(str, IGame.class);
+		return gson.fromJson(str, Game.class);
 	}
 
 	public Player deserializePlayer(String str) {
