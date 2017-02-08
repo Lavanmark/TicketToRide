@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride;
 
+import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
@@ -56,14 +57,14 @@ public class ServerModel {
 		return newGame;
 	}
 
-	public User addUser(User user) {
-		if(user.getUsername().length() < 4) return null;
-		if(user.getPassword().length() < 8) return null;
+	public User addUser(User user) throws UserCreationException {
+		if(user.getUsername().length() < 4) throw new UserCreationException("Username too short!");
+		if(user.getPassword().length() < 8) throw new UserCreationException("Password too short!");
 		if(user.getFullName() == null || user.getFullName().length() < 1) user.setFullName(user.getUsername());
 
 		for(User u : users) {
 			if(u.getUsername().equals(user.getUsername()))
-				return null;
+				throw new UserCreationException("User already exisits!");
 		}
 
 		User newUser = new User(user.getUsername(), user.getPassword(), user.getFullName());

@@ -13,7 +13,7 @@ public abstract class IGame {
 	protected int gameSize = -1;
 	protected String name = null;
 
-	protected boolean finsihed = false;
+	protected boolean finished = false;
 
 	public Player addPlayer(User user, Player.PlayerColor color) {
 		if(user == null) return null;
@@ -32,7 +32,7 @@ public abstract class IGame {
 			if(!hasStarted()) {
 				if(player.isConductor()) {
 					playerList.clear();
-					this.finsihed = true;
+					this.finished = true;
 					return true;
 				}
 				ArrayList<Player> newlist = new ArrayList<Player>();
@@ -97,7 +97,7 @@ public abstract class IGame {
 	}
 
 	public boolean isFinsihed() {
-		return finsihed;
+		return finished;
 	}
 
 	@Override
