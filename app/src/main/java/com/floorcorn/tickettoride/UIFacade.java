@@ -2,6 +2,7 @@ package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.clientModel.ClientModel;
 import com.floorcorn.tickettoride.clientModel.User;
+import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.IGame;
@@ -164,24 +165,44 @@ public class UIFacade {
         clientModelRoot.setCurrentGame(game);
     }
 
+    /**
+     * Gets games from the ServerProxy and updates the games in the ClientModel.
+     */
     public void requestGames() {
-        // Not implemented yet.
-        throw new UnsupportedOperationException();
+        clientModelRoot.setGames(serverProxy.getGames(getUser()));
     }
 
-    public void cancelGame(int gameID) {
-        // Not implemented yet.
-        throw new UnsupportedOperationException();
+    /**
+     * The current user leaves the game that matches gameID.
+     * @param gameID int game ID
+     */
+    public void leaveGame(int gameID) {
+        IUser user = getUser();
+        try {
+            serverProxy.leaveGame(user, gameID);
+        } catch (BadUserException ex) {
+            // TODO: should I be handling the error?
+            ex.printStackTrace();
+        }
     }
 
+    /**
+     * Creates a game with current user as the conductor (creator).
+     * @param gameName String game name
+     * @param playerCount int number of players (this should be between 2 and 5)
+     * @return IGame object representing the newly created game
+     */
     public IGame createGame(String gameName, int playerCount) {
-        // Not implemented yet.
-        throw new UnsupportedOperationException();
+        return serverProxy.createGame(getUser(), gameName, playerCount);
     }
 
-    public void joinGame(int userID, int gameID, Player.PlayerColor color) {
-        // Not implemented yet.
-        throw new UnsupportedOperationException();
+    /**
+     * Joins the game that matches the gameID and selects the specified color for the user.
+     * @param gameID int game ID
+     * @param color PlayerColor color
+     */
+    public void joinGame(int gameID, Player.PlayerColor color) {
+        serverProxy.joinGame(getUser(), gameID, color);
     }
 
     // Observer things.
