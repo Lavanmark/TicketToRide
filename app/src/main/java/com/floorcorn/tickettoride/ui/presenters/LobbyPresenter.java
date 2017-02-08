@@ -10,9 +10,14 @@ import java.util.Set;
  * Created by Kaylee on 2/4/2017.
  */
 
-public class LobbyPresenter {
+public class LobbyPresenter implements IPresenter{
 
     private IView view;
+
+    @Override
+    public void setView(IView view) {
+
+    }
 
     public void createGame(){
 
@@ -42,4 +47,6 @@ public class LobbyPresenter {
     private void getNewGameInfo(){
         
     }
+
+
 }
