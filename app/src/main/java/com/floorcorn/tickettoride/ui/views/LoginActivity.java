@@ -21,7 +21,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
+//import android.apwidget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -268,10 +268,10 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, IVie
 
 	private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
 		//Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-		ArrayAdapter<String> adapter =
-				new ArrayAdapter<>(LoginActivity.this,
-						android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
+//		ArrayAdapter<String> adapter =
+//				new ArrayAdapter<>(LoginActivity.this,
+//						android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+//
 //		mEmailView.setAdapter(adapter);
 	}
 

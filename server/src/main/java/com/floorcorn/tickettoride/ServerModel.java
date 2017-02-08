@@ -2,9 +2,10 @@ package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.model.IGame;
+import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.model.Player;
-import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.serverModel.Game;
+import com.floorcorn.tickettoride.serverModel.User;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -26,7 +27,7 @@ public class ServerModel {
 		random = new SecureRandom();
 	}
 
-	private void generateToken(User u) {
+	private void generateToken(IUser u) {
 		u.setToken(new BigInteger(130, random).toString(32));
 	}
 
@@ -57,7 +58,7 @@ public class ServerModel {
 		return newGame;
 	}
 
-	public User addUser(User user) throws UserCreationException {
+	public User addUser(IUser user) throws UserCreationException {
 		if(user.getUsername().length() < 4) throw new UserCreationException("Username too short!");
 		if(user.getPassword().length() < 8) throw new UserCreationException("Password too short!");
 		if(user.getFullName() == null || user.getFullName().length() < 1) user.setFullName(user.getUsername());
@@ -73,7 +74,7 @@ public class ServerModel {
 		return newUser;
 	}
 
-	public IGame joinGame(User user, int gameID, Player.PlayerColor color) {
+	public IGame joinGame(IUser user, int gameID, Player.PlayerColor color) {
 		for(IGame g : games) {
 			if(g.getGameID() == gameID) {
 				g.addPlayer(user, color);
@@ -83,7 +84,7 @@ public class ServerModel {
 		return null;
 	}
 
-	public boolean removePlayer(User user, int gameID) {
+	public boolean removePlayer(IUser user, int gameID) {
 		for(IGame g : games) {
 			if(g.getGameID() == gameID) {
 				return g.removePlayer(user);
