@@ -1,10 +1,12 @@
 package com.floorcorn.tickettoride.clientModel;
 
+<<<<<<< HEAD
 import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.clientModel.Game;
+=======
+>>>>>>> master
 import java.util.Set;
-import java.util.SortedSet;
 
 /**
  * Created by Kaylee on 2/4/2017.

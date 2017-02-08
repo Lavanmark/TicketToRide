@@ -1,7 +1,7 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
 import com.floorcorn.tickettoride.clientModel.Game;
-import com.floorcorn.tickettoride.model.User;
+import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.ui.views.IView;
 
 import java.util.Set;
@@ -31,7 +31,7 @@ public class LobbyPresenter {
     }
 
     public Set<Game> getGameList(Set<Game> gameList){
-        //not exactly sure what this does
+        //TODO not exactly sure what this does
         return null;
     }
 

@@ -4,45 +4,15 @@ package com.floorcorn.tickettoride.model;
  * Created by Tyler on 2/1/17.
  */
 
-public class User {
+public abstract class IUser {
 
-	private String username = null; // Must be 4 characters long
-	private String password = null; // Must be 8 characters long
-	private String fullName = null; // Can be null
-	private String token = null;
-	private int userID = -1;
-
-	private static int nextID = 0;
+	protected String username = null; // Must be 4 characters long
+	protected String password = null; // Must be 8 characters long
+	protected String fullName = null; // Can be null
+	protected String token = null;
+	protected int userID = -1;
 
 	public static final int AUTH_TOKEN_SIZE = 16;
-
-	public User(String username, String password) {
-		this.username = username;
-		this.password = password;
-	}
-
-	public User(String token) {
-		this.token = token;
-	}
-
-	public User(String username, String password, String fullName) {
-		this.username = username;
-		this.password = password;
-		this.fullName = fullName;
-		createID();
-	}
-
-	public User(User user) {
-		this.username = user.getUsername();
-		this.password = user.getPassword();
-		this.fullName = user.getFullName();
-		this.token = user.getToken();
-		this.userID = user.getUserID();
-	}
-
-	private void createID() {
-		userID = nextID++;
-	}
 
 	public void setToken(String token) {
 		this.token = token;
@@ -77,7 +47,7 @@ public class User {
 		if(this == o) return true;
 		if(o == null || getClass() != o.getClass()) return false;
 
-		User user = (User) o;
+		IUser user = (IUser) o;
 
 		if(userID != user.userID) return false;
 		if(!username.equals(user.username)) return false;
