@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.clientModel.User;
+import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.model.Player;
@@ -99,7 +100,13 @@ public class ServerProxyUnitTest {
 		//
 		//LEAVE/CANCEL GAME
 		//
-		boolean left = sp.leaveGame(login, gameID);
+		boolean left = false;
+		try {
+			left = sp.leaveGame(login, gameID);
+		} catch(BadUserException e) {
+			e.printStackTrace();
+			assertFalse(true);
+		}
 		assertTrue(left);
 
 		games = null;

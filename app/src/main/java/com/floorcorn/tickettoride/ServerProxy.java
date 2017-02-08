@@ -23,11 +23,10 @@ public class ServerProxy implements IServer {
 	@Override
 	public IUser login(IUser user) {
 		Results res = clientComm.send(LOGIN, user, null);
+		String reser = Serializer.getInstance().serialize(res.getResult());
 		if(res.isSuccess()) {
-			String reser = Serializer.getInstance().serialize(res.getResult());
 			return Serializer.getInstance().deserializeUser(reser);
 		} else {
-			String reser = Serializer.getInstance().serialize(res.getResult());
 			System.err.println(((BadUserException)Serializer.getInstance().deserialze(reser, BadUserException.class)).getMessage());
 		}
 		return null;
@@ -36,12 +35,11 @@ public class ServerProxy implements IServer {
 	@Override
 	public IUser register(IUser user) {
 		Results res = clientComm.send(REGISTER, user, null);
+		String reser = Serializer.getInstance().serialize(res.getResult());
 		if(res.isSuccess()) {
-			String reser = Serializer.getInstance().serialize(res.getResult());
 			return Serializer.getInstance().deserializeUser(reser);
 		} else {
-			String reser = Serializer.getInstance().serialize(res.getResult());
-			System.err.println(((BadUserException)Serializer.getInstance().deserialze(reser, BadUserException.class)).getMessage());
+			System.err.println(((UserCreationException)Serializer.getInstance().deserialze(reser, UserCreationException.class)).getMessage());
 		}
 		return null;
 	}
@@ -49,11 +47,10 @@ public class ServerProxy implements IServer {
 	@Override
 	public Set<IGame> getGames(IUser user) {
 		Results res = clientComm.send(GET_GAMES, null, user);
+		String reser = Serializer.getInstance().serialize(res.getResult());
 		if(res.isSuccess()) {
-			String reser = Serializer.getInstance().serialize(res.getResult());
 			return Serializer.getInstance().deserializeGameList(reser);
 		} else {
-			String reser = Serializer.getInstance().serialize(res.getResult());
 			System.err.println(((BadUserException)Serializer.getInstance().deserialze(reser, BadUserException.class)).getMessage());
 		}
 		return null;
@@ -62,11 +59,10 @@ public class ServerProxy implements IServer {
 	@Override
 	public IGame createGame(IUser user, String name, int gameSize) {
 		Results res = clientComm.send(CREATE_GAME, new Game(name, gameSize), user);
+		String reser = Serializer.getInstance().serialize(res.getResult());
 		if(res.isSuccess()) {
-			String reser = Serializer.getInstance().serialize(res.getResult());
 			return Serializer.getInstance().deserializeIGame(reser);
 		} else {
-			String reser = Serializer.getInstance().serialize(res.getResult());
 			System.err.println(((BadUserException)Serializer.getInstance().deserialze(reser, BadUserException.class)).getMessage());
 		}
 		return null;
@@ -75,20 +71,23 @@ public class ServerProxy implements IServer {
 	@Override
 	public IGame joinGame(IUser user, int gameID, Player.PlayerColor color) {
 		Results res = clientComm.send(JOIN_GAME, new Player(user.getUserID(), gameID, color), user);
+		String reser = Serializer.getInstance().serialize(res.getResult());
 		if(res.isSuccess()) {
-			String reser = Serializer.getInstance().serialize(res.getResult());
 			return Serializer.getInstance().deserializeIGame(reser);
 		} else {
-			String reser = Serializer.getInstance().serialize(res.getResult());
 			System.err.println(((BadUserException)Serializer.getInstance().deserialze(reser, BadUserException.class)).getMessage());
 		}
 		return null;
 	}
 
 	@Override
-	public boolean leaveGame(IUser user, int gameID) {
+	public boolean leaveGame(IUser user, int gameID) throws BadUserException {
 		Results res = clientComm.send(LEAVE_GAME, new Game(gameID), user);
-		return res.isSuccess();
+		if(res.isSuccess())
+			return true;
+		else if(res.getBadUserException() != null)
+			throw res.getBadUserException();
+		return false;
 	}
 
 	public void setHost(String host) {
