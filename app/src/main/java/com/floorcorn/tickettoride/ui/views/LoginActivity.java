@@ -1,11 +1,10 @@
-package com.floorcorn.tickettoride;
+package com.floorcorn.tickettoride.ui.views;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -21,13 +20,16 @@ import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 //import android.apwidget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.ui.presenters.IPresenter;
+import com.floorcorn.tickettoride.ui.presenters.LoginPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +39,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements ILoginView, IView {
 
 	/**
 	 * Id to identity READ_CONTACTS permission request.
@@ -56,9 +58,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 	 */
 	private UserLoginTask mAuthTask = null;
 
+    private LoginPresenter presenter;
+
 	// UI references.
-	private AutoCompleteTextView mEmailView;
+	private EditText mUserView;
 	private EditText mPasswordView;
+	private EditText mFirstNameView;
+	private EditText mLastNameView;
+	private EditText mNewPasswordView;
+	private EditText mConfirmPasswordView;
+
+    private Button mSignInButton;
+    private Button mRegisterButton;
+
 	private View mProgressView;
 	private View mLoginFormView;
 
@@ -67,8 +79,36 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		// Set up the login form.
-		mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-		populateAutoComplete();
+//		mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mUserView = (EditText) findViewById(R.id.username);
+        mPasswordView = (EditText) findViewById(R.id.password);
+        mFirstNameView = (EditText) findViewById(R.id.register_name_first);
+        mLastNameView = (EditText) findViewById(R.id.register_name_last);
+        mNewPasswordView = (EditText) findViewById(R.id.register_password);
+        mConfirmPasswordView = (EditText) findViewById(R.id.register_password_confirm);
+
+
+        LoginPresenter mPresenter = new LoginPresenter();
+        setPresenter(mPresenter);
+
+        presenter.setView(this);
+
+
+        mSignInButton = (Button) findViewById(R.id.sign_in_button);
+        mSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.loginClicked();
+            }
+        });
+
+        mRegisterButton = (Button) findViewById(R.id.register_button);
+        mRegisterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.registerClicked();
+            }
+        });
 
 		mPasswordView = (EditText) findViewById(R.id.password);
 		mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -94,51 +134,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 		mProgressView = findViewById(R.id.login_progress);
 	}
 
-	private void populateAutoComplete() {
-		if(!mayRequestContacts()) {
-			return;
-		}
-
-		getLoaderManager().initLoader(0, null, this);
-	}
-
-	private boolean mayRequestContacts() {
-		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-			return true;
-		}
-		if(checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-			return true;
-		}
-		if(shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-/*			Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-					.setAction(android.R.string.ok, new View.OnClickListener() {
-						@Override
-						@TargetApi(Build.VERSION_CODES.M)
-						public void onClick(View v) {
-							requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-						}
-					});
-					*/
-		} else {
-			requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-		}
-		return false;
-	}
-
-	/**
-	 * Callback received when a permissions request has been completed.
-	 */
-	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-	                                       @NonNull int[] grantResults) {
-		if(requestCode == REQUEST_READ_CONTACTS) {
-			if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-				populateAutoComplete();
-			}
-		}
-	}
-
-
 	/**
 	 * Attempts to sign in or register the account specified by the login form.
 	 * If there are form errors (invalid email, missing fields, etc.), the
@@ -150,11 +145,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 		}
 
 		// Reset errors.
-		mEmailView.setError(null);
+//		mEmailView.setError(null);
 		mPasswordView.setError(null);
 
 		// Store values at the time of the login attempt.
-		String email = mEmailView.getText().toString();
+//		String email = mEmailView.getText().toString();
 		String password = mPasswordView.getText().toString();
 
 		boolean cancel = false;
@@ -167,16 +162,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 			cancel = true;
 		}
 
-		// Check for a valid email address.
-		if(TextUtils.isEmpty(email)) {
-//			mEmailView.setError(getString(R.string.error_field_required));
-			focusView = mEmailView;
-			cancel = true;
-		} else if(!isEmailValid(email)) {
-//			mEmailView.setError(getString(R.string.error_invalid_email));
-			focusView = mEmailView;
-			cancel = true;
-		}
+//		// Check for a valid email address.
+//		if(TextUtils.isEmpty(email)) {
+////			mEmailView.setError(getString(R.string.error_field_required));
+//			focusView = mEmailView;
+//			cancel = true;
+//		} else if(!isEmailValid(email)) {
+////			mEmailView.setError(getString(R.string.error_invalid_email));
+//			focusView = mEmailView;
+//			cancel = true;
+//		}
 
 		if(cancel) {
 			// There was an error; don't attempt login and focus the first
@@ -186,7 +181,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
 			showProgress(true);
-			mAuthTask = new UserLoginTask(email, password);
+//			mAuthTask = new UserLoginTask(email, password);
 			mAuthTask.execute((Void) null);
 		}
 	}
@@ -237,24 +232,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 		}
 	}
 
-	@Override
-	public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-		return new CursorLoader(this,
-				// Retrieve data rows for the device user's 'profile' contact.
-				Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-						ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
+//	@Override
+//	public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+//		return new CursorLoader(this,
+//				// Retrieve data rows for the device user's 'profile' contact.
+//				Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
+//						ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
+//
+//				// Select only email addresses.
+//				ContactsContract.Contacts.Data.MIMETYPE +
+//						" = ?", new String[]{ContactsContract.CommonDataKinds.Email
+//				.CONTENT_ITEM_TYPE},
+//
+//				// Show primary email addresses first. Note that there won't be
+//				// a primary email address if the user hasn't specified one.
+//				ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
+//	}
 
-				// Select only email addresses.
-				ContactsContract.Contacts.Data.MIMETYPE +
-						" = ?", new String[]{ContactsContract.CommonDataKinds.Email
-				.CONTENT_ITEM_TYPE},
-
-				// Show primary email addresses first. Note that there won't be
-				// a primary email address if the user hasn't specified one.
-				ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-	}
-
-	@Override
+//	@Override
 	public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
 		List<String> emails = new ArrayList<>();
 		cursor.moveToFirst();
@@ -266,22 +261,68 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 		addEmailsToAutoComplete(emails);
 	}
 
-	@Override
+//	@Override
 	public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
 	}
 
 	private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
 		//Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+<<<<<<< HEAD:app/src/main/java/com/floorcorn/tickettoride/LoginActivity.java
 //		ArrayAdapter<String> adapter =
 //				new ArrayAdapter<>(LoginActivity.this,
 //						android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 //
 //		mEmailView.setAdapter(adapter);
+=======
+		ArrayAdapter<String> adapter =
+				new ArrayAdapter<>(LoginActivity.this,
+						android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+
+//		mEmailView.setAdapter(adapter);
 	}
 
+	@Override
+	public String getUsername() {
+		return null;
+	}
 
-	private interface ProfileQuery {
+	@Override
+	public String getPassword() {
+		return null;
+	}
+
+	@Override
+	public String getConfirmPassword() {
+		return null;
+	}
+
+	@Override
+	public String getFullName() {
+		return null;
+>>>>>>> master:app/src/main/java/com/floorcorn/tickettoride/ui/views/LoginActivity.java
+	}
+
+	@Override
+	public void displayMessage(String message) {
+
+	}
+
+	@Override
+	public void clearView() {
+
+	}
+
+    @Override
+    public void setPresenter(IPresenter presenter) {
+        if(presenter instanceof LoginPresenter)
+            this.presenter = (LoginPresenter) presenter;
+        else
+            throw new IllegalArgumentException();
+    }
+
+
+    private interface ProfileQuery {
 		String[] PROJECTION = {
 				ContactsContract.CommonDataKinds.Email.ADDRESS,
 				ContactsContract.CommonDataKinds.Email.IS_PRIMARY,

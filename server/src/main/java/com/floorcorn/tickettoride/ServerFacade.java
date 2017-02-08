@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride;
 
+import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.interfaces.IServer;
 import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.model.Player;
@@ -31,10 +32,10 @@ public class ServerFacade implements IServer {
 	}
 
 	@Override
-	public User register(User user) {
+	public User register(User user) throws UserCreationException {
 		if(user != null)
 			return model.addUser(user);
-		return null;
+		throw new UserCreationException("User was null!");
 	}
 
 	@Override

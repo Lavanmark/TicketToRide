@@ -1,6 +1,12 @@
 package com.floorcorn.tickettoride;
 
+import com.floorcorn.tickettoride.handlers.CreateGameHandler;
+import com.floorcorn.tickettoride.handlers.GetGamesHandler;
+import com.floorcorn.tickettoride.handlers.JoinGameHandler;
+import com.floorcorn.tickettoride.handlers.LeaveGameHandler;
 import com.floorcorn.tickettoride.handlers.LoginHandler;
+import com.floorcorn.tickettoride.handlers.RegisterHandler;
+import com.floorcorn.tickettoride.interfaces.IServer;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
@@ -32,11 +38,12 @@ public class ServerCommunicator {
 	}
 
 	private void createContexts() {
-		server.createContext("/login", new LoginHandler());
-		server.createContext("/register", new LoginHandler());
-		server.createContext("/getGames", new LoginHandler());
-		server.createContext("/leaveGame", new LoginHandler());
-		server.createContext("/joinGame", new LoginHandler());
+		server.createContext(IServer.LOGIN, new LoginHandler());
+		server.createContext(IServer.REGISTER, new RegisterHandler());
+		server.createContext(IServer.GET_GAMES, new GetGamesHandler());
+		server.createContext(IServer.CREATE_GAME, new CreateGameHandler());
+		server.createContext(IServer.LEAVE_GAME, new LeaveGameHandler());
+		server.createContext(IServer.JOIN_GAME, new JoinGameHandler());
 	}
 
 	public static void main(String[] args) {

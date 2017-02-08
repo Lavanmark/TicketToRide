@@ -41,7 +41,7 @@ public class LeaveGameHandler extends HandlerBase {
 			boolean left = ServerFacade.getInstance().leaveGame(new User(token), iGame.getGameID());
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			sendResponseBody(httpExchange, new Results(true, left));
+			sendResponseBody(httpExchange, new Results(left, null));
 		} catch(IOException e) {
 			e.printStackTrace();
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);

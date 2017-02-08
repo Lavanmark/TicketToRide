@@ -8,5 +8,14 @@ import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 
 public interface IView {
 
+    /**
+     * This method assigns the presenter with which this view will interact
+     *
+     * @param presenter the presenter to interact with
+     *
+     * @pre presenter != null
+     *
+     * @post view.presenter() == presenter
+     */
     public void setPresenter(IPresenter presenter);
 }
