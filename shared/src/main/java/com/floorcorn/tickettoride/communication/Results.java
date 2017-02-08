@@ -1,12 +1,6 @@
 package com.floorcorn.tickettoride.communication;
 
-import java.util.HashMap;
-
 public class Results {
-
-	public enum ResultClasses {
-
-	}
 	private boolean success;
 
 	private Object result;
@@ -22,11 +16,5 @@ public class Results {
 
 	public Object getResult(){
 		return result;
-	}
-
-	public void deserializeMap() {
-		//for(Type t : results.keySet()) {
-			//TODO put serializer in shared and deserialze each object.
-		//}
 	}
 }
