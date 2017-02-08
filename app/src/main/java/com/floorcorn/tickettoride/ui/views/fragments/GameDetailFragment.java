@@ -1,4 +1,4 @@
-package com.floorcorn.tickettoride;
+package com.floorcorn.tickettoride.ui.views.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,6 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.floorcorn.tickettoride.ui.views.GameListContent;
+import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.ui.views.activities.GameDetailActivity;
+import com.floorcorn.tickettoride.ui.views.activities.GameListActivity;
 
 /**
  * A fragment representing a single Game detail screen.

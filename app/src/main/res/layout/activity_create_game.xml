@@ -9,19 +9,56 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.floorcorn.tickettoride.CreateGameActivity">
+    tools:context="com.floorcorn.tickettoride.ui.views.activities.CreateGameActivity">
 
-    <EditText
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/createGameNamePrompt">
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/prompt_gamename" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/chooseColorText"
+        android:text="@string/prompt_color"
+        android:layout_below="@id/createGameNamePrompt"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/colorSpinner"
+        android:layout_weight="1"
+        android:layout_below="@id/chooseColorText"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/choosePlayersText"
+        android:text="@string/prompt_player_allowance"
+        android:layout_below="@id/colorSpinner"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/playerSpinner"
+        android:layout_weight="1"
+        android:layout_below="@id/choosePlayersText"/>
+
+
+    <Button
+        android:text="@string/create_game_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:ems="10"
-        android:id="@+id/editText" />
+        android:id="@+id/createGameButton"
+        android:layout_below="@id/playerSpinner"/>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-    </ListView>
 </RelativeLayout>

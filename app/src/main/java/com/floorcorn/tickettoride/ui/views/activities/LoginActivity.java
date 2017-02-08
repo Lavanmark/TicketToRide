@@ -1,4 +1,4 @@
-package com.floorcorn.tickettoride.ui.views;
+package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -30,6 +30,8 @@ import android.widget.TextView;
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.presenters.LoginPresenter;
+import com.floorcorn.tickettoride.ui.views.ILoginView;
+import com.floorcorn.tickettoride.ui.views.IView;
 
 import java.util.ArrayList;
 import java.util.List;
