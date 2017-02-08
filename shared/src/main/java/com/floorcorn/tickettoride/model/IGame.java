@@ -1,5 +1,8 @@
 package com.floorcorn.tickettoride.model;
 
+import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
+
 import java.util.ArrayList;
 
 /**
@@ -15,8 +18,8 @@ public abstract class IGame {
 
 	protected boolean finished = false;
 
-	public Player addPlayer(IUser user, Player.PlayerColor color) {
-		if(user == null) return null;
+	public Player addPlayer(IUser user, Player.PlayerColor color) throws GameActionException {
+		if(user == null) throw new GameActionException("Cannot add null User to game!");
 		Player np = getPlayer(user);
 		if(np == null && !hasStarted()) {
 			np = new Player(user.getUserID(), gameID, color);
@@ -26,7 +29,7 @@ public abstract class IGame {
 		return np;
 	}
 
-	public boolean removePlayer(IUser user) {
+	public boolean removePlayer(IUser user) throws GameActionException {
 		Player player = getPlayer(user);
 		if(player != null) {
 			if(!hasStarted()) {
@@ -44,17 +47,18 @@ public abstract class IGame {
 				}
 				playerList = newlist;
 				return true;
-			}
-		}
-		return false;
+			} else
+			throw new GameActionException("Game has already started!");
+		} else
+			throw new GameActionException("User is not a player of the game!");
 	}
 
-	public boolean userCanJoin(IUser user) {
-		if(user == null) return false;
-		if(hasStarted()) return false;
+	public boolean userCanJoin(IUser user) throws BadUserException, GameActionException {
+		if(user == null) throw new BadUserException("A null user cannot join!");
+		if(hasStarted()) throw new GameActionException("Game has already started!");
 		for(Player p : playerList) {
 			if(p.getUserID() == user.getUserID())
-				return false;
+				throw new GameActionException("User already in the game!");
 		}
 		return true;
 	}
@@ -68,7 +72,7 @@ public abstract class IGame {
 	}
 
 	public Player getPlayer(IUser user) {
-		if(user == null) return null;
+		if(user == null) return null; // Don't throw BadUserException here.
 		for(Player p : playerList) {
 			if(p.getUserID() == user.getUserID())
 				return p;

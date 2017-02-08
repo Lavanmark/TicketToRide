@@ -3,8 +3,11 @@ package com.floorcorn.tickettoride.handlers;
 import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
+import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.serverModel.User;
+import com.sun.net.httpserver.Authenticator;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
@@ -38,10 +41,17 @@ public class LeaveGameHandler extends HandlerBase {
 				return;
 			}
 
-			boolean left = ServerFacade.getInstance().leaveGame(new User(token), iGame.getGameID());
+			Results results = null;
+			try {
+				boolean left = ServerFacade.getInstance().leaveGame(new User(token), iGame.getGameID());
+				results = new Results(true, null);
+			} catch(BadUserException | GameActionException e) {
+				//e.printStackTrace();
+				results = new Results(false, e);
+			}
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			sendResponseBody(httpExchange, new Results(left, null));
+			sendResponseBody(httpExchange, results);
 		} catch(IOException e) {
 			e.printStackTrace();
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);

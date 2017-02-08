@@ -25,7 +25,7 @@ public interface IServer {
 	public IUser login(IUser user) throws BadUserException;
 	public IUser register(IUser user) throws UserCreationException;
 	public Set<IGame> getGames(IUser user) throws BadUserException;
-	public IGame createGame(IUser user, String name, int gameSize) throws GameActionException, BadUserException;
+	public IGame createGame(IUser user, String name, int gameSize) throws BadUserException;
 	public IGame joinGame(IUser user, int gameID, Player.PlayerColor color) throws GameActionException, BadUserException;
-	public boolean leaveGame(IUser user, int gameID) throws BadUserException;
+	public boolean leaveGame(IUser user, int gameID) throws BadUserException, GameActionException;
 }

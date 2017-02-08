@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.handlers;
 import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
+import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.serverModel.User;
 import com.sun.net.httpserver.HttpExchange;
@@ -26,11 +27,17 @@ public class LoginHandler extends HandlerBase {
 			}
 			IUser userInfo = Serializer.getInstance().deserializeUser(reqBody);
 
-			userInfo = ServerFacade.getInstance().login(userInfo);
+			Results results = null;
+			try {
+				userInfo = ServerFacade.getInstance().login(userInfo);
+				results = new Results(true, userInfo);
+			} catch(BadUserException e) {
+				//e.printStackTrace();
+				results = new Results(false, e);
+			}
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			sendResponseBody(httpExchange, new Results(true, userInfo));
-
+			sendResponseBody(httpExchange, results);
 		} catch(IOException e){
 			e.printStackTrace();
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
