@@ -1,4 +1,4 @@
-package com.floorcorn.tickettoride;
+package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,12 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-public class BoardmapActivity extends AppCompatActivity {
+import com.floorcorn.tickettoride.R;
+
+public class PregameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_boardmap);
+        setContentView(R.layout.activity_pregame);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
