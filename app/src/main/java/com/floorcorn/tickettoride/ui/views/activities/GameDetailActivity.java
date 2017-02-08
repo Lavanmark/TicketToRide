@@ -1,4 +1,4 @@
-package com.floorcorn.tickettoride;
+package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.floorcorn.tickettoride.ui.views.fragments.GameDetailFragment;
+import com.floorcorn.tickettoride.R;
 
 /**
  * An activity representing a single Game detail screen. This
