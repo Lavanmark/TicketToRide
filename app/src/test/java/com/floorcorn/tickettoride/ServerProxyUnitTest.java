@@ -1,8 +1,9 @@
 package com.floorcorn.tickettoride;
 
+import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.model.IGame;
+import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.model.Player;
-import com.floorcorn.tickettoride.model.User;
 
 import org.junit.*;
 
@@ -33,14 +34,14 @@ public class ServerProxyUnitTest {
 	public void testLogin() {
 		User goodUser = new User("tyler", "dragonman");
 		try {
-			User res = sp.register(goodUser);
+			IUser res = sp.register(goodUser);
 			assertNotEquals(res, null);
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 			assertTrue(false);
 		}
 		goodUser = new User("tyler", "dragonman");
-		User res = sp.login(goodUser);
+		IUser res = sp.login(goodUser);
 		assertNotEquals(res, null);
 		assertEquals(res.getUsername(), "tyler");
 		assertEquals(res.getPassword(), "dragonman");
@@ -51,7 +52,7 @@ public class ServerProxyUnitTest {
 
 	@Test
 	public void testGameOperations() {
-		User login = sp.login(new User("tyler","dragonman"));
+		IUser login = sp.login(new User("tyler","dragonman"));
 		//TODO bad params gives end of file from server.
 		IGame game = sp.createGame(login, "Test", 3);
 		assertNotEquals(game, null);

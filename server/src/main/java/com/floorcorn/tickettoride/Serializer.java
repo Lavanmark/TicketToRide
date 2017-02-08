@@ -2,8 +2,8 @@ package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.model.Player;
-import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.serverModel.Game;
+import com.floorcorn.tickettoride.serverModel.User;
 import com.google.gson.Gson;
 
 /**

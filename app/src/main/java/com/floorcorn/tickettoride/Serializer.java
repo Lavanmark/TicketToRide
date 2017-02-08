@@ -1,10 +1,11 @@
 package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.clientModel.Game;
+import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.model.User;
+import com.floorcorn.tickettoride.model.IUser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -51,7 +52,7 @@ public class Serializer {
 	    return gson.fromJson(resultsJson, Results.class);
     }
 
-	public User deserializeUser(String userJson) {
+	public IUser deserializeUser(String userJson) {
 		return gson.fromJson(userJson, User.class);
 	}
 

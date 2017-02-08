@@ -1,7 +1,7 @@
 package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.communication.Results;
-import com.floorcorn.tickettoride.model.User;
+import com.floorcorn.tickettoride.model.IUser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +10,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
 /**
  * Created by mgard on 2/1/2017.
@@ -27,7 +26,7 @@ public class ClientCommunicator {
 	 * @param authUser user object containing authentication token. (optional)
 	 * @return The Results object sent back from the Server
 	 */
-	public Results send(String urlPath, Object request, User authUser) {
+	public Results send(String urlPath, Object request, IUser authUser) {
 		try {
 			String stringToSend = null;
 			if(request != null)
