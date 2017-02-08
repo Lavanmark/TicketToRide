@@ -3,6 +3,8 @@ package com.floorcorn.tickettoride;
 import com.floorcorn.tickettoride.clientModel.ClientModel;
 import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.IGame;
@@ -44,22 +46,25 @@ public class UIFacade {
 
     /**
      * Prepares a User object for parameter to login(...) in ServerProxy. Calls login(...).
+     * Throws a BadUserException if server side cannot authenticate given the parameters.
      * @param username String username
      * @param password String password
      */
-    public void login(String username, String password) {
+    public void login(String username, String password) throws BadUserException {
         User user = new User(username, password);
         serverProxy.login(user);
     }
 
     /**
      * Prepares a User object for parameter to register(...) in ServerProxy. Calls register(...).
+     * Throws UserCreationException if server side cannot register the user with the given
+     * parameters.
      * @param username String username
      * @param password String password
      * @param firstname String firstname
      * @param lastname String lastname
      */
-    public void register(String username, String password, String firstname, String lastname) {
+    public void register(String username, String password, String firstname, String lastname) throws UserCreationException {
         User user = new User(username, password, firstname + " " + lastname);
         serverProxy.register(user);
     }
@@ -166,42 +171,43 @@ public class UIFacade {
     }
 
     /**
-     * Gets games from the ServerProxy and updates the games in the ClientModel.
+     * Gets games from the ServerProxy and updates the games in the ClientModel. Re-throws
+     * BadUserException if authentication doesn't work on the server side.
      */
-    public void requestGames() {
+    public void requestGames() throws BadUserException {
         clientModelRoot.setGames(serverProxy.getGames(getUser()));
     }
 
     /**
-     * The current user leaves the game that matches gameID.
+     * The current user leaves the game that matches gameID. Throws
+     * BadUserException if user cannot be authenticated by server. Throws GameActionException if
+     * user can't leave the game (not in the game, etc).
      * @param gameID int game ID
      */
-    public void leaveGame(int gameID) {
+    public void leaveGame(int gameID) throws GameActionException, BadUserException {
         IUser user = getUser();
-        try {
-            serverProxy.leaveGame(user, gameID);
-        } catch (BadUserException ex) {
-            // TODO: should I be handling the error?
-            ex.printStackTrace();
-        }
+        serverProxy.leaveGame(user, gameID);
     }
 
     /**
-     * Creates a game with current user as the conductor (creator).
+     * Creates a game with current user as the conductor (creator). Throws a BadUserException if
+     * getUser() cannot authenticate on the server side during game creation.
      * @param gameName String game name
      * @param playerCount int number of players (this should be between 2 and 5)
      * @return IGame object representing the newly created game
      */
-    public IGame createGame(String gameName, int playerCount) {
+    public IGame createGame(String gameName, int playerCount) throws BadUserException {
         return serverProxy.createGame(getUser(), gameName, playerCount);
     }
 
     /**
-     * Joins the game that matches the gameID and selects the specified color for the user.
+     * Joins the game that matches the gameID and selects the specified color for the user. Throws
+     * BadUserException if user cannot be authenticated by server. Throws GameActionException if
+     * user can't join the game (already part of the game, the game is full, etc).
      * @param gameID int game ID
      * @param color PlayerColor color
      */
-    public void joinGame(int gameID, Player.PlayerColor color) {
+    public void joinGame(int gameID, Player.PlayerColor color) throws GameActionException, BadUserException {
         serverProxy.joinGame(getUser(), gameID, color);
     }
 
