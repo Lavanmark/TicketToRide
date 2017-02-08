@@ -268,17 +268,10 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, IVie
 
 	private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
 		//Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-<<<<<<< HEAD:app/src/main/java/com/floorcorn/tickettoride/LoginActivity.java
 //		ArrayAdapter<String> adapter =
 //				new ArrayAdapter<>(LoginActivity.this,
 //						android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 //
-//		mEmailView.setAdapter(adapter);
-=======
-		ArrayAdapter<String> adapter =
-				new ArrayAdapter<>(LoginActivity.this,
-						android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
 //		mEmailView.setAdapter(adapter);
 	}
 
@@ -300,7 +293,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, IVie
 	@Override
 	public String getFullName() {
 		return null;
->>>>>>> master:app/src/main/java/com/floorcorn/tickettoride/ui/views/LoginActivity.java
 	}
 
 	@Override
