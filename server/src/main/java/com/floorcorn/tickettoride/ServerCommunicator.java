@@ -18,6 +18,11 @@ public class ServerCommunicator {
 
 	private final int MAX_WAITING_CONNECTIONS = 12;
 
+	/**
+	 * Creates an HttpServer on provided port
+	 *
+	 * @param port used as the post the server listens on.
+	 */
 	public ServerCommunicator(String port){
 		System.out.println("Initializing HTTP Server");
 		try {

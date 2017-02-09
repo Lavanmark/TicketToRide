@@ -67,7 +67,7 @@ public class ServerProxy implements IServer {
 
 	@Override
 	public IGame joinGame(IUser user, int gameID, Player.PlayerColor color) throws BadUserException, GameActionException {
-		Results res = clientComm.send(JOIN_GAME, new Player(user.getUserID(), gameID, color), user);
+		Results res = clientComm.send(JOIN_GAME, new Player(user.getUserID(), user.getFullName(), gameID, color), user);
 		String reser = Serializer.getInstance().serialize(res.getResult());
 		if(res.isSuccess()) {
 			return Serializer.getInstance().deserializeIGame(reser);

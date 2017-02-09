@@ -4,6 +4,8 @@ import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Tyler on 2/2/2017.
@@ -22,7 +24,7 @@ public abstract class IGame {
 		if(user == null) throw new GameActionException("Cannot add null User to game!");
 		Player np = getPlayer(user);
 		if(np == null && !hasStarted()) {
-			np = new Player(user.getUserID(), gameID, color);
+			np = new Player(user.getUserID(), user.getFullName(), gameID, color);
 			np.setPlayerID(playerList.size());
 			playerList.add(np);
 		}
@@ -78,6 +80,16 @@ public abstract class IGame {
 				return p;
 		}
 		return null;
+	}
+
+	public List<Player.PlayerColor> getAvailableColors() {
+		List<Player.PlayerColor> avail = Arrays.asList(Player.PlayerColor.BLUE,
+				Player.PlayerColor.BLACK, Player.PlayerColor.GREEN,
+				Player.PlayerColor.RED, Player.PlayerColor.YELLOW);
+		for(Player p : playerList) {
+			avail.remove(p.getColor());
+		}
+		return avail;
 	}
 
 	public int getGameID() {
