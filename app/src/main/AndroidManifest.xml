@@ -46,7 +46,7 @@
             android:theme="@style/MyDialogTheme" />
         <activity
             android:name=".ui.views.activities.BoardmapActivity"
-            android:label="@string/title_activity_boardmap"
+            android:label="@string/title_activity_boardmap"/>
     </application>
 
 </manifest>

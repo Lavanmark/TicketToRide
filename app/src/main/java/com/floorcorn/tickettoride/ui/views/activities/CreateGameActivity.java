@@ -19,10 +19,6 @@ import java.util.List;
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.ui.views.IView;
 import com.floorcorn.tickettoride.ui.views.LobbyView;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 
 public class CreateGameActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
