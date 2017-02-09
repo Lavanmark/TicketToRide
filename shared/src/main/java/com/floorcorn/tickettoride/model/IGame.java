@@ -24,7 +24,7 @@ public abstract class IGame {
 		if(user == null) throw new GameActionException("Cannot add null User to game!");
 		Player np = getPlayer(user);
 		if(np == null && !hasStarted()) {
-			np = new Player(user.getUserID(), gameID, color);
+			np = new Player(user.getUserID(), user.getFullName(), gameID, color);
 			np.setPlayerID(playerList.size());
 			playerList.add(np);
 		}
