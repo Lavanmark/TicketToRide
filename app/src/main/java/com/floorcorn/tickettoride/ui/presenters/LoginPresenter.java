@@ -39,7 +39,12 @@ public class LoginPresenter implements IPresenter, Observer {
         String userName = this.loginView.getUsername();
         String password = this.loginView.getPassword();
 
-        UIFacade.getInstance().login(userName, password);
+        try {
+            UIFacade.getInstance().login(userName, password);
+        } catch (Exception ex) {
+            // TODO
+            ex.printStackTrace();
+        }
 
     }
 
@@ -55,7 +60,12 @@ public class LoginPresenter implements IPresenter, Observer {
             return;
         }
 
-        UIFacade.getInstance().register(username, password, firstName, lastName);
+        try {
+            UIFacade.getInstance().register(username, password, firstName, lastName);
+        } catch (Exception ex) {
+            // TODO
+            ex.printStackTrace();
+        }
 
     }
 

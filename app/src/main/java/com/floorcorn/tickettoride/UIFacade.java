@@ -213,14 +213,22 @@ public class UIFacade {
 
     // Observer things.
 
+    /**
+     * Register an observer for the ClientModel. Your class (a Presenter, probably) should
+     * implement Observer and have the required update(...) method. Also, see this for useful
+     * visual: http://stackoverflow.com/a/15810174.
+     * @param obs Observer object
+     */
     public void registerObserver(Observer obs) {
-        // Not implemented yet.
-        throw new UnsupportedOperationException();
+        clientModelRoot.addObserver(obs);
     }
 
+    /**
+     * Unregister an observer from the ClientModel.
+     * @param obs Observer object
+     */
     public void unregisterObserver(Observer obs) {
-        // Not implemented yet.
-        throw new UnsupportedOperationException();
+        clientModelRoot.deleteObserver(obs);
     }
 
 }
