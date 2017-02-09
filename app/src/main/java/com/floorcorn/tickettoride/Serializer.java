@@ -45,25 +45,46 @@ public class Serializer {
      * This method converts a String into a corresponding Results object.
      *
      * @param resultsJson The String representing the results
-     *             new TypeToken<Results<Foo>>() {}.getType();
-     * @return      a Results object representing the input String
+     * @return    a Results object representing the input String
      */
     public Results deserializeResults(String resultsJson) {
 	    return gson.fromJson(resultsJson, Results.class);
     }
 
+	/**
+	 * converts json of a user into a user object
+	 * @param userJson string of json representing a user
+	 * @return User object from string of json
+	 */
 	public IUser deserializeUser(String userJson) {
 		return gson.fromJson(userJson, User.class);
 	}
 
+	/**
+	 * converts a string into a Game object
+	 * @param gameJson string of json representing the game
+	 * @return game object from the string
+	 */
 	public Game deserializeIGame(String gameJson) {
 		return gson.fromJson(gameJson, Game.class);
 	}
 
-	public Set<IGame> deserializeGameList(String json) {
+	/**
+	 * deserializes a set of games
+	 * @param json string of json representing a set of games
+	 * @return set of games
+	 */
+	public Set<IGame> deserializeGameSet(String json) {
 		return gson.fromJson(json, new TypeToken<Set<Game>>(){}.getType());
 	}
 
+	/**
+	 * potentially deserializes a class of any type
+	 * PROBABLY SHOULDNT CALL??
+	 * @param reser string of json
+	 * @param type type/class of the json
+	 * @return object of the type parameter from the json string.
+	 */
 	public Object deserialze(String reser, Type type) {
 		return gson.fromJson(reser, type);
 	}
