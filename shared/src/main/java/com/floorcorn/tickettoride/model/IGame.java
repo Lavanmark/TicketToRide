@@ -4,6 +4,8 @@ import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Tyler on 2/2/2017.
@@ -18,17 +20,30 @@ public abstract class IGame {
 
 	protected boolean finished = false;
 
+	/**
+	 * adds a player to the game
+	 * @param user full user object
+	 * @param color color the user wants
+	 * @return the player object just created
+	 * @throws GameActionException
+	 */
 	public Player addPlayer(IUser user, Player.PlayerColor color) throws GameActionException {
 		if(user == null) throw new GameActionException("Cannot add null User to game!");
 		Player np = getPlayer(user);
 		if(np == null && !hasStarted()) {
-			np = new Player(user.getUserID(), gameID, color);
+			np = new Player(user.getUserID(), user.getFullName(), gameID, color);
 			np.setPlayerID(playerList.size());
 			playerList.add(np);
 		}
 		return np;
 	}
 
+	/**
+	 * removes a player from the game or ends the game if the player was the conductor
+	 * @param user user containing at least user.id
+	 * @return true if player was removed, false if not
+	 * @throws GameActionException
+	 */
 	public boolean removePlayer(IUser user) throws GameActionException {
 		Player player = getPlayer(user);
 		if(player != null) {
@@ -53,9 +68,16 @@ public abstract class IGame {
 			throw new GameActionException("User is not a player of the game!");
 	}
 
+	/**
+	 * tests if the user could join
+	 * @param user user with user.id
+	 * @return true if player can join, false otherwise
+	 * @throws BadUserException
+	 * @throws GameActionException
+	 */
 	public boolean userCanJoin(IUser user) throws BadUserException, GameActionException {
 		if(user == null) throw new BadUserException("A null user cannot join!");
-		if(hasStarted()) throw new GameActionException("Game has already started!");
+		if(hasStarted()) return false;
 		for(Player p : playerList) {
 			if(p.getUserID() == user.getUserID())
 				throw new GameActionException("User already in the game!");
@@ -63,6 +85,11 @@ public abstract class IGame {
 		return true;
 	}
 
+	/**
+	 * tests if the user is a player in the game
+	 * @param userID id of the user that will be checked for
+	 * @return true if user is in the game, false otherwise
+	 */
 	public boolean isPlayer(int userID) {
 		for(Player p : playerList) {
 			if(p.getUserID() == userID)
@@ -71,6 +98,11 @@ public abstract class IGame {
 		return false;
 	}
 
+	/**
+	 * get the player object for the specified user
+	 * @param user contains at least user.id
+	 * @return Player object of the user, null if user not in game
+	 */
 	public Player getPlayer(IUser user) {
 		if(user == null) return null; // Don't throw BadUserException here.
 		for(Player p : playerList) {
@@ -78,6 +110,20 @@ public abstract class IGame {
 				return p;
 		}
 		return null;
+	}
+
+	/**
+	 * get a list of available Player.PlayerColors
+	 * @return List of Player.PlayerColors not already in use
+	 */
+	public List<Player.PlayerColor> getAvailableColors() {
+		List<Player.PlayerColor> avail = Arrays.asList(Player.PlayerColor.BLUE,
+				Player.PlayerColor.BLACK, Player.PlayerColor.GREEN,
+				Player.PlayerColor.RED, Player.PlayerColor.YELLOW);
+		for(Player p : playerList) {
+			avail.remove(p.getColor());
+		}
+		return avail;
 	}
 
 	public int getGameID() {
