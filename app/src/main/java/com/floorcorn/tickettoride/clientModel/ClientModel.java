@@ -1,16 +1,20 @@
 package com.floorcorn.tickettoride.clientModel;
 
+import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.clientModel.Game;
+
+import java.util.List;
+import java.util.Observable;
 import java.util.Set;
 
 /**
  * Created by Kaylee on 2/4/2017.
  */
 
-public class ClientModel {
+public class ClientModel extends Observable {
 
     private User currentUser;
     private Set<IGame> gameList;
@@ -35,10 +39,10 @@ public class ClientModel {
         return gameSet;
     }
 
-    public Set<IGame> getGames(Set<IGame> gList){
-        //not entirely sure what this one does...
-
-        return null;
+    public List<IGame> getGames(UIFacade.GameSortStyle sortStyle) {
+        // Probably don't need this because UIFacade can return sorted games lists after getting
+        // the games from this ClientModel
+        throw new UnsupportedOperationException();
     }
 
     public IGame getCurrentGame(){
@@ -47,13 +51,22 @@ public class ClientModel {
 
     public void setGames(Set<IGame> gList){
         gameList = gList;
+
+        setChanged();
+        notifyObservers();
     }
 
     public void setCurrentUser(User user){
         currentUser = user;
+
+        setChanged();
+        notifyObservers();
     }
 
     public void setCurrentGame(IGame game){
         currentGame = game;
+
+        setChanged();
+        notifyObservers();
     }
 }
