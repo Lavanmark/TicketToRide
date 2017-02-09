@@ -24,18 +24,38 @@ public class Serializer {
 		gson = new Gson();
 	}
 
+	/**
+	 * turns objects into a string of json
+	 * @param o any object to be serialized
+	 * @return string of json of the object
+	 */
 	public String serialize(Object o) {
 		return gson.toJson(o);
 	}
 
+	/**
+	 * converts json string of a user into a user object
+	 * @param str json string representing a user
+	 * @return user object from json string
+	 */
 	public User deserializeUser(String str) {
 		return gson.fromJson(str, User.class);
 	}
 
+	/**
+	 * converts string of json representing a game to a game object
+	 * @param str json representing a game
+	 * @return game object from json string
+	 */
 	public IGame deserializeGame(String str) {
 		return gson.fromJson(str, Game.class);
 	}
 
+	/**
+	 * converts string of json representing a player to a player object
+	 * @param str json representing a player
+	 * @return player object from json string
+	 */
 	public Player deserializePlayer(String str) {
 		return gson.fromJson(str, Player.class);
 	}

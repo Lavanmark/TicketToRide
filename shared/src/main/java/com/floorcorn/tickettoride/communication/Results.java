@@ -34,10 +34,22 @@ public class Results {
 		return result;
 	}
 
+	/**
+	 * add an exception to the result object
+	 * @param className name of the exception class
+	 * @param e exception to be added
+	 */
 	public void addException(String className, Exception e) {
 		errors.put(className, e);
 	}
 
+	/**
+	 * on failure, you can get an exception based on the classname
+	 * @pre success = false
+	 *
+	 * @param className name of the exception class
+	 * @return exception from the server
+	 */
 	public Exception getException(String className) {
 		if(errors.containsKey(className))
 			return errors.get(className);

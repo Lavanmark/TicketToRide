@@ -48,7 +48,7 @@ public class ServerProxy implements IServer {
 		Results res = clientComm.send(GET_GAMES, null, user);
 		String reser = Serializer.getInstance().serialize(res.getResult());
 		if(res.isSuccess()) {
-			return Serializer.getInstance().deserializeGameList(reser);
+			return Serializer.getInstance().deserializeGameSet(reser);
 		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
 			throw (BadUserException)res.getException(BadUserException.class.getSimpleName());
 		return null;

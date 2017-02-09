@@ -120,14 +120,18 @@ public class ServerProxyUnitTest {
 			assertEquals(p.getUserID(), login.getUserID());
 			assertEquals(p.getPlayerID(), 0);
 			assertTrue(p.isConductor());
+			assertEquals(p.getName(), login.getFullName());
 		}
 
 		assertTrue(game.isPlayer(login.getUserID()));
 		try {
-			assertFalse(game.userCanJoin(login));
-		} catch(BadUserException | GameActionException e) {
+			game.userCanJoin(login);
+			assertFalse(true);
+		} catch(BadUserException e) {
 			e.printStackTrace();
 			assertFalse(true);
+		} catch(GameActionException e) {
+			assertTrue(true);
 		}
 		assertEquals(game.getPlayer(login).getUserID(), login.getUserID());
 		assertEquals(game.getPlayer(login).getColor(), Player.PlayerColor.BLACK);

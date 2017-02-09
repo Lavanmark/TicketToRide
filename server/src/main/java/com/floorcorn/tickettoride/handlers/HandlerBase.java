@@ -18,6 +18,11 @@ import java.util.List;
 
 public abstract class HandlerBase implements HttpHandler {
 
+	/**
+	 * Retrive the authentication token from the headers
+	 * @param exchange httpexchange object from the request
+	 * @return authentication token string
+	 */
 	protected String getAuthenticationToken(HttpExchange exchange){
 		String token = null;
 		if(exchange.getRequestHeaders().containsKey("Authentication")) {
@@ -28,6 +33,12 @@ public abstract class HandlerBase implements HttpHandler {
 		return token;
 	}
 
+	/**
+	 * turns bits from requestbody into a string
+	 * @param exchange http exchange from the request
+	 * @return request body in string format
+	 * @throws IOException
+	 */
 	protected String getRequestBody(HttpExchange exchange) throws IOException {
 		InputStream is = exchange.getRequestBody();
 		InputStreamReader reader = new InputStreamReader(is);
@@ -39,6 +50,12 @@ public abstract class HandlerBase implements HttpHandler {
 		return sb.toString();
 	}
 
+	/**
+	 * sends response body string by serializing and then writing the bits to the stream
+	 * @param exchange httpexchange object from the request
+	 * @param result results object to respond with
+	 * @throws IOException
+	 */
 	protected void sendResponseBody(HttpExchange exchange, Results result) throws IOException {
 		OutputStream os = exchange.getResponseBody();
 		OutputStreamWriter writer = new OutputStreamWriter(os);
