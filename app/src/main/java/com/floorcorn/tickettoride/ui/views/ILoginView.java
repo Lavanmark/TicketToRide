@@ -33,7 +33,21 @@ public interface ILoginView {
     public String getPassword();
 
     /**
-     * This method returns the password that was entered in the UI
+     * This method returns the password that was entered in the UI under the
+     * new user section
+     *
+     * @return a String representing the password that was entered
+     * in the UI password field for a new user.
+     *
+     * @pre register button has been clicked
+     *
+     * @post the returned String is identical to the one entered in the UI
+     * password field for a new user.
+     */
+    public String getNewPassword();
+
+    /**
+     * This method returns the confirmation password that was entered in the UI
      *
      * @return a String representing the password that was entered
      * in the UI confirm password field.
@@ -48,15 +62,39 @@ public interface ILoginView {
     /**
      * This method returns the first and last name that was entered in the UI
      *
-     * @return a String representing the first and last name entered in the UI
-     * fields for first and last name.
+     * @return a String representing the first name entered in the UI
+     * field for first name.
      *
      * @pre register button has been clicked
      *
-     * @post the returned String is a concatenation of the strings entered into
-     * the UI first name and last name fields.
+     * @post the returned String the UI first name field.
      */
-    public String getFullName();
+    public String getFirstName();
+
+    /**
+     * This method returns the last name that was entered in the UI
+     *
+     * @return a String representing the last name entered in the UI
+     * field for last name.
+     *
+     * @pre register button has been clicked
+     *
+     * @post the returned String is the UI last name field.
+     */
+    public String getLastName();
+
+    /**
+     * This method returns the username that was entered in the UI register field
+     *
+     * @return a String representing the username that was entered
+     * in the UI register username field.
+     *
+     * @pre register button has been clicked
+     *
+     * @post the returned String is identical to the one entered in the UI
+     * username view under the register section.
+     */
+    public String getNewUsername();
 
     /**
      * This method displays a message on the screen
