@@ -18,8 +18,8 @@ public class LobbyPresenter implements IPresenter{
     private LobbyView view;
 
     @Override
-    public void setView(IView view) {
-
+    public void setView(IView v) {
+        view = (LobbyView) v;
     }
 
     public void createGame(){
@@ -31,15 +31,18 @@ public class LobbyPresenter implements IPresenter{
     }
 
     public void joinGame(){
-
+        //what does this do?
     }
 
     public Set<Game> getGameList(){
         return null;
-    }
+    } // where am i supposed to get the gamelist from
 
-    public Set<Game> getGameList(User user){
-        return null;
+    public Set<Game> getGameList(User user){ //where am i supposed to get the gamelist from
+        Set<Game> returnSet = null;
+        //for loop, pick out the games that have the user in it
+
+        return returnSet;
     }
 
     public Set<Game> getGameList(Set<Game> gameList){
@@ -49,10 +52,10 @@ public class LobbyPresenter implements IPresenter{
 
     public Game getGameInfo(int gameID){
         return null;
-    }
+    } //what info?
 
     private void getNewGameInfo(){
-        
+        //what info?
     }
 
 
