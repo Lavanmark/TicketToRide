@@ -59,13 +59,11 @@ public class ClientCommunicator {
 				String respData = readString(respBody);
 				return Serializer.getInstance().deserializeResults(respData);
 			} else {
-				return new Results(false, http.getResponseMessage());
+				return new Results(false, new Exception(http.getResponseMessage()));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
-			Results errResult = new Results(false, e);
-			return errResult;
-
+			return new Results(false, e);
 		}
 	}
 
