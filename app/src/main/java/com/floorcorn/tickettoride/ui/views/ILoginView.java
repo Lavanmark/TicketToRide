@@ -4,7 +4,7 @@ package com.floorcorn.tickettoride.ui.views;
  * Created by mgard on 2/4/2017.
  */
 
-public interface ILoginView {
+public interface ILoginView extends IView {
 
     /**
      * This method returns the username that was entered in the UI
