@@ -34,6 +34,8 @@ public class UIFacade {
     private UIFacade() {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
+	    serverProxy.setHost("localhost");
+	    serverProxy.setPort("8080");
     }
     private static UIFacade instance = null;
     public static UIFacade getInstance() {
