@@ -6,6 +6,7 @@ import android.widget.Button;
 
 import com.floorcorn.tickettoride.clientModel.Game;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
+import com.floorcorn.tickettoride.ui.views.activities.CreateGameActivity;
 
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 
 public class LobbyView implements IView{
 
+    private CreateGameActivity gameActivity;
     private IPresenter presenter;
     private Button createGameButton;
     private Button refreshListButton;
@@ -22,35 +24,35 @@ public class LobbyView implements IView{
     private RecyclerView gameList;
 
     public void getGameNumber(){
-
+        //game number?
     }
 
-    public Color getPlayerColor(){
-        return null;
+    public String getPlayerColor(){ // do we want these as colors or strings?
+        return gameActivity.getColor();
     }
 
     public void createNewGameDialogue(){
-
+        //does this need to be in the activity?
     }
 
     public int getNewGamePlayerNumber(){
-        return 0;
+        return Integer.parseInt(gameActivity.getPlayerNumber());
     }
 
-    public Color getNewGameHostColor(){
-        return null;
+    public String getNewGameHostColor(){ // there need to be separate getters for the host and the rest?
+        return gameActivity.getColor();
     }
 
     public String getNewGameName(){
-        return null;
+        return gameActivity.getGameName();
     }
 
     public void displayGameList(Set<Game> games){
-
+        //does this need to be in the activity?
     }
 
     @Override
     public void setPresenter(IPresenter presenter) {
-        
+        //and this does?
     }
 }
