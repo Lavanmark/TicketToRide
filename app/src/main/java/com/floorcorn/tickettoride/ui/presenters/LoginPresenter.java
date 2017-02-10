@@ -62,7 +62,7 @@ public class LoginPresenter implements IPresenter, Observer {
 
         try {
             UIFacade.getInstance().register(username, password, firstName, lastName);
-        }catch(UserCreationException e) {
+        }catch(Exception e) {
             this.loginView.displayMessage(e.getMessage());
         }
 
@@ -87,8 +87,7 @@ public class LoginPresenter implements IPresenter, Observer {
     @Override
     public void update(Observable o, Object arg) {
         this.user = UIFacade.getInstance().getUser();
-        if(this.user == null)
-        {
+        if(this.user == null) {
             this.loginView.displayMessage("User error -- unable to find user");
             return;
         }
