@@ -21,7 +21,7 @@ public class Results {
 		if(success) {
 			this.result = result;
 		} else {
-			result = null;
+			this.result = null;
 			errors.put(result.getClass().getSimpleName(), (Exception)result);
 		}
 	}
