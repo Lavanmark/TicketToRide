@@ -40,12 +40,13 @@ public class ClientCommunicator{
 		System.out.print("sending");
 		Object[] params = new Object[3];
 		//TODO:String urlString = "http://" + host + ":" + port + urlPath;
-		String urlString = "http://10.10.21.227:8080" + urlPath;
+		String urlString = "http://192.168.255.0:8080" + urlPath;
 		params[0] = urlString;
 		params[1] = request;
 		params[2] = authUser;
 		TaskHandler myTask = new TaskHandler();
 		myTask.execute(params);
+		System.out.println("receiving" + myTask.getResults().getResult().toString());
 		return myTask.getResults();
 
 
