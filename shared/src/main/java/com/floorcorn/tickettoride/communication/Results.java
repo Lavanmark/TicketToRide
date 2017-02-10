@@ -31,6 +31,7 @@ public class Results {
 	}
 
 	public Object getResult(){
+
 		return result;
 	}
 

@@ -2,10 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.floorcorn.tickettoride">
 
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- Permissions for network access -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -21,6 +20,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".ui.views.activities.GameListActivity"
@@ -46,7 +46,7 @@
             android:theme="@style/MyDialogTheme" />
         <activity
             android:name=".ui.views.activities.BoardmapActivity"
-            android:label="@string/title_activity_boardmap"/>
+            android:label="@string/title_activity_boardmap" />
     </application>
 
 </manifest>
