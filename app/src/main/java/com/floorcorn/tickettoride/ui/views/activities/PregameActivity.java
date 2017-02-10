@@ -8,8 +8,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.ui.presenters.IPresenter;
+import com.floorcorn.tickettoride.ui.views.IView;
 
-public class PregameActivity extends AppCompatActivity {
+public class PregameActivity extends AppCompatActivity implements IView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,4 +30,9 @@ public class PregameActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void setPresenter(IPresenter presenter) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
 }
