@@ -28,7 +28,7 @@ public class ServerProxy implements IServer {
 		if(res.isSuccess()) {
 			return Serializer.getInstance().deserializeUser(reser);
 		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
-			throw (BadUserException)res.getException(BadUserException.class.getSimpleName());
+			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()).getMessage());
 		return null;
 	}
 
@@ -39,7 +39,7 @@ public class ServerProxy implements IServer {
 		if(res.isSuccess()) {
 			return Serializer.getInstance().deserializeUser(reser);
 		} else if(res.getException(UserCreationException.class.getSimpleName()) != null)
-			throw (UserCreationException)res.getException(UserCreationException.class.getSimpleName());
+			throw new UserCreationException(res.getException(UserCreationException.class.getSimpleName()).getMessage());
 		return null;
 	}
 
@@ -50,7 +50,7 @@ public class ServerProxy implements IServer {
 		if(res.isSuccess()) {
 			return Serializer.getInstance().deserializeGameSet(reser);
 		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
-			throw (BadUserException)res.getException(BadUserException.class.getSimpleName());
+			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()).getMessage());
 		return null;
 	}
 
@@ -61,7 +61,7 @@ public class ServerProxy implements IServer {
 		if(res.isSuccess()) {
 			return Serializer.getInstance().deserializeIGame(reser);
 		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
-			throw (BadUserException)res.getException(BadUserException.class.getSimpleName());
+			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()).getMessage());
 		return null;
 	}
 
@@ -72,9 +72,9 @@ public class ServerProxy implements IServer {
 		if(res.isSuccess()) {
 			return Serializer.getInstance().deserializeIGame(reser);
 		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
-			throw (BadUserException)res.getException(BadUserException.class.getSimpleName());
+			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()).getMessage());
 		else if(res.getException(GameActionException.class.getSimpleName()) != null)
-			throw (GameActionException)res.getException(GameActionException.class.getSimpleName());
+			throw new GameActionException(res.getException(GameActionException.class.getSimpleName()).getMessage());
 		return null;
 	}
 
@@ -84,9 +84,9 @@ public class ServerProxy implements IServer {
 		if(res.isSuccess())
 			return true;
 		else if(res.getException(BadUserException.class.getSimpleName()) != null)
-			throw (BadUserException)res.getException(BadUserException.class.getSimpleName());
+			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()).getMessage());
 		else if(res.getException(GameActionException.class.getSimpleName()) != null)
-			throw (GameActionException)res.getException(GameActionException.class.getSimpleName());
+			throw new GameActionException(res.getException(GameActionException.class.getSimpleName()).getMessage());
 		return false;
 	}
 

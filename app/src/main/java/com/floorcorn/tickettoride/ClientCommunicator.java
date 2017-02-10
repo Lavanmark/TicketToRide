@@ -126,6 +126,7 @@ public class ClientCommunicator{
 				System.out.println("error");
 				return "error";
 
+
 			}
 		}
 
@@ -139,6 +140,7 @@ public class ClientCommunicator{
 				sb.append(buf, 0, len);
 			}
 			return sb.toString();
+
 		}
 
 
