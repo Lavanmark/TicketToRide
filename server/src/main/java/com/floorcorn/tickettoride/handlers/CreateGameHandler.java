@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.handlers;
 import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
+import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.serverModel.User;
 import com.sun.net.httpserver.HttpExchange;
@@ -38,10 +39,17 @@ public class CreateGameHandler extends HandlerBase {
 				return;
 			}
 
-			iGame = ServerFacade.getInstance().createGame(new User(token), iGame.getName(), iGame.getGameSize());
+			Results results = null;
+			try {
+				iGame = ServerFacade.getInstance().createGame(new User(token), iGame.getName(), iGame.getGameSize());
+				results = new Results(true, iGame);
+			} catch(BadUserException e) {
+				//e.printStackTrace();
+				results = new Results(false, e);
+			}
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			sendResponseBody(httpExchange, new Results(true, iGame));
+			sendResponseBody(httpExchange, results);
 		} catch(IOException e) {
 			e.printStackTrace();
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);

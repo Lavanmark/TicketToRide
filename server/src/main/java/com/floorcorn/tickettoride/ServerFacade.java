@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride;
 
+import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.interfaces.IServer;
 import com.floorcorn.tickettoride.model.IGame;
@@ -26,10 +28,10 @@ public class ServerFacade implements IServer {
 	private ServerFacade() { model = new ServerModel(); }
 
 	@Override
-	public IUser login(IUser user) {
+	public IUser login(IUser user) throws BadUserException {
 		if(user != null)
 			return model.authenticate(user.getUsername(), user.getPassword());
-		return null;
+		throw new BadUserException("User was null!");
 	}
 
 	@Override
@@ -40,30 +42,30 @@ public class ServerFacade implements IServer {
 	}
 
 	@Override
-	public Set<IGame> getGames(IUser user) {
+	public Set<IGame> getGames(IUser user) throws BadUserException {
 		if(model.authenticate(user.getToken()) != null)
 			return model.getGames();
-		return null;
+		throw new BadUserException("Could not Authenticate User!");
 	}
 
 	@Override
-	public IGame createGame(IUser user, String name, int gameSize) {
+	public IGame createGame(IUser user, String name, int gameSize) throws BadUserException {
 		if(model.authenticate(user.getToken()) != null)
 			return model.addGame(name, gameSize);
-		return null;
+		throw new BadUserException("Could not Authenticate User!");
 	}
 
 	@Override
-	public IGame joinGame(IUser user, int gameID, Player.PlayerColor color) {
+	public IGame joinGame(IUser user, int gameID, Player.PlayerColor color) throws BadUserException, GameActionException {
 		if((user = model.authenticate(user.getToken())) != null)
 			return model.joinGame(user, gameID, color);
-		return null;
+		throw new BadUserException("Could not Authenticate User!");
 	}
 
 	@Override
-	public boolean leaveGame(IUser user, int gameID) {
+	public boolean leaveGame(IUser user, int gameID) throws BadUserException, GameActionException {
 		if((user = model.authenticate(user.getToken())) != null)
 			return model.removePlayer(user, gameID);
-		return false;
+		throw new BadUserException("Could not Authenticate User!");
 	}
 }

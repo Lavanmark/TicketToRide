@@ -25,16 +25,18 @@ public class RegisterHandler extends HandlerBase {
 				return;
 			}
 			IUser userInfo = Serializer.getInstance().deserializeUser(reqBody);
+
+			Results results = null;
 			try {
 				userInfo = ServerFacade.getInstance().register(userInfo);
-			} catch(UserCreationException uce) {
-				httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-				sendResponseBody(httpExchange, new Results(false, uce));
-				return;
+				results = new Results(true, userInfo);
+			} catch(UserCreationException e) {
+				//e.printStackTrace();
+				results = new Results(false, e);
 			}
-			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			sendResponseBody(httpExchange, new Results(true, userInfo));
 
+			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+			sendResponseBody(httpExchange, results);
 		} catch(IOException e) {
 			e.printStackTrace();
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
