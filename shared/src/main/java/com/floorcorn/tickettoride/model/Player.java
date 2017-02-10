@@ -14,16 +14,19 @@ public class Player {
 	private int gameID;
 	private int userID;
 	private PlayerColor color;
+	private String name = null;
 
 	public Player(Player player) {
 		this.playerID = player.getPlayerID();
 		this.gameID = player.getGameID();
 		this.userID = player.getUserID();
 		this.color = player.getColor();
+		this.name = player.getName();
 	}
 
-	public Player(int userID, int gameID, PlayerColor color) {
+	public Player(int userID, String name, int gameID, PlayerColor color) {
 		this.userID = userID;
+		this.name = name;
 		this.color = color;
 		this.gameID = gameID;
 		this.playerID = -1;
@@ -55,6 +58,10 @@ public class Player {
 
 	public void setColor(PlayerColor color) {
 		this.color = color;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public boolean isConductor() { return playerID == 0; }

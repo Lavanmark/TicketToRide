@@ -25,7 +25,9 @@
         <activity
             android:name=".ui.views.activities.GameListActivity"
             android:label="@string/title_game_list"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" >
+
+        </activity>
         <activity
             android:name=".ui.views.activities.GameDetailActivity"
             android:label="@string/title_game_detail"
@@ -37,15 +39,14 @@
         </activity>
         <activity
             android:name=".ui.views.activities.CreateGameActivity"
-            android:theme="@android:style/Theme.Holo.Dialog" />
+            android:theme="@style/MyDialogTheme" />
         <activity
             android:name=".ui.views.activities.PregameActivity"
             android:label="@string/title_activity_pregame"
-            android:theme="@android:style/Theme.Holo.Dialog" />
+            android:theme="@style/MyDialogTheme" />
         <activity
             android:name=".ui.views.activities.BoardmapActivity"
-            android:label="@string/title_activity_boardmap"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="@string/title_activity_boardmap"/>
     </application>
 
 </manifest>

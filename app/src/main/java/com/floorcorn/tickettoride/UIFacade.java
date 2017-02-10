@@ -190,14 +190,19 @@ public class UIFacade {
     }
 
     /**
-     * Creates a game with current user as the conductor (creator). Throws a BadUserException if
-     * getUser() cannot authenticate on the server side during game creation.
+     * Creates a game with current user as the conductor (creator). Throws a GameActionException
+     * if user can't join the newly created game (already part of game, the game is full, etc).
+     * Throws a BadUserException if getUser() cannot authenticate on the server side during game
+     * creation.
      * @param gameName String game name
      * @param playerCount int number of players (this should be between 2 and 5)
+     * @param color Player.PlayerColor color desired by the creating user
      * @return IGame object representing the newly created game
      */
-    public IGame createGame(String gameName, int playerCount) throws BadUserException {
-        return serverProxy.createGame(getUser(), gameName, playerCount);
+    public IGame createGame(String gameName, int playerCount, Player.PlayerColor color) throws GameActionException, BadUserException {
+        IGame createdGame = serverProxy.createGame(getUser(), gameName, playerCount);
+        joinGame(createdGame.getGameID(), color);
+        return createdGame;
     }
 
     /**
@@ -213,14 +218,22 @@ public class UIFacade {
 
     // Observer things.
 
+    /**
+     * Register an observer for the ClientModel. Your class (a Presenter, probably) should
+     * implement Observer and have the required update(...) method. Also, see this for useful
+     * visual: http://stackoverflow.com/a/15810174.
+     * @param obs Observer object
+     */
     public void registerObserver(Observer obs) {
-        // Not implemented yet.
-        throw new UnsupportedOperationException();
+        clientModelRoot.addObserver(obs);
     }
 
+    /**
+     * Unregister an observer from the ClientModel.
+     * @param obs Observer object
+     */
     public void unregisterObserver(Observer obs) {
-        // Not implemented yet.
-        throw new UnsupportedOperationException();
+        clientModelRoot.deleteObserver(obs);
     }
 
 }
