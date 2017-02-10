@@ -2,6 +2,7 @@ package com.floorcorn.tickettoride.ui.presenters;
 
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.clientModel.User;
+import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.ui.views.ILoginView;
 import com.floorcorn.tickettoride.ui.views.IView;
 
@@ -39,7 +40,11 @@ public class LoginPresenter implements IPresenter, Observer {
         String userName = this.loginView.getUsername();
         String password = this.loginView.getPassword();
 
-        UIFacade.getInstance().login(userName, password);
+        try {
+            UIFacade.getInstance().login(userName, password);
+        }catch(Exception e){
+            this.loginView.displayMessage(e.getMessage());
+        }
 
     }
 
@@ -55,7 +60,11 @@ public class LoginPresenter implements IPresenter, Observer {
             return;
         }
 
-        UIFacade.getInstance().register(username, password, firstName, lastName);
+        try {
+            UIFacade.getInstance().register(username, password, firstName, lastName);
+        }catch(UserCreationException e) {
+            this.loginView.displayMessage(e.getMessage());
+        }
 
     }
 
@@ -81,6 +90,9 @@ public class LoginPresenter implements IPresenter, Observer {
         if(this.user == null)
         {
             this.loginView.displayMessage("User error -- unable to find user");
+            return;
         }
+
+        this.loginView.launchNextActivity();
     }
 }

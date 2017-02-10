@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.ui.views.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -332,6 +333,12 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, IVie
 		this.mConfirmPasswordView.setText(null);
 
 	}
+
+    @Override
+    public void launchNextActivity() {
+        Intent i = new Intent(LoginActivity.this, GameListActivity.class);
+        startActivity(i);
+    }
 
     @Override
     public void setPresenter(IPresenter presenter) {
