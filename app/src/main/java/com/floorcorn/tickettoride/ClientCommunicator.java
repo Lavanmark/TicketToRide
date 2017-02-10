@@ -127,6 +127,7 @@ public class ClientCommunicator{
 				System.out.println("error");
 				return "error";
 
+<<<<<<< HEAD
 			}
 		}
 
@@ -140,6 +141,18 @@ public class ClientCommunicator{
 				sb.append(buf, 0, len);
 			}
 			return sb.toString();
+=======
+			if(http.getResponseCode() == HttpURLConnection.HTTP_OK) {
+				InputStream respBody = http.getInputStream();
+				String respData = readString(respBody);
+				return Serializer.getInstance().deserializeResults(respData);
+			} else {
+				return new Results(false, new Exception(http.getResponseMessage()));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new Results(false, e);
+>>>>>>> fea59d8153e32d8ada686ff9600e86d1013a3642
 		}
 
 

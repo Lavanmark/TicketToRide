@@ -28,8 +28,8 @@ public interface IServer {
 	 * @pre user.password corresponds to user.username
 	 *
 	 * @param user only should consist of a username and password
-	 * @return the user who was logged in if the username and password were correct
-	 * @throws BadUserException contains a message about the failure
+	 * @return the user who was logged in if the username and password were correct, null otherwise
+	 * @throws BadUserException contains a message about the failure (only if user is not formatted correctly)
 	 */
 	public IUser login(IUser user) throws BadUserException;
 
