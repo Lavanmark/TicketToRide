@@ -1,8 +1,11 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
+import android.graphics.Color;
+
 import com.floorcorn.tickettoride.clientModel.Game;
 import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.ui.views.IView;
+import com.floorcorn.tickettoride.ui.views.LobbyView;
 
 import java.util.Set;
 
@@ -12,7 +15,7 @@ import java.util.Set;
 
 public class LobbyPresenter implements IPresenter{
 
-    private IView view;
+    private LobbyView view;
 
     @Override
     public void setView(IView view) {
@@ -20,7 +23,11 @@ public class LobbyPresenter implements IPresenter{
     }
 
     public void createGame(){
-
+        String color = view.getPlayerColor();
+        int numPlayers = view.getNewGamePlayerNumber();
+        String gameName = view.getNewGameName();
+        //color, num players, game name
+        //asks the view, the view asks the activity
     }
 
     public void joinGame(){
