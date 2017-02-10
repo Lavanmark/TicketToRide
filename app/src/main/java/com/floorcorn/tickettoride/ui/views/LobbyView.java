@@ -6,6 +6,7 @@ import android.widget.Button;
 
 import com.floorcorn.tickettoride.clientModel.Game;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
+import com.floorcorn.tickettoride.ui.presenters.LobbyPresenter;
 import com.floorcorn.tickettoride.ui.views.activities.CreateGameActivity;
 
 import java.util.Set;
@@ -52,7 +53,7 @@ public class LobbyView implements IView{
     }
 
     @Override
-    public void setPresenter(IPresenter presenter) {
-        //and this does?
+    public void setPresenter(IPresenter p) {
+        presenter = (LobbyPresenter) p;
     }
 }
