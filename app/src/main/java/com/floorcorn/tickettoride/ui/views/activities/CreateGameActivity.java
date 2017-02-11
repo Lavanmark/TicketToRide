@@ -1,9 +1,9 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -13,21 +13,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.clientModel.Game;
-import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.views.IView;
-import com.floorcorn.tickettoride.ui.views.LobbyView;
 
 
-public class CreateGameActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,IPresenter {
+public class CreateGameActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,IView {
 
-    LobbyView view;
     private String color;
     private String playerNumber;
     private String gameName;
@@ -97,42 +92,46 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
     }
     //uifacade is a singleton.
 
+    private CreateGameActivity gameActivity;
+    private IPresenter presenter;
+    private Button createGameButton;
+    private Button refreshListButton;
+    private Button joinGameButton;
+    private RecyclerView gameList;
+
+    public void getGameID(){
+        //game number? this is game ID
+    }
+
+    public String getPlayerColor(){
+        return gameActivity.getColor();
+    }
+
+    public void createNewGameDialogue(){
+        //does this need to be in the activity?
+    }
+
+    public int getNewGamePlayerNumber(){ //number of people in a game
+        return Integer.parseInt(gameActivity.getPlayerNumber());
+    }
+
+    public String getNewGameHostColor(){ // there need to be separate getters for the host and the rest?
+        return gameActivity.getColor();
+    }
+
+    public String getNewGameName(){
+        return gameActivity.getGameName();
+    }
+
+    public void displayGameList(Set<Game> games){
+        //does this need to be in the activity?
+    }
+
     @Override
-    public void setView(IView v) {
-        view = (LobbyView) v;
+    public void setPresenter(IPresenter p) {
+        //presenter = () p;
+        //presenter = () p;
     }
-
-    public void createGame(){
-        String color = view.getPlayerColor();
-        int numPlayers = view.getNewGamePlayerNumber();
-        String gameName = view.getNewGameName();
-
-        //color, num players, game name
-        //asks the view, the view asks the activity
-        //sends to the uifacade, who requests it . create game
-    }
-
-    public void joinGame(){
-        //what does this do?
-    }
-
-    public Set<Game> getGameList(){
-        return null;
-    } // where am i supposed to get the gamelist from
-
-    public Set<Game> getGameList(User user){ //where am i supposed to get the gamelist from
-        Set<Game> returnSet = null;
-        //for loop, pick out the games that have the user in it
-
-        return returnSet;
-    }
-
-    public Game getGameInfo(int gameID){
-        return null;
-    } //user clicks on game on the list and it reports back the info of the game. returnt eh game object
-
-
-
 
 
     public String getColor() {
@@ -145,7 +144,7 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
 
     public String getPlayerNumber() {
         return playerNumber;
-    }
+    } //number of people in a game
 
     public void setPlayerNumber(String number) {
         this.playerNumber = number;
