@@ -6,4 +6,4 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:textIsSelectable="true"
-    tools:context="cs.byu.edu.myapplication.GameDetailFragment" />
+    tools:context="com.floorcorn.tickettoride.ui.views.fragments.GameDetailFragment" />

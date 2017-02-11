@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.ui.views.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -254,6 +255,15 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, IVie
 
 	}
 
+    /**
+     * This method checks all of the fields to determine if there is enough information to
+     * register
+     *
+     * @return a boolean indicating whether or not there is enough information to submit
+     *
+     * @pre text has been altered in one of the UI fields.
+     * @post the returned value is false if there is not enough data. Else true.
+     */
     private boolean registerFormComplete()
     {
         if(mFirstNameView.getText().toString().length() < 1)
@@ -323,6 +333,12 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, IVie
 		this.mConfirmPasswordView.setText(null);
 
 	}
+
+    @Override
+    public void launchNextActivity() {
+        Intent i = new Intent(LoginActivity.this, GameListActivity.class);
+        startActivity(i);
+    }
 
     @Override
     public void setPresenter(IPresenter presenter) {
