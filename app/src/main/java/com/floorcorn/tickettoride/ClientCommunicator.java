@@ -40,7 +40,7 @@ public class ClientCommunicator{
 		System.out.print("sending");
 		Object[] params = new Object[3];
 		//TODO:String urlString = "http://" + host + ":" + port + urlPath;
-		String urlString = "http://10.10.21.227:8080" + urlPath;
+		String urlString = "http://10.24.66.9:8080" + urlPath;
 		params[0] = urlString;
 		params[1] = request;
 		params[2] = authUser;
