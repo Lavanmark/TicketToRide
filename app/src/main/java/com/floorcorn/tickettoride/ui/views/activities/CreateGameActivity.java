@@ -23,9 +23,49 @@ import com.floorcorn.tickettoride.ui.views.IView;
 
 public class CreateGameActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,IView {
 
-    private String color;
+    private IPresenter presenter;
+    private String playerColor;
     private String playerNumber;
     private String gameName;
+    private Button createGameButton;
+    private Button refreshListButton; //this button needs to be implemented
+    private Button joinGameButton; // this button needs to be implemented
+    private RecyclerView gameList; // this view? whats going on with it?
+
+    @Override
+    public void setPresenter(IPresenter p) {
+        presenter = p;
+    }
+
+    private void setGameName(String name){
+        gameName = name;
+    }
+
+    private void setPlayerNumber(String number){
+        playerNumber = number;
+    }
+
+    private void setColor(String color){
+        playerColor = color;
+    }
+
+    //uifacade is a singleton.
+
+    public void getGameID(){
+        //game number? this is game ID
+    }
+
+    public String getPlayerColor(){ // i think this can double as the starting player color and also eveyrone elses color, just has to be stored somewhere else, and depends on the time of the call
+        return this.playerColor;
+    }
+
+    public int getNewGamePlayerNumber(){ //number of people in a game
+        return Integer.parseInt(this.playerNumber);
+    }
+
+    public String getNewGameName(){
+        return this.gameName;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +100,7 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // TODO: Send Info to the View
-                System.out.printf("%s,%s,%s\n",gameName, playerNumber, color);
+                System.out.printf("%s,%s,%s\n",gameName, playerNumber, playerColor);
                 // view.createGame(name, playerNumber, color)
                 // TODO: Close Activity
                 ((Activity) v.getContext()).finish();
@@ -71,16 +111,16 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
         gameNameField.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void afterTextChanged(Editable s) {
-                Button button = (Button) findViewById(R.id.createGameButton);
-                button.setEnabled(true);
+            public void afterTextChanged(Editable s) { // made create game button a private data member so other classes can access it
+                createGameButton = (Button) findViewById(R.id.createGameButton);
+                createGameButton.setEnabled(true);
                 setGameName(s.toString());
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Button button = (Button) findViewById(R.id.createGameButton);
-                button.setEnabled(false);
+                createGameButton = (Button) findViewById(R.id.createGameButton);
+                createGameButton.setEnabled(false);
             }
 
             @Override
@@ -88,74 +128,14 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
 
             }
         });
-
-    }
-    //uifacade is a singleton.
-
-    private CreateGameActivity gameActivity;
-    private IPresenter presenter;
-    private Button createGameButton;
-    private Button refreshListButton;
-    private Button joinGameButton;
-    private RecyclerView gameList;
-
-    public void getGameID(){
-        //game number? this is game ID
-    }
-
-    public String getPlayerColor(){
-        return gameActivity.getColor();
     }
 
     public void createNewGameDialogue(){
-        //does this need to be in the activity?
+        //Lily
     }
 
-    public int getNewGamePlayerNumber(){ //number of people in a game
-        return Integer.parseInt(gameActivity.getPlayerNumber());
-    }
-
-    public String getNewGameHostColor(){ // there need to be separate getters for the host and the rest?
-        return gameActivity.getColor();
-    }
-
-    public String getNewGameName(){
-        return gameActivity.getGameName();
-    }
-
-    public void displayGameList(Set<Game> games){
-        //does this need to be in the activity?
-    }
-
-    @Override
-    public void setPresenter(IPresenter p) {
-        //presenter = () p;
-        //presenter = () p;
-    }
-
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getPlayerNumber() {
-        return playerNumber;
-    } //number of people in a game
-
-    public void setPlayerNumber(String number) {
-        this.playerNumber = number;
-    }
-
-    public String getGameName() {
-        return gameName;
-    }
-
-    public void setGameName(String gameName) {
-        this.gameName = gameName;
+    public void displayGameList(Set<Game> games) {
+        //Lily
     }
 
     @Override
