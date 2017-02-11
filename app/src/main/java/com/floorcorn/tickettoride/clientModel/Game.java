@@ -30,5 +30,4 @@ public class Game extends IGame {
     public Game(int gameID) {
         this.gameID = gameID;
     }
-    public Game(){}
 }
