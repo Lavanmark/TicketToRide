@@ -8,10 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.floorcorn.tickettoride.R;
-import com.floorcorn.tickettoride.ui.presenters.IPresenter;
-import com.floorcorn.tickettoride.ui.views.IView;
 
-public class BoardmapActivity extends AppCompatActivity implements IView {
+public class BoardmapActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +26,6 @@ public class BoardmapActivity extends AppCompatActivity implements IView {
                         .setAction("Action", null).show();
             }
         });
-
-        // TODO: Opens Pregame view to wait for game start.
-        //      Is there a game.started() check?
     }
 
-    @Override
-    public void setPresenter(IPresenter presenter) {
-        throw new UnsupportedOperationException();
-    }
 }
