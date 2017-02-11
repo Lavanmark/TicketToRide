@@ -115,5 +115,14 @@ public interface ILoginView {
      */
     public void clearView();
 
+    /**
+     * This method is called when the presenter logins succesfully. It then creates a new
+     * activity for the game lobby.
+     *
+     * @pre The user login/register was succesful.
+     * @post The client is now on the GameLobby activity
+     */
+    public void launchNextActivity();
+
 
 }

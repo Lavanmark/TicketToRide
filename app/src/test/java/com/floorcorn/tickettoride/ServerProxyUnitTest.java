@@ -3,12 +3,14 @@ package com.floorcorn.tickettoride;
 import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.model.Player;
 
 import org.junit.*;
 
+import java.security.spec.ECField;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -39,7 +41,7 @@ public class ServerProxyUnitTest {
 			IUser res = sp.register(goodUser);
 			assertNotEquals(res, null);
 		} catch(Exception e) {
-			System.out.println(e.getMessage());
+			System.err.println(e.getMessage());
 			assertTrue(false);
 		}
 		goodUser = new User("tyler", "dragonman");
@@ -56,6 +58,106 @@ public class ServerProxyUnitTest {
 		assertNotEquals(res.getToken(), null);
 		assertNotEquals(res.getUserID(), -1);
 		assertEquals(res.getFullName(), "tyler");
+
+		//
+		//REGISTER TESTS
+		//
+
+		//SHORT USERNAME
+		User badUser = new User("t", "dragonman");
+		try {
+			res = sp.register(badUser);
+			assertFalse(true);
+		} catch(UserCreationException e) {
+			assertTrue(true);
+		}
+
+		//SHORT PASSWORD
+		badUser = new User("tylerd", "short");
+		try {
+			res = sp.register(badUser);
+			assertFalse(true);
+		} catch(UserCreationException e) {
+			assertTrue(true);
+		}
+
+		//REPEAT USER
+		badUser = new User("tyler", "dragonman");
+		try {
+			res = sp.register(badUser);
+			assertFalse(true);
+		} catch(UserCreationException e) {
+			assertTrue(true);
+		}
+
+		//NO USER
+		badUser = null;
+		try {
+			res = sp.register(badUser);
+			assertEquals(res, null); //TODO since server gets empty body it responds with bad request.
+			// ok since user doesn't need to know its null?
+		} catch(UserCreationException e) {
+			assertFalse(true);
+		}
+
+		//
+		//LOGIN TESTS
+		//
+
+		//BAD PASSWORD
+		badUser = new User("tyler", "notthepassword");
+		try {
+			res = sp.login(badUser);
+			assertEquals(res, null);
+		} catch(BadUserException e) {
+			assertFalse(true);
+		}
+
+		//BAD USERNAME
+		badUser = new User("tswaggin", "dragonman");
+		try {
+			res = sp.login(badUser);
+			assertEquals(res, null);
+		} catch(BadUserException e) {
+			assertFalse(true);
+		}
+
+		//PASSWORD ONLY
+		badUser = new User("", "dragonman");
+		try {
+			res = sp.login(badUser);
+			assertEquals(res, null);
+		} catch(BadUserException e) {
+			assertFalse(true);
+		}
+
+		//USERNAME ONLY
+		badUser = new User("tyler", "");
+		try {
+			res = sp.login(badUser);
+			assertEquals(res, null);
+		} catch(BadUserException e) {
+			assertFalse(true);
+		}
+
+		//BAD TOKEN
+		badUser = new User("ABCDEFGHIJKLMNOP");
+		try {
+			res = sp.login(badUser);
+			assertEquals(res, null);
+		} catch(BadUserException e) {
+			assertFalse(true);
+		}
+
+		//NO USER
+		badUser = null;
+		try {
+			res = sp.login(badUser);
+			assertEquals(res, null);
+		} catch(BadUserException e) {
+			assertFalse(true);
+		}
+
 	}
 
 	@Test
