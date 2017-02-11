@@ -1,9 +1,9 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -13,24 +13,52 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.clientModel.Game;
-import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
+import com.floorcorn.tickettoride.ui.views.ILobbyView;
 import com.floorcorn.tickettoride.ui.views.IView;
-import com.floorcorn.tickettoride.ui.views.LobbyView;
 
 
-public class CreateGameActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,IPresenter {
+public class CreateGameActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,ILobbyView {
 
-    LobbyView view;
-    private String color;
+    private IPresenter presenter;
+    private String playerColor;
     private String playerNumber;
     private String gameName;
+    private Button createGameButton;
+    private Button refreshListButton; //this button needs to be implemented
+    private Button joinGameButton; // this button needs to be implemented
+    private RecyclerView gameList; // this view? whats going on with it?
+
+    @Override
+    public void setPresenter(IPresenter p) {
+        presenter = p;
+    }
+
+    //uifacade is a singleton.
+    @Override
+    public int getGameID(){
+        //game number? this is game ID
+        return 0;
+    }
+
+    @Override
+    public String getPlayerColor(){ // i think this can double as the starting player color and also eveyrone elses color, just has to be stored somewhere else, and depends on the time of the call
+        return this.playerColor;
+    }
+
+    @Override
+    public int getNewGamePlayerNumber(){ //number of people in a game
+        return Integer.parseInt(this.playerNumber);
+    }
+
+    @Override
+    public String getNewGameName(){
+        return this.gameName;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +93,7 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // TODO: Send Info to the View
-                System.out.printf("%s,%s,%s\n",gameName, playerNumber, color);
+                System.out.printf("%s,%s,%s\n",gameName, playerNumber, playerColor);
                 // view.createGame(name, playerNumber, color)
                 // TODO: Close Activity
                 ((Activity) v.getContext()).finish();
@@ -76,16 +104,16 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
         gameNameField.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void afterTextChanged(Editable s) {
-                Button button = (Button) findViewById(R.id.createGameButton);
-                button.setEnabled(true);
+            public void afterTextChanged(Editable s) { // made create game button a private data member so other classes can access it
+                createGameButton = (Button) findViewById(R.id.createGameButton);
+                createGameButton.setEnabled(true);
                 setGameName(s.toString());
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Button button = (Button) findViewById(R.id.createGameButton);
-                button.setEnabled(false);
+                createGameButton = (Button) findViewById(R.id.createGameButton);
+                createGameButton.setEnabled(false);
             }
 
             @Override
@@ -93,70 +121,28 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
 
             }
         });
-
     }
-    //uifacade is a singleton.
+
+    private void setGameName(String name){
+        gameName = name;
+    }
+
+    private void setPlayerNumber(String number){
+        playerNumber = number;
+    }
+
+    private void setColor(String color){
+        playerColor = color;
+    }
 
     @Override
-    public void setView(IView v) {
-        view = (LobbyView) v;
+    public void createNewGameDialogue(){
+        //Lily
     }
 
-    public void createGame(){
-        String color = view.getPlayerColor();
-        int numPlayers = view.getNewGamePlayerNumber();
-        String gameName = view.getNewGameName();
-
-        //color, num players, game name
-        //asks the view, the view asks the activity
-        //sends to the uifacade, who requests it . create game
-    }
-
-    public void joinGame(){
-        //what does this do?
-    }
-
-    public Set<Game> getGameList(){
-        return null;
-    } // where am i supposed to get the gamelist from
-
-    public Set<Game> getGameList(User user){ //where am i supposed to get the gamelist from
-        Set<Game> returnSet = null;
-        //for loop, pick out the games that have the user in it
-
-        return returnSet;
-    }
-
-    public Game getGameInfo(int gameID){
-        return null;
-    } //user clicks on game on the list and it reports back the info of the game. returnt eh game object
-
-
-
-
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getPlayerNumber() {
-        return playerNumber;
-    }
-
-    public void setPlayerNumber(String number) {
-        this.playerNumber = number;
-    }
-
-    public String getGameName() {
-        return gameName;
-    }
-
-    public void setGameName(String gameName) {
-        this.gameName = gameName;
+    @Override
+    public void displayGameList(Set<Game> games) {
+        //Lily
     }
 
     @Override

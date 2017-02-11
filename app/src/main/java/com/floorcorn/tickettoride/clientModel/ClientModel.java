@@ -16,11 +16,11 @@ import java.util.Set;
 
 public class ClientModel extends Observable {
 
-    private User currentUser;
+    private IUser currentUser;
     private Set<IGame> gameList;
     private IGame currentGame;
 
-    public User getCurrentUser(){
+    public IUser getCurrentUser(){
         return currentUser;
     }
 
@@ -28,7 +28,7 @@ public class ClientModel extends Observable {
         return gameList;
     }
 
-    public Set<IGame> getGames(User user){
+    public Set<IGame> getGames(IUser user) {
         if(user==null) return null;
         Set<IGame> gameSet = null;
         for(IGame g: gameList){
@@ -49,24 +49,28 @@ public class ClientModel extends Observable {
         return currentGame;
     }
 
-    public void setGames(Set<IGame> gList){
+    public void setGames(Set<IGame> gList) {
         gameList = gList;
 
         setChanged();
         notifyObservers();
     }
 
-    public void setCurrentUser(User user){
+    public void setCurrentUser(IUser user) {
         currentUser = user;
 
         setChanged();
         notifyObservers();
     }
 
-    public void setCurrentGame(IGame game){
+    public void setCurrentGame(IGame game) {
         currentGame = game;
 
         setChanged();
         notifyObservers();
     }
+
+	public void addGame(IGame game) {
+		gameList.add(game);
+	}
 }
