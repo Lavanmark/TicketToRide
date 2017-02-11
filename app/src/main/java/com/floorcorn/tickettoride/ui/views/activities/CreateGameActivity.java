@@ -15,13 +15,17 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.clientModel.Game;
+import com.floorcorn.tickettoride.clientModel.User;
+import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.views.IView;
 import com.floorcorn.tickettoride.ui.views.LobbyView;
 
 
-public class CreateGameActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class CreateGameActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,IPresenter {
 
     LobbyView view;
     private String color;
@@ -91,8 +95,41 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
         });
 
     }
+    //uifacade is a singleton.
 
+    @Override
+    public void setView(IView v) {
+        view = (LobbyView) v;
+    }
 
+    public void createGame(){
+        String color = view.getPlayerColor();
+        int numPlayers = view.getNewGamePlayerNumber();
+        String gameName = view.getNewGameName();
+
+        //color, num players, game name
+        //asks the view, the view asks the activity
+        //sends to the uifacade, who requests it . create game
+    }
+
+    public void joinGame(){
+        //what does this do?
+    }
+
+    public Set<Game> getGameList(){
+        return null;
+    } // where am i supposed to get the gamelist from
+
+    public Set<Game> getGameList(User user){ //where am i supposed to get the gamelist from
+        Set<Game> returnSet = null;
+        //for loop, pick out the games that have the user in it
+
+        return returnSet;
+    }
+
+    public Game getGameInfo(int gameID){
+        return null;
+    } //user clicks on game on the list and it reports back the info of the game. returnt eh game object
 
 
 
