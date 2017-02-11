@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.ui.presenters;
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
+import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.ui.views.ILoginView;
 import com.floorcorn.tickettoride.ui.views.IView;
 
@@ -16,7 +17,7 @@ import java.util.Observer;
 public class LoginPresenter implements IPresenter, Observer {
 
     private ILoginView loginView;
-    private User user;
+    private IUser user;
 
     /**
      * Default constructor for LoginPresenter class. Registers itself with UI facade as observer

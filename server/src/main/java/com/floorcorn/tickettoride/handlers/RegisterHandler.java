@@ -19,6 +19,7 @@ public class RegisterHandler extends HandlerBase {
 	@Override
 	public void handle(HttpExchange httpExchange) throws IOException {
 		try {
+			System.out.println("Are you talkin to ME??");
 			String reqBody = getRequestBody(httpExchange);
 			if(reqBody == null || reqBody.isEmpty()) {
 				httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);
@@ -34,6 +35,7 @@ public class RegisterHandler extends HandlerBase {
 				//e.printStackTrace();
 				results = new Results(false, e);
 			}
+
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			sendResponseBody(httpExchange, results);
