@@ -49,10 +49,9 @@ public class GameListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startActivity(new Intent(view.getContext(), CreateGameActivity.class));
+                //starts the CreateGameActivity as a dialogue
                 startActivity(new Intent(view.getContext(),CreateGameActivity.class));
-                //Snackbar.make(view, "Create New Game Action not yet implemented", Snackbar.LENGTH_LONG)
-                //    .setAction("Action", null).show();
+
             }
 
 
@@ -64,6 +63,7 @@ public class GameListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Update Game List not yet implemented", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                //TODO: Make call to view
             }
         });
 
@@ -104,7 +104,7 @@ public class GameListActivity extends AppCompatActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
             holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mContentView.setText(mValues.get(position).name);
             holder.mStatusView.setText(mValues.get(position).status);
 
 
