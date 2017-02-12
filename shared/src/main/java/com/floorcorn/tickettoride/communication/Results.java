@@ -22,7 +22,8 @@ public class Results {
 			this.result = result;
 		} else {
 			this.result = null;
-			errors.put(result.getClass().getSimpleName(), (Exception)result);
+			if(result instanceof Exception)
+				errors.put(result.getClass().getSimpleName(), (Exception)result);
 		}
 	}
 
