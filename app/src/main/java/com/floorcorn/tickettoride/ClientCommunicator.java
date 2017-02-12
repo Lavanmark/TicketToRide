@@ -18,6 +18,7 @@ import java.util.concurrent.ExecutionException;
  * Created by mgard on 2/1/2017.
  *
  * @author Lily on 2/10/17
+ * @author Tyler on 2/10/17
  *
  */
 
@@ -35,19 +36,18 @@ public class ClientCommunicator {
 	 * @return The Results object sent back from the Server
 	 */
 	public Results send(String urlPath, Object request, IUser authUser) {
-		System.out.println("sending");
+		//System.out.println("sending");
 		Object[] params = new Object[3];
 		String urlString = "http://" + host + ":" + port + urlPath;
-		//String urlString = "http://107.188.140.106:8080" + urlPath;
 		params[0] = urlString;
 		params[1] = request;
 		params[2] = authUser;
 		TaskHandler myTask = new TaskHandler();
 		myTask.execute(params);
-		System.out.println("receiving");
+		//System.out.println("receiving");
 		try {
-			Results res = myTask.get();
-			System.out.println(res.isSuccess());
+			Results res = myTask.get(); //TODO warning this call is blocking. Should we keep it? or time out?
+			//System.out.println(res.isSuccess());
 			return res;
 		} catch(InterruptedException | ExecutionException e) {
 			e.printStackTrace();
@@ -112,17 +112,17 @@ public class ClientCommunicator {
 				if(http.getResponseCode() == HttpURLConnection.HTTP_OK) {
 					InputStream respBody = http.getInputStream();
 					String respData = readString(respBody);
-					System.out.println("success");
+					//System.out.println("success");
 					return Serializer.getInstance().deserializeResults(respData);
 				} else {
-					System.out.println("bad stuff");
-					System.out.println(http.getResponseCode());
-					System.out.println(http.getResponseMessage());
+					//System.out.println("bad stuff");
+					//System.out.println(http.getResponseCode());
+					//System.out.println(http.getResponseMessage());
 					return new Results(false, new Exception(http.getResponseMessage()));
 				}
 			} catch(Exception e) {
 				e.printStackTrace();
-				System.out.println("error");
+				//System.out.println("error");
 				return new Results(false, e);
 			}
 		}

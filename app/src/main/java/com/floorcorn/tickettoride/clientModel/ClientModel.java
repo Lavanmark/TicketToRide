@@ -6,6 +6,7 @@ import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.clientModel.Game;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Observable;
 import java.util.Set;
@@ -20,21 +21,27 @@ public class ClientModel extends Observable {
     private Set<IGame> gameList;
     private IGame currentGame;
 
-    public IUser getCurrentUser(){
+	public ClientModel() {
+		currentGame = null;
+		currentUser = null;
+		gameList = new HashSet<IGame>();
+	}
+
+    public IUser getCurrentUser() {
         return currentUser;
     }
 
-    public Set<IGame> getGames(){
+    public Set<IGame> getGames() {
         return gameList;
     }
 
     public Set<IGame> getGames(IUser user) {
-        if(user==null) return null;
-        Set<IGame> gameSet = null;
-        for(IGame g: gameList){
-            if(g.getPlayer(user)!=null){ // found the player inside of the list
+        if(user == null)
+	        return null;
+        Set<IGame> gameSet = new HashSet<IGame>();
+        for(IGame g : gameList) {
+            if(g.getPlayer(user) != null) // found the player inside of the list
                 gameSet.add(g);
-            }
         }
         return gameSet;
     }
@@ -45,7 +52,7 @@ public class ClientModel extends Observable {
         throw new UnsupportedOperationException();
     }
 
-    public IGame getCurrentGame(){
+    public IGame getCurrentGame() {
         return currentGame;
     }
 
