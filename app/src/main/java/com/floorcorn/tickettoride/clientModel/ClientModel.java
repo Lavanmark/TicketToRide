@@ -53,21 +53,21 @@ public class ClientModel extends Observable {
         gameList = gList;
 
         setChanged();
-        notifyObservers();
+        notifyObservers(gameList);
     }
 
     public void setCurrentUser(IUser user) {
         currentUser = user;
 
         setChanged();
-        notifyObservers();
+        notifyObservers(currentUser);
     }
 
     public void setCurrentGame(IGame game) {
         currentGame = game;
 
         setChanged();
-        notifyObservers();
+        notifyObservers(currentGame);
     }
 
 	public void addGame(IGame game) {

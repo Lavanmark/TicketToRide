@@ -8,8 +8,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.ui.presenters.IPresenter;
+import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 
-public class BoardmapActivity extends AppCompatActivity {
+public class BoardmapActivity extends AppCompatActivity implements IBoardmapView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,4 +30,9 @@ public class BoardmapActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void setPresenter(IPresenter presenter) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
 }
