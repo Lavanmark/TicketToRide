@@ -12,11 +12,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.Set;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.clientModel.Game;
+import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.views.ILobbyView;
 import com.floorcorn.tickettoride.ui.views.IView;
@@ -25,28 +27,27 @@ import com.floorcorn.tickettoride.ui.views.IView;
 public class CreateGameActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,ILobbyView {
 
     private IPresenter presenter;
-    private String playerColor;
+    private Player.PlayerColor playerColor;
     private String playerNumber;
     private String gameName;
     private Button createGameButton;
     private Button refreshListButton; //this button needs to be implemented
     private Button joinGameButton; // this button needs to be implemented
     private RecyclerView gameList; // this view? whats going on with it?
+    private int gameID;
 
     @Override
     public void setPresenter(IPresenter p) {
         presenter = p;
     }
 
-    //uifacade is a singleton.
     @Override
     public int getGameID(){
-        //game number? this is game ID
-        return 0;
+        return this.gameID;
     }
 
     @Override
-    public String getPlayerColor(){ // i think this can double as the starting player color and also eveyrone elses color, just has to be stored somewhere else, and depends on the time of the call
+    public Player.PlayerColor getPlayerColor(){ // i think this can double as the starting player color and also eveyrone elses color, just has to be stored somewhere else, and depends on the time of the call
         return this.playerColor;
     }
 
@@ -58,6 +59,11 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
     @Override
     public String getNewGameName(){
         return this.gameName;
+    }
+
+    @Override
+    public void displayMessage(String message){
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -132,7 +138,22 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
     }
 
     private void setColor(String color){
-        playerColor = color;
+        switch(color) {
+            case "black":
+                playerColor = Player.PlayerColor.BLACK;
+                break;
+            case "yellow":
+                playerColor = Player.PlayerColor.YELLOW;
+                break;
+            case "blue":
+                playerColor = Player.PlayerColor.BLUE;
+                break;
+            case "green":
+                playerColor = Player.PlayerColor.GREEN;
+                break;
+            case "red":
+                playerColor = Player.PlayerColor.RED;
+        }
     }
 
     @Override
