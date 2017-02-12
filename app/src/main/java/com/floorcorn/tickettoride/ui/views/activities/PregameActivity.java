@@ -8,13 +8,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.presenters.PregamePresenter;
 import com.floorcorn.tickettoride.ui.views.IPregameView;
 
+import java.util.Set;
+
 public class PregameActivity extends AppCompatActivity implements IPregameView {
 
     private PregamePresenter presenter;
+    // playerList:RecyclerView
+    // startGameButton:Button
+    // cancelGameButton:Button
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,24 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 
     @Override
     public void setPresenter(IPresenter presenter) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void createGameWaitingDialog() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void displayPlayerList(Set<Player> players) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void startGame() {
         // TODO
         throw new UnsupportedOperationException();
     }
