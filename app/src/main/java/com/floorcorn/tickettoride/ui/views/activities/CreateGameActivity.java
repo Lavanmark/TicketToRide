@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.Set;
 
@@ -33,17 +34,16 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
     private Button refreshListButton; //this button needs to be implemented
     private Button joinGameButton; // this button needs to be implemented
     private RecyclerView gameList; // this view? whats going on with it?
+    private int gameID;
 
     @Override
     public void setPresenter(IPresenter p) {
         presenter = p;
     }
 
-    //uifacade is a singleton.
     @Override
     public int getGameID(){
-        //game number? this is game ID
-        return 0;
+        return this.gameID;
     }
 
     @Override
@@ -63,7 +63,7 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public void displayMessage(String message){
-
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     @Override
