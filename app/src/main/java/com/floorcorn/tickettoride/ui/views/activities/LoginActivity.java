@@ -45,7 +45,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements ILoginView, IView {
+public class LoginActivity extends AppCompatActivity implements ILoginView {
 
 	/**
 	 * Id to identity READ_CONTACTS permission request.
@@ -255,6 +255,12 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, IVie
 
 	}
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        this.clearView();
+    }
+
     /**
      * This method checks all of the fields to determine if there is enough information to
      * register
@@ -281,7 +287,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, IVie
 
 	@Override
 	public String getUsername() {
-		return this.mNewUsernameView.getText().toString();
+		return this.mUserView.getText().toString();
 	}
 
 	@Override

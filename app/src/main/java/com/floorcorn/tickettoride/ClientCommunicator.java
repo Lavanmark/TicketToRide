@@ -1,4 +1,4 @@
-package com.floorcorn.tickettoride;
+﻿package com.floorcorn.tickettoride;
 
 import android.os.AsyncTask;
 
@@ -137,6 +137,7 @@ public class ClientCommunicator {
 				sb.append(buf, 0, len);
 			}
 			return sb.toString();
+
 		}
 
 
