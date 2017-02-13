@@ -34,7 +34,7 @@ public class UIFacade {
     private UIFacade() {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
-	    serverProxy.setHost("localhost");
+	    serverProxy.setHost("192.168.1.14");
 	    serverProxy.setPort("8080");
     }
     private static UIFacade instance = null;
@@ -53,8 +53,9 @@ public class UIFacade {
      * @param password String password
      */
     public void login(String username, String password) throws BadUserException {
-        User user = new User(username, password);
-        serverProxy.login(user);
+        IUser user = new User(username, password);
+        user = serverProxy.login(user);
+	    clientModelRoot.setCurrentUser(user);
     }
 
     /**
@@ -67,8 +68,9 @@ public class UIFacade {
      * @param lastname String lastname
      */
     public void register(String username, String password, String firstname, String lastname) throws UserCreationException {
-        User user = new User(username, password, firstname + " " + lastname);
-        serverProxy.register(user);
+        IUser user = new User(username, password, firstname + " " + lastname);
+        user = serverProxy.register(user);
+	    clientModelRoot.setCurrentUser(user);
     }
 
     // User and game related.
@@ -77,7 +79,7 @@ public class UIFacade {
      * Gets the current user from the ClientModel.
      * @return User object from ClientModel
      */
-    public User getUser() {
+    public IUser getUser() {
         return clientModelRoot.getCurrentUser();
     }
 
@@ -95,8 +97,8 @@ public class UIFacade {
      * @return Set of IGame objects from the ClientModel
      */
     public Set<IGame> getGames(IUser user) {
-        User user2 = new User(user);
-        return clientModelRoot.getGames(user2);
+	    user = new User(user);
+        return clientModelRoot.getGames(user);
     }
 
     /**
@@ -128,8 +130,8 @@ public class UIFacade {
      * @return List of IGame objects from the ClientModel, sorted
      */
     public List<IGame> getGames(IUser user, GameSortStyle sortStyle) {
-        User user2 = new User(user);
-        Set<IGame> gamesSet = getGames(user2);
+	    user = new User(user);
+        Set<IGame> gamesSet = getGames(user);
         return sortGames(gamesSet, sortStyle);
     }
 
@@ -142,15 +144,12 @@ public class UIFacade {
     public IGame getGame(int gameID) {
         Set<IGame> games = getGames();
         if (games == null) return null;
-        IGame retval = null;
         for (IGame game : games) {
             if (game.getGameID() == gameID) {
-                retval = game;
-                break;
+                return game;
             }
         }
-        // Can be null if gameID is not in games.
-        return retval;
+        return null;
     }
 
     /**
@@ -186,9 +185,10 @@ public class UIFacade {
      * user can't leave the game (not in the game, etc).
      * @param gameID int game ID
      */
-    public void leaveGame(int gameID) throws GameActionException, BadUserException {
-        IUser user = getUser();
-        serverProxy.leaveGame(user, gameID);
+    public boolean leaveGame(int gameID) throws GameActionException, BadUserException {
+        boolean left = serverProxy.leaveGame(getUser(), gameID);
+	    requestGames();
+	    return left;
     }
 
     /**
@@ -203,7 +203,7 @@ public class UIFacade {
      */
     public IGame createGame(String gameName, int playerCount, Player.PlayerColor color) throws GameActionException, BadUserException {
         IGame createdGame = serverProxy.createGame(getUser(), gameName, playerCount);
-        joinGame(createdGame.getGameID(), color);
+        createdGame = joinGame(createdGame.getGameID(), color);
         return createdGame;
     }
 
@@ -214,8 +214,10 @@ public class UIFacade {
      * @param gameID int game ID
      * @param color PlayerColor color
      */
-    public void joinGame(int gameID, Player.PlayerColor color) throws GameActionException, BadUserException {
-        serverProxy.joinGame(getUser(), gameID, color);
+    public IGame joinGame(int gameID, Player.PlayerColor color) throws GameActionException, BadUserException {
+        IGame ret = serverProxy.joinGame(getUser(), gameID, color);
+	    requestGames();
+	    return ret;
     }
 
     // Observer things.
