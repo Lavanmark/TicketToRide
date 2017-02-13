@@ -255,6 +255,12 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 
 	}
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        this.clearView();
+    }
+
     /**
      * This method checks all of the fields to determine if there is enough information to
      * register
