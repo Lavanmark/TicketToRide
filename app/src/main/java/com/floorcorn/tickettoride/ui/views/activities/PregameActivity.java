@@ -13,7 +13,12 @@ import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.presenters.PregamePresenter;
 import com.floorcorn.tickettoride.ui.views.IPregameView;
 
+import java.util.ArrayList;
 import java.util.Set;
+
+/**
+ * @author Joseph Hansen
+ */
 
 public class PregameActivity extends AppCompatActivity implements IPregameView {
 
@@ -39,27 +44,54 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
         });
     }
 
+    /**
+     * Sets the presenter to the argument if its the correct type. Will throw
+     * IllegalArgumentException if presenter is not the correct type
+     * @param presenter the presenter to interact with
+     */
     @Override
     public void setPresenter(IPresenter presenter) {
-        // TODO
-        throw new UnsupportedOperationException();
+        if (presenter instanceof PregamePresenter) {
+            this.presenter = (PregamePresenter) presenter;
+        } else {
+            throw new IllegalArgumentException("Presenter arg was not a PregamePresenter");
+        }
     }
 
+    /**
+     *
+     */
     @Override
     public void createGameWaitingDialog() {
         // TODO
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Displays this game's players in the view.
+     * @param players A Set of Player objects representing players in current game
+     */
     @Override
-    public void displayPlayerList(Set<Player> players) {
+    public void displayPlayerList(ArrayList<Player> players) {
         // TODO
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Begins this game.
+     */
     @Override
     public void startGame() {
         // TODO
         throw new UnsupportedOperationException();
     }
+
+    /**
+     * Switches to the Lobby view. It does not leave the game (the game in the Pregame View).
+     */
+    @Override
+    public void switchToLobbyActivity() {
+        this.finish();
+    }
+
 }
