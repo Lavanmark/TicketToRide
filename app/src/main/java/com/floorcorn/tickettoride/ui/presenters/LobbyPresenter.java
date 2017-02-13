@@ -29,7 +29,8 @@ public class LobbyPresenter implements IPresenter {
         }catch(GameActionException gameAction){
             view.displayMessage(gameAction.getMessage());
         }catch(BadUserException badUser){
-            //TODO: toss them out to the login lobby because this user is bad juju
+            UIFacade.getInstance().logout();
+            view.backToLogin();
         }
     }
 
@@ -40,7 +41,8 @@ public class LobbyPresenter implements IPresenter {
         }catch(GameActionException gameAction){
             view.displayMessage(gameAction.getMessage());
         }catch(BadUserException badUser){
-            //TODO: toss them out to the login lobby because this user is bad juju
+	        UIFacade.getInstance().logout();
+	        view.backToLogin();
         }
     }
 

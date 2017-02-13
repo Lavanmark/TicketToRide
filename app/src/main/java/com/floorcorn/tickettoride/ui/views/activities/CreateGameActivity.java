@@ -22,7 +22,6 @@ import com.floorcorn.tickettoride.clientModel.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.views.ILobbyView;
-import com.floorcorn.tickettoride.ui.views.IView;
 
 /**
  * This class acts as a dialogue box. It will send data back to the GameListActivity to notify the presenter.
@@ -42,6 +41,11 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
     private Spinner playerSpinner;
     private EditText gameNameField;
 
+
+    @Override
+    public void backToLogin() {
+        onBackPressed();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
