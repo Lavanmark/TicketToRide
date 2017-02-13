@@ -216,6 +216,11 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
                 Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void backToLogin() {
+        //TODO: this
+    }
+
 
     /**
      *
