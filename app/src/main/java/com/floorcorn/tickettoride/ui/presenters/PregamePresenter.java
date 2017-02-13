@@ -1,6 +1,8 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
 import com.floorcorn.tickettoride.UIFacade;
+import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.model.Player;
@@ -30,8 +32,12 @@ public class PregamePresenter implements IPresenter, Observer {
      * This does a leave game operation.
      */
     public void cancelGame() {
-        // TODO
-        throw new UnsupportedOperationException();
+        try {
+            UIFacade.getInstance().leaveGame(game.getGameID());
+        } catch (BadUserException | GameActionException ex) {
+            view.displayMessage("Could not leave game");
+        }
+        returnToLobby();
     }
 
     /**
@@ -39,7 +45,6 @@ public class PregamePresenter implements IPresenter, Observer {
      * @return
      */
     public Set<Player> getPlayerList() {
-        // TODO
         throw new UnsupportedOperationException();
     }
 
@@ -54,7 +59,7 @@ public class PregamePresenter implements IPresenter, Observer {
      * This checks the status of the game and starts the game if it has filled with players.
      * It schedules a TimerTask that checks if game is filled (every 5000 milliseconds).
      * TODO check that this is still running if Activity is finished()
-     * TODO check that this properly dies if Actiivyt is finished() and then game starts
+     * TODO check that this properly dies if Activity is finished() and then game starts
      */
     public void beginStartGamePoller() {
         Timer timer = new Timer();
@@ -91,6 +96,7 @@ public class PregamePresenter implements IPresenter, Observer {
     public void startGame() {
         // TODO
         throw new UnsupportedOperationException();
+        // Just show the Boardmap with message: Game Started
     }
 
     /**
