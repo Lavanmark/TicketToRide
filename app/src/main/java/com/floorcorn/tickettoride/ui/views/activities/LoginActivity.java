@@ -281,7 +281,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, IVie
 
 	@Override
 	public String getUsername() {
-		return this.mNewUsernameView.getText().toString();
+		return this.mUserView.getText().toString();
 	}
 
 	@Override
