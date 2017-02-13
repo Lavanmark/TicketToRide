@@ -1,4 +1,4 @@
-﻿package com.floorcorn.tickettoride;
+package com.floorcorn.tickettoride;
 
 import android.os.AsyncTask;
 
