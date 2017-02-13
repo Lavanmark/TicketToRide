@@ -87,7 +87,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     }
 
     /**
-     * Switches to the Lobby view. It does not leave the game (the game in the Pregame View).
+     * Switches to the Lobby view. It does not leave the game.
      */
     @Override
     public void switchToLobbyActivity() {

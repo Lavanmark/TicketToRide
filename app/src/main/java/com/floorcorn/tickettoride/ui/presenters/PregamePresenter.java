@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
+import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.model.Player;
@@ -9,6 +10,8 @@ import com.floorcorn.tickettoride.ui.views.IView;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author Joseph Hansen
@@ -18,6 +21,10 @@ public class PregamePresenter implements IPresenter, Observer {
     private IPregameView view;
     private IGame game;
     private IUser user;
+
+    public PregamePresenter() {
+        beginStartGamePoller();
+    }
 
     /**
      * This does a leave game operation.
@@ -44,7 +51,42 @@ public class PregamePresenter implements IPresenter, Observer {
     }
 
     /**
-     *
+     * This checks the status of the game and starts the game if it has filled with players.
+     * It schedules a TimerTask that checks if game is filled (every 5000 milliseconds).
+     * TODO check that this is still running if Activity is finished()
+     * TODO check that this properly dies if Actiivyt is finished() and then game starts
+     */
+    public void beginStartGamePoller() {
+        Timer timer = new Timer();
+
+        class CheckGameFilledTask extends TimerTask {
+            Timer timer;
+
+            CheckGameFilledTask(Timer t) {
+                timer = t;
+            }
+
+            @Override
+            public void run() {
+                IGame gameFromServer = UIFacade.getInstance().getGame(game.getGameID());
+                if (gameFromServer != null) {
+                    game = gameFromServer;
+                    updatePlayerList();
+                    if (game.hasStarted()) {
+                        timer.cancel();
+                        timer.purge();
+                        startGame();
+                        return;
+                    }
+                }
+            }
+        };
+
+        timer.schedule(new CheckGameFilledTask(timer), 5000, 5000); // every 5000 ms
+    }
+
+    /**
+     * Should be called when number of players in game matches the game's size. Starts the game.
      */
     public void startGame() {
         // TODO
@@ -75,9 +117,17 @@ public class PregamePresenter implements IPresenter, Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof IGame) {
             game = (IGame) arg;
-            this.view.displayPlayerList(game.getPlayerList());
+            updatePlayerList();
         } else if (arg instanceof IUser) {
             user = (IUser) arg;
         }
+    }
+
+    /**
+     * Updates the displayed player list. (Sends the player list to the view and calls display
+     * again.)
+     */
+    private void updatePlayerList() {
+        this.view.displayPlayerList(this.game.getPlayerList());
     }
 }
