@@ -30,4 +30,16 @@ public interface IPregameView extends IView {
      * Switches to the Lobby view. It does not leave the game (the game in the Pregame View).
      */
     public void switchToLobbyActivity();
+
+    /**
+     * Switches to the Boardmap view. This happens when the game is started and we don't need
+     * Pregame view anymore.
+     */
+    public void switchToBoardmapActivity();
+
+    /**
+     * Displays a message in a Toast.
+     * @param message String to display
+     */
+    public void displayMessage(String message);
 }

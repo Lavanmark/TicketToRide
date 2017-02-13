@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.model.Player;
@@ -92,6 +93,25 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     @Override
     public void switchToLobbyActivity() {
         this.finish();
+    }
+
+    /**
+     * Switches to the Boardmap view. This happens when the game is started and we don't need
+     * Pregame view anymore.
+     */
+    @Override
+    public void switchToBoardmapActivity() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Displays a message in a Toast.
+     * @param message String to display
+     */
+    @Override
+    public void displayMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
 }
