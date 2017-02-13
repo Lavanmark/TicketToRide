@@ -42,6 +42,13 @@ public class ServerFacade implements IServer {
 	}
 
 	@Override
+	public IGame getGame(IUser user, int gameID) throws BadUserException {
+		if(user != null)
+			return model.getGame(gameID);
+		throw new BadUserException("User was null!");
+	}
+
+	@Override
 	public Set<IGame> getGames(IUser user) throws BadUserException {
 		if(model.authenticate(user.getToken()) != null)
 			return model.getGames();
