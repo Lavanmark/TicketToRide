@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.floorcorn.tickettoride.GameListActivity">
+    tools:context="com.floorcorn.tickettoride.ui.views.activities.GameListActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -21,35 +21,15 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/game_list" />
+            <include layout="@layout/game_frame" />
 
-    </FrameLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_add"
-        app:backgroundTint="@android:color/holo_blue_light" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_revert"
-        app:backgroundTint="@android:color/holo_orange_light"
-        android:layout_gravity="center_vertical|left"
-        app:layout_anchor="@+id/frameLayout"
-        app:layout_anchorGravity="center_vertical|right" />
+        </FrameLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>
