@@ -5,27 +5,26 @@ import android.os.AsyncTask;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.model.IUser;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.ConnectException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by mgard on 2/1/2017.
  *
  * @author Lily on 2/10/17
+ * @author Tyler on 2/10/17
  *
  */
 
 
 
-public class ClientCommunicator{
+public class ClientCommunicator {
 
 	private String host;
 	private String port;
@@ -37,22 +36,24 @@ public class ClientCommunicator{
 	 * @return The Results object sent back from the Server
 	 */
 	public Results send(String urlPath, Object request, IUser authUser) {
-		System.out.print("sending");
+		//System.out.println("sending");
 		Object[] params = new Object[3];
-		//TODO:String urlString = "http://" + host + ":" + port + urlPath;
-		String urlString = "http://192.168.255.0:8080" + urlPath;
+		String urlString = "http://" + host + ":" + port + urlPath;
 		params[0] = urlString;
 		params[1] = request;
 		params[2] = authUser;
 		TaskHandler myTask = new TaskHandler();
 		myTask.execute(params);
-		System.out.println("receiving" + myTask.getResults().getResult().toString());
-		return myTask.getResults();
-
-
+		//System.out.println("receiving");
+		try {
+			Results res = myTask.get(); //TODO warning this call is blocking. Should we keep it? or time out?
+			//System.out.println(res.isSuccess());
+			return res;
+		} catch(InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+			return new Results(false, e);
+		}
 	}
-
-
 
 	public void setHost(String host) {
 		this.host = host;
@@ -67,12 +68,11 @@ public class ClientCommunicator{
 	//    Progress – the type that gets passed to onProgressUpdate()
 	//    Result – the type returns from doInBackground()
 	// Any of them can be String, Integer, Void, etc.
-	private class TaskHandler extends AsyncTask<Object, Void, String>{
+	private class TaskHandler extends AsyncTask<Object, Void, Results>{
 
-		private Results results;
 
 		@Override
-		protected String doInBackground(Object... objects) {
+		protected Results doInBackground(Object... objects) {
 
 			String urlString = (String) objects[0];
 			Object request = (Object) objects[1];
@@ -80,7 +80,7 @@ public class ClientCommunicator{
 			return sendHelper(urlString, request, authUser);
 		}
 
-		public String sendHelper(String urlString, Object request, IUser authUser) {
+		public Results sendHelper(String urlString, Object request, IUser authUser) {
 			try {
 				String stringToSend = null;
 				if(request != null)
@@ -112,21 +112,18 @@ public class ClientCommunicator{
 				if(http.getResponseCode() == HttpURLConnection.HTTP_OK) {
 					InputStream respBody = http.getInputStream();
 					String respData = readString(respBody);
-					this.results = new Results(true, Serializer.getInstance().deserializeResults(respData));
-					System.out.println("success");
-					return "success";
+					//System.out.println("success");
+					return Serializer.getInstance().deserializeResults(respData);
 				} else {
-					this.results = new Results(false, http.getResponseMessage());
-					System.out.println(http.getResponseMessage());
-					return "error";
+					//System.out.println("bad stuff");
+					//System.out.println(http.getResponseCode());
+					//System.out.println(http.getResponseMessage());
+					return new Results(false, new Exception(http.getResponseMessage()));
 				}
 			} catch(Exception e) {
 				e.printStackTrace();
-				Results errResult = new Results(false, e);
-				this.results = errResult;
-				System.out.println("error");
-				return "error";
-
+				//System.out.println("error");
+				return new Results(false, e);
 			}
 		}
 
@@ -147,12 +144,6 @@ public class ClientCommunicator{
 			OutputStreamWriter sw = new OutputStreamWriter(os);
 			sw.write(str);
 			sw.flush();
-		}
-
-
-
-		public Results getResults() {
-			return results;
 		}
 	}
 

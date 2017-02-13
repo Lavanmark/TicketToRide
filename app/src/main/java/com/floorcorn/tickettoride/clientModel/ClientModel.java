@@ -6,6 +6,7 @@ import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.clientModel.Game;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Observable;
 import java.util.Set;
@@ -16,25 +17,31 @@ import java.util.Set;
 
 public class ClientModel extends Observable {
 
-    private User currentUser;
+    private IUser currentUser;
     private Set<IGame> gameList;
     private IGame currentGame;
 
-    public User getCurrentUser(){
+	public ClientModel() {
+		currentGame = null;
+		currentUser = null;
+		gameList = new HashSet<IGame>();
+	}
+
+    public IUser getCurrentUser() {
         return currentUser;
     }
 
-    public Set<IGame> getGames(){
+    public Set<IGame> getGames() {
         return gameList;
     }
 
-    public Set<IGame> getGames(User user){
-        if(user==null) return null;
-        Set<IGame> gameSet = null;
-        for(IGame g: gameList){
-            if(g.getPlayer(user)!=null){ // found the player inside of the list
+    public Set<IGame> getGames(IUser user) {
+        if(user == null)
+	        return null;
+        Set<IGame> gameSet = new HashSet<IGame>();
+        for(IGame g : gameList) {
+            if(g.getPlayer(user) != null) // found the player inside of the list
                 gameSet.add(g);
-            }
         }
         return gameSet;
     }
@@ -45,28 +52,32 @@ public class ClientModel extends Observable {
         throw new UnsupportedOperationException();
     }
 
-    public IGame getCurrentGame(){
+    public IGame getCurrentGame() {
         return currentGame;
     }
 
-    public void setGames(Set<IGame> gList){
+    public void setGames(Set<IGame> gList) {
         gameList = gList;
 
         setChanged();
         notifyObservers();
     }
 
-    public void setCurrentUser(User user){
+    public void setCurrentUser(IUser user) {
         currentUser = user;
 
         setChanged();
         notifyObservers();
     }
 
-    public void setCurrentGame(IGame game){
+    public void setCurrentGame(IGame game) {
         currentGame = game;
 
         setChanged();
         notifyObservers();
     }
+
+	public void addGame(IGame game) {
+		gameList.add(game);
+	}
 }
