@@ -83,8 +83,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
      */
     @Override
     public void startGame() {
-        // TODO
-        throw new UnsupportedOperationException();
+        this.finish();
     }
 
     /**
@@ -92,7 +91,9 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
      */
     @Override
     public void switchToLobbyActivity() {
-        this.finish();
+        // TODO
+        throw new UnsupportedOperationException();
+        // this needs to go back two views, the boardmap makes the pregame view
     }
 
     /**
