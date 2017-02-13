@@ -143,10 +143,10 @@ public abstract class IGame {
 	}
 
 	public boolean hasStarted() {
-		return playerList.size() == gameSize || isFinsihed();
+		return playerList.size() == gameSize || isFinished();
 	}
 
-	public boolean isFinsihed() {
+	public boolean isFinished() {
 		return finished;
 	}
 

@@ -214,7 +214,7 @@ public class ServerProxyUnitTest {
 		assertNotEquals(game, null);
 		assertEquals(game.getGameID(), gameID);
 		assertFalse(game.hasStarted());
-		assertFalse(game.isFinsihed());
+		assertFalse(game.isFinished());
 		assertEquals(game.getPlayerList().size(), 1);
 		for(Player p : game.getPlayerList()) {
 			assertEquals(p.getGameID(), game.getGameID());
@@ -261,7 +261,7 @@ public class ServerProxyUnitTest {
 		assertEquals(games.size(), 1);
 		for(IGame g : games) {
 			assertEquals(g.getGameID(), game.getGameID());
-			assertTrue(g.isFinsihed());
+			assertTrue(g.isFinished());
 		}
 	}
 }
