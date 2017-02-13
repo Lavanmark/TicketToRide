@@ -8,8 +8,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.model.Player;
+import com.floorcorn.tickettoride.ui.presenters.IPresenter;
+import com.floorcorn.tickettoride.ui.presenters.PregamePresenter;
+import com.floorcorn.tickettoride.ui.views.IPregameView;
 
-public class PregameActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Set;
+
+/**
+ * @author Joseph Hansen
+ */
+
+public class PregameActivity extends AppCompatActivity implements IPregameView {
+
+    private PregamePresenter presenter;
+    // playerList:RecyclerView
+    // startGameButton:Button
+    // cancelGameButton:Button
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +42,56 @@ public class PregameActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    /**
+     * Sets the presenter to the argument if its the correct type. Will throw
+     * IllegalArgumentException if presenter is not the correct type
+     * @param presenter the presenter to interact with
+     */
+    @Override
+    public void setPresenter(IPresenter presenter) {
+        if (presenter instanceof PregamePresenter) {
+            this.presenter = (PregamePresenter) presenter;
+        } else {
+            throw new IllegalArgumentException("Presenter arg was not a PregamePresenter");
+        }
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void createGameWaitingDialog() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Displays this game's players in the view.
+     * @param players A Set of Player objects representing players in current game
+     */
+    @Override
+    public void displayPlayerList(ArrayList<Player> players) {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Begins this game.
+     */
+    @Override
+    public void startGame() {
+        // TODO
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Switches to the Lobby view. It does not leave the game.
+     */
+    @Override
+    public void switchToLobbyActivity() {
+        this.finish();
     }
 
 }
