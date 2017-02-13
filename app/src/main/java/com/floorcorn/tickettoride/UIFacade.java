@@ -220,6 +220,10 @@ public class UIFacade {
 	    return ret;
     }
 
+	public void logout() {
+		clientModelRoot.setCurrentUser(null);
+	}
+
     // Observer things.
 
     /**

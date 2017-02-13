@@ -21,7 +21,6 @@ import com.floorcorn.tickettoride.clientModel.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.views.ILobbyView;
-import com.floorcorn.tickettoride.ui.views.IView;
 
 
 public class CreateGameActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,ILobbyView {
@@ -64,6 +63,11 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
     @Override
     public void displayMessage(String message){
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void backToLogin() {
+        onBackPressed();
     }
 
     @Override
