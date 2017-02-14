@@ -41,7 +41,6 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
     private Spinner playerSpinner;
     private EditText gameNameField;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
