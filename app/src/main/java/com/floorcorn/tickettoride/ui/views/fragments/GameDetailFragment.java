@@ -1,21 +1,21 @@
 package com.floorcorn.tickettoride.ui.views.fragments;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.floorcorn.tickettoride.ui.views.GameListContent;
-import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.ui.views.activities.GameDetailActivity;
 import com.floorcorn.tickettoride.ui.views.activities.GameListActivity;
+import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.ui.views.DummyContent;
 
 /**
- * A fragment representing a single Game detail screen.
+ * A fragment representing a single Item detail screen.
  * This fragment is either contained in a {@link GameListActivity}
  * in two-pane mode (on tablets) or a {@link GameDetailActivity}
  * on handsets.
@@ -30,7 +30,7 @@ public class GameDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private GameListContent.GameItem mItem;
+    private DummyContent.DummyItem mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -47,12 +47,12 @@ public class GameDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = GameListContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.name);
+                appBarLayout.setTitle(mItem.content);
             }
         }
     }
