@@ -211,10 +211,10 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
                 Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void backToLogin() {
-        //TODO: this
-    }
+	@Override
+	public void backToLogin() {
+		startActivity(new Intent(GameListActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+	}
 
 
     /**
