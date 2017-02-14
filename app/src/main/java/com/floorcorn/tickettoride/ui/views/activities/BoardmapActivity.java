@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,8 +9,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IPresenter;
+import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 
-public class BoardmapActivity extends AppCompatActivity {
+import java.security.InvalidParameterException;
+
+public class BoardmapActivity extends AppCompatActivity implements IBoardmapView {
+
+	BoardmapPresenter presenter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,4 +36,16 @@ public class BoardmapActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void setPresenter(IPresenter presenter) {
+	    if(presenter instanceof BoardmapPresenter)
+            this.presenter = (BoardmapPresenter)presenter;
+	    else
+		    throw new IllegalArgumentException();
+    }
+
+    @Override
+    public void backToLogin() {
+	    startActivity(new Intent(BoardmapActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+    }
 }

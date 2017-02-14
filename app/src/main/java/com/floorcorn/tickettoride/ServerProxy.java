@@ -44,6 +44,17 @@ public class ServerProxy implements IServer {
 	}
 
 	@Override
+	public IGame getGame(IUser user, int gameID) throws BadUserException {
+		Results res = clientComm.send(GET_GAME, new Game(gameID), user);
+		String reser = Serializer.getInstance().serialize(res.getResult());
+		if(res.isSuccess()) {
+			return Serializer.getInstance().deserializeIGame(reser);
+		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
+			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()).getMessage());
+		return null;
+	}
+
+	@Override
 	public Set<IGame> getGames(IUser user) throws BadUserException {
 		Results res = clientComm.send(GET_GAMES, null, user);
 		String reser = Serializer.getInstance().serialize(res.getResult());

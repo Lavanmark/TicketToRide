@@ -17,6 +17,7 @@ public interface IServer {
 	// Contexts
 	String LOGIN = "/login";
 	String REGISTER = "/register";
+	String GET_GAME = "/getAGame";
 	String GET_GAMES = "/getGames";
 	String CREATE_GAME = "/createGame";
 	String LEAVE_GAME = "/leaveGame";
@@ -56,6 +57,18 @@ public interface IServer {
 	 * @throws BadUserException
 	 */
 	public Set<IGame> getGames(IUser user) throws BadUserException;
+
+	/**
+	 * retrives a single game based on gameID
+	 * @pre user.token is a valid authentication token
+	 * @pre gameID is a valid Game's ID
+	 *
+	 * @param user contains token that is valid
+	 * @param gameID ID number of game to be retrieved
+	 * @return Game object corresponding to the gameID, null if game does not exist
+	 * @throws BadUserException
+	 */
+	public IGame getGame(IUser user, int gameID) throws BadUserException;
 
 	/**
 	 * will create a new game

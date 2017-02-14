@@ -52,4 +52,7 @@
     <string name="title_game_detail">Game Detail</string>
     <string name="title_activity_pregame">PregameActivity</string>
     <string name="title_activity_boardmap">BoardmapActivity</string>
+
+
+    <string name="leave_game">Leave Game</string>
 </resources>

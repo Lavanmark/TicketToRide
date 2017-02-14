@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +22,6 @@ import com.floorcorn.tickettoride.clientModel.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.views.ILobbyView;
-import com.floorcorn.tickettoride.ui.views.IView;
 
 
 public class CreateGameActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,ILobbyView {
@@ -64,6 +64,11 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
     @Override
     public void displayMessage(String message){
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void backToLogin() {
+        startActivity(new Intent(CreateGameActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     @Override
