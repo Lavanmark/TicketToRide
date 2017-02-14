@@ -122,8 +122,8 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
                 }
                 else{
                     displayMessage("The server has " + gameList.size() + " games.");
-//                    mGameListRecyclerView = findViewById(R.id.game_list);
-//                    assert mGameListRecyclerView  != null;
+                    mGameListRecyclerView = findViewById(R.id.game_list);
+                    assert mGameListRecyclerView  != null;
                     List<IGame> games = new ArrayList<IGame>(gameList);
                     //refreshRecyclerView((RecyclerView) mGameListRecyclerView, games);
                     GameItemRecyclerViewAdapter a = (GameItemRecyclerViewAdapter)((RecyclerView) mGameListRecyclerView).getAdapter();
@@ -139,20 +139,15 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
         mResumeGameButton.setEnabled(false);
 
         //TODO: WHY DOES THIS BREAK EVERY TIME?? HOW DO I GET THE INITIAL LIST?
-//        try {
-//            gameList = presenter.getGameList();
-//            if (gameList == null){
-//                displayMessage("Game list from server was null");
-//            }
-//            else{
-//                displayMessage("The server has " + gameList.size() + " games.");
-//            }
-//
-//        } catch (BadUserException e) {
-//            //TODO: move this back down to the presenter level and call display message on e.message()
-//            e.printStackTrace();
-//            displayMessage(e.getMessage());
-//        }
+	        //presenter.requestGames();
+            gameList = presenter.getGameList();
+            if (gameList == null){
+                displayMessage("Game list from server was null");
+            }
+            else{
+                displayMessage("The server has " + gameList.size() + " games.");
+            }
+
         //initialize game list with what the server has
 
         mGameListRecyclerView = findViewById(R.id.game_list);
@@ -298,8 +293,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
     }
 
 
-    public class GameItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<GameItemRecyclerViewAdapter.ViewHolder> {
+    public class GameItemRecyclerViewAdapter extends RecyclerView.Adapter<GameItemRecyclerViewAdapter.ViewHolder> {
 
         //private final List<DummyContent.DummyItem> mValues;
         private List<IGame> mValues;

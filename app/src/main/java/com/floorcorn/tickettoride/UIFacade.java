@@ -34,7 +34,7 @@ public class UIFacade {
     private UIFacade() {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
-	    serverProxy.setHost("192.168.1.14");
+	    serverProxy.setHost("192.168.0.100");
 	    serverProxy.setPort("8080");
     }
     private static UIFacade instance = null;
@@ -56,6 +56,7 @@ public class UIFacade {
         IUser user = new User(username, password);
         user = serverProxy.login(user);
 	    clientModelRoot.setCurrentUser(user);
+        requestGames();
     }
 
     /**
@@ -71,6 +72,11 @@ public class UIFacade {
         IUser user = new User(username, password, firstname + " " + lastname);
         user = serverProxy.register(user);
 	    clientModelRoot.setCurrentUser(user);
+        try {
+            requestGames();
+        } catch(BadUserException e) {
+            e.printStackTrace();
+        }
     }
 
     // User and game related.

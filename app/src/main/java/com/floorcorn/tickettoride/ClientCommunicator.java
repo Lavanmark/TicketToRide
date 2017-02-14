@@ -47,7 +47,7 @@ public class ClientCommunicator {
 		//System.out.println("receiving");
 		try {
 			Results res = myTask.get(); //TODO warning this call is blocking. Should we keep it? or time out?
-			//System.out.println(res.isSuccess());
+			System.out.println(res.isSuccess());
 			return res;
 		} catch(InterruptedException | ExecutionException e) {
 			e.printStackTrace();
