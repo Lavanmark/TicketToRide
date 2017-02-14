@@ -28,6 +28,11 @@ public class PregamePresenter implements IPresenter, Observer {
         beginStartGamePoller();
     }
 
+    public PregamePresenter(IGame g, IUser u) {
+        game = g;
+        user = u;
+    }
+
     /**
      * This does a leave game operation.
      */

@@ -23,12 +23,18 @@
 
     <include layout="@layout/content_pregame" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="384dp"
+        android:layout_height="match_parent"
+        android:id="@+id/pregame_player_list"
+        android:background="@android:drawable/alert_dark_frame" />
+
+    <Button
+        android:text="@string/leave_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:id="@+id/cancelGameButton"
+        app:layout_anchorGravity="center_vertical|center_horizontal"
+        android:layout_gravity="center_vertical|center_horizontal" />
 
 </android.support.design.widget.CoordinatorLayout>
