@@ -18,7 +18,12 @@ public class BoardmapPresenter implements IPresenter, Observer {
 
     private IBoardmapView view = null;
 	private IGame game = null;
-	private IUser user;
+	private IUser user = null;
+
+	public BoardmapPresenter(IGame game, IUser user) {
+		this.game = game;
+		this.user = user;
+	}
 
     @Override
     public void setView(IView view) {
@@ -33,7 +38,15 @@ public class BoardmapPresenter implements IPresenter, Observer {
         if(arg instanceof IGame)
 	        UIFacade.getInstance().getCurrentGame();
 	    else if(arg instanceof User)
-
-
+	        if(UIFacade.getInstance().getUser() == null )
+		        view.backToLogin();
     }
+
+	public void setUser(IUser user) {
+		this.user = user;
+	}
+
+	public void setGame(IGame game) {
+		this.game = game;
+	}
 }
