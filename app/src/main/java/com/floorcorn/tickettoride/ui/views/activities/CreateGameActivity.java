@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -67,7 +68,7 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public void backToLogin() {
-        onBackPressed();
+        startActivity(new Intent(CreateGameActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     @Override

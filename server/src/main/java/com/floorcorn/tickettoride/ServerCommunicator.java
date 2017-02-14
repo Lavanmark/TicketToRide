@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.handlers.CreateGameHandler;
+import com.floorcorn.tickettoride.handlers.GetGameHandler;
 import com.floorcorn.tickettoride.handlers.GetGamesHandler;
 import com.floorcorn.tickettoride.handlers.JoinGameHandler;
 import com.floorcorn.tickettoride.handlers.LeaveGameHandler;
@@ -45,6 +46,7 @@ public class ServerCommunicator {
 	private void createContexts() {
 		server.createContext(IServer.LOGIN, new LoginHandler());
 		server.createContext(IServer.REGISTER, new RegisterHandler());
+		server.createContext(IServer.GET_GAME, new GetGameHandler());
 		server.createContext(IServer.GET_GAMES, new GetGamesHandler());
 		server.createContext(IServer.CREATE_GAME, new CreateGameHandler());
 		server.createContext(IServer.LEAVE_GAME, new LeaveGameHandler());
