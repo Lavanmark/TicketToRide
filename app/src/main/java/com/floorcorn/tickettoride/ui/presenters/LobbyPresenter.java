@@ -46,8 +46,17 @@ public class LobbyPresenter implements IPresenter {
         }
     }
 
-    public Set<IGame> getGameList(){
+    public Set<IGame> getGameList() {
         return UIFacade.getInstance().getGames();
+    }
+
+    public void requestGames() {
+        try {
+            UIFacade.getInstance().requestGames();
+        } catch (Exception e) {
+            e.printStackTrace();
+            view.displayMessage(e.getMessage());
+        }
     }
 
     public Set<IGame> getGameList(User user){
