@@ -91,7 +91,7 @@ public class LoginPresenter implements IPresenter, Observer {
     public void update(Observable o, Object arg) {
         this.user = UIFacade.getInstance().getUser();
         if(this.user == null) {
-            this.loginView.displayMessage("User error -- unable to find user");
+            this.loginView.displayMessage("Username/password error -- unable to authenticate");
             return;
         }
 
