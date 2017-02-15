@@ -7,13 +7,13 @@ import android.app.job.JobService;
  * Created by mgard on 2/14/2017.
  */
 
-public class Poller extends JobService {
-    @Override
+public class Poller {
+    //@Override
     public boolean onStartJob(JobParameters params) {
         return false;
     }
 
-    @Override
+    //@Override
     public boolean onStopJob(JobParameters params) {
         return false;
     }
