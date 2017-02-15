@@ -57,8 +57,7 @@ public class GameDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(GameDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(GameDetailFragment.ARG_ITEM_ID));
+            arguments.putString(GameDetailFragment.ARG_GAME_ID, getIntent().getStringExtra(GameDetailFragment.ARG_GAME_ID));
             GameDetailFragment fragment = new GameDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
