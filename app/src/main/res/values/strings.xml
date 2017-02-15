@@ -59,4 +59,7 @@
     <string name="title_item_detail">Item Detail</string>
     <string name="leave_game">Leave Game</string>
 
+    <string name="game_started">Game Started</string>
+    <string name="waiting_on_player">Waiting on player...</string>
+
 </resources>
