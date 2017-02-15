@@ -117,11 +117,22 @@ public abstract class IGame {
 	 * @return List of Player.PlayerColors not already in use
 	 */
 	public List<Player.PlayerColor> getAvailableColors() {
-		List<Player.PlayerColor> avail = Arrays.asList(Player.PlayerColor.BLUE,
+
+
+		List<Player.PlayerColor> all = Arrays.asList(Player.PlayerColor.BLUE,
 				Player.PlayerColor.BLACK, Player.PlayerColor.GREEN,
 				Player.PlayerColor.RED, Player.PlayerColor.YELLOW);
-		for(Player p : playerList) {
-			avail.remove(p.getColor());
+		List<Player.PlayerColor> taken = new ArrayList<Player.PlayerColor>();
+		for(Player p : playerList){
+			taken.add(p.getColor());
+		}
+		List<Player.PlayerColor> avail = new ArrayList<Player.PlayerColor>();
+		for(Player.PlayerColor a: all){
+			for(Player.PlayerColor b: taken){
+				if(!a.equals(b)){
+					avail.add(a);
+				}
+			}
 		}
 		return avail;
 	}
