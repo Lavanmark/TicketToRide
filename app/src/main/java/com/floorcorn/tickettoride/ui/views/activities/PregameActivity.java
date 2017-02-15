@@ -33,6 +33,8 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     private RecyclerView playerListView;
     private Button cancelGameButton;
 
+	private PlayerListRecyclerViewAdapter a;
+
 
     /**
      * Sets up the view components including the cancel/leave game button and the player list.
@@ -104,7 +106,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     public void displayPlayerList(ArrayList<Player> players) {
 	    playerListView = (RecyclerView) findViewById(R.id.pregame_list);
 	    assert playerListView != null;
-	    PlayerListRecyclerViewAdapter a = (PlayerListRecyclerViewAdapter) ((RecyclerView) playerListView).getAdapter();
+	    a = (PlayerListRecyclerViewAdapter) ((RecyclerView) playerListView).getAdapter();
 	    a.swapList(players);
     }
 
