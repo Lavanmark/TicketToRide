@@ -29,6 +29,7 @@ public abstract class IGame {
 	 */
 	public Player addPlayer(IUser user, Player.PlayerColor color) throws GameActionException {
 		if(user == null) throw new GameActionException("Cannot add null User to game!");
+		if(color == null) throw new GameActionException("Color was not selected!");
 		Player np = getPlayer(user);
 		if(np == null && !hasStarted()) {
 			np = new Player(user.getUserID(), user.getFullName(), gameID, color);
@@ -117,23 +118,17 @@ public abstract class IGame {
 	 * @return List of Player.PlayerColors not already in use
 	 */
 	public List<Player.PlayerColor> getAvailableColors() {
-
-
 		List<Player.PlayerColor> all = Arrays.asList(Player.PlayerColor.BLUE,
 				Player.PlayerColor.BLACK, Player.PlayerColor.GREEN,
 				Player.PlayerColor.RED, Player.PlayerColor.YELLOW);
 		List<Player.PlayerColor> taken = new ArrayList<Player.PlayerColor>();
-		for(Player p : playerList){
+		for(Player p : playerList)
 			taken.add(p.getColor());
-		}
 		List<Player.PlayerColor> avail = new ArrayList<Player.PlayerColor>();
-		for(Player.PlayerColor a: all){
-			for(Player.PlayerColor b: taken){
-				if(!a.equals(b)){
+		for(Player.PlayerColor a: all)
+			for(Player.PlayerColor b: taken)
+				if(!a.equals(b))
 					avail.add(a);
-				}
-			}
-		}
 		return avail;
 	}
 

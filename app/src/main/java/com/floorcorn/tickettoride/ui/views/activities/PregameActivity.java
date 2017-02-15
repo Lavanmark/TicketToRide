@@ -60,6 +60,12 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 
     }
 
+	@Override
+	public void onStop () {
+		presenter.stopStartGamePoller();
+		super.onStop();
+	}
+
     /**
      * Sets the presenter to the argument if its the correct type. Will throw
      * IllegalArgumentException if presenter is not the correct type

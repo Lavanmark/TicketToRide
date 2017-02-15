@@ -37,7 +37,7 @@ public class PregamePresenter implements IPresenter, Observer {
     public void cancelGame() {
         try {
             if(UIFacade.getInstance().leaveGame(game.getGameID()))
-	            stupidPoller.cancel();
+	            stopStartGamePoller();
         } catch (BadUserException | GameActionException ex) {
             view.displayMessage("Could not leave game");
         }
@@ -95,6 +95,11 @@ public class PregamePresenter implements IPresenter, Observer {
 
         stupidPoller.schedule(new CheckGameFilledTask(stupidPoller), 5000, 5000); // every 5000 ms
     }
+
+	public void stopStartGamePoller() {
+		stupidPoller.cancel();
+		stupidPoller.purge();
+	}
 
     /**
      * Should be called when number of players in game matches the game's size. Starts the game.
