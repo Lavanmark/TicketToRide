@@ -23,12 +23,6 @@
 
     <include layout="@layout/content_pregame" />
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="384dp"
-        android:layout_height="match_parent"
-        android:id="@+id/pregame_player_list"
-        android:background="@android:drawable/alert_dark_frame" />
-
     <Button
         android:text="@string/leave_game"
         android:layout_width="wrap_content"
@@ -36,5 +30,11 @@
         android:id="@+id/cancelGameButton"
         app:layout_anchorGravity="center_vertical|center_horizontal"
         android:layout_gravity="center_vertical|center_horizontal" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="384dp"
+        android:layout_height="match_parent"
+        android:id="@+id/pregame_player_list"
+        android:background="@android:drawable/alert_dark_frame" />
 
 </android.support.design.widget.CoordinatorLayout>

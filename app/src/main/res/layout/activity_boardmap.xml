@@ -17,20 +17,17 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="56dp"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/content_boardmap"
-             android:id="@+id/include"/>
 
     <TextView
         android:text="GameStartText"
         android:id="@+id/gameStartedText"
         tools:text="Game Started"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="36dp"
         android:textAppearance="@android:style/TextAppearance.Material.Large"/>
 
 </android.support.design.widget.CoordinatorLayout>

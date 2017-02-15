@@ -23,14 +23,11 @@ public class PregamePresenter implements IPresenter, Observer {
     private IPregameView view;
     private IGame game;
     private IUser user;
+	private Timer stupidPoller;
 
     public PregamePresenter() {
-        beginStartGamePoller();
-    }
-
-    public PregamePresenter(IGame g, IUser u) {
-        game = g;
-        user = u;
+        game = UIFacade.getInstance().getCurrentGame();
+        user = UIFacade.getInstance().getUser();
         beginStartGamePoller();
     }
 
@@ -39,14 +36,11 @@ public class PregamePresenter implements IPresenter, Observer {
      */
     public void cancelGame() {
         try {
-            UIFacade.getInstance().leaveGame(game.getGameID());
+            if(UIFacade.getInstance().leaveGame(game.getGameID()))
+	            stupidPoller.cancel();
         } catch (BadUserException | GameActionException ex) {
             view.displayMessage("Could not leave game");
-            // Here, we could send back to login. Put this in PregameActivity as a func and call
-            // if that's what we want:
-            // startActivity(new Intent(PregameActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         }
-        returnToLobby();
     }
 
     /**
@@ -71,7 +65,7 @@ public class PregamePresenter implements IPresenter, Observer {
      * TODO check that this properly dies when game starts, even if Activity is finished()
      */
     public void beginStartGamePoller() {
-        Timer timer = new Timer();
+        stupidPoller = new Timer();
 
         class CheckGameFilledTask extends TimerTask {
             Timer timer;
@@ -96,7 +90,7 @@ public class PregamePresenter implements IPresenter, Observer {
             }
         };
 
-        timer.schedule(new CheckGameFilledTask(timer), 5000, 5000); // every 5000 ms
+        stupidPoller.schedule(new CheckGameFilledTask(stupidPoller), 5000, 5000); // every 5000 ms
     }
 
     /**
@@ -104,10 +98,12 @@ public class PregamePresenter implements IPresenter, Observer {
      * For Phase 0, just show the Boardmap with message: Game Started.
      */
     public void startGame() {
-        // TODO
-        throw new UnsupportedOperationException();
-        // Just show the Boardmap with message: Game Started
+        view.startGame();
     }
+
+	public boolean isConductor() {
+		return game.getPlayer(user).isConductor();
+	}
 
     /**
      * Sets the view. If the view parameter is not an IPregameView, this will throw an

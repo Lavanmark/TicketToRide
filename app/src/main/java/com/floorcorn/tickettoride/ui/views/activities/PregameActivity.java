@@ -37,8 +37,15 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        presenter = new PregamePresenter();
+
         playerList = (RecyclerView) findViewById(R.id.pregame_player_list);
         cancelGameButton = (Button) findViewById(R.id.cancelGameButton);
+
+        if(presenter.isConductor())
+            cancelGameButton.setText("Cancel Game");
+        else
+            cancelGameButton.setText("Leave Game");
 
         cancelGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +53,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
                 presenter.cancelGame();
             }
         });
+
     }
 
     /**
@@ -77,8 +85,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
      */
     @Override
     public void displayPlayerList(ArrayList<Player> players) {
-        // TODO
-        throw new UnsupportedOperationException();
+
     }
 
     /**
