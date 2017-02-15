@@ -6,7 +6,7 @@
               android:layout_marginLeft="15dp">
 
     <TextView
-        android:text="Waiting on player..."
+        android:text="@string/waiting_on_player"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/playerListNameText"
