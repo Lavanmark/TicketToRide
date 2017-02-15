@@ -5,20 +5,32 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.floorcorn.tickettoride.ui.views.fragments.GameDetailFragment;
-import com.floorcorn.tickettoride.ui.views.GameListContent;
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.UIFacade;
+import com.floorcorn.tickettoride.clientModel.Game;
+import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.model.IGame;
+import com.floorcorn.tickettoride.model.Player;
+import com.floorcorn.tickettoride.ui.presenters.IPresenter;
+import com.floorcorn.tickettoride.ui.presenters.LobbyPresenter;
+import com.floorcorn.tickettoride.ui.views.GameListContent;
+import com.floorcorn.tickettoride.ui.views.ILobbyView;
+import com.floorcorn.tickettoride.ui.views.fragments.GameDetailFragment;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * An activity representing a list of Games. This activity
@@ -28,132 +40,365 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class GameListActivity extends AppCompatActivity {
+public class GameListActivity extends AppCompatActivity implements ILobbyView {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private boolean mTwoPane;
+	/**
+	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet
+	 * device.
+	 */
+	private boolean mTwoPane;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_list);
+	static final int CREATE_GAME_REQUEST = 1;
+	static final int UPDATE_GAME_REQUEST = 2;
+	static final int DISPLAY_GAME_REQUEST = 3;
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+	//model references
+	private Player.PlayerColor playerColor;
+	private int playerNumber;
+	private String gameName;
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //starts the CreateGameActivity as a dialogue
-                startActivity(new Intent(view.getContext(),CreateGameActivity.class));
+	// ui references
+	private Toolbar mToolbar;
+	private FloatingActionButton mCreateGameFab;
+	private FloatingActionButton mUpdateGameListFab;
+	private View mGameListRecyclerView;
+	private Button mCreateGameButton;
+	private Button mRefreshGameButton;
+	private Button mJoinGameButton;
+	private Button mResumeGameButton;
 
-            }
+	//presenter
+	private LobbyPresenter presenter;
 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_game_list);
 
-        });
+		mToolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(mToolbar);
+		mToolbar.setTitle(getTitle());
 
-        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
-        fab2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Update Game List not yet implemented", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                //TODO: Make call to view
-            }
-        });
+		LobbyPresenter mPresenter = new LobbyPresenter();
+		setPresenter(mPresenter);
+		presenter.setView(this);
 
-        View recyclerView = findViewById(R.id.game_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+		//mCreateGameFab = (FloatingActionButton) findViewById(R.id.fab);
+		//mUpdateGameListFab = (FloatingActionButton) findViewById(R.id.fab2);
+		mCreateGameButton = (Button) findViewById(R.id.createGameButton);
+		mRefreshGameButton = (Button) findViewById(R.id.refreshListButton);
+		mJoinGameButton = (Button) findViewById(R.id.joinGameButton);
+		mResumeGameButton = (Button) findViewById(R.id.resumeGameButton);
 
-        if (findViewById(R.id.game_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
-    }
+		mCreateGameButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				//starts the CreateGameActivity as a dialogue
+				Intent intent = new Intent(getBaseContext(), CreateGameActivity.class);
+				startActivityForResult(new Intent(view.getContext(), CreateGameActivity.class), CREATE_GAME_REQUEST);
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(GameListContent.ITEMS));
-    }
-
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-
-        private final List<GameListContent.GameItem> mValues;
-
-        public SimpleItemRecyclerViewAdapter(List<GameListContent.GameItem> items) {
-            mValues = items;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.game_list_content, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).name);
-            holder.mStatusView.setText(mValues.get(position).status);
+			}
 
 
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putString(GameDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-                        GameDetailFragment fragment = new GameDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.game_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, GameDetailActivity.class);
-                        intent.putExtra(GameDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+		});
 
-                        context.startActivity(intent);
-                    }
-                }
-            });
-        }
+		mRefreshGameButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				//request games from server, which updates model
+				presenter.requestGames();
+				//get games from model after it is updated.
+			}
+		});
 
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
+		mJoinGameButton.setEnabled(false);
+		mResumeGameButton.setEnabled(false);
+		//initialize game list with what the server has
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
-            public final TextView mStatusView;
-            public GameListContent.GameItem mItem;
+		mGameListRecyclerView = findViewById(R.id.game_list);
+		assert mGameListRecyclerView != null;
+		List<IGame> games = new ArrayList<IGame>();
+		if(presenter.getGameList() != null) {
+			games.clear();
+			games.addAll(presenter.getGameList());
+		}
+		setupRecyclerView((RecyclerView) mGameListRecyclerView, games);
 
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
-                mStatusView = (TextView) view.findViewById(R.id.status);
-            }
+		if(findViewById(R.id.game_detail_container) != null) {
+			// The detail container view will be present only in the
+			// large-screen layouts (res/values-w900dp).
+			// If this view is present, then the
+			// activity should be in two-pane mode.
+			mTwoPane = true;
+		}
 
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mContentView.getText() + " '" + mStatusView.getText() + "'";
-            }
-        }
-    }
+
+	}
+
+	@Override
+	public void setPresenter(IPresenter presenter) {
+		if(presenter instanceof LobbyPresenter)
+			this.presenter = (LobbyPresenter) presenter;
+		else
+			throw new IllegalArgumentException();
+	}
+
+	@Override
+	public void setGameList(Set<IGame> gameList) {
+		if(gameList == null) {
+			displayMessage("Game list from server was null");
+		} else {
+			displayMessage("The server has " + gameList.size() + " games.");
+			mGameListRecyclerView = findViewById(R.id.game_list);
+			assert mGameListRecyclerView != null;
+			List<IGame> games = new ArrayList<IGame>(gameList);
+			GameItemRecyclerViewAdapter a = (GameItemRecyclerViewAdapter) ((RecyclerView) mGameListRecyclerView).getAdapter();
+			a.swapList(games);
+		}
+	}
+
+	@Override
+	public int getGameID() {
+		return -1;
+	}
+
+	@Override
+	public Player.PlayerColor getPlayerColor() {
+		return this.playerColor;
+	}
+
+	@Override
+	public int getNewGamePlayerNumber() {
+		return this.playerNumber;
+	}
+
+	@Override
+	public String getNewGameName() {
+		return this.gameName;
+	}
+
+	@Override
+	public void displayMessage(String message) {
+		Toast.makeText(this, message,
+				Toast.LENGTH_LONG).show();
+	}
+
+	@Override
+	public void backToLogin() {
+		startActivity(new Intent(GameListActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+	}
+
+	@Override
+	public void resumeGame(IGame game) {
+		presenter.setCurrentGame(game);
+		startActivity(new Intent(GameListActivity.this, BoardmapActivity.class));
+	}
+
+
+	/**
+	 * When the GameListActivity starts another Activity for a result (i.e. CreateGameActivity),
+	 * the onActivityResult is called when the activity finishes. It will process the data from
+	 * the requested activity and notify the presenter accordingly.
+	 *
+	 * @param requestCode type of request
+	 * @param resultCode  result of the request (OK, FAILED)
+	 * @param data        the data produced by the requested activity
+	 */
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(requestCode == CREATE_GAME_REQUEST) {
+			if(resultCode == RESULT_OK) {
+				setGameName(data.getStringExtra("GAMENAME"));
+				setPlayerColor(data.getStringExtra("PLAYERCOLOR"));
+				setPlayerNumber(data.getStringExtra("PLAYERNUMBER"));
+				presenter.createGame();
+			}
+		}
+	}
+
+	/**
+	 * The CreateGameActivity will return the user's desired color as a string.
+	 * setPlayerColor will change the string to the correct PlayerColor Enum.
+	 *
+	 * @param color
+	 */
+	public void setPlayerColor(String color) {
+		switch(color) {
+			case "black":
+				playerColor = Player.PlayerColor.BLACK;
+				break;
+			case "yellow":
+				playerColor = Player.PlayerColor.YELLOW;
+				break;
+			case "blue":
+				playerColor = Player.PlayerColor.BLUE;
+				break;
+			case "green":
+				playerColor = Player.PlayerColor.GREEN;
+				break;
+			case "red":
+				playerColor = Player.PlayerColor.RED;
+		}
+	}
+
+	/**
+	 * @param gameName
+	 */
+	public void setGameName(String gameName) {
+		this.gameName = gameName;
+	}
+
+	/**
+	 * The CreateGameActivity will let the player choose the number
+	 * of players allowed in the game. It returns this playerNumber as a string.
+	 * setPlayerNumber converts the string to an integer.
+	 *
+	 * @param playerNumber
+	 */
+	public void setPlayerNumber(String playerNumber) {
+		this.playerNumber = Integer.parseInt(playerNumber);
+	}
+
+
+	// RECYCLERS
+
+	/**
+	 * This sets up the Recycler view with an adapter
+	 *
+	 * @param recyclerView
+	 */
+	private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<IGame> games) {
+		recyclerView.setAdapter(new GameItemRecyclerViewAdapter(recyclerView, games));
+	}
+
+
+	public class GameItemRecyclerViewAdapter extends RecyclerView.Adapter<GameItemRecyclerViewAdapter.ViewHolder> {
+		private RecyclerView rv;
+		private GameListContent glc = null;
+		private int mSelectedPosition;
+		private View mSelectedView;
+
+		public GameItemRecyclerViewAdapter(RecyclerView rv, List<IGame> items) {
+			glc = new GameListContent(items);
+			mSelectedPosition = -1;
+			this.rv = rv;
+		}
+
+		@Override
+		public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+			View view = LayoutInflater.from(parent.getContext())
+					.inflate(R.layout.game_list_content, parent, false);
+			return new ViewHolder(view);
+		}
+
+		public void swapList(List<IGame> list) {
+			glc.setGamesList(list);
+			notifyDataSetChanged();
+		}
+
+		@Override
+		public void onBindViewHolder(final ViewHolder holder, int position) {
+			holder.mItem = (Game) glc.get(position);
+			holder.mIdView.setText(String.valueOf(position));
+			if(holder.mItem == null)
+				return;
+			holder.mContentView.setText(holder.mItem.getName());
+			holder.mStatusView.setText(holder.mItem.getPlayerList().size() + "/" + holder.mItem.getGameSize());
+			try {
+				holder.mJoinButton.setEnabled(holder.mItem.userCanJoin(UIFacade.getInstance().getUser()));
+			} catch(BadUserException e) {
+				backToLogin();
+			} catch(GameActionException e) {
+				holder.mJoinButton.setText("Resume");
+				holder.mJoinButton.setEnabled(true);
+			}
+
+			//holder.mView.setSelected(position);
+			holder.mView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if(!v.isSelected()) {
+						if (mSelectedView != null) {
+							// deselect the previously selected view
+							mSelectedView.setSelected(false);
+						}
+						mSelectedPosition = rv.getChildAdapterPosition(v);
+						mSelectedView = v;
+					} else {
+						mSelectedPosition = -1;
+						mSelectedView = null;
+					}
+					v.setSelected(!v.isSelected());
+					v.setActivated(v.isSelected());
+
+					if(mTwoPane) {
+						Bundle arguments = new Bundle();
+						arguments.putString(GameDetailFragment.ARG_GAME_ID, String.valueOf(holder.mItem.getGameID()));
+						GameDetailFragment fragment = new GameDetailFragment();
+						fragment.setArguments(arguments);
+						getSupportFragmentManager().beginTransaction()
+								.replace(R.id.game_detail_container, fragment)
+								.commit();
+					} else {
+						Context context = v.getContext();
+						Intent intent = new Intent(context, GameDetailActivity.class);
+						intent.putExtra(GameDetailFragment.ARG_GAME_ID, String.valueOf(holder.mItem.getGameID()));
+
+						context.startActivity(intent);
+					}
+				}
+			});
+			if (position == mSelectedPosition) {
+				holder.itemView.setSelected(true);
+
+				// keep track of the currently selected view when recycled
+				mSelectedView = holder.mView;
+			} else {
+				holder.itemView.setSelected(false);
+			}
+			if(mSelectedView != null)
+				mSelectedView.setActivated(true);
+		}
+
+		@Override
+		public int getItemCount() {
+			return glc.getSize();
+		}
+
+		public class ViewHolder extends RecyclerView.ViewHolder {
+			public final View mView;
+			public final TextView mIdView;
+			public final TextView mContentView;
+			public final TextView mStatusView;
+			public final Button mJoinButton;
+			public Game mItem;
+
+			public ViewHolder(View view) {
+				super(view);
+				mView = view;
+				mIdView = (TextView) view.findViewById(R.id.id);
+				mContentView = (TextView) view.findViewById(R.id.content);
+				mStatusView = (TextView) view.findViewById(R.id.status);
+				mJoinButton = (Button) view.findViewById(R.id.joinButton);
+				mJoinButton.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						if(mJoinButton.getText().equals("Join")){
+							presenter.joinGame();
+						} else {
+							if(mItem.isPlayer(UIFacade.getInstance().getUser().getUserID()))
+								resumeGame(mItem);
+						}
+					}
+				});
+				view.setClickable(true);
+			}
+
+			@Override
+			public String toString() {
+				return super.toString() + " '" + mContentView.getText() + "'";
+			}
+		}
+	}
+
+
 }

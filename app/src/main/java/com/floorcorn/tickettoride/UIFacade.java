@@ -9,6 +9,7 @@ import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.IGame;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.Observer;
 import java.util.Set;
@@ -34,7 +35,7 @@ public class UIFacade {
     private UIFacade() {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
-	    serverProxy.setHost("192.168.1.14");
+	    serverProxy.setHost("192.168.0.100");
 	    serverProxy.setPort("8080");
     }
     private static UIFacade instance = null;
@@ -56,6 +57,7 @@ public class UIFacade {
         IUser user = new User(username, password);
         user = serverProxy.login(user);
 	    clientModelRoot.setCurrentUser(user);
+        requestGames();
     }
 
     /**
@@ -71,6 +73,11 @@ public class UIFacade {
         IUser user = new User(username, password, firstname + " " + lastname);
         user = serverProxy.register(user);
 	    clientModelRoot.setCurrentUser(user);
+        try {
+            requestGames();
+        } catch(BadUserException e) {
+            e.printStackTrace();
+        }
     }
 
     // User and game related.
@@ -170,6 +177,16 @@ public class UIFacade {
         }
         clientModelRoot.setCurrentGame(game);
     }
+
+	public void requestCurrentGame() throws BadUserException, InvalidParameterException {
+		if(getCurrentGame() == null)
+			throw new InvalidParameterException("No game currently selected!");
+		IGame cgame = serverProxy.getGame(clientModelRoot.getCurrentUser(), getCurrentGame().getGameID());
+		if(cgame != null)
+			clientModelRoot.setCurrentGame(cgame);
+		else
+			throw new InvalidParameterException("Current game could not be found!");
+	}
 
     /**
      * Gets games from the ServerProxy and updates the games in the ClientModel. Re-throws

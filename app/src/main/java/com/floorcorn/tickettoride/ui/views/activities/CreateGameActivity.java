@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -22,60 +23,30 @@ import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.views.ILobbyView;
 
+/**
+ * This class acts as a dialogue box. It will send data back to the GameListActivity to notify the presenter.
+ * Therefore, it does not implement the ILobbyView Interface.
+ *
+ * @author Lily, Kaylee
+ *
+ */
+public class CreateGameActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-public class CreateGameActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,ILobbyView {
-
-    private IPresenter presenter;
-    private Player.PlayerColor playerColor;
+    private String playerColor;
     private String playerNumber;
     private String gameName;
     private Button createGameButton;
-    private Button refreshListButton; //this button needs to be implemented
-    private Button joinGameButton; // this button needs to be implemented
-    private RecyclerView gameList; // this view? whats going on with it?
-    private int gameID;
 
-    @Override
-    public void setPresenter(IPresenter p) {
-        presenter = p;
-    }
-
-    @Override
-    public int getGameID(){
-        return this.gameID;
-    }
-
-    @Override
-    public Player.PlayerColor getPlayerColor(){ // i think this can double as the starting player color and also eveyrone elses color, just has to be stored somewhere else, and depends on the time of the call
-        return this.playerColor;
-    }
-
-    @Override
-    public int getNewGamePlayerNumber(){ //number of people in a game
-        return Integer.parseInt(this.playerNumber);
-    }
-
-    @Override
-    public String getNewGameName(){
-        return this.gameName;
-    }
-
-    @Override
-    public void displayMessage(String message){
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void backToLogin() {
-        onBackPressed();
-    }
+    private Spinner colorSpinner;
+    private Spinner playerSpinner;
+    private EditText gameNameField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_game);
 
-        Spinner colorSpinner = (Spinner) findViewById(R.id.colorSpinner);
+        colorSpinner = (Spinner) findViewById(R.id.colorSpinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> colorAdapter = ArrayAdapter.createFromResource(this,
                 R.array.player_colors_array, android.R.layout.simple_spinner_item);
@@ -84,9 +55,8 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
         // Apply the adapter to the spinner
         colorSpinner.setAdapter(colorAdapter);
         colorSpinner.setOnItemSelectedListener(this);
-        //color = (String) colorAdapter.getItem(0);
 
-        Spinner playerSpinner = (Spinner) findViewById(R.id.playerSpinner);
+        playerSpinner = (Spinner) findViewById(R.id.playerSpinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> playerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.num_players_array, android.R.layout.simple_spinner_item);
@@ -95,22 +65,26 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
         // Apply the adapter to the spinner
         playerSpinner.setAdapter(playerAdapter);
         playerSpinner.setOnItemSelectedListener(this);
-        //playerNumber = (String) playerAdapter.getItem(0);
 
 
-        Button button = (Button) findViewById(R.id.createGameButton);
-        button.setEnabled(false);
-        button.setOnClickListener(new View.OnClickListener() {
+        createGameButton = (Button) findViewById(R.id.createGameButton);
+        createGameButton.setEnabled(false);
+        createGameButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // TODO: Send Info to the View
+                /*
+                This section allows us to pass back data to the GameListActivity class, who will notify the LobbyPresenter
+                 */
                 System.out.printf("%s,%s,%s\n",gameName, playerNumber, playerColor);
-                // view.createGame(name, playerNumber, color)
-                // TODO: Close Activity
-                ((Activity) v.getContext()).finish();
+                Intent intent = new Intent();
+                intent.putExtra("GAMENAME", gameName);
+                intent.putExtra("PLAYERNUMBER", playerNumber);
+                intent.putExtra("PLAYERCOLOR", playerColor);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
-        EditText gameNameField = (EditText) findViewById(R.id.gameNameField);
+        gameNameField = (EditText) findViewById(R.id.gameNameField);
         gameNameField.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -142,33 +116,9 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
     }
 
     private void setColor(String color){
-        switch(color) {
-            case "black":
-                playerColor = Player.PlayerColor.BLACK;
-                break;
-            case "yellow":
-                playerColor = Player.PlayerColor.YELLOW;
-                break;
-            case "blue":
-                playerColor = Player.PlayerColor.BLUE;
-                break;
-            case "green":
-                playerColor = Player.PlayerColor.GREEN;
-                break;
-            case "red":
-                playerColor = Player.PlayerColor.RED;
-        }
+        playerColor = color;
     }
 
-    @Override
-    public void createNewGameDialogue(){
-        //Lily
-    }
-
-    @Override
-    public void displayGameList(Set<Game> games) {
-        //Lily
-    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {

@@ -1,72 +1,55 @@
 package com.floorcorn.tickettoride.ui.views.fragments;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.ui.views.GameListContent;
-import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.ui.views.activities.GameDetailActivity;
 import com.floorcorn.tickettoride.ui.views.activities.GameListActivity;
+import com.floorcorn.tickettoride.R;
 
 /**
- * A fragment representing a single Game detail screen.
+ * A fragment representing a single Item detail screen.
  * This fragment is either contained in a {@link GameListActivity}
  * in two-pane mode (on tablets) or a {@link GameDetailActivity}
  * on handsets.
  */
 public class GameDetailFragment extends Fragment {
     /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
+     * The fragment argument representing the item ID that this fragment represents.
      */
-    public static final String ARG_ITEM_ID = "item_id";
-
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private GameListContent.GameItem mItem;
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public GameDetailFragment() {
-    }
+    public static final String ARG_GAME_ID = "game_id";
+    private IGame game = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = GameListContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+        if (getArguments().containsKey(ARG_GAME_ID)) {
+            game = GameListContent.get(getArguments().getString(ARG_GAME_ID));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.name);
+                    appBarLayout.setTitle("Game Details:");
             }
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.game_detail, container, false);
-
-        // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.game_detail)).setText(mItem.details);
+        // Show the content as text in a TextView.
+        if (game != null) {
+            ((TextView) rootView.findViewById(R.id.game_detail)).setText(game.toString());
         }
-
         return rootView;
     }
 }
