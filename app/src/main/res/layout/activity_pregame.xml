@@ -21,8 +21,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_pregame" />
-
     <Button
         android:text="@string/leave_game"
         android:layout_width="wrap_content"
@@ -32,9 +30,12 @@
         android:layout_gravity="center_vertical|center_horizontal" />
 
     <android.support.v7.widget.RecyclerView
-        android:layout_width="384dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/pregame_player_list"
-        android:background="@android:drawable/alert_dark_frame" />
+        android:background="@android:drawable/alert_dark_frame"
+        tools:listitem="@layout/pregame_list_item"
+        android:clipToPadding="false"
+        android:clipChildren="false"/>
 
 </android.support.design.widget.CoordinatorLayout>
