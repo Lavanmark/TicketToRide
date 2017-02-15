@@ -47,6 +47,7 @@ public class PregamePresenter implements IPresenter, Observer {
                 UIFacade.getInstance().requestCurrentGame();
             } catch (Exception ex) {
                 System.out.println("Updated the Pregame View list, but there was an exception.");
+                ex.printStackTrace();
             }
 
             // Observer pattern will update the game object.
