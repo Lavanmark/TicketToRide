@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.model.Player;
 
 import java.util.ArrayList;
 
@@ -38,12 +39,10 @@ public class JoinGameActivity extends AppCompatActivity implements AdapterView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_game);
-
+        Intent intent = getIntent();
         colorSpinner = (Spinner) findViewById(R.id.colorSpinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
-	    ArrayList<String> strings = new ArrayList<String>();
-	    //TODO create list from intent here
-	    
+	    ArrayList<String> strings = intent.getStringArrayListExtra("colList");
         ArrayAdapter<String> colorAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strings);
 
         // Specify the layout to use when the list of choices appears
@@ -67,7 +66,7 @@ public class JoinGameActivity extends AppCompatActivity implements AdapterView.O
         });
 
         gameNameField = (EditText) findViewById(R.id.gameNameTextField);
-        Intent intent = getIntent();
+
         gameNameField.setText(intent.getStringExtra("game_name"));
     }
 

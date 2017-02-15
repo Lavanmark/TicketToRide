@@ -384,9 +384,12 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 						if(mJoinButton.getText().equals("Join")) {
 							Intent intent = new Intent(v.getContext(), JoinGameActivity.class);
 							intent.putExtra("game_name", mItem.getName());
-							for(Player.PlayerColor p : mItem.getAvailableColors()){
-								intent.putExtra(String.valueOf(p),p);
+							List<Player.PlayerColor> colList = mItem.getAvailableColors();
+							ArrayList<String> strList = new ArrayList<String>();
+							for(Player.PlayerColor p :colList){
+								strList.add(String.valueOf(p));
 							}
+							intent.putStringArrayListExtra("colList", strList);
 							gameID = mItem.getGameID();
 							System.out.println(gameID);
 							startActivityForResult(intent, JOIN_GAME_REQUEST);
