@@ -61,8 +61,11 @@ public class PregamePresenter implements IPresenter, Observer {
     /**
      * This checks the status of the game and starts the game if it has filled with players.
      * It schedules a TimerTask that checks if game is filled (every 5000 milliseconds).
-     * TODO check that this is still running if Activity is finished()
-     * TODO check that this properly dies when game starts, even if Activity is finished()
+     *
+     * check that this is still running if Activity is finished() (should work)
+     * check that this properly dies when game starts, even if Activity is finished() (should work)
+     *
+     * Other interesting, potentially useful info in the future: http://stackoverflow.com/q/26549246
      */
     public void beginStartGamePoller() {
         stupidPoller = new Timer();
@@ -79,7 +82,7 @@ public class PregamePresenter implements IPresenter, Observer {
                 IGame gameFromServer = UIFacade.getInstance().getGame(game.getGameID());
                 if (gameFromServer != null) {
                     game = gameFromServer;
-                    updatePlayerList();
+                    updatePlayerList(); // should this call if activity is in background?
                     if (game.hasStarted()) {
                         timer.cancel();
                         timer.purge();
@@ -95,9 +98,9 @@ public class PregamePresenter implements IPresenter, Observer {
 
     /**
      * Should be called when number of players in game matches the game's size. Starts the game.
-     * For Phase 0, just show the Boardmap with message: Game Started.
      */
     public void startGame() {
+        // For Phase 0, just show the Boardmap with message: Game Started
         view.startGame();
     }
 

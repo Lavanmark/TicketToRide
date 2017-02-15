@@ -99,8 +99,10 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
      */
     @Override
     public void switchToLobbyActivity() {
-        // this needs to go back two views; the Boardmap makes the Pregame view and we want to
-        // go back to before the Boardmap
+        // This needs to go back two views; the Boardmap makes the Pregame view and we want to
+        // go back to before the Boardmap.
+        // The FLAG_ACTIVITY_CLEAR_TOP tells Android that this activity is already running and that
+        // we can go back to that one, popping/clearing the newer activities off the stack.
         startActivity(new Intent(PregameActivity.this, GameListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
