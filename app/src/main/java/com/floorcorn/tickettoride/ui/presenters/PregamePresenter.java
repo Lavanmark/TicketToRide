@@ -14,6 +14,9 @@ import java.util.Observer;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Joseph Hansen
@@ -24,14 +27,32 @@ public class PregamePresenter implements IPresenter, Observer {
     private IGame game;
     private IUser user;
 
+    private ScheduledExecutorService scheduledTaskExecutor;
+
     public PregamePresenter() {
-        beginStartGamePoller();
+        this(null, null);
     }
 
     public PregamePresenter(IGame g, IUser u) {
         game = g;
         user = u;
+        scheduledTaskExecutor = Executors.newSingleThreadScheduledExecutor();
         beginStartGamePoller();
+    }
+
+    class CheckGameFilledTask implements Runnable {
+        @Override
+        public void run() {
+            IGame gameFromServer = UIFacade.getInstance().getGame(game.getGameID());
+            if (gameFromServer != null) {
+                game = gameFromServer;
+                updatePlayerList();
+                if (game.hasStarted()) {
+                    startGame();
+                    return;
+                }
+            }
+        }
     }
 
     /**
@@ -64,7 +85,7 @@ public class PregamePresenter implements IPresenter, Observer {
         this.view.switchToLobbyActivity();
     }
 
-    /**
+    /** SEE NEW IMPLEMENTATION OF THIS (BELOW)
      * This checks the status of the game and starts the game if it has filled with players.
      * It schedules a TimerTask that checks if game is filled (every 5000 milliseconds).
      *
@@ -73,33 +94,40 @@ public class PregamePresenter implements IPresenter, Observer {
      *
      * Other interesting, potentially useful info in the future: http://stackoverflow.com/q/26549246
      */
+//    public void beginStartGamePoller() {
+//        Timer timer = new Timer();
+//
+//        class CheckGameFilledTask extends TimerTask {
+//            Timer timer;
+//
+//            CheckGameFilledTask(Timer t) {
+//                timer = t;
+//            }
+//
+//            @Override
+//            public void run() {
+//                IGame gameFromServer = UIFacade.getInstance().getGame(game.getGameID());
+//                if (gameFromServer != null) {
+//                    game = gameFromServer;
+//                    updatePlayerList(); // should this call if activity is in background?
+//                    if (game.hasStarted()) {
+//                        timer.cancel();
+//                        timer.purge();
+//                        startGame();
+//                        return;
+//                    }
+//                }
+//            }
+//        };
+//
+//        timer.schedule(new CheckGameFilledTask(timer), 5000, 5000); // every 5000 ms
+//    }
+
+    /**
+     * This checks the status of the game and starts the game if it has filled with players.
+     */
     public void beginStartGamePoller() {
-        Timer timer = new Timer();
-
-        class CheckGameFilledTask extends TimerTask {
-            Timer timer;
-
-            CheckGameFilledTask(Timer t) {
-                timer = t;
-            }
-
-            @Override
-            public void run() {
-                IGame gameFromServer = UIFacade.getInstance().getGame(game.getGameID());
-                if (gameFromServer != null) {
-                    game = gameFromServer;
-                    updatePlayerList(); // should this call if activity is in background?
-                    if (game.hasStarted()) {
-                        timer.cancel();
-                        timer.purge();
-                        startGame();
-                        return;
-                    }
-                }
-            }
-        };
-
-        timer.schedule(new CheckGameFilledTask(timer), 5000, 5000); // every 5000 ms
+        scheduledTaskExecutor.scheduleAtFixedRate(new CheckGameFilledTask(), 0, 5, TimeUnit.SECONDS);
     }
 
     /**
