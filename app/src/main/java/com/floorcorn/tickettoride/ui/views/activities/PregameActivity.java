@@ -2,8 +2,7 @@ package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +22,6 @@ import com.floorcorn.tickettoride.ui.views.IPregameView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Joseph Hansen
@@ -43,14 +41,22 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_pregame);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarzz);
         setSupportActionBar(toolbar);
 
 
         presenter = new PregamePresenter();
+	    presenter.setView(this);
 
-	    playerListView = (RecyclerView) findViewById(R.id.pregame_player_list);
+	    playerListView = (RecyclerView) findViewById(R.id.pregame_list);
+	    LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
+	    mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+	    playerListView.setLayoutManager(mLinearLayoutManager);
+	    playerListView.setAdapter(new PlayerListRecyclerViewAdapter(presenter.getPlayerList()));
+
+
         cancelGameButton = (Button) findViewById(R.id.cancelGameButton);
 
         if(presenter.isConductor())
@@ -73,6 +79,9 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 		super.onStop();
 	}
 
+	private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Player> players) {
+		recyclerView.setAdapter(new PlayerListRecyclerViewAdapter(players));
+	}
     /**
      * Sets the presenter to the argument if its the correct type. Will throw
      * IllegalArgumentException if presenter is not the correct type
@@ -93,7 +102,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
      */
     @Override
     public void displayPlayerList(ArrayList<Player> players) {
-	    playerListView = (RecyclerView) findViewById(R.id.pregame_player_list);
+	    playerListView = (RecyclerView) findViewById(R.id.pregame_list);
 	    assert playerListView != null;
 	    PlayerListRecyclerViewAdapter a = (PlayerListRecyclerViewAdapter) ((RecyclerView) playerListView).getAdapter();
 	    a.swapList(players);
@@ -138,24 +147,21 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     }
 
 	public class PlayerListRecyclerViewAdapter extends RecyclerView.Adapter<PlayerListRecyclerViewAdapter.ViewHolder> {
-		private RecyclerView rv;
 		private List<Player> players;
-		private int mSelectedPosition;
-		private View mSelectedView;
 
-		PlayerListRecyclerViewAdapter(RecyclerView rv, List<Player> items) {
-			mSelectedPosition = -1;
-			this.rv = rv;
+		PlayerListRecyclerViewAdapter(List<Player> items) {
+			players = new ArrayList<>(items);
 		}
 
 		@Override
 		public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 			View view = LayoutInflater.from(parent.getContext())
-					.inflate(R.layout.game_list_content, parent, false);
+					.inflate(R.layout.pregame_list_item, parent, false);
 			return new ViewHolder(view);
 		}
 
 		void swapList(List<Player> list) {
+			System.out.println("Swapping lists");
 			players.clear();
 			players.addAll(list);
 			notifyDataSetChanged();
