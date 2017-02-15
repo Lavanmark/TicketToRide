@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -57,13 +56,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	private String gameName;
 	private int gameID;
 
-	// ui references
-	private Toolbar mToolbar;
-	private FloatingActionButton mCreateGameFab;
-	private FloatingActionButton mUpdateGameListFab;
 	private View mGameListRecyclerView;
-	private Button mCreateGameButton;
-	private Button mRefreshGameButton;
 
 	//presenter
 	private LobbyPresenter presenter;
@@ -73,7 +66,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_list);
 
-		mToolbar = (Toolbar) findViewById(R.id.toolbar);
+		Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(mToolbar);
 		mToolbar.setTitle(getTitle());
 
@@ -81,10 +74,8 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 		setPresenter(mPresenter);
 		presenter.setView(this);
 
-		//mCreateGameFab = (FloatingActionButton) findViewById(R.id.fab);
-		//mUpdateGameListFab = (FloatingActionButton) findViewById(R.id.fab2);
-		mCreateGameButton = (Button) findViewById(R.id.createGameButton);
-		mRefreshGameButton = (Button) findViewById(R.id.refreshListButton);
+		Button mCreateGameButton = (Button) findViewById(R.id.createGameButton);
+		Button mRefreshGameButton = (Button) findViewById(R.id.refreshListButton);
 
 		mCreateGameButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -220,6 +211,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	 * @param color
 	 */
 	public void setPlayerColor(String color) {
+		color = color.toLowerCase();
 		switch(color) {
 			case "black":
 				playerColor = Player.PlayerColor.BLACK;
@@ -235,6 +227,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 				break;
 			case "red":
 				playerColor = Player.PlayerColor.RED;
+				break;
 		}
 	}
 
@@ -275,7 +268,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 		private int mSelectedPosition;
 		private View mSelectedView;
 
-		public GameItemRecyclerViewAdapter(RecyclerView rv, List<IGame> items) {
+		GameItemRecyclerViewAdapter(RecyclerView rv, List<IGame> items) {
 			glc = new GameListContent(items);
 			mSelectedPosition = -1;
 			this.rv = rv;
@@ -288,14 +281,14 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 			return new ViewHolder(view);
 		}
 
-		public void swapList(List<IGame> list) {
-			glc.setGamesList(list);
+		void swapList(List<IGame> list) {
+			GameListContent.setGamesList(list);
 			notifyDataSetChanged();
 		}
 
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, int position) {
-			holder.mItem = (Game) glc.get(position);
+			holder.mItem = (Game) GameListContent.get(position);
 			holder.mIdView.setText(String.valueOf(position));
 			if(holder.mItem == null)
 				return;
@@ -359,18 +352,18 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 
 		@Override
 		public int getItemCount() {
-			return glc.getSize();
+			return GameListContent.getSize();
 		}
 
-		public class ViewHolder extends RecyclerView.ViewHolder {
-			public final View mView;
-			public final TextView mIdView;
-			public final TextView mContentView;
-			public final TextView mStatusView;
-			public final Button mJoinButton;
-			public Game mItem;
+		class ViewHolder extends RecyclerView.ViewHolder {
+			final View mView;
+			final TextView mIdView;
+			final TextView mContentView;
+			final TextView mStatusView;
+			final Button mJoinButton;
+			Game mItem;
 
-			public ViewHolder(View view) {
+			ViewHolder(View view) {
 				super(view);
 				mView = view;
 				mIdView = (TextView) view.findViewById(R.id.id);
@@ -384,6 +377,12 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 						if(mJoinButton.getText().equals("Join")) {
 							Intent intent = new Intent(v.getContext(), JoinGameActivity.class);
 							intent.putExtra("game_name", mItem.getName());
+							List<Player.PlayerColor> colList = mItem.getAvailableColors();
+							ArrayList<String> strList = new ArrayList<>();
+							for(Player.PlayerColor p :colList){
+								strList.add(String.valueOf(p));
+							}
+							intent.putStringArrayListExtra("colList", strList);
 							gameID = mItem.getGameID();
 							System.out.println(gameID);
 							startActivityForResult(intent, JOIN_GAME_REQUEST);

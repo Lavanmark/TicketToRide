@@ -2,14 +2,16 @@ package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
@@ -19,7 +21,7 @@ import com.floorcorn.tickettoride.ui.presenters.PregamePresenter;
 import com.floorcorn.tickettoride.ui.views.IPregameView;
 
 import java.util.ArrayList;
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author Joseph Hansen
@@ -27,10 +29,10 @@ import java.util.Set;
 
 public class PregameActivity extends AppCompatActivity implements IPregameView {
 
-    private PregamePresenter presenter = null;
-    private RecyclerView playerList = null;
-    private LinearLayoutManager linearLayout = null;
-    private Button cancelGameButton = null;
+    private PregamePresenter presenter;
+    private RecyclerView playerListView;
+    private Button cancelGameButton;
+
 
     /**
      * Sets up the view components including the cancel/leave game button and the player list.
@@ -39,23 +41,47 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_pregame);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarzz);
         setSupportActionBar(toolbar);
 
-        playerList = (RecyclerView) findViewById(R.id.pregame_player_list);
-        linearLayout = new LinearLayoutManager(this);
-        playerList.setLayoutManager(linearLayout);
+
+        presenter = new PregamePresenter();
+	    presenter.setView(this);
+
+	    playerListView = (RecyclerView) findViewById(R.id.pregame_list);
+	    LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
+	    mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+	    playerListView.setLayoutManager(mLinearLayoutManager);
+	    playerListView.setAdapter(new PlayerListRecyclerViewAdapter(presenter.getPlayerList()));
+
 
         cancelGameButton = (Button) findViewById(R.id.cancelGameButton);
+
+        if(presenter.isConductor())
+            cancelGameButton.setText("Cancel Game");
+        else
+            cancelGameButton.setText("Leave Game");
+
         cancelGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 presenter.cancelGame();
             }
         });
+
     }
 
+	@Override
+	public void onStop () {
+		presenter.stopStartGamePoller();
+		super.onStop();
+	}
+
+	private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Player> players) {
+		recyclerView.setAdapter(new PlayerListRecyclerViewAdapter(players));
+	}
     /**
      * Sets the presenter to the argument if its the correct type. Will throw
      * IllegalArgumentException if presenter is not the correct type
@@ -71,22 +97,15 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     }
 
     /**
-     * NOTE: I don't think this function is necessary. The Pregame view *is* the game waiting
-     * dialog.
-     */
-    @Override
-    public void createGameWaitingDialog() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
      * Displays this game's players in the view.
      * @param players A Set of Player objects representing players in current game
      */
     @Override
     public void displayPlayerList(ArrayList<Player> players) {
-        // TODO
-        throw new UnsupportedOperationException();
+	    playerListView = (RecyclerView) findViewById(R.id.pregame_list);
+	    assert playerListView != null;
+	    PlayerListRecyclerViewAdapter a = (PlayerListRecyclerViewAdapter) ((RecyclerView) playerListView).getAdapter();
+	    a.swapList(players);
     }
 
     /**
@@ -127,4 +146,59 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
+	public class PlayerListRecyclerViewAdapter extends RecyclerView.Adapter<PlayerListRecyclerViewAdapter.ViewHolder> {
+		private List<Player> players;
+
+		PlayerListRecyclerViewAdapter(List<Player> items) {
+			players = new ArrayList<>(items);
+		}
+
+		@Override
+		public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+			View view = LayoutInflater.from(parent.getContext())
+					.inflate(R.layout.pregame_list_item, parent, false);
+			return new ViewHolder(view);
+		}
+
+		void swapList(List<Player> list) {
+			System.out.println("Swapping lists");
+			players.clear();
+			players.addAll(list);
+			notifyDataSetChanged();
+		}
+
+		@Override
+		public void onBindViewHolder(final ViewHolder holder, int position) {
+			holder.mItem = (Player) players.get(position);
+			if(holder.mItem == null)
+				return;
+			holder.mNameView.setText(holder.mItem.getName());
+			holder.mColorView.setText(String.valueOf(holder.mItem.getColor()));
+		}
+
+		@Override
+		public int getItemCount() {
+			return players.size();
+		}
+
+		class ViewHolder extends RecyclerView.ViewHolder {
+			final View mView;
+			final TextView mNameView;
+			final TextView mColorView;
+			Player mItem;
+
+			ViewHolder(View view) {
+				super(view);
+				mView = view;
+				mNameView = (TextView) view.findViewById(R.id.playerListNameText);
+				mColorView = (TextView) view.findViewById(R.id.playerListColorText);
+				view.setClickable(false);
+			}
+
+			@Override
+			public String toString() {
+				return super.toString() + " '" + mNameView.getText() + "'";
+			}
+		}
+	}
 }

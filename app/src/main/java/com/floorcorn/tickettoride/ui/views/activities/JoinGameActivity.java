@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.model.Player;
+
+import java.util.ArrayList;
 
 /**
  * This class acts as a dialogue box. It will send data back to the GameListActivity to notify the presenter.
@@ -36,11 +39,12 @@ public class JoinGameActivity extends AppCompatActivity implements AdapterView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_game);
-
+        Intent intent = getIntent();
         colorSpinner = (Spinner) findViewById(R.id.colorSpinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> colorAdapter = ArrayAdapter.createFromResource(this,
-                R.array.player_colors_array, android.R.layout.simple_spinner_item);
+	    ArrayList<String> strings = intent.getStringArrayListExtra("colList");
+        ArrayAdapter<String> colorAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strings);
+
         // Specify the layout to use when the list of choices appears
         colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
@@ -62,7 +66,7 @@ public class JoinGameActivity extends AppCompatActivity implements AdapterView.O
         });
 
         gameNameField = (EditText) findViewById(R.id.gameNameTextField);
-        Intent intent = getIntent();
+
         gameNameField.setText(intent.getStringExtra("game_name"));
     }
 

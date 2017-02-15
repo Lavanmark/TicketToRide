@@ -9,12 +9,6 @@ import java.util.ArrayList;
  */
 
 public interface IPregameView extends IView {
-
-    /**
-     *
-     */
-    public void createGameWaitingDialog();
-
     /**
      * Displays this game's players in the view.
      * @param players A Set of Player objects representing players in current game
