@@ -35,8 +35,9 @@ public class UIFacade {
     private UIFacade() {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
-	    serverProxy.setHost("192.168.0.100");
+	    //serverProxy.setHost("192.168.0.100");
 	    serverProxy.setPort("8080");
+        serverProxy.setHost("10.24.64.162");
     }
     private static UIFacade instance = null;
     public static UIFacade getInstance() {
@@ -220,6 +221,8 @@ public class UIFacade {
      */
     public IGame createGame(String gameName, int playerCount, Player.PlayerColor color) throws GameActionException, BadUserException {
         IGame createdGame = serverProxy.createGame(getUser(), gameName, playerCount);
+        System.out.println("UIFarquad says to create game: " + gameName + " " + playerCount);
+        System.out.println(createdGame);
         createdGame = joinGame(createdGame.getGameID(), color);
         return createdGame;
     }
