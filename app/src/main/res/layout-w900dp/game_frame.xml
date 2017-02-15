@@ -32,19 +32,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/refreshListButton" />
 
-            <Button
-                android:text="Join Game"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/joinGameButton" />
-
-            <Button
-                android:text="Resume Game"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/resumeGameButton" />
-
-        </LinearLayout>
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/frameLayout"

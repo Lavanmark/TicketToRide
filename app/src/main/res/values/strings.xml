@@ -29,6 +29,7 @@
     <string name="prompt_color">Choose your color</string>
     <string name="prompt_player_allowance">Choose number of players</string>
     <string name="create_game_button">Create Game</string>
+    <string name="join_game_button">Join Game</string>
     <string name="cancel">Cancel</string>
     <string-array name="num_players_array">
         <item>2</item>
