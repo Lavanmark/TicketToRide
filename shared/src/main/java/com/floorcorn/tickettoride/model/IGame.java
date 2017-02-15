@@ -171,10 +171,9 @@ public abstract class IGame {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Size: ");
-		sb.append(gameSize);
-		sb.append('\n');
-		sb.append("Players:\n");
+		sb.append("Name: " + name + '\n');
+		sb.append("Size: " + gameSize + '\n');
+		sb.append("Players: (" + playerList.size() + "/" + gameSize + ")\n");
 		for(Player p : playerList)
 			sb.append("    " + p.getName() + "\n");
 		return sb.toString();

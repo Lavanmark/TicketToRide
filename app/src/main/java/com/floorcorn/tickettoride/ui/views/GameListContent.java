@@ -24,31 +24,31 @@ public class GameListContent {
 
     public GameListContent(List<IGame> games) {
 	    GameListContent.gamesList.clear();
-        gamesList.addAll(games);
+        GameListContent.gamesList.addAll(games);
         for(IGame g : games)
-            gamesMap.put(String.valueOf(g.getGameID()), g);
+            GameListContent.gamesMap.put(String.valueOf(g.getGameID()), g);
     }
 
     public static void setGamesList(List<IGame> gamesList) {
 	    GameListContent.gamesList.clear();
         GameListContent.gamesList.addAll(gamesList);
         for(IGame g : gamesList)
-            gamesMap.put(String.valueOf(g.getGameID()), g);
+	        GameListContent.gamesMap.put(String.valueOf(g.getGameID()), g);
     }
 
 	public static IGame get(int position) {
-		if(position < gamesList.size() && position >= 0)
-			return gamesList.get(position);
+		if(position < GameListContent.gamesList.size() && position >= 0)
+			return GameListContent.gamesList.get(position);
 		return null;
 	}
 
 	public static IGame get(String key) {
-		if(gamesMap.containsKey(key))
-			return gamesMap.get(key);
+		if(GameListContent.gamesMap.containsKey(key))
+			return GameListContent.gamesMap.get(key);
 		return null;
 	}
 
 	public static int getSize() {
-		return gamesList.size();
+		return GameListContent.gamesList.size();
 	}
 }

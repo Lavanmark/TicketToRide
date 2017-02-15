@@ -17,16 +17,17 @@
     
     -->
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/game_list"
-        android:name="com.floorcorn.tickettoride.GameListFragment"
-        android:layout_width="@dimen/item_width"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context="com.floorcorn.tickettoride.ui.views.activities.GameListActivity"
-        tools:listitem="@layout/game_list_content" />
+                                            xmlns:tools="http://schemas.android.com/tools"
+                                            android:id="@+id/game_list"
+                                            android:name="com.floorcorn.tickettoride.GameListFragment"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginLeft="16dp"
+                                            android:layout_marginRight="16dp"
+                                            app:layoutManager="LinearLayoutManager"
+                                            tools:context="com.floorcorn.tickettoride.ui.views.activities.GameListActivity"
+                                            tools:listitem="@layout/game_list_content"
+                                            android:layout_weight="1.44"/>
 
     <FrameLayout
         android:id="@+id/game_detail_container"
