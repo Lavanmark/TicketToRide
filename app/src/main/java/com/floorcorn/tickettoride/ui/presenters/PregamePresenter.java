@@ -28,13 +28,14 @@ public class PregamePresenter implements IPresenter, Observer {
     private IPregameView view;
     private IGame game;
     private IUser user;
-	private Timer stupidPoller;
 
     private ScheduledExecutorService scheduledTaskExecutor;
 
     public PregamePresenter() {
         game = UIFacade.getInstance().getCurrentGame();
         user = UIFacade.getInstance().getUser();
+        UIFacade.getInstance().registerObserver(this);
+
 	    scheduledTaskExecutor = Executors.newSingleThreadScheduledExecutor();
         beginStartGamePoller();
     }
@@ -42,14 +43,13 @@ public class PregamePresenter implements IPresenter, Observer {
     private class CheckGameFilledTask implements Runnable {
         @Override
         public void run() {
-            IGame gameFromServer = UIFacade.getInstance().getCurrentGame();
-            if (gameFromServer != null) {
-                game = gameFromServer;
-                updatePlayerList();
-                if (game.hasStarted()) {
-                    startGame();
-                }
+            try {
+                UIFacade.getInstance().requestCurrentGame();
+            } catch (Exception ex) {
+                System.out.println("Updated the Pregame View list, but there was an exception.");
             }
+
+            // Observer pattern will update the game object.
         }
     }
 
@@ -81,7 +81,7 @@ public class PregamePresenter implements IPresenter, Observer {
         this.view.switchToLobbyActivity();
     }
 
-    /** SEE NEW IMPLEMENTATION OF THIS (BELOW)
+    /**
      * This checks the status of the game and starts the game if it has filled with players.
      * It schedules a TimerTask that checks if game is filled (every 5000 milliseconds).
      *
@@ -91,38 +91,10 @@ public class PregamePresenter implements IPresenter, Observer {
      * Other interesting, potentially useful info in the future: http://stackoverflow.com/q/26549246
      */
     public void beginStartGamePoller() {
-//        stupidPoller = new Timer();
-//
-////        class CheckGameFilledTask extends TimerTask {
-////            Timer timer;
-////
-////            CheckGameFilledTask(Timer t) {
-////                timer = t;
-////            }
-////
-////            @Override
-////            public void run() {
-////                IGame gameFromServer = UIFacade.getInstance().getGame(game.getGameID());
-////                if (gameFromServer != null) {
-////                    game = gameFromServer;
-////                    updatePlayerList(); // should this call if activity is in background?
-////                    if (game.hasStarted()) {
-////                        timer.cancel();
-////                        timer.purge();
-////                        startGame();
-////                        return;
-////                    }
-////                }
-////            }
-////        };
-//
-//        stupidPoller.schedule(new CheckGameFilledTask(), 5000, 5000); // every 5000 ms
 	    scheduledTaskExecutor.scheduleAtFixedRate(new CheckGameFilledTask(), 0, 5, TimeUnit.SECONDS);
     }
 
 	public void stopStartGamePoller() {
-		//stupidPoller.cancel();
-		//stupidPoller.purge();
 		scheduledTaskExecutor.shutdown();
 	}
 
@@ -132,6 +104,7 @@ public class PregamePresenter implements IPresenter, Observer {
      */
     public void startGame() {
         // For Phase 0, just show the Boardmap with message: Game Started
+        // TODO: show the game started message
         view.startGame();
     }
 
@@ -163,7 +136,10 @@ public class PregamePresenter implements IPresenter, Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof IGame) {
             game = (IGame) arg;
-            updatePlayerList();
+            if (game.hasStarted())
+                startGame();
+            else
+                updatePlayerList();
         } else if (arg instanceof IUser) {
             user = (IUser) arg;
         }
