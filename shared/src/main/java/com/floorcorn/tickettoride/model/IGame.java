@@ -77,11 +77,11 @@ public abstract class IGame {
 	 */
 	public boolean userCanJoin(IUser user) throws BadUserException, GameActionException {
 		if(user == null) throw new BadUserException("A null user cannot join!");
-		if(hasStarted()) return false;
 		for(Player p : playerList) {
 			if(p.getUserID() == user.getUserID())
 				throw new GameActionException("User already in the game!");
 		}
+		if(hasStarted()) return false;
 		return true;
 	}
 

@@ -12,26 +12,12 @@
     tools:context="com.floorcorn.tickettoride.ui.views.activities.CreateGameActivity">
 
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/createGameNamePrompt">
-
-
-        <EditText
-            android:id="@+id/gameNameField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/prompt_gamename" />
-
-    </android.support.design.widget.TextInputLayout>
-
     <TextView
-        android:layout_width="match_parent"
+        android:text="Game Name:"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/chooseColorText"
-        android:text="@string/prompt_color"
-        android:layout_below="@id/createGameNamePrompt"/>
+        android:id="@+id/gameNameText"/>
+
 
     <Spinner
         android:layout_width="match_parent"
@@ -40,27 +26,38 @@
         android:layout_weight="1"
         android:layout_below="@id/chooseColorText"/>
 
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/choosePlayersText"
-        android:text="@string/prompt_player_allowance"
-        android:layout_below="@id/colorSpinner"/>
+        android:id="@+id/chooseColorText"
+        android:text="@string/prompt_color"
+        android:layout_below="@+id/gameNameTextField"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/playerSpinner"
-        android:layout_weight="1"
-        android:layout_below="@id/choosePlayersText"/>
-
-
-    <Button
-        android:text="@string/create_game_button"
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/createGameButton"
-        android:layout_below="@+id/playerSpinner"
+        android:inputType="textPersonName"
+        android:text="Game Name"
+        android:ems="10"
+        android:id="@+id/gameNameTextField"
+        android:enabled="false"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_below="@+id/gameNameText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <Button
+        android:text="@string/join_game_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/joinGameButton"
+        android:layout_below="@+id/colorSpinner"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 

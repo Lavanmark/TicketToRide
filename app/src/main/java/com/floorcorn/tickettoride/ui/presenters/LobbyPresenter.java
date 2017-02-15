@@ -45,6 +45,7 @@ public class LobbyPresenter implements IPresenter, Observer {
     public void joinGame(){
         try {
 	        //TODO need to implement a join game dialogue that has the parameters
+	        System.out.println("joinin");
             UIFacade.getInstance().joinGame(view.getGameID(), view.getPlayerColor());
             //pop up window, get color, get game id, call ui facade
         }catch(GameActionException gameAction){

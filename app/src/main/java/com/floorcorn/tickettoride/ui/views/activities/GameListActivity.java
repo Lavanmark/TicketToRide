@@ -49,13 +49,13 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	private boolean mTwoPane;
 
 	static final int CREATE_GAME_REQUEST = 1;
-	static final int UPDATE_GAME_REQUEST = 2;
-	static final int DISPLAY_GAME_REQUEST = 3;
+	static final int JOIN_GAME_REQUEST = 2;
 
 	//model references
 	private Player.PlayerColor playerColor;
 	private int playerNumber;
 	private String gameName;
+	private int gameID;
 
 	// ui references
 	private Toolbar mToolbar;
@@ -64,8 +64,6 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	private View mGameListRecyclerView;
 	private Button mCreateGameButton;
 	private Button mRefreshGameButton;
-	private Button mJoinGameButton;
-	private Button mResumeGameButton;
 
 	//presenter
 	private LobbyPresenter presenter;
@@ -87,14 +85,11 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 		//mUpdateGameListFab = (FloatingActionButton) findViewById(R.id.fab2);
 		mCreateGameButton = (Button) findViewById(R.id.createGameButton);
 		mRefreshGameButton = (Button) findViewById(R.id.refreshListButton);
-		mJoinGameButton = (Button) findViewById(R.id.joinGameButton);
-		mResumeGameButton = (Button) findViewById(R.id.resumeGameButton);
 
 		mCreateGameButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				//starts the CreateGameActivity as a dialogue
-				Intent intent = new Intent(getBaseContext(), CreateGameActivity.class);
 				startActivityForResult(new Intent(view.getContext(), CreateGameActivity.class), CREATE_GAME_REQUEST);
 
 			}
@@ -111,8 +106,6 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 			}
 		});
 
-		mJoinGameButton.setEnabled(false);
-		mResumeGameButton.setEnabled(false);
 		//initialize game list with what the server has
 
 		mGameListRecyclerView = findViewById(R.id.game_list);
@@ -159,7 +152,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 
 	@Override
 	public int getGameID() {
-		return -1;
+		return gameID;
 	}
 
 	@Override
@@ -211,6 +204,11 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 				setPlayerColor(data.getStringExtra("PLAYERCOLOR"));
 				setPlayerNumber(data.getStringExtra("PLAYERNUMBER"));
 				presenter.createGame();
+			}
+		} else if(requestCode == JOIN_GAME_REQUEST) {
+			if(resultCode == RESULT_OK) {
+				setPlayerColor(data.getStringExtra("PLAYERCOLOR"));
+				presenter.joinGame();
 			}
 		}
 	}
@@ -382,8 +380,13 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 				mJoinButton.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						if(mJoinButton.getText().equals("Join")){
-							presenter.joinGame();
+
+						if(mJoinButton.getText().equals("Join")) {
+							Intent intent = new Intent(v.getContext(), JoinGameActivity.class);
+							intent.putExtra("game_name", mItem.getName());
+							gameID = mItem.getGameID();
+							System.out.println(gameID);
+							startActivityForResult(intent, JOIN_GAME_REQUEST);
 						} else {
 							if(mItem.isPlayer(UIFacade.getInstance().getUser().getUserID()))
 								resumeGame(mItem);
