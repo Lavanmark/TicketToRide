@@ -56,7 +56,9 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 	    LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
 	    mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 	    playerListView.setLayoutManager(mLinearLayoutManager);
-	    playerListView.setAdapter(new PlayerListRecyclerViewAdapter(presenter.getPlayerList()));
+
+		a = new PlayerListRecyclerViewAdapter(presenter.getPlayerList());
+	    playerListView.setAdapter(a);
 
 
         cancelGameButton = (Button) findViewById(R.id.cancelGameButton);
@@ -84,6 +86,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 	private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Player> players) {
 		recyclerView.setAdapter(new PlayerListRecyclerViewAdapter(players));
 	}
+
     /**
      * Sets the presenter to the argument if its the correct type. Will throw
      * IllegalArgumentException if presenter is not the correct type
@@ -104,9 +107,9 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
      */
     @Override
     public void displayPlayerList(ArrayList<Player> players) {
-	    playerListView = (RecyclerView) findViewById(R.id.pregame_list);
+	    //playerListView = (RecyclerView) findViewById(R.id.pregame_list);
 	    assert playerListView != null;
-	    a = (PlayerListRecyclerViewAdapter) ((RecyclerView) playerListView).getAdapter();
+	    //a = (PlayerListRecyclerViewAdapter) ((RecyclerView) playerListView).getAdapter();
 	    a.swapList(players);
     }
 
