@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -28,8 +29,13 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 
     private PregamePresenter presenter;
     private RecyclerView playerList;
+    private LinearLayoutManager linearLayout;
     private Button cancelGameButton;
 
+    /**
+     * Sets up the view components including the cancel/leave game button and the player list.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +44,10 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
         setSupportActionBar(toolbar);
 
         playerList = (RecyclerView) findViewById(R.id.pregame_player_list);
-        cancelGameButton = (Button) findViewById(R.id.cancelGameButton);
+        linearLayout = new LinearLayoutManager(this);
+        playerList.setLayoutManager(linearLayout);
 
+        cancelGameButton = (Button) findViewById(R.id.cancelGameButton);
         cancelGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
