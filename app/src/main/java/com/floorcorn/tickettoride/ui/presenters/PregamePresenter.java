@@ -45,7 +45,6 @@ public class PregamePresenter implements IPresenter, Observer {
                 updatePlayerList();
                 if (game.hasStarted()) {
                     startGame();
-                    return;
                 }
             }
         }
@@ -122,10 +121,19 @@ public class PregamePresenter implements IPresenter, Observer {
 	}
 
     /**
-     * Should be called when number of players in game matches the game's size. Starts the game.
+     * Ends the periodic checking for start game status.
+     */
+    public void endStartGamePoller() {
+        scheduledTaskExecutor.shutdown();
+    }
+
+    /**
+     * Should be called when number of players in game matches the game's size. Stops the
+     * StartGamePoller. Starts the game.
      */
     public void startGame() {
         // For Phase 0, just show the Boardmap with message: Game Started
+        endStartGamePoller();
         view.startGame();
     }
 

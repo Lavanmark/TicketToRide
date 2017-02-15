@@ -35,6 +35,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     private RecyclerView playerListView;
     private Button cancelGameButton;
 
+
     /**
      * Sets up the view components including the cancel/leave game button and the player list.
      * @param savedInstanceState
