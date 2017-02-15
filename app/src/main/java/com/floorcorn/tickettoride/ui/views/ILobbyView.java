@@ -19,8 +19,6 @@ public interface ILobbyView extends IView {
     Player.PlayerColor getPlayerColor();
     int getNewGamePlayerNumber();
     String getNewGameName();
-    void createNewGameDialogue();
-    void displayGameList(Set<Game> games);
     void displayMessage(String message);
     void backToLogin();
 }

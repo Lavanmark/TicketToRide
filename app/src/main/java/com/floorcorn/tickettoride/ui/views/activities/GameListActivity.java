@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,22 +16,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.floorcorn.tickettoride.clientModel.Game;
-import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.model.IGame;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.presenters.LobbyPresenter;
-import com.floorcorn.tickettoride.ui.presenters.LoginPresenter;
-import com.floorcorn.tickettoride.ui.views.DummyContent;
-import com.floorcorn.tickettoride.ui.views.ILobbyView;
-import com.floorcorn.tickettoride.ui.views.IView;
-import com.floorcorn.tickettoride.ui.views.fragments.GameDetailFragment;
 import com.floorcorn.tickettoride.ui.views.GameListContent;
+import com.floorcorn.tickettoride.ui.views.ILobbyView;
+import com.floorcorn.tickettoride.ui.views.fragments.GameDetailFragment;
 import com.floorcorn.tickettoride.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -196,16 +189,6 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
     }
 
     @Override
-    public void createNewGameDialogue() {
-        //TODO: why? This implements on a click listener?
-    }
-
-    @Override
-    public void displayGameList(Set<Game> games) {
-        //TODO: why? This implements automatically?
-    }
-
-    @Override
     public void displayMessage(String message) {
         Toast.makeText(this, message,
                 Toast.LENGTH_LONG).show();
@@ -227,7 +210,6 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
      * @param resultCode result of the request (OK, FAILED)
      * @param data the data produced by the requested activity
      */
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CREATE_GAME_REQUEST){
             if (resultCode == RESULT_OK){
@@ -295,14 +277,10 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 
     public class GameItemRecyclerViewAdapter extends RecyclerView.Adapter<GameItemRecyclerViewAdapter.ViewHolder> {
 
-        //private final List<DummyContent.DummyItem> mValues;
-        private List<IGame> mValues;
+        private GameListContent glc = null;
 
-//        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
-//            mValues = items;
-//        }
         public GameItemRecyclerViewAdapter(List<IGame> items) {
-            mValues = items;
+            glc = new GameListContent(items);
         }
 
         @Override
@@ -313,23 +291,24 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
         }
 
         public void swapList(List<IGame> list){
-            mValues.clear();
-            mValues.addAll(list);
+            glc.setGamesList(list);
             notifyDataSetChanged();
         }
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = (Game)mValues.get(position);
+            holder.mItem = (Game)glc.get(position);
             holder.mIdView.setText(String.valueOf(position));
-            holder.mContentView.setText(mValues.get(position).getName());
+	        if(holder.mItem == null)
+		        return;
+            holder.mContentView.setText(holder.mItem.getName());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(GameDetailFragment.ARG_ITEM_ID, String.valueOf(holder.mItem.getGameID()));
+                        arguments.putString(GameDetailFragment.ARG_GAME_ID, String.valueOf(holder.mItem.getGameID()));
                         GameDetailFragment fragment = new GameDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -338,7 +317,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, GameDetailActivity.class);
-                        intent.putExtra(GameDetailFragment.ARG_ITEM_ID, String.valueOf(holder.mItem.getGameID()));
+                        intent.putExtra(GameDetailFragment.ARG_GAME_ID, String.valueOf(holder.mItem.getGameID()));
 
                         context.startActivity(intent);
                     }
@@ -348,7 +327,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 
         @Override
         public int getItemCount() {
-            return mValues.size();
+            return glc.getSize();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {

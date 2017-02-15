@@ -167,4 +167,16 @@ public abstract class IGame {
 	public int hashCode() {
 		return gameID;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Size: ");
+		sb.append(gameSize);
+		sb.append('\n');
+		sb.append("Players:\n");
+		for(Player p : playerList)
+			sb.append("    " + p.getName() + "\n");
+		return sb.toString();
+	}
 }

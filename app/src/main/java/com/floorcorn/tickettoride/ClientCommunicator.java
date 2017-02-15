@@ -13,6 +13,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by mgard on 2/1/2017.
@@ -28,6 +30,8 @@ public class ClientCommunicator {
 
 	private String host;
 	private String port;
+
+	private static final long REQUEST_TIMEOUT = 30; // in TimeUnit.SECONDS
 
 	/**
 	 * @param urlPath the url to which the object is to be sent.
@@ -46,10 +50,13 @@ public class ClientCommunicator {
 		myTask.execute(params);
 		//System.out.println("receiving");
 		try {
-			Results res = myTask.get(); //TODO warning this call is blocking. Should we keep it? or time out?
-			System.out.println(res.isSuccess());
+			Results res = myTask.get(30, TimeUnit.SECONDS);
+			//System.out.println(res.isSuccess());
 			return res;
 		} catch(InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+			return new Results(false, e);
+		} catch(TimeoutException e) {
 			e.printStackTrace();
 			return new Results(false, e);
 		}
