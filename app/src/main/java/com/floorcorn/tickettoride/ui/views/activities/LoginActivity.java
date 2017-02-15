@@ -343,6 +343,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     @Override
     public void launchNextActivity() {
         Intent i = new Intent(LoginActivity.this, GameListActivity.class);
+	    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
     }
 

@@ -9,11 +9,16 @@ import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.views.IPregameView;
 import com.floorcorn.tickettoride.ui.views.IView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Joseph Hansen
@@ -23,14 +28,29 @@ public class PregamePresenter implements IPresenter, Observer {
     private IPregameView view;
     private IGame game;
     private IUser user;
+	private Timer stupidPoller;
+
+    private ScheduledExecutorService scheduledTaskExecutor;
 
     public PregamePresenter() {
+        game = UIFacade.getInstance().getCurrentGame();
+        user = UIFacade.getInstance().getUser();
+	    scheduledTaskExecutor = Executors.newSingleThreadScheduledExecutor();
         beginStartGamePoller();
     }
 
-    public PregamePresenter(IGame g, IUser u) {
-        game = g;
-        user = u;
+    private class CheckGameFilledTask implements Runnable {
+        @Override
+        public void run() {
+            IGame gameFromServer = UIFacade.getInstance().getCurrentGame();
+            if (gameFromServer != null) {
+                game = gameFromServer;
+                updatePlayerList();
+                if (game.hasStarted()) {
+                    startGame();
+                }
+            }
+        }
     }
 
     /**
@@ -38,19 +58,20 @@ public class PregamePresenter implements IPresenter, Observer {
      */
     public void cancelGame() {
         try {
-            UIFacade.getInstance().leaveGame(game.getGameID());
+            if(UIFacade.getInstance().leaveGame(game.getGameID()))
+	            stopStartGamePoller();
         } catch (BadUserException | GameActionException ex) {
             view.displayMessage("Could not leave game");
         }
-        returnToLobby();
     }
 
     /**
      * // NOTE: I do not think this method, that we put in the design doc, is needed.
      * @return
      */
-    public Set<Player> getPlayerList() {
-        throw new UnsupportedOperationException();
+    public List<Player> getPlayerList() {
+	    System.out.println(game.getPlayerList().size());
+        return game.getPlayerList();
     }
 
     /**
@@ -60,49 +81,63 @@ public class PregamePresenter implements IPresenter, Observer {
         this.view.switchToLobbyActivity();
     }
 
-    /**
+    /** SEE NEW IMPLEMENTATION OF THIS (BELOW)
      * This checks the status of the game and starts the game if it has filled with players.
      * It schedules a TimerTask that checks if game is filled (every 5000 milliseconds).
-     * TODO check that this is still running if Activity is finished()
-     * TODO check that this properly dies if Activity is finished() and then game starts
+     *
+     * check that this is still running if Activity is finished() (should work)
+     * check that this properly dies when game starts, even if Activity is finished() (should work)
+     *
+     * Other interesting, potentially useful info in the future: http://stackoverflow.com/q/26549246
      */
     public void beginStartGamePoller() {
-        Timer timer = new Timer();
-
-        class CheckGameFilledTask extends TimerTask {
-            Timer timer;
-
-            CheckGameFilledTask(Timer t) {
-                timer = t;
-            }
-
-            @Override
-            public void run() {
-                IGame gameFromServer = UIFacade.getInstance().getGame(game.getGameID());
-                if (gameFromServer != null) {
-                    game = gameFromServer;
-                    updatePlayerList();
-                    if (game.hasStarted()) {
-                        timer.cancel();
-                        timer.purge();
-                        startGame();
-                        return;
-                    }
-                }
-            }
-        };
-
-        timer.schedule(new CheckGameFilledTask(timer), 5000, 5000); // every 5000 ms
+//        stupidPoller = new Timer();
+//
+////        class CheckGameFilledTask extends TimerTask {
+////            Timer timer;
+////
+////            CheckGameFilledTask(Timer t) {
+////                timer = t;
+////            }
+////
+////            @Override
+////            public void run() {
+////                IGame gameFromServer = UIFacade.getInstance().getGame(game.getGameID());
+////                if (gameFromServer != null) {
+////                    game = gameFromServer;
+////                    updatePlayerList(); // should this call if activity is in background?
+////                    if (game.hasStarted()) {
+////                        timer.cancel();
+////                        timer.purge();
+////                        startGame();
+////                        return;
+////                    }
+////                }
+////            }
+////        };
+//
+//        stupidPoller.schedule(new CheckGameFilledTask(), 5000, 5000); // every 5000 ms
+	    scheduledTaskExecutor.scheduleAtFixedRate(new CheckGameFilledTask(), 0, 5, TimeUnit.SECONDS);
     }
+
+	public void stopStartGamePoller() {
+		//stupidPoller.cancel();
+		//stupidPoller.purge();
+		scheduledTaskExecutor.shutdown();
+	}
 
     /**
-     * Should be called when number of players in game matches the game's size. Starts the game.
+     * Should be called when number of players in game matches the game's size. Stops the
+     * StartGamePoller. Starts the game.
      */
     public void startGame() {
-        // TODO
-        throw new UnsupportedOperationException();
-        // Just show the Boardmap with message: Game Started
+        // For Phase 0, just show the Boardmap with message: Game Started
+        view.startGame();
     }
+
+	public boolean isConductor() {
+		return game.getPlayer(user).isConductor();
+	}
 
     /**
      * Sets the view. If the view parameter is not an IPregameView, this will throw an

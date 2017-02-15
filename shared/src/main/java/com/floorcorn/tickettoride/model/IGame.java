@@ -29,6 +29,7 @@ public abstract class IGame {
 	 */
 	public Player addPlayer(IUser user, Player.PlayerColor color) throws GameActionException {
 		if(user == null) throw new GameActionException("Cannot add null User to game!");
+		if(color == null) throw new GameActionException("Color was not selected!");
 		Player np = getPlayer(user);
 		if(np == null && !hasStarted()) {
 			np = new Player(user.getUserID(), user.getFullName(), gameID, color);
@@ -77,11 +78,11 @@ public abstract class IGame {
 	 */
 	public boolean userCanJoin(IUser user) throws BadUserException, GameActionException {
 		if(user == null) throw new BadUserException("A null user cannot join!");
-		if(hasStarted()) return false;
 		for(Player p : playerList) {
 			if(p.getUserID() == user.getUserID())
 				throw new GameActionException("User already in the game!");
 		}
+		if(hasStarted()) return false;
 		return true;
 	}
 
@@ -117,12 +118,17 @@ public abstract class IGame {
 	 * @return List of Player.PlayerColors not already in use
 	 */
 	public List<Player.PlayerColor> getAvailableColors() {
-		List<Player.PlayerColor> avail = Arrays.asList(Player.PlayerColor.BLUE,
+		List<Player.PlayerColor> all = Arrays.asList(Player.PlayerColor.BLUE,
 				Player.PlayerColor.BLACK, Player.PlayerColor.GREEN,
 				Player.PlayerColor.RED, Player.PlayerColor.YELLOW);
-		for(Player p : playerList) {
-			avail.remove(p.getColor());
-		}
+		List<Player.PlayerColor> taken = new ArrayList<Player.PlayerColor>();
+		for(Player p : playerList)
+			taken.add(p.getColor());
+		List<Player.PlayerColor> avail = new ArrayList<Player.PlayerColor>();
+		for(Player.PlayerColor a: all)
+			for(Player.PlayerColor b: taken)
+				if(!a.equals(b))
+					avail.add(a);
 		return avail;
 	}
 
@@ -166,5 +172,16 @@ public abstract class IGame {
 	@Override
 	public int hashCode() {
 		return gameID;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Name: " + name + '\n');
+		sb.append("Size: " + gameSize + '\n');
+		sb.append("Players: (" + playerList.size() + "/" + gameSize + ")\n");
+		for(Player p : playerList)
+			sb.append("    " + p.getName() + "\n");
+		return sb.toString();
 	}
 }
