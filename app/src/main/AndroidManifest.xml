@@ -41,12 +41,16 @@
             android:name=".ui.views.activities.CreateGameActivity"
             android:theme="@style/MyDialogTheme" />
         <activity
+            android:name=".ui.views.activities.JoinGameActivity"
+            android:theme="@style/MyDialogTheme" />
+        <activity
             android:name=".ui.views.activities.PregameActivity"
             android:label="@string/title_activity_pregame"
             android:theme="@style/MyDialogTheme" />
         <activity
             android:name=".ui.views.activities.BoardmapActivity"
-            android:label="@string/title_activity_boardmap" />
+            android:label="@string/title_activity_boardmap"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
