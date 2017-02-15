@@ -19,6 +19,7 @@ import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.presenters.PregamePresenter;
 import com.floorcorn.tickettoride.ui.views.IPregameView;
+import com.floorcorn.tickettoride.ui.views.PlayerListContent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     private RecyclerView playerListView;
     private Button cancelGameButton;
 
-	private PlayerListRecyclerViewAdapter a;
+	private PlayerListRecyclerViewAdapter playerListViewAdapter;
 
 
     /**
@@ -43,10 +44,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_pregame);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarzz);
-        setSupportActionBar(toolbar);
 
 
         presenter = new PregamePresenter();
@@ -109,8 +107,13 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     public void displayPlayerList(ArrayList<Player> players) {
 	    //playerListView = (RecyclerView) findViewById(R.id.pregame_list);
 	    assert playerListView != null;
+<<<<<<< HEAD
 	    //a = (PlayerListRecyclerViewAdapter) ((RecyclerView) playerListView).getAdapter();
 	    a.swapList(players);
+=======
+	    playerListViewAdapter = (PlayerListRecyclerViewAdapter) ((RecyclerView) playerListView).getAdapter();
+	    playerListViewAdapter.swapList(players);
+>>>>>>> master
     }
 
     /**
@@ -152,10 +155,10 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     }
 
 	public class PlayerListRecyclerViewAdapter extends RecyclerView.Adapter<PlayerListRecyclerViewAdapter.ViewHolder> {
-		private List<Player> players;
+		PlayerListContent plc = null;
 
 		PlayerListRecyclerViewAdapter(List<Player> items) {
-			players = new ArrayList<>(items);
+			plc = new PlayerListContent(items);
 		}
 
 		@Override
@@ -167,14 +170,13 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 
 		void swapList(List<Player> list) {
 			System.out.println("Swapping lists");
-			players.clear();
-			players.addAll(list);
+			PlayerListContent.setPlayerList(list);
 			notifyDataSetChanged();
 		}
 
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, int position) {
-			holder.mItem = (Player) players.get(position);
+			holder.mItem = (Player) PlayerListContent.get(position);
 			if(holder.mItem == null)
 				return;
 			holder.mNameView.setText(holder.mItem.getName());
@@ -183,7 +185,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 
 		@Override
 		public int getItemCount() {
-			return players.size();
+			return PlayerListContent.getSize();
 		}
 
 		class ViewHolder extends RecyclerView.ViewHolder {
