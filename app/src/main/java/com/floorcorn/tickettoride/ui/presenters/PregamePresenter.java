@@ -14,6 +14,9 @@ import java.util.Observer;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Joseph Hansen
@@ -25,10 +28,27 @@ public class PregamePresenter implements IPresenter, Observer {
     private IUser user;
 	private Timer stupidPoller;
 
+    private ScheduledExecutorService scheduledTaskExecutor;
+
     public PregamePresenter() {
         game = UIFacade.getInstance().getCurrentGame();
         user = UIFacade.getInstance().getUser();
         beginStartGamePoller();
+    }
+
+    class CheckGameFilledTask implements Runnable {
+        @Override
+        public void run() {
+            IGame gameFromServer = UIFacade.getInstance().getGame(game.getGameID());
+            if (gameFromServer != null) {
+                game = gameFromServer;
+                updatePlayerList();
+                if (game.hasStarted()) {
+                    startGame();
+                    return;
+                }
+            }
+        }
     }
 
     /**
@@ -58,7 +78,7 @@ public class PregamePresenter implements IPresenter, Observer {
         this.view.switchToLobbyActivity();
     }
 
-    /**
+    /** SEE NEW IMPLEMENTATION OF THIS (BELOW)
      * This checks the status of the game and starts the game if it has filled with players.
      * It schedules a TimerTask that checks if game is filled (every 5000 milliseconds).
      *
