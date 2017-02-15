@@ -44,6 +44,9 @@
         <item>Yellow</item>
         <item>Black</item>
     </string-array>
+    <string-array name="empty_colors_array">
+
+    </string-array>
 
 
     <string name="action_settings">Settings</string>
