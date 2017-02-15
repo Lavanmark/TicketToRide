@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -42,7 +43,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
         cancelGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO
+                presenter.cancelGame();
             }
         });
     }
@@ -85,7 +86,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
      */
     @Override
     public void startGame() {
-        this.finish();
+        switchToBoardmapActivity();
     }
 
     /**
@@ -93,9 +94,9 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
      */
     @Override
     public void switchToLobbyActivity() {
-        // TODO
-        throw new UnsupportedOperationException();
-        // this needs to go back two views, the boardmap makes the pregame view
+        // this needs to go back two views; the Boardmap makes the Pregame view and we want to
+        // go back to before the Boardmap
+        startActivity(new Intent(PregameActivity.this, GameListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     /**
@@ -104,8 +105,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
      */
     @Override
     public void switchToBoardmapActivity() {
-        // TODO
-        throw new UnsupportedOperationException();
+        this.finish();
     }
 
     /**

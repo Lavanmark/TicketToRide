@@ -31,6 +31,7 @@ public class PregamePresenter implements IPresenter, Observer {
     public PregamePresenter(IGame g, IUser u) {
         game = g;
         user = u;
+        beginStartGamePoller();
     }
 
     /**
@@ -41,6 +42,9 @@ public class PregamePresenter implements IPresenter, Observer {
             UIFacade.getInstance().leaveGame(game.getGameID());
         } catch (BadUserException | GameActionException ex) {
             view.displayMessage("Could not leave game");
+            // Here, we could send back to login. Put this in PregameActivity as a func and call
+            // if that's what we want:
+            // startActivity(new Intent(PregameActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         }
         returnToLobby();
     }
@@ -64,7 +68,7 @@ public class PregamePresenter implements IPresenter, Observer {
      * This checks the status of the game and starts the game if it has filled with players.
      * It schedules a TimerTask that checks if game is filled (every 5000 milliseconds).
      * TODO check that this is still running if Activity is finished()
-     * TODO check that this properly dies if Activity is finished() and then game starts
+     * TODO check that this properly dies when game starts, even if Activity is finished()
      */
     public void beginStartGamePoller() {
         Timer timer = new Timer();
@@ -97,6 +101,7 @@ public class PregamePresenter implements IPresenter, Observer {
 
     /**
      * Should be called when number of players in game matches the game's size. Starts the game.
+     * For Phase 0, just show the Boardmap with message: Game Started.
      */
     public void startGame() {
         // TODO
