@@ -14,6 +14,8 @@ import android.widget.Spinner;
 
 import com.floorcorn.tickettoride.R;
 
+import java.util.ArrayList;
+
 /**
  * This class acts as a dialogue box. It will send data back to the GameListActivity to notify the presenter.
  * Therefore, it does not implement the ILobbyView Interface.
@@ -39,8 +41,11 @@ public class JoinGameActivity extends AppCompatActivity implements AdapterView.O
 
         colorSpinner = (Spinner) findViewById(R.id.colorSpinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> colorAdapter = ArrayAdapter.createFromResource(this,
-                R.array.player_colors_array, android.R.layout.simple_spinner_item);
+	    ArrayList<String> strings = new ArrayList<String>();
+	    //TODO create list from intent here
+	    
+        ArrayAdapter<String> colorAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strings);
+
         // Specify the layout to use when the list of choices appears
         colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
