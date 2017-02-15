@@ -23,9 +23,10 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
         presenter = new BoardmapPresenter();
 
-	    //Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-	    //setSupportActionBar(mToolbar);
-	    //mToolbar.setTitle("hello");
+	    Toolbar mToolbar = (Toolbar) findViewById(R.id.bmap_toolbar);
+	    setSupportActionBar(mToolbar);
+	    if(getSupportActionBar() != null)
+	        getSupportActionBar().setTitle(presenter.getGameName());
 
         if(!presenter.gameInProgress()) {
 	        ((TextView)findViewById(R.id.gameStartedText)).setText("Waiting on Players");

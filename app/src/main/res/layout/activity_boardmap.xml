@@ -10,27 +10,25 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:theme="@style/AppTheme.NoActionBar"
-        app:expanded="true"
-        android:fitsSystemWindows="true"
-        android:layout_height="56dp">
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        >
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/bmap_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            android:layout_weight="1"/>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_boardmap"
-             android:id="@+id/include"/>
-
     <TextView
-        android:text="GameStartText"
-        android:id="@+id/gameStartedText"
-        tools:text="Game Started"
+        android:text="Game Started"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.Material.Large"/>
+        android:id="@+id/gameStartedText"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="normal|bold"
+        android:textColor="@android:color/black"/>
 
 </android.support.design.widget.CoordinatorLayout>
