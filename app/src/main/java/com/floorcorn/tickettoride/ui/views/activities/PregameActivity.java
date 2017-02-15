@@ -27,10 +27,10 @@ import java.util.Set;
 
 public class PregameActivity extends AppCompatActivity implements IPregameView {
 
-    private PregamePresenter presenter;
-    private RecyclerView playerList;
-    private LinearLayoutManager linearLayout;
-    private Button cancelGameButton;
+    private PregamePresenter presenter = null;
+    private RecyclerView playerList = null;
+    private LinearLayoutManager linearLayout = null;
+    private Button cancelGameButton = null;
 
     /**
      * Sets up the view components including the cancel/leave game button and the player list.
