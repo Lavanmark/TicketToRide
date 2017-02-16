@@ -50,8 +50,9 @@ public class ClientCommunicator {
 		myTask.execute(params);
 		//System.out.println("receiving");
 		try {
-			Results res = myTask.get(30, TimeUnit.SECONDS);
-			//System.out.println(res.isSuccess());
+			Results res = myTask.get(5, TimeUnit.SECONDS);
+			System.out.println(res.isSuccess());
+			myTask.cancel(true);
 			return res;
 		} catch(InterruptedException | ExecutionException e) {
 			e.printStackTrace();

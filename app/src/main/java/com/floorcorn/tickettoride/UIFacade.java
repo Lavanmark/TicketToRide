@@ -36,7 +36,7 @@ public class UIFacade {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
 	    serverProxy.setPort("8080");
-        serverProxy.setHost("10.24.64.162");
+        serverProxy.setHost("192.168.0.100");
     }
     private static UIFacade instance = null;
     public static UIFacade getInstance() {
@@ -178,14 +178,15 @@ public class UIFacade {
         clientModelRoot.setCurrentGame(game);
     }
 
-	public void requestCurrentGame() throws BadUserException, InvalidParameterException {
+	public void requestCurrentGame() throws BadUserException{
 		if(getCurrentGame() == null)
 			throw new InvalidParameterException("No game currently selected!");
-		IGame cgame = serverProxy.getGame(clientModelRoot.getCurrentUser(), getCurrentGame().getGameID());
+		IGame cgame = serverProxy.getGame(clientModelRoot.getCurrentUser(), clientModelRoot.getCurrentGame().getGameID());
 		if(cgame != null)
 			clientModelRoot.setCurrentGame(cgame);
 		else
 			throw new InvalidParameterException("Current game could not be found!");
+        requestGames();
 	}
 
     /**
