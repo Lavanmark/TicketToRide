@@ -252,14 +252,22 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         setPresenter(mPresenter);
 
         presenter.setView(this);
-
+		presenter.clearObservers();
+		presenter.register();
 	}
 
     @Override
     protected void onResume(){
         super.onResume();
         this.clearView();
+	    presenter.clearObservers();
+	    presenter.register();
     }
+
+	public void onStop() {
+		presenter.clearObservers();
+		super.onStop();
+	}
 
     /**
      * This method checks all of the fields to determine if there is enough information to

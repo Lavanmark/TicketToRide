@@ -182,11 +182,7 @@ public class UIFacade {
 		if(getCurrentGame() == null)
 			throw new InvalidParameterException("No game currently selected!");
 		IGame cgame = serverProxy.getGame(clientModelRoot.getCurrentUser(), clientModelRoot.getCurrentGame().getGameID());
-		if(cgame != null)
-			clientModelRoot.setCurrentGame(cgame);
-		else
-			throw new InvalidParameterException("Current game could not be found!");
-        requestGames();
+        clientModelRoot.setCurrentGame(cgame);
 	}
 
     /**
@@ -221,8 +217,6 @@ public class UIFacade {
      */
     public IGame createGame(String gameName, int playerCount, Player.PlayerColor color) throws GameActionException, BadUserException {
         IGame createdGame = serverProxy.createGame(getUser(), gameName, playerCount);
-        System.out.println("UIFarquad says to create game: " + gameName + " " + playerCount);
-        System.out.println(createdGame);
         createdGame = joinGame(createdGame.getGameID(), color);
         return createdGame;
     }
@@ -262,6 +256,10 @@ public class UIFacade {
      */
     public void unregisterObserver(Observer obs) {
         clientModelRoot.deleteObserver(obs);
+    }
+
+    public void clearObservers() {
+        clientModelRoot.deleteObservers();
     }
 
 }

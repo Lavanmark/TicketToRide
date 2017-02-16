@@ -24,7 +24,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	public BoardmapPresenter() {
 		this.game = UIFacade.getInstance().getCurrentGame();
 		this.user = UIFacade.getInstance().getUser();
-		UIFacade.getInstance().registerObserver(this);
+		register();
 	}
 
     @Override
@@ -40,16 +40,15 @@ public class BoardmapPresenter implements IPresenter, Observer {
         if(arg instanceof IGame) {
 	        game = UIFacade.getInstance().getCurrentGame();
 	        checkStart();
-        }else if(arg instanceof User) {
-	        if(UIFacade.getInstance().getUser() == null) {
-		        UIFacade.getInstance().unregisterObserver(this);
-		        view.backToLogin();
-	        }
         }
+
+	    if(UIFacade.getInstance().getUser() == null) {
+		    view.backToLogin();
+	    }
     }
 	private void checkStart() {
 		if(game.hasStarted()){
-
+			view.gameStarted();
 		}
 	}
 	public boolean gameInProgress() {
@@ -65,5 +64,11 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	}
 	public String getGameName(){
 		return this.game.getName();
+	}
+	public void unregister() {
+		UIFacade.getInstance().unregisterObserver(this);
+	}
+	public void register() {
+		UIFacade.getInstance().registerObserver(this);
 	}
 }
