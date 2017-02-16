@@ -27,6 +27,16 @@
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:text="@string/refresh_pre_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/refreshPreGameButton"
+            app:layout_anchorGravity="center_vertical|center_horizontal"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
