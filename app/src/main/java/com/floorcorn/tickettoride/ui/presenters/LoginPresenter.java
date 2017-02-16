@@ -25,7 +25,7 @@ public class LoginPresenter implements IPresenter, Observer {
      * @post a new instance of LoginPresenter is created.
      */
     public LoginPresenter() {
-        UIFacade.getInstance().registerObserver(this);
+
     }
 
     @Override
@@ -97,6 +97,15 @@ public class LoginPresenter implements IPresenter, Observer {
             }
             this.loginView.launchNextActivity();
         }
+    }
 
+    public void register() {
+        UIFacade.getInstance().registerObserver(this);
+    }
+    public void unregister() {
+        UIFacade.getInstance().unregisterObserver(this);
+    }
+    public void clearObservers() {
+        UIFacade.getInstance().clearObservers();
     }
 }

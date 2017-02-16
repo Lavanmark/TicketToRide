@@ -44,8 +44,6 @@ public class LobbyPresenter implements IPresenter, Observer {
 
     public void joinGame(){
         try {
-	        //TODO need to implement a join game dialogue that has the parameters
-	        System.out.println("joinin");
             UIFacade.getInstance().joinGame(view.getGameID(), view.getPlayerColor());
             //pop up window, get color, get game id, call ui facade
         }catch(GameActionException gameAction){
@@ -63,9 +61,8 @@ public class LobbyPresenter implements IPresenter, Observer {
     public void requestGames() {
         try {
             UIFacade.getInstance().requestGames();
-        } catch (Exception e) {
-            e.printStackTrace();
-            view.displayMessage(e.getMessage());
+        } catch (BadUserException e) {
+            view.backToLogin();
         }
     }
 
@@ -86,8 +83,10 @@ public class LobbyPresenter implements IPresenter, Observer {
     public void update(Observable o, Object arg) {
         if(arg instanceof Set)
 	        view.setGameList(UIFacade.getInstance().getGames());
-        //else if(arg instanceof IGame)
-        //    view.startGameView();
+	    if(UIFacade.getInstance().getUser() == null) {
+		    unregister();
+		    view.backToLogin();
+	    }
     }
     public void unregister() {
         UIFacade.getInstance().unregisterObserver(this);
