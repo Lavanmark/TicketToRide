@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.ui.views;
 import com.floorcorn.tickettoride.model.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Joseph Hansen
@@ -13,7 +14,7 @@ public interface IPregameView extends IView {
      * Displays this game's players in the view.
      * @param players A Set of Player objects representing players in current game
      */
-    public void displayPlayerList(ArrayList<Player> players);
+    public void displayPlayerList(List<Player> players);
 
     /**
      * Begins this game.
@@ -37,5 +38,10 @@ public interface IPregameView extends IView {
      */
     public void displayMessage(String message);
 
+<<<<<<< HEAD
     public void pollPlayerList();
+=======
+    public void backToLogin();
+    void pollPlayerList();
+>>>>>>> master
 }

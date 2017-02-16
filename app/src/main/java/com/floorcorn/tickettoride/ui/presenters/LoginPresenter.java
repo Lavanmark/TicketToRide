@@ -25,7 +25,7 @@ public class LoginPresenter implements IPresenter, Observer {
      * @post a new instance of LoginPresenter is created.
      */
     public LoginPresenter() {
-        UIFacade.getInstance().registerObserver(this);
+
     }
 
     @Override
@@ -89,12 +89,23 @@ public class LoginPresenter implements IPresenter, Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        this.user = UIFacade.getInstance().getUser();
-        if(this.user == null) {
-            this.loginView.displayMessage("Username/password error -- unable to authenticate");
-            return;
+        if(arg instanceof IUser) {
+            this.user = UIFacade.getInstance().getUser();
+            if(this.user == null) {
+                this.loginView.displayMessage("Username/password error -- unable to authenticate");
+                return;
+            }
+            this.loginView.launchNextActivity();
         }
+    }
 
-        this.loginView.launchNextActivity();
+    public void register() {
+        UIFacade.getInstance().registerObserver(this);
+    }
+    public void unregister() {
+        UIFacade.getInstance().unregisterObserver(this);
+    }
+    public void clearObservers() {
+        UIFacade.getInstance().clearObservers();
     }
 }

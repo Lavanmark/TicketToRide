@@ -65,4 +65,29 @@ public class Player {
 	}
 
 	public boolean isConductor() { return playerID == 0; }
+
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) return true;
+		if(o == null || getClass() != o.getClass()) return false;
+
+		Player player = (Player) o;
+
+		if(playerID != player.playerID) return false;
+		if(gameID != player.gameID) return false;
+		if(userID != player.userID) return false;
+		if(color != player.color) return false;
+		return name != null ? name.equals(player.name) : player.name == null;
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = playerID;
+		result = 31 * result + gameID;
+		result = 31 * result + userID;
+		result = 31 * result + color.hashCode();
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		return result;
+	}
 }

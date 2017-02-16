@@ -2,11 +2,9 @@ package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +19,6 @@ import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.presenters.PregamePresenter;
 import com.floorcorn.tickettoride.ui.views.IPregameView;
-import com.floorcorn.tickettoride.ui.views.PlayerListContent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +35,16 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     private PregamePresenter presenter;
     private RecyclerView playerListView;
     private Button cancelGameButton;
+	private Button refreshButton;
 
 	private PlayerListRecyclerViewAdapter playerListViewAdapter;
+<<<<<<< HEAD
 
 	private ScheduledExecutorService scheduledExecutorService;
 
+=======
+	private ScheduledExecutorService scheduledExecutorService;
+>>>>>>> master
 
     /**
      * Sets up the view components including the cancel/leave game button and the player list.
@@ -52,6 +54,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pregame);
+        setTitle(getTitleString(0,0));
 
 
         presenter = new PregamePresenter();
@@ -80,19 +83,29 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
             }
         });
 
+<<<<<<< HEAD
 		pollPlayerList();
 
+=======
+	    pollPlayerList();
+>>>>>>> master
     }
 
 	@Override
 	public void onStop () {
+<<<<<<< HEAD
 		System.out.println("PregameActivity onStop");
 		presenter.stopStartGamePoller();
+=======
+		if(scheduledExecutorService != null)
+			scheduledExecutorService.shutdown();
+		presenter.unregister();
+>>>>>>> master
 		super.onStop();
 	}
 
-	private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Player> players) {
-		recyclerView.setAdapter(new PlayerListRecyclerViewAdapter(players));
+	private String getTitleString(int cur, int tot) {
+		return "Waiting on Players... (" + cur + "/" + tot + ")";
 	}
 
     /**
@@ -114,11 +127,19 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
      * @param players A Set of Player objects representing players in current game
      */
     @Override
+<<<<<<< HEAD
     public void displayPlayerList(ArrayList<Player> players) {
 	    //playerListView = (RecyclerView) findViewById(R.id.pregame_list);
 	    assert playerListView != null;
 	    //playerListViewAdapter = (PlayerListRecyclerViewAdapter) ((RecyclerView) playerListView).getAdapter();
+=======
+    public void displayPlayerList(List<Player> players) {
+	    playerListView = (RecyclerView) findViewById(R.id.pregame_list);
+	    assert playerListView != null;
+	    playerListViewAdapter = (PlayerListRecyclerViewAdapter) (playerListView).getAdapter();
+>>>>>>> master
 	    playerListViewAdapter.swapList(players);
+	    setTitle(getTitleString(players.size(), presenter.getGameSize()));
     }
 
     /**
@@ -141,6 +162,24 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
         startActivity(new Intent(PregameActivity.this, GameListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
+	@Override
+	public void pollPlayerList() {
+		scheduledExecutorService = Executors.newScheduledThreadPool(2);
+		scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+
+			@Override
+			public void run() {
+				PregameActivity.this.runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						presenter.requestPlayerList();
+					}
+				});
+			}
+		}, 0, 5, TimeUnit.SECONDS);
+	}
+
     /**
      * Switches to the Boardmap view. This happens when the game is started and we don't need
      * Pregame view anymore.
@@ -160,6 +199,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     }
 
 	@Override
+<<<<<<< HEAD
 	public void pollPlayerList() {
 		scheduledExecutorService = Executors.newScheduledThreadPool(2);
 		scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
@@ -184,13 +224,17 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 				});
 			}
 		}, 5, 5, TimeUnit.SECONDS);
+=======
+	public void backToLogin() {
+		startActivity(new Intent(PregameActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+>>>>>>> master
 	}
 
 	public class PlayerListRecyclerViewAdapter extends RecyclerView.Adapter<PlayerListRecyclerViewAdapter.ViewHolder> {
-		PlayerListContent plc = null;
+		List<Player> players;
 
 		PlayerListRecyclerViewAdapter(List<Player> items) {
-			plc = new PlayerListContent(items);
+			players = new ArrayList<>(items);
 		}
 
 		@Override
@@ -201,14 +245,14 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 		}
 
 		void swapList(List<Player> list) {
-			System.out.println("Swapping lists");
-			PlayerListContent.setPlayerList(list);
+			players.clear();
+			players.addAll(list);
 			notifyDataSetChanged();
 		}
 
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, int position) {
-			holder.mItem = (Player) PlayerListContent.get(position);
+			holder.mItem = (Player) players.get(position);
 			if(holder.mItem == null)
 				return;
 			holder.mNameView.setText(holder.mItem.getName());
@@ -217,7 +261,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 
 		@Override
 		public int getItemCount() {
-			return PlayerListContent.getSize();
+			return players.size();
 		}
 
 		class ViewHolder extends RecyclerView.ViewHolder {

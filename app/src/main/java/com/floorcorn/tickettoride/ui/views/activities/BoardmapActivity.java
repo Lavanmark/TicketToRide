@@ -20,7 +20,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_boardmap);
 
-
         presenter = new BoardmapPresenter();
 
 	    Toolbar mToolbar = (Toolbar) findViewById(R.id.bmap_toolbar);
@@ -29,8 +28,28 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	        getSupportActionBar().setTitle(presenter.getGameName());
 
         if(!presenter.gameInProgress()) {
-	        ((TextView)findViewById(R.id.gameStartedText)).setText("Waiting on Players");
+	        ((TextView)findViewById(R.id.gameStartedText)).setText("Waiting on Players...");
 			launchPreGame();
+        }
+
+    }
+
+	@Override
+	public void onStop() {
+		presenter.unregister();
+		super.onStop();
+	}
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(presenter.getGameName());
+        }
+        if(!presenter.gameInProgress()) {
+	        ((TextView)findViewById(R.id.gameStartedText)).setText("Waiting on Players...");
+        } else {
+	        ((TextView)findViewById(R.id.gameStartedText)).setText("Game Started!");
         }
     }
 
@@ -48,7 +67,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	@Override
 	public void gameStarted() {
-		((TextView)findViewById(R.id.gameStartedText)).setText("Game Started");
+		((TextView)findViewById(R.id.gameStartedText)).setText("Game Started!");
 	}
 
 	@Override

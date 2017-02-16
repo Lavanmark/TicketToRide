@@ -19,6 +19,7 @@ import java.util.Observer;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Exchanger;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -32,6 +33,7 @@ public class PregamePresenter implements IPresenter, Observer {
     private IGame game;
     private IUser user;
 
+<<<<<<< HEAD
 //    private Handler h;
 //    private Timer t;
 
@@ -71,6 +73,12 @@ public class PregamePresenter implements IPresenter, Observer {
 //
 //            h.postDelayed(this, 5000);
         }
+=======
+    public PregamePresenter() {
+        game = UIFacade.getInstance().getCurrentGame();
+        user = UIFacade.getInstance().getUser();
+        UIFacade.getInstance().registerObserver(this);
+>>>>>>> master
     }
 
     /**
@@ -79,9 +87,12 @@ public class PregamePresenter implements IPresenter, Observer {
     public void cancelGame() {
         try {
             if(UIFacade.getInstance().leaveGame(game.getGameID()))
-	            stopStartGamePoller();
-        } catch (BadUserException | GameActionException ex) {
-            view.displayMessage("Could not leave game");
+	            returnToLobby();
+        } catch (BadUserException e) {
+            view.backToLogin();
+        } catch(GameActionException e) {
+	        e.printStackTrace();
+	        view.displayMessage("Could not leave game");
         }
     }
 
@@ -90,8 +101,20 @@ public class PregamePresenter implements IPresenter, Observer {
      * @return
      */
     public List<Player> getPlayerList() {
-	    System.out.println(game.getPlayerList().size());
         return game.getPlayerList();
+    }
+
+	public int getGameSize() {
+		return game.getGameSize();
+	}
+
+    public void requestPlayerList() {
+        try {
+            UIFacade.getInstance().requestCurrentGame();
+        } catch(BadUserException e) {
+            e.printStackTrace();
+            view.backToLogin();
+        }
     }
 
     /**
@@ -102,6 +125,7 @@ public class PregamePresenter implements IPresenter, Observer {
     }
 
     /**
+<<<<<<< HEAD
      * This checks the status of the game and starts the game if it has filled with players.
      * It schedules a TimerTask that checks if game is filled (every 5000 milliseconds).
      *
@@ -139,12 +163,12 @@ public class PregamePresenter implements IPresenter, Observer {
 	}
 
     /**
+=======
+>>>>>>> master
      * Should be called when number of players in game matches the game's size. Stops the
      * StartGamePoller. Starts the game.
      */
     public void startGame() {
-        // For Phase 0, just show the Boardmap with message: Game Started
-        // TODO: show the game started message
         view.startGame();
     }
 
@@ -177,6 +201,8 @@ public class PregamePresenter implements IPresenter, Observer {
         System.out.println("Called update in PregamePresenter. Arg is " + arg);
         if (arg instanceof IGame) {
             game = (IGame) arg;
+	        if(!game.isPlayer(user.getUserID()))
+		        view.switchToLobbyActivity();
             if (game.hasStarted())
                 startGame();
 //            else
@@ -184,7 +210,15 @@ public class PregamePresenter implements IPresenter, Observer {
         } else if (arg instanceof IUser) {
             user = (IUser) arg;
         }
+	    if(UIFacade.getInstance().getCurrentGame() == null)
+		    view.switchToLobbyActivity();
+	    if(UIFacade.getInstance().getUser() == null)
+		    view.backToLogin();
     }
+
+	public void unregister() {
+		UIFacade.getInstance().unregisterObserver(this);
+	}
 
     /**
      * Updates the displayed player list. (Sends the player list to the view and calls display

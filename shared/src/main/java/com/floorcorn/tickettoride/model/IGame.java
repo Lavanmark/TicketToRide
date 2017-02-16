@@ -126,9 +126,9 @@ public abstract class IGame {
 			taken.add(p.getColor());
 		List<Player.PlayerColor> avail = new ArrayList<Player.PlayerColor>();
 		for(Player.PlayerColor a: all)
-			for(Player.PlayerColor b: taken)
-				if(!a.equals(b))
-					avail.add(a);
+			if(! taken.contains(a)) {
+				avail.add(a);
+			}
 		return avail;
 	}
 
@@ -181,7 +181,7 @@ public abstract class IGame {
 		sb.append("Size: " + gameSize + '\n');
 		sb.append("Players: (" + playerList.size() + "/" + gameSize + ")\n");
 		for(Player p : playerList)
-			sb.append("    " + p.getName() + "\n");
+			sb.append("    " + p.getName() + "    " + p.getColor() +  "\n");
 		return sb.toString();
 	}
 }

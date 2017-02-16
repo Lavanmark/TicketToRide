@@ -36,7 +36,7 @@ public class UIFacade {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
 	    serverProxy.setPort("8080");
-        serverProxy.setHost("10.24.64.162");
+        serverProxy.setHost("192.168.0.100");
     }
     private static UIFacade instance = null;
     public static UIFacade getInstance() {
@@ -178,9 +178,10 @@ public class UIFacade {
         clientModelRoot.setCurrentGame(game);
     }
 
-	public void requestCurrentGame() throws BadUserException, InvalidParameterException {
+	public void requestCurrentGame() throws BadUserException{
 		if(getCurrentGame() == null)
 			throw new InvalidParameterException("No game currently selected!");
+<<<<<<< HEAD
 		IGame cgame = serverProxy.getGame(clientModelRoot.getCurrentUser(), getCurrentGame().getGameID());
         System.out.println("clientModelRoot current game in request current game: " + clientModelRoot.getCurrentGame());
 		if(cgame != null)
@@ -188,6 +189,10 @@ public class UIFacade {
 		else
 			throw new InvalidParameterException("Current game could not be found!");
         System.out.println("clientModelRoot current game in request current game: " + clientModelRoot.getCurrentGame());
+=======
+		IGame cgame = serverProxy.getGame(clientModelRoot.getCurrentUser(), clientModelRoot.getCurrentGame().getGameID());
+        clientModelRoot.setCurrentGame(cgame);
+>>>>>>> master
 	}
 
     /**
@@ -222,8 +227,6 @@ public class UIFacade {
      */
     public IGame createGame(String gameName, int playerCount, Player.PlayerColor color) throws GameActionException, BadUserException {
         IGame createdGame = serverProxy.createGame(getUser(), gameName, playerCount);
-        System.out.println("UIFarquad says to create game: " + gameName + " " + playerCount);
-        System.out.println(createdGame);
         createdGame = joinGame(createdGame.getGameID(), color);
         return createdGame;
     }
@@ -263,6 +266,10 @@ public class UIFacade {
      */
     public void unregisterObserver(Observer obs) {
         clientModelRoot.deleteObserver(obs);
+    }
+
+    public void clearObservers() {
+        clientModelRoot.deleteObservers();
     }
 
 }

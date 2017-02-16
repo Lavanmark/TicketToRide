@@ -50,8 +50,9 @@ public class ClientCommunicator {
 		myTask.execute(params);
 		//System.out.println("receiving");
 		try {
-			Results res = myTask.get(30, TimeUnit.SECONDS);
+			Results res = myTask.get(5, TimeUnit.SECONDS);
 			//System.out.println(res.isSuccess());
+			myTask.cancel(true);
 			return res;
 		} catch(InterruptedException | ExecutionException e) {
 			e.printStackTrace();
@@ -92,7 +93,11 @@ public class ClientCommunicator {
 				String stringToSend = null;
 				if(request != null)
 					stringToSend = Serializer.getInstance().serialize(request);
+<<<<<<< HEAD
 				System.out.println("sendHelper stringToSend " + stringToSend);
+=======
+				//System.out.println(stringToSend);
+>>>>>>> master
 				URL url = new URL(urlString);
 
 				HttpURLConnection http = (HttpURLConnection) url.openConnection();

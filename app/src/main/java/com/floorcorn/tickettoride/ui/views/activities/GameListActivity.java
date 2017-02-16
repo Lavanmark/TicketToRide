@@ -77,6 +77,8 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 		Button mCreateGameButton = (Button) findViewById(R.id.createGameButton);
 		Button mRefreshGameButton = (Button) findViewById(R.id.refreshListButton);
 
+
+
 		mCreateGameButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -115,8 +117,19 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 			// activity should be in two-pane mode.
 			mTwoPane = true;
 		}
+	}
 
+	@Override
+	public void onStop() {
+		presenter.unregister();
+		super.onStop();
+	}
 
+	@Override
+	public void onResume() {
+		presenter.register();
+		presenter.requestGames();
+		super.onResume();
 	}
 
 	@Override
@@ -175,6 +188,11 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	@Override
 	public void resumeGame(IGame game) {
 		presenter.setCurrentGame(game);
+		startGameView();
+	}
+
+	@Override
+	public void startGameView(){
 		startActivity(new Intent(GameListActivity.this, BoardmapActivity.class));
 	}
 
@@ -261,7 +279,6 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 		recyclerView.setAdapter(new GameItemRecyclerViewAdapter(recyclerView, games));
 	}
 
-
 	public class GameItemRecyclerViewAdapter extends RecyclerView.Adapter<GameItemRecyclerViewAdapter.ViewHolder> {
 		private RecyclerView rv;
 		private GameListContent glc = null;
@@ -302,8 +319,6 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 				holder.mJoinButton.setText("Resume");
 				holder.mJoinButton.setEnabled(true);
 			}
-
-			//holder.mView.setSelected(position);
 			holder.mView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -384,7 +399,6 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 							}
 							intent.putStringArrayListExtra("colList", strList);
 							gameID = mItem.getGameID();
-							System.out.println(gameID);
 							startActivityForResult(intent, JOIN_GAME_REQUEST);
 						} else {
 							if(mItem.isPlayer(UIFacade.getInstance().getUser().getUserID()))
