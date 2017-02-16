@@ -61,9 +61,8 @@ public class LobbyPresenter implements IPresenter, Observer {
     public void requestGames() {
         try {
             UIFacade.getInstance().requestGames();
-        } catch (Exception e) {
-            e.printStackTrace();
-            view.displayMessage(e.getMessage());
+        } catch (BadUserException e) {
+            view.backToLogin();
         }
     }
 
@@ -84,6 +83,10 @@ public class LobbyPresenter implements IPresenter, Observer {
     public void update(Observable o, Object arg) {
         if(arg instanceof Set)
 	        view.setGameList(UIFacade.getInstance().getGames());
+	    if(UIFacade.getInstance().getUser() == null) {
+		    unregister();
+		    view.backToLogin();
+	    }
     }
     public void unregister() {
         UIFacade.getInstance().unregisterObserver(this);

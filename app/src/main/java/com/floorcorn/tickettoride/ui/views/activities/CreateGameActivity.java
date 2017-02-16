@@ -90,8 +90,13 @@ public class CreateGameActivity extends AppCompatActivity implements AdapterView
             @Override
             public void afterTextChanged(Editable s) { // made create game button a private data member so other classes can access it
                 createGameButton = (Button) findViewById(R.id.createGameButton);
-                createGameButton.setEnabled(true);
-                setGameName(s.toString());
+                if(s.length() > 0) {
+	                setGameName(s.toString());
+	                createGameButton.setEnabled(true);
+                } else {
+	                createGameButton.setEnabled(false);
+                }
+
             }
 
             @Override

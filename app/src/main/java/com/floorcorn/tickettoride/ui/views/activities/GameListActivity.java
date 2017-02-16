@@ -65,7 +65,6 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_list);
-		System.out.println("oncreate");
 
 		Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(mToolbar);

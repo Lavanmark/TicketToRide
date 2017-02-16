@@ -53,9 +53,12 @@ public class PregamePresenter implements IPresenter, Observer {
      * @return
      */
     public List<Player> getPlayerList() {
-	    System.out.println(game.getPlayerList().size());
         return game.getPlayerList();
     }
+
+	public int getGameSize() {
+		return game.getGameSize();
+	}
 
     public void requestPlayerList() {
         try {
@@ -108,7 +111,9 @@ public class PregamePresenter implements IPresenter, Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof IGame) {
-            game = UIFacade.getInstance().getCurrentGame();
+            game = (IGame) arg;
+	        if(!game.isPlayer(user.getUserID()))
+		        view.switchToLobbyActivity();
             if (game.hasStarted())
                 startGame();
             else
@@ -116,8 +121,12 @@ public class PregamePresenter implements IPresenter, Observer {
         } else if (arg instanceof IUser) {
             user = (IUser) arg;
         }
+	    if(UIFacade.getInstance().getCurrentGame() == null)
+		    view.switchToLobbyActivity();
+	    if(UIFacade.getInstance().getUser() == null)
+		    view.backToLogin();
     }
-//TODO fix unregister for game list on some action maybe?
+
 	public void unregister() {
 		UIFacade.getInstance().unregisterObserver(this);
 	}
