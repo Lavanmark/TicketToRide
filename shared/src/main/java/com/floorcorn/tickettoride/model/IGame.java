@@ -181,7 +181,7 @@ public abstract class IGame {
 		sb.append("Size: " + gameSize + '\n');
 		sb.append("Players: (" + playerList.size() + "/" + gameSize + ")\n");
 		for(Player p : playerList)
-			sb.append("    " + p.getName() + "\n");
+			sb.append("    " + p.getName() + "    " + p.getColor() +  "\n");
 		return sb.toString();
 	}
 }
