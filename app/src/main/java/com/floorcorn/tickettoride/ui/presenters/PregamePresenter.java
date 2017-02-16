@@ -43,8 +43,11 @@ public class PregamePresenter implements IPresenter, Observer {
         try {
             if(UIFacade.getInstance().leaveGame(game.getGameID()))
 	            returnToLobby();
-        } catch (BadUserException | GameActionException ex) {
-            view.displayMessage("Could not leave game");
+        } catch (BadUserException e) {
+            view.backToLogin();
+        } catch(GameActionException e) {
+	        e.printStackTrace();
+	        view.displayMessage("Could not leave game");
         }
     }
 
