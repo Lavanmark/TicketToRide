@@ -33,6 +33,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     private PregamePresenter presenter;
     private RecyclerView playerListView;
     private Button cancelGameButton;
+	private Button refreshButton;
 
 	private PlayerListRecyclerViewAdapter playerListViewAdapter;
 
@@ -71,6 +72,14 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
                 presenter.cancelGame();
             }
         });
+
+		refreshButton = (Button) findViewById(R.id.refreshPreGameButton);
+		refreshButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				presenter.getPlayerList();
+			}
+		});
 
     }
 
