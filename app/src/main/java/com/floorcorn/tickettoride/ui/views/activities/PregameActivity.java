@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.UIFacade;
+import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.presenters.PregamePresenter;
@@ -23,6 +25,9 @@ import com.floorcorn.tickettoride.ui.views.PlayerListContent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Joseph Hansen
@@ -35,6 +40,8 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     private Button cancelGameButton;
 
 	private PlayerListRecyclerViewAdapter playerListViewAdapter;
+
+	private ScheduledExecutorService scheduledExecutorService;
 
 
     /**
@@ -55,8 +62,8 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 	    mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 	    playerListView.setLayoutManager(mLinearLayoutManager);
 
-		a = new PlayerListRecyclerViewAdapter(presenter.getPlayerList());
-	    playerListView.setAdapter(a);
+		playerListViewAdapter = new PlayerListRecyclerViewAdapter(presenter.getPlayerList());
+	    playerListView.setAdapter(playerListViewAdapter);
 
 
         cancelGameButton = (Button) findViewById(R.id.cancelGameButton);
@@ -73,10 +80,13 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
             }
         });
 
+		pollPlayerList();
+
     }
 
 	@Override
 	public void onStop () {
+		System.out.println("PregameActivity onStop");
 		presenter.stopStartGamePoller();
 		super.onStop();
 	}
@@ -107,13 +117,8 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     public void displayPlayerList(ArrayList<Player> players) {
 	    //playerListView = (RecyclerView) findViewById(R.id.pregame_list);
 	    assert playerListView != null;
-<<<<<<< HEAD
-	    //a = (PlayerListRecyclerViewAdapter) ((RecyclerView) playerListView).getAdapter();
-	    a.swapList(players);
-=======
-	    playerListViewAdapter = (PlayerListRecyclerViewAdapter) ((RecyclerView) playerListView).getAdapter();
+	    //playerListViewAdapter = (PlayerListRecyclerViewAdapter) ((RecyclerView) playerListView).getAdapter();
 	    playerListViewAdapter.swapList(players);
->>>>>>> master
     }
 
     /**
@@ -153,6 +158,33 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     public void displayMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
+
+	@Override
+	public void pollPlayerList() {
+		scheduledExecutorService = Executors.newScheduledThreadPool(2);
+		scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+
+			@Override
+			public void run() {
+				PregameActivity.this.runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						try {
+							System.out.println("right before requestCurrentGame");
+							UIFacade.getInstance().requestCurrentGame();
+							System.out.println("right before presenter getPlayerList");
+							displayPlayerList((ArrayList) presenter.getPlayerList());
+							System.out.println("right after getPlayerList");
+						} catch (Exception e) {
+//							e.printStackTrace();
+							System.out.println("Error requestCurrentGame from runOnUiThread");
+						}
+					}
+				});
+			}
+		}, 5, 5, TimeUnit.SECONDS);
+	}
 
 	public class PlayerListRecyclerViewAdapter extends RecyclerView.Adapter<PlayerListRecyclerViewAdapter.ViewHolder> {
 		PlayerListContent plc = null;

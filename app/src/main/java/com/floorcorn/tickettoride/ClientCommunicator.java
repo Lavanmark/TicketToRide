@@ -92,7 +92,7 @@ public class ClientCommunicator {
 				String stringToSend = null;
 				if(request != null)
 					stringToSend = Serializer.getInstance().serialize(request);
-				System.out.println(stringToSend);
+				System.out.println("sendHelper stringToSend " + stringToSend);
 				URL url = new URL(urlString);
 
 				HttpURLConnection http = (HttpURLConnection) url.openConnection();

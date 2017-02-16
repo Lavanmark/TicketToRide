@@ -182,10 +182,12 @@ public class UIFacade {
 		if(getCurrentGame() == null)
 			throw new InvalidParameterException("No game currently selected!");
 		IGame cgame = serverProxy.getGame(clientModelRoot.getCurrentUser(), getCurrentGame().getGameID());
+        System.out.println("clientModelRoot current game in request current game: " + clientModelRoot.getCurrentGame());
 		if(cgame != null)
 			clientModelRoot.setCurrentGame(cgame);
 		else
 			throw new InvalidParameterException("Current game could not be found!");
+        System.out.println("clientModelRoot current game in request current game: " + clientModelRoot.getCurrentGame());
 	}
 
     /**

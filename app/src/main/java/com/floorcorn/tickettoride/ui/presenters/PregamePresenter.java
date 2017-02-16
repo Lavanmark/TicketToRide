@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
+import android.os.Handler;
+
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
@@ -8,6 +10,7 @@ import com.floorcorn.tickettoride.model.IUser;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.views.IPregameView;
 import com.floorcorn.tickettoride.ui.views.IView;
+import com.floorcorn.tickettoride.ui.views.activities.PregameActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,27 +32,44 @@ public class PregamePresenter implements IPresenter, Observer {
     private IGame game;
     private IUser user;
 
-    private ScheduledExecutorService scheduledTaskExecutor;
+//    private Handler h;
+//    private Timer t;
+
+//    private ScheduledExecutorService scheduledTaskExecutor;
 
     public PregamePresenter() {
         game = UIFacade.getInstance().getCurrentGame();
         user = UIFacade.getInstance().getUser();
-        UIFacade.getInstance().registerObserver(this);
+//        UIFacade.getInstance().registerObserver(this);
 
-	    scheduledTaskExecutor = Executors.newSingleThreadScheduledExecutor();
+//	    scheduledTaskExecutor = Executors.newSingleThreadScheduledExecutor();
         beginStartGamePoller();
     }
 
     private class CheckGameFilledTask implements Runnable {
         @Override
         public void run() {
-            try {
-                UIFacade.getInstance().requestCurrentGame();
-            } catch (Exception ex) {
-                System.out.println("Updated the Pregame View list, but there was an exception.");
-            }
 
-            // Observer pattern will update the game object.
+//            PregameActivity.runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        UIFacade.getInstance().requestCurrentGame();
+//                    } catch (Exception ex) {
+//                        System.out.println("Updated the Pregame View list, but there was an exception.");
+//                    }
+//                }
+//            });
+
+//            try {
+//                UIFacade.getInstance().requestCurrentGame();
+//            } catch (Exception ex) {
+//                System.out.println("Updated the Pregame View list, but there was an exception.");
+//            }
+//
+//            // Observer pattern will update the game object.
+//
+//            h.postDelayed(this, 5000);
         }
     }
 
@@ -91,11 +111,31 @@ public class PregamePresenter implements IPresenter, Observer {
      * Other interesting, potentially useful info in the future: http://stackoverflow.com/q/26549246
      */
     public void beginStartGamePoller() {
-	    scheduledTaskExecutor.scheduleAtFixedRate(new CheckGameFilledTask(), 0, 5, TimeUnit.SECONDS);
+	    //scheduledTaskExecutor.scheduleAtFixedRate(new CheckGameFilledTask(), 0, 5, TimeUnit.SECONDS);
+
+//        h = new Handler();
+//        h.postDelayed(new CheckGameFilledTask(), 5000);
+
+//        t = new Timer();
+//        t.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+//                try {
+//                    UIFacade.getInstance().requestCurrentGame();
+//                } catch (Exception ex) {
+//                    System.out.println("Simple poller exception when request current game");
+//                }
+//            }
+//        }, 0, 5000);
+
+//        view.pollPlayerList();
     }
 
 	public void stopStartGamePoller() {
-		scheduledTaskExecutor.shutdown();
+		//scheduledTaskExecutor.shutdown();
+
+//        t.cancel();
+//        t.purge();
 	}
 
     /**
@@ -134,12 +174,13 @@ public class PregamePresenter implements IPresenter, Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
+        System.out.println("Called update in PregamePresenter. Arg is " + arg);
         if (arg instanceof IGame) {
             game = (IGame) arg;
             if (game.hasStarted())
                 startGame();
-            else
-                updatePlayerList();
+//            else
+//                updatePlayerList();
         } else if (arg instanceof IUser) {
             user = (IUser) arg;
         }
