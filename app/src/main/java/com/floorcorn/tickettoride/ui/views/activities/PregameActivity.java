@@ -46,7 +46,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pregame);
-		System.out.println("PreGameActivity: OnCreate");
+        setTitle("Waiting on Players");
 
 
         presenter = new PregamePresenter();
