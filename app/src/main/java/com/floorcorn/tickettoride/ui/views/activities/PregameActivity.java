@@ -147,12 +147,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 
 					@Override
 					public void run() {
-						try {
-							UIFacade.getInstance().requestCurrentGame();
-						} catch (Exception e) {
-							e.printStackTrace();
-							backToLogin();
-						}
+						presenter.requestPlayerList();
 					}
 				});
 			}

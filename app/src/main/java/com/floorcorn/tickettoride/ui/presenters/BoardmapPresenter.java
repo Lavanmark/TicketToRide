@@ -39,18 +39,12 @@ public class BoardmapPresenter implements IPresenter, Observer {
     public void update(Observable o, Object arg) {
         if(arg instanceof IGame) {
 	        game = UIFacade.getInstance().getCurrentGame();
-	        checkStart();
         }
 
 	    if(UIFacade.getInstance().getUser() == null) {
 		    view.backToLogin();
 	    }
     }
-	private void checkStart() {
-		if(game.hasStarted()){
-			view.gameStarted();
-		}
-	}
 	public boolean gameInProgress() {
 		return game.hasStarted();
 	}
