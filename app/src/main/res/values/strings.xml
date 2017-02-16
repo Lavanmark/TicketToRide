@@ -62,4 +62,6 @@
     <string name="game_started">Game Started</string>
     <string name="waiting_on_player">Waiting on player...</string>
 
+    <string name="tab">\u0009</string>
+
 </resources>

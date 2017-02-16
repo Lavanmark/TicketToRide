@@ -19,7 +19,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_boardmap);
-
+        System.out.println("BoardmapActivity:OnCreate");
 
         presenter = new BoardmapPresenter();
 
