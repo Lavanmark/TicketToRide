@@ -32,6 +32,20 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	        ((TextView)findViewById(R.id.gameStartedText)).setText("Waiting on Players");
 			launchPreGame();
         }
+
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(presenter.getGameName());
+        }
+        if(!presenter.gameInProgress()) {
+            getSupportActionBar().setTitle("Waiting on Players");
+        } else {
+            getSupportActionBar().setTitle("Game Started!");
+        }
     }
 
     public void launchPreGame() {
