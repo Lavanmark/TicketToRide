@@ -21,4 +21,5 @@ public interface ILobbyView extends IView {
     void displayMessage(String message);
     void backToLogin();
     void resumeGame(IGame game);
+    void startGameView();
 }

@@ -25,8 +25,8 @@
         <activity
             android:name=".ui.views.activities.GameListActivity"
             android:label="@string/title_game_list"
+            android:configChanges="orientation"
             android:theme="@style/AppTheme.NoActionBar" >
-
         </activity>
         <activity
             android:name=".ui.views.activities.GameDetailActivity"
@@ -46,10 +46,12 @@
         <activity
             android:name=".ui.views.activities.PregameActivity"
             android:label="@string/title_activity_pregame"
+            android:configChanges="orientation"
             android:theme="@style/MyDialogTheme" />
         <activity
             android:name=".ui.views.activities.BoardmapActivity"
             android:label="@string/title_activity_boardmap"
+            android:configChanges="orientation"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
