@@ -42,7 +42,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
             getSupportActionBar().setTitle(presenter.getGameName());
         }
         if(!presenter.gameInProgress()) {
-            getSupportActionBar().setTitle("Waiting on Players");
+            getSupportActionBar().setTitle("Waiting on Players...");
         } else {
             getSupportActionBar().setTitle("Game Started!");
         }
