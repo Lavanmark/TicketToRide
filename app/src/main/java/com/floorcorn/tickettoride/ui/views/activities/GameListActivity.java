@@ -118,8 +118,6 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 			// activity should be in two-pane mode.
 			mTwoPane = true;
 		}
-
-
 	}
 
 	@Override
