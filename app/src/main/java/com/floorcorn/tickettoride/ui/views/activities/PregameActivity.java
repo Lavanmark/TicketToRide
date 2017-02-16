@@ -2,11 +2,9 @@ package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +17,6 @@ import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.presenters.PregamePresenter;
 import com.floorcorn.tickettoride.ui.views.IPregameView;
-import com.floorcorn.tickettoride.ui.views.PlayerListContent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +74,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 		refreshButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				presenter.getPlayerList();
+				presenter.requestPlayerList();
 			}
 		});
 
@@ -85,13 +82,10 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 
 	@Override
 	public void onStop () {
-		presenter.stopStartGamePoller();
+		presenter.unregister();
 		super.onStop();
 	}
 
-	private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Player> players) {
-		recyclerView.setAdapter(new PlayerListRecyclerViewAdapter(players));
-	}
     /**
      * Sets the presenter to the argument if its the correct type. Will throw
      * IllegalArgumentException if presenter is not the correct type
@@ -113,8 +107,8 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     @Override
     public void displayPlayerList(ArrayList<Player> players) {
 	    playerListView = (RecyclerView) findViewById(R.id.pregame_list);
-	    assert playerListView != null;
-	    playerListViewAdapter = (PlayerListRecyclerViewAdapter) ((RecyclerView) playerListView).getAdapter();
+	    //assert playerListView != null;
+	    playerListViewAdapter = (PlayerListRecyclerViewAdapter) (playerListView).getAdapter();
 	    playerListViewAdapter.swapList(players);
     }
 
@@ -135,6 +129,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
         // go back to before the Boardmap.
         // The FLAG_ACTIVITY_CLEAR_TOP tells Android that this activity is already running and that
         // we can go back to that one, popping/clearing the newer activities off the stack.
+	    System.out.println("leavin");
         startActivity(new Intent(PregameActivity.this, GameListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
@@ -156,11 +151,16 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
+	@Override
+	public void backToLogin() {
+		startActivity(new Intent(PregameActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+	}
+
 	public class PlayerListRecyclerViewAdapter extends RecyclerView.Adapter<PlayerListRecyclerViewAdapter.ViewHolder> {
-		PlayerListContent plc = null;
+		List<Player> players;
 
 		PlayerListRecyclerViewAdapter(List<Player> items) {
-			plc = new PlayerListContent(items);
+			players = new ArrayList<>(items);
 		}
 
 		@Override
@@ -172,13 +172,14 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 
 		void swapList(List<Player> list) {
 			System.out.println("Swapping lists");
-			PlayerListContent.setPlayerList(list);
+			players.clear();
+			players.addAll(list);
 			notifyDataSetChanged();
 		}
 
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, int position) {
-			holder.mItem = (Player) PlayerListContent.get(position);
+			holder.mItem = (Player) players.get(position);
 			if(holder.mItem == null)
 				return;
 			holder.mNameView.setText(holder.mItem.getName());
@@ -187,7 +188,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 
 		@Override
 		public int getItemCount() {
-			return PlayerListContent.getSize();
+			return players.size();
 		}
 
 		class ViewHolder extends RecyclerView.ViewHolder {
