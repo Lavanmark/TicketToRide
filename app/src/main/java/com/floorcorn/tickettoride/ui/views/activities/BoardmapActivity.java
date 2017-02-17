@@ -21,6 +21,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         setContentView(R.layout.activity_boardmap);
 
         presenter = new BoardmapPresenter();
+	    presenter.setView(this);
 
 	    Toolbar mToolbar = (Toolbar) findViewById(R.id.bmap_toolbar);
 	    setSupportActionBar(mToolbar);
