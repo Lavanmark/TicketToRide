@@ -4,7 +4,7 @@ package com.floorcorn.tickettoride.model;
  * Created by Tyler on 2/1/17.
  */
 
-public abstract class IUser {
+public class User {
 
 	protected String username = null; // Must be 4 characters long
 	protected String password = null; // Must be 8 characters long
@@ -13,6 +13,29 @@ public abstract class IUser {
 	protected int userID = -1;
 
 	public static final int AUTH_TOKEN_SIZE = 16;
+
+	public User(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
+
+	public User(String token) {
+		this.token = token;
+	}
+
+	public User(String username, String password, String fullName) {
+		this.username = username;
+		this.password = password;
+		this.fullName = fullName;
+	}
+
+	public User(User user) {
+		this.username = user.getUsername();
+		this.password = user.getPassword();
+		this.fullName = user.getFullName();
+		this.token = user.getToken();
+		this.userID = user.getUserID();
+	}
 
 	public void setToken(String token) {
 		this.token = token;
@@ -47,7 +70,7 @@ public abstract class IUser {
 		if(this == o) return true;
 		if(o == null || getClass() != o.getClass()) return false;
 
-		IUser user = (IUser) o;
+		User user = (User) o;
 
 		if(userID != user.userID) return false;
 		if(!username.equals(user.username)) return false;

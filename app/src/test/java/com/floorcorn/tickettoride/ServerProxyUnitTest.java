@@ -1,16 +1,16 @@
 package com.floorcorn.tickettoride;
 
-import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.model.IUser;
+import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.Player;
+import com.floorcorn.tickettoride.model.PlayerColor;
 
 import org.junit.*;
 
-import java.security.spec.ECField;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -38,14 +38,14 @@ public class ServerProxyUnitTest {
 	public void testLogin() {
 		User goodUser = new User("tyler", "dragonman");
 		try {
-			IUser res = sp.register(goodUser);
+			User res = sp.register(goodUser);
 			assertNotEquals(res, null);
 		} catch(Exception e) {
 			System.err.println(e.getMessage());
 			assertTrue(false);
 		}
 		goodUser = new User("tyler", "dragonman");
-		IUser res = null;
+		User res = null;
 		try {
 			res = sp.login(goodUser);
 		} catch(BadUserException e) {
@@ -162,7 +162,7 @@ public class ServerProxyUnitTest {
 
 	@Test
 	public void testGameOperations() {
-		IUser login = null;
+		User login = null;
 		try {
 			login = sp.login(new User("tyler","dragonman"));
 		} catch(BadUserException e) {
@@ -170,7 +170,7 @@ public class ServerProxyUnitTest {
 			assertFalse(true);
 		}
 		//TODO bad params gives end of file from server.
-		IGame game = null;
+		Game game = null;
 		try {
 			game = sp.createGame(login, "Test", 3);
 		} catch(BadUserException e) {
@@ -185,7 +185,7 @@ public class ServerProxyUnitTest {
 		//
 		//CHECK GAME LIST
 		//
-		Set<IGame> games = null;
+		Set<GameInfo> games = null;
 		try {
 			games = sp.getGames(login);
 		} catch(BadUserException e) {
@@ -195,7 +195,7 @@ public class ServerProxyUnitTest {
 		assertNotEquals(games, null);
 		assertEquals(games.size(), 1);
 		int gameID = -1;
-		for(IGame g : games) {
+		for(GameInfo g : games) {
 			assertEquals(g.getGameSize(), game.getGameSize());
 			assertEquals(g.getName(), game.getName());
 			assertEquals(g.getGameID(), game.getGameID());
@@ -206,7 +206,7 @@ public class ServerProxyUnitTest {
 		//JOIN GAME
 		//
 		try {
-			game = sp.joinGame(login, gameID, Player.PlayerColor.BLACK);
+			game = sp.joinGame(login, gameID, PlayerColor.BLACK);
 		} catch(BadUserException | GameActionException e) {
 			e.printStackTrace();
 			assertFalse(true);
@@ -218,7 +218,7 @@ public class ServerProxyUnitTest {
 		assertEquals(game.getPlayerList().size(), 1);
 		for(Player p : game.getPlayerList()) {
 			assertEquals(p.getGameID(), game.getGameID());
-			assertEquals(p.getColor(), Player.PlayerColor.BLACK);
+			assertEquals(p.getColor(), PlayerColor.BLACK);
 			assertEquals(p.getUserID(), login.getUserID());
 			assertEquals(p.getPlayerID(), 0);
 			assertTrue(p.isConductor());
@@ -236,7 +236,7 @@ public class ServerProxyUnitTest {
 			assertTrue(true);
 		}
 		assertEquals(game.getPlayer(login).getUserID(), login.getUserID());
-		assertEquals(game.getPlayer(login).getColor(), Player.PlayerColor.BLACK);
+		assertEquals(game.getPlayer(login).getColor(), PlayerColor.BLACK);
 
 		//
 		//LEAVE/CANCEL GAME
@@ -259,7 +259,7 @@ public class ServerProxyUnitTest {
 		}
 		assertNotEquals(games, null);
 		assertEquals(games.size(), 1);
-		for(IGame g : games) {
+		for(GameInfo g : games) {
 			assertEquals(g.getGameID(), game.getGameID());
 			assertTrue(g.isFinished());
 		}

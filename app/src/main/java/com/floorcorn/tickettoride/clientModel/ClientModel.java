@@ -1,10 +1,9 @@
 package com.floorcorn.tickettoride.clientModel;
 
 import com.floorcorn.tickettoride.UIFacade;
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.model.IUser;
-import com.floorcorn.tickettoride.clientModel.User;
-import com.floorcorn.tickettoride.clientModel.Game;
+import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.User;
 
 import java.util.HashSet;
 import java.util.List;
@@ -17,67 +16,63 @@ import java.util.Set;
 
 public class ClientModel extends Observable {
 
-    private IUser currentUser;
-    private Set<IGame> gameList;
-    private IGame currentGame;
+    private User currentUser;
+    private Set<GameInfo> gameList;
+    private Game currentGame;
 
 	public ClientModel() {
 		currentGame = null;
 		currentUser = null;
-		gameList = new HashSet<IGame>();
+		gameList = new HashSet<GameInfo>();
 	}
 
-    public IUser getCurrentUser() {
+    public User getCurrentUser() {
         return currentUser;
     }
 
-    public Set<IGame> getGames() {
+    public Set<GameInfo> getGames() {
         return gameList;
     }
 
-    public Set<IGame> getGames(IUser user) {
+    public Set<GameInfo> getGames(User user) {
         if(user == null)
 	        return null;
-        Set<IGame> gameSet = new HashSet<IGame>();
-        for(IGame g : gameList) {
-            if(g.getPlayer(user) != null) // found the player inside of the list
-                gameSet.add(g);
+        Set<GameInfo> gameSet = new HashSet<GameInfo>();
+        for(GameInfo gi : gameList) {
+            if(gi.isPlayer(user.getUserID())) // found the player inside of the list
+                gameSet.add(gi);
         }
         return gameSet;
     }
 
-    public List<IGame> getGames(UIFacade.GameSortStyle sortStyle) {
+    public List<Game> getGames(UIFacade.GameSortStyle sortStyle) {
         // Probably don't need this because UIFacade can return sorted games lists after getting
         // the games from this ClientModel
         throw new UnsupportedOperationException();
     }
 
-    public IGame getCurrentGame() {
+    public Game getCurrentGame() {
         return currentGame;
     }
 
-    public void setGames(Set<IGame> gList) {
+    public void setGames(Set<GameInfo> gList) {
         gameList = gList;
 
         setChanged();
         notifyObservers(gameList);
     }
 
-    public void setCurrentUser(IUser user) {
+    public void setCurrentUser(User user) {
         currentUser = user;
 
         setChanged();
         notifyObservers(currentUser);
     }
 
-    public void setCurrentGame(IGame game) {
+    public void setCurrentGame(Game game) {
         currentGame = game;
 
         setChanged();
         notifyObservers(currentGame);
     }
-
-	public void addGame(IGame game) {
-		gameList.add(game);
-	}
 }

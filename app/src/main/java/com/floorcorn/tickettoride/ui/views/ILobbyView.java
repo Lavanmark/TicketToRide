@@ -1,8 +1,8 @@
 package com.floorcorn.tickettoride.ui.views;
 
-import com.floorcorn.tickettoride.clientModel.Game;
-import com.floorcorn.tickettoride.model.IGame;
+import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.Player;
+import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 
 import java.util.List;
@@ -13,13 +13,13 @@ import java.util.Set;
  */
 
 public interface ILobbyView extends IView {
-    void setGameList(Set<IGame> gameList);
+    void setGameList(Set<GameInfo> gameList);
     int getGameID();
-    Player.PlayerColor getPlayerColor();
+    PlayerColor getPlayerColor();
     int getNewGamePlayerNumber();
     String getNewGameName();
     void displayMessage(String message);
     void backToLogin();
-    void resumeGame(IGame game);
+    void resumeGame(GameInfo game);
     void startGameView();
 }

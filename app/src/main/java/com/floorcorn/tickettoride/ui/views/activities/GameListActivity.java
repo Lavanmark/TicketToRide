@@ -16,11 +16,11 @@ import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.UIFacade;
-import com.floorcorn.tickettoride.clientModel.Game;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
-import com.floorcorn.tickettoride.model.IGame;
+import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.Player;
+import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.presenters.LobbyPresenter;
 import com.floorcorn.tickettoride.ui.views.GameListContent;
@@ -51,7 +51,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	static final int JOIN_GAME_REQUEST = 2;
 
 	//model references
-	private Player.PlayerColor playerColor;
+	private PlayerColor playerColor;
 	private int playerNumber;
 	private String gameName;
 	private int gameID;
@@ -103,7 +103,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 
 		mGameListRecyclerView = findViewById(R.id.game_list);
 		assert mGameListRecyclerView != null;
-		List<IGame> games = new ArrayList<IGame>();
+		List<GameInfo> games = new ArrayList<GameInfo>();
 		if(presenter.getGameList() != null) {
 			games.clear();
 			games.addAll(presenter.getGameList());
@@ -141,14 +141,14 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	}
 
 	@Override
-	public void setGameList(Set<IGame> gameList) {
+	public void setGameList(Set<GameInfo> gameList) {
 		if(gameList == null) {
-			displayMessage("Game list from server was null");
+			displayMessage("GameInfo list from server was null");
 		} else {
 			displayMessage("The server has " + gameList.size() + " games.");
 			mGameListRecyclerView = findViewById(R.id.game_list);
 			assert mGameListRecyclerView != null;
-			List<IGame> games = new ArrayList<IGame>(gameList);
+			List<GameInfo> games = new ArrayList<GameInfo>(gameList);
 			GameItemRecyclerViewAdapter a = (GameItemRecyclerViewAdapter) ((RecyclerView) mGameListRecyclerView).getAdapter();
 			a.swapList(games);
 		}
@@ -160,7 +160,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	}
 
 	@Override
-	public Player.PlayerColor getPlayerColor() {
+	public PlayerColor getPlayerColor() {
 		return this.playerColor;
 	}
 
@@ -186,7 +186,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	}
 
 	@Override
-	public void resumeGame(IGame game) {
+	public void resumeGame(GameInfo game) {
 		presenter.setCurrentGame(game);
 		startGameView();
 	}
@@ -232,19 +232,19 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 		color = color.toLowerCase();
 		switch(color) {
 			case "black":
-				playerColor = Player.PlayerColor.BLACK;
+				playerColor = PlayerColor.BLACK;
 				break;
 			case "yellow":
-				playerColor = Player.PlayerColor.YELLOW;
+				playerColor = PlayerColor.YELLOW;
 				break;
 			case "blue":
-				playerColor = Player.PlayerColor.BLUE;
+				playerColor = PlayerColor.BLUE;
 				break;
 			case "green":
-				playerColor = Player.PlayerColor.GREEN;
+				playerColor = PlayerColor.GREEN;
 				break;
 			case "red":
-				playerColor = Player.PlayerColor.RED;
+				playerColor = PlayerColor.RED;
 				break;
 		}
 	}
@@ -275,7 +275,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	 *
 	 * @param recyclerView
 	 */
-	private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<IGame> games) {
+	private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<GameInfo> games) {
 		recyclerView.setAdapter(new GameItemRecyclerViewAdapter(recyclerView, games));
 	}
 
@@ -285,7 +285,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 		private int mSelectedPosition;
 		private View mSelectedView;
 
-		GameItemRecyclerViewAdapter(RecyclerView rv, List<IGame> items) {
+		GameItemRecyclerViewAdapter(RecyclerView rv, List<GameInfo> items) {
 			glc = new GameListContent(items);
 			mSelectedPosition = -1;
 			this.rv = rv;
@@ -298,14 +298,14 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 			return new ViewHolder(view);
 		}
 
-		void swapList(List<IGame> list) {
+		void swapList(List<GameInfo> list) {
 			GameListContent.setGamesList(list);
 			notifyDataSetChanged();
 		}
 
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, int position) {
-			holder.mItem = (Game) GameListContent.get(position);
+			holder.mItem = (GameInfo) GameListContent.get(position);
 			holder.mIdView.setText(String.valueOf(position));
 			if(holder.mItem == null)
 				return;
@@ -376,7 +376,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 			final TextView mContentView;
 			final TextView mStatusView;
 			final Button mJoinButton;
-			Game mItem;
+			GameInfo mItem;
 
 			ViewHolder(View view) {
 				super(view);
@@ -392,9 +392,9 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 						if(mJoinButton.getText().equals("Join")) {
 							Intent intent = new Intent(v.getContext(), JoinGameActivity.class);
 							intent.putExtra("game_name", mItem.getName());
-							List<Player.PlayerColor> colList = mItem.getAvailableColors();
+							List<PlayerColor> colList = mItem.getAvailableColors();
 							ArrayList<String> strList = new ArrayList<>();
-							for(Player.PlayerColor p :colList){
+							for(PlayerColor p :colList){
 								strList.add(String.valueOf(p));
 							}
 							intent.putStringArrayListExtra("colList", strList);

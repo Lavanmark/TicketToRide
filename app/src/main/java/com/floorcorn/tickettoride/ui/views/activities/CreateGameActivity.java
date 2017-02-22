@@ -18,7 +18,6 @@ import android.widget.Toast;
 import java.util.Set;
 
 import com.floorcorn.tickettoride.R;
-import com.floorcorn.tickettoride.clientModel.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.views.ILobbyView;

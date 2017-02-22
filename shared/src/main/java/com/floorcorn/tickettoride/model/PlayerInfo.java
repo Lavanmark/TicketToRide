@@ -1,18 +1,18 @@
 package com.floorcorn.tickettoride.model;
 
 /**
- * Created by Tyler on 2/2/2017.
+ * Created by Tyler on 2/21/17.
  */
 
-public class Player {
-
+public class PlayerInfo {
 	private int playerID;
 	private int gameID;
 	private int userID;
 	private PlayerColor color;
 	private String name = null;
 
-	public Player(Player player) {
+
+	public PlayerInfo(Player player) {
 		this.playerID = player.getPlayerID();
 		this.gameID = player.getGameID();
 		this.userID = player.getUserID();
@@ -20,24 +20,12 @@ public class Player {
 		this.name = player.getName();
 	}
 
-	public Player(int userID, String name, int gameID, PlayerColor color) {
+	public PlayerInfo(int userID, String name, int gameID, PlayerColor color) {
 		this.userID = userID;
 		this.name = name;
 		this.color = color;
 		this.gameID = gameID;
 		this.playerID = -1;
-	}
-
-	public PlayerInfo getPlayerInfo() {
-		return new PlayerInfo(this);
-	}
-
-	public int getPlayerID() {
-		return playerID;
-	}
-
-	public void setPlayerID(int playerID) {
-		this.playerID = playerID;
 	}
 
 	public int getGameID() {
@@ -64,14 +52,12 @@ public class Player {
 		return name;
 	}
 
-	public boolean isConductor() { return playerID == 0; }
-
 	@Override
 	public boolean equals(Object o) {
 		if(this == o) return true;
 		if(o == null || getClass() != o.getClass()) return false;
 
-		Player player = (Player) o;
+		PlayerInfo player = (PlayerInfo) o;
 
 		if(playerID != player.playerID) return false;
 		if(gameID != player.gameID) return false;

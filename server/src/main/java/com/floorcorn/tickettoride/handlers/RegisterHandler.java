@@ -4,7 +4,7 @@ import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
-import com.floorcorn.tickettoride.model.IUser;
+import com.floorcorn.tickettoride.model.User;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class RegisterHandler extends HandlerBase {
 				httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);
 				return;
 			}
-			IUser userInfo = Serializer.getInstance().deserializeUser(reqBody);
+			User userInfo = Serializer.getInstance().deserializeUser(reqBody);
 
 			Results results = null;
 			try {

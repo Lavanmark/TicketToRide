@@ -3,23 +3,15 @@ package com.floorcorn.tickettoride.ui.presenters;
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.model.IUser;
+import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.views.IPregameView;
 import com.floorcorn.tickettoride.ui.views.IView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Exchanger;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Joseph Hansen
@@ -27,8 +19,8 @@ import java.util.concurrent.TimeUnit;
 
 public class PregamePresenter implements IPresenter, Observer {
     private IPregameView view;
-    private IGame game;
-    private IUser user;
+    private Game game;
+    private User user;
 
     public PregamePresenter() {
         game = UIFacade.getInstance().getCurrentGame();
@@ -113,16 +105,16 @@ public class PregamePresenter implements IPresenter, Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-        if (arg instanceof IGame) {
-            game = (IGame) arg;
+        if (arg instanceof Game) {
+            game = (Game) arg;
 	        if(!game.isPlayer(user.getUserID()))
 		        view.switchToLobbyActivity();
             if (game.hasStarted())
                 startGame();
             else
                 updatePlayerList();
-        } else if (arg instanceof IUser) {
-            user = (IUser) arg;
+        } else if (arg instanceof User) {
+            user = (User) arg;
         }
 	    if(UIFacade.getInstance().getCurrentGame() == null)
 		    view.switchToLobbyActivity();

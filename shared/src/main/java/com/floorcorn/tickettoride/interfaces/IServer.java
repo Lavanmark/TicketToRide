@@ -3,9 +3,10 @@ package com.floorcorn.tickettoride.interfaces;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.model.IUser;
-import com.floorcorn.tickettoride.model.Player;
+import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.User;
+import com.floorcorn.tickettoride.model.PlayerColor;
 
 import java.util.Set;
 
@@ -32,7 +33,7 @@ public interface IServer {
 	 * @return the user who was logged in if the username and password were correct, null otherwise
 	 * @throws BadUserException contains a message about the failure (only if user is not formatted correctly)
 	 */
-	public IUser login(IUser user) throws BadUserException;
+	public User login(User user) throws BadUserException;
 
 	/**
 	 * method to register a new user
@@ -46,17 +47,17 @@ public interface IServer {
 	 * @return completed user that was registered
 	 * @throws UserCreationException
 	 */
-	public IUser register(IUser user) throws UserCreationException;
+	public User register(User user) throws UserCreationException;
 
 	/**
-	 * retrieves the set of IGames from the server
+	 * retrieves the set of Games from the server
 	 * @pre user.token is a valid authentication token
 	 *
 	 * @param user contains token that is valid
 	 * @return set of all games that exist
 	 * @throws BadUserException
 	 */
-	public Set<IGame> getGames(IUser user) throws BadUserException;
+	public Set<GameInfo> getGames(User user) throws BadUserException;
 
 	/**
 	 * retrives a single game based on gameID
@@ -68,7 +69,7 @@ public interface IServer {
 	 * @return Game object corresponding to the gameID, null if game does not exist
 	 * @throws BadUserException
 	 */
-	public IGame getGame(IUser user, int gameID) throws BadUserException;
+	public Game getGame(User user, int gameID) throws BadUserException;
 
 	/**
 	 * will create a new game
@@ -76,12 +77,12 @@ public interface IServer {
 	 * @pre gameSize >= 2 and gameSize <= 5
 	 *
 	 * @param user contains valid authentication token
-	 * @param name name of the game being created
+	 * @param gameName name of the game being created
 	 * @param gameSize number of players in the game (2-5)
 	 * @return newly created game object
 	 * @throws BadUserException
 	 */
-	public IGame createGame(IUser user, String name, int gameSize) throws BadUserException;
+	public Game createGame(User user, String gameName, int gameSize) throws BadUserException;
 
 	/**
 	 * attempts to add the user to the specified game with the specified color.
@@ -95,7 +96,7 @@ public interface IServer {
 	 * @throws GameActionException
 	 * @throws BadUserException
 	 */
-	public IGame joinGame(IUser user, int gameID, Player.PlayerColor color) throws GameActionException, BadUserException;
+	public Game joinGame(User user, int gameID, PlayerColor color) throws GameActionException, BadUserException;
 
 	/**
 	 * will remove the player from the game or cancel it if the player made the game.
@@ -110,6 +111,6 @@ public interface IServer {
 	 * @throws BadUserException
 	 * @throws GameActionException
 	 */
-	public boolean leaveGame(IUser user, int gameID) throws BadUserException, GameActionException;
+	public boolean leaveGame(User user, int gameID) throws BadUserException, GameActionException;
 	//TODO could return the game so the model is updated?
 }

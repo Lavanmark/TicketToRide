@@ -4,8 +4,8 @@ import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.serverModel.User;
+import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.User;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class CreateGameHandler extends HandlerBase {
 				return;
 			}
 
-			IGame iGame = Serializer.getInstance().deserializeGame(reqBody);
+			Game iGame = Serializer.getInstance().deserializeGame(reqBody);
 
 			if(iGame == null) {
 				httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);

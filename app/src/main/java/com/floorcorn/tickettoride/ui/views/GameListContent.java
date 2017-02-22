@@ -1,7 +1,8 @@
 package com.floorcorn.tickettoride.ui.views;
 
-import com.floorcorn.tickettoride.clientModel.Game;
-import com.floorcorn.tickettoride.model.IGame;
+
+import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.GameInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,31 +19,31 @@ import java.util.Map;
 public class GameListContent {
 
     
-    private static List<IGame> gamesList = new ArrayList<IGame>();
+    private static List<GameInfo> gamesList = new ArrayList<GameInfo>();
 
-    private static Map<String, IGame> gamesMap = new HashMap<String, IGame>();
+    private static Map<String, GameInfo> gamesMap = new HashMap<String, GameInfo>();
 
-    public GameListContent(List<IGame> games) {
+    public GameListContent(List<GameInfo> games) {
 	    GameListContent.gamesList.clear();
         GameListContent.gamesList.addAll(games);
-        for(IGame g : games)
+        for(GameInfo g : games)
             GameListContent.gamesMap.put(String.valueOf(g.getGameID()), g);
     }
 
-    public static void setGamesList(List<IGame> gamesList) {
+    public static void setGamesList(List<GameInfo> gamesList) {
 	    GameListContent.gamesList.clear();
         GameListContent.gamesList.addAll(gamesList);
-        for(IGame g : gamesList)
+        for(GameInfo g : gamesList)
 	        GameListContent.gamesMap.put(String.valueOf(g.getGameID()), g);
     }
 
-	public static IGame get(int position) {
+	public static GameInfo get(int position) {
 		if(position < GameListContent.gamesList.size() && position >= 0)
 			return GameListContent.gamesList.get(position);
 		return null;
 	}
 
-	public static IGame get(String key) {
+	public static GameInfo get(String key) {
 		if(GameListContent.gamesMap.containsKey(key))
 			return GameListContent.gamesMap.get(key);
 		return null;
