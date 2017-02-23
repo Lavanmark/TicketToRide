@@ -74,8 +74,6 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
                 presenter.cancelGame();
             }
         });
-
-	    pollPlayerList();
     }
 
 	@Override
@@ -135,24 +133,6 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
         // we can go back to that one, popping/clearing the newer activities off the stack.
         startActivity(new Intent(PregameActivity.this, GameListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
-
-	@Override
-	public void pollPlayerList() {
-		scheduledExecutorService = Executors.newScheduledThreadPool(2);
-		scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-
-			@Override
-			public void run() {
-				PregameActivity.this.runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						presenter.requestPlayerList();
-					}
-				});
-			}
-		}, 0, 5, TimeUnit.SECONDS);
-	}
 
     /**
      * Switches to the Boardmap view. This happens when the game is started and we don't need

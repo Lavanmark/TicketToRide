@@ -28,6 +28,10 @@ public class PlayerInfo {
 		this.playerID = -1;
 	}
 
+	public int getPlayerID() {
+		return playerID;
+	}
+
 	public int getGameID() {
 		return gameID;
 	}
@@ -51,6 +55,8 @@ public class PlayerInfo {
 	public String getName() {
 		return name;
 	}
+
+	public boolean isConductor() { return playerID == 0; }
 
 	@Override
 	public boolean equals(Object o) {

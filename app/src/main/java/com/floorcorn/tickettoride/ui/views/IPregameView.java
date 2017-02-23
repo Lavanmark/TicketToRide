@@ -39,5 +39,4 @@ public interface IPregameView extends IView {
     public void displayMessage(String message);
 
     public void backToLogin();
-    void pollPlayerList();
 }

@@ -5,6 +5,7 @@ import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.PlayerInfo;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.PlayerColor;
@@ -170,7 +171,7 @@ public class ServerProxyUnitTest {
 			assertFalse(true);
 		}
 		//TODO bad params gives end of file from server.
-		Game game = null;
+		GameInfo game = null;
 		try {
 			game = sp.createGame(login, "Test", 3);
 		} catch(BadUserException e) {
@@ -216,7 +217,7 @@ public class ServerProxyUnitTest {
 		assertFalse(game.hasStarted());
 		assertFalse(game.isFinished());
 		assertEquals(game.getPlayerList().size(), 1);
-		for(Player p : game.getPlayerList()) {
+		for(PlayerInfo p : game.getPlayerList()) {
 			assertEquals(p.getGameID(), game.getGameID());
 			assertEquals(p.getColor(), PlayerColor.BLACK);
 			assertEquals(p.getUserID(), login.getUserID());

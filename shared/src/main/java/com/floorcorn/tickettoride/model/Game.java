@@ -11,12 +11,12 @@ import java.util.ArrayList;
 
 public class Game {
 
-	protected int gameID = -1;
-	protected ArrayList<Player> playerList = null;
-	protected int gameSize = -1;
-	protected String name = null;
+	private int gameID = -1;
+	private ArrayList<Player> playerList = null;
+	private int gameSize = -1;
+	private String name = null;
 
-	protected boolean finished = false;
+	private boolean finished = false;
 
 	public Game(Game game) {
 		this.gameID = game.getGameID();
@@ -34,7 +34,12 @@ public class Game {
 		this.playerList = new ArrayList<Player>();
 	}
 
-	public Game(int gameID) {
+	public Game(String name, int size, int gameID) {
+		this.name = name;
+		if(size < 2) size = 2;
+		if(size > 5) size = 5;
+		this.gameSize = size;
+		this.playerList = new ArrayList<Player>();
 		this.gameID = gameID;
 	}
 

@@ -69,10 +69,10 @@ public class ServerModel {
 	 * @param gameSize number of players in the game
 	 * @return the newly created game
 	 */
-	public Game addGame(String name, int gameSize) {
-		Game newGame = new Game(name, gameSize);
+	public GameInfo addGame(String name, int gameSize) {
+		Game newGame = new Game(name, gameSize, IDManager.getNextGameID());
 		games.add(newGame);
-		return newGame;
+		return newGame.getGameInfo();
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class ServerModel {
 				throw new UserCreationException("User already exisits!");
 		}
 
-		User newUser = new User(user.getUsername(), user.getPassword(), user.getFullName());
+		User newUser = new User(user.getUsername(), user.getPassword(), user.getFullName(), IDManager.getNextUserID());
 		generateToken(newUser);
 		users.add(newUser);
 		return newUser;
@@ -105,11 +105,11 @@ public class ServerModel {
 	 * @return updated game object
 	 * @throws GameActionException
 	 */
-	public Game joinGame(User user, int gameID, PlayerColor color) throws GameActionException {
+	public GameInfo joinGame(User user, int gameID, PlayerColor color) throws GameActionException {
 		for(Game g : games) {
 			if(g.getGameID() == gameID) {
 				g.addPlayer(user, color);
-				return g;
+				return g.getGameInfo();
 			}
 		}
 		throw new GameActionException("Could not join game!");

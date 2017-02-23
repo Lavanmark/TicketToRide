@@ -45,10 +45,10 @@ public class ServerProxy implements IServer {
 
 	@Override
 	public Game getGame(User user, int gameID) throws BadUserException {
-		Results res = clientComm.send(GET_GAME, new Game(gameID), user);
+		Results res = clientComm.send(GET_GAME, new GameInfo(gameID), user);
 		String reser = Serializer.getInstance().serialize(res.getResult());
 		if(res.isSuccess()) {
-			return Serializer.getInstance().deserializeIGame(reser);
+			return Serializer.getInstance().deserializeGame(reser);
 		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
 			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()).getMessage());
 		return null;
@@ -66,22 +66,22 @@ public class ServerProxy implements IServer {
 	}
 
 	@Override
-	public Game createGame(User user, String name, int gameSize) throws BadUserException {
+	public GameInfo createGame(User user, String name, int gameSize) throws BadUserException {
 		Results res = clientComm.send(CREATE_GAME, new Game(name, gameSize), user);
 		String reser = Serializer.getInstance().serialize(res.getResult());
 		if(res.isSuccess()) {
-			return Serializer.getInstance().deserializeIGame(reser);
+			return Serializer.getInstance().deserializeGameInfo(reser);
 		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
 			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()).getMessage());
 		return null;
 	}
 
 	@Override
-	public Game joinGame(User user, int gameID, PlayerColor color) throws BadUserException, GameActionException {
+	public GameInfo joinGame(User user, int gameID, PlayerColor color) throws BadUserException, GameActionException {
 		Results res = clientComm.send(JOIN_GAME, new Player(user.getUserID(), user.getFullName(), gameID, color), user);
 		String reser = Serializer.getInstance().serialize(res.getResult());
 		if(res.isSuccess()) {
-			return Serializer.getInstance().deserializeIGame(reser);
+			return Serializer.getInstance().deserializeGameInfo(reser);
 		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
 			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()).getMessage());
 		else if(res.getException(GameActionException.class.getSimpleName()) != null)
@@ -91,7 +91,7 @@ public class ServerProxy implements IServer {
 
 	@Override
 	public boolean leaveGame(User user, int gameID) throws BadUserException, GameActionException {
-		Results res = clientComm.send(LEAVE_GAME, new Game(gameID), user);
+		Results res = clientComm.send(LEAVE_GAME, new GameInfo(gameID), user);
 		if(res.isSuccess())
 			return true;
 		else if(res.getException(BadUserException.class.getSimpleName()) != null)

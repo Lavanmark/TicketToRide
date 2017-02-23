@@ -110,9 +110,8 @@ public class ClientCommunicator {
 				http.connect();
 
 				if(stringToSend != null) {
-					String reqData = stringToSend;
 					OutputStream reqBody = http.getOutputStream();
-					writeString(reqData, reqBody);
+					writeString(stringToSend, reqBody);
 
 					reqBody.close();
 				}

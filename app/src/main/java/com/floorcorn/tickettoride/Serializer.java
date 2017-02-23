@@ -63,8 +63,17 @@ public class Serializer {
 	 * @param gameJson string of json representing the game
 	 * @return game object from the string
 	 */
-	public Game deserializeIGame(String gameJson) {
+	public Game deserializeGame(String gameJson) {
 		return gson.fromJson(gameJson, Game.class);
+	}
+
+	/**
+	 * converts a string into a Game object
+	 * @param gameJson string of json representing the game
+	 * @return game object from the string
+	 */
+	public GameInfo deserializeGameInfo(String gameJson) {
+		return gson.fromJson(gameJson, GameInfo.class);
 	}
 
 	/**

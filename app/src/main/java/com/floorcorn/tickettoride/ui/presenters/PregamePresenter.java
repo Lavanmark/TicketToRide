@@ -55,14 +55,14 @@ public class PregamePresenter implements IPresenter, Observer {
 		return game.getGameSize();
 	}
 
-    public void requestPlayerList() {
-        try {
-            UIFacade.getInstance().requestCurrentGame();
-        } catch(BadUserException e) {
-            e.printStackTrace();
-            view.backToLogin();
-        }
-    }
+//    public void requestPlayerList() {
+//        try {
+//            UIFacade.getInstance().requestGame();
+//        } catch(BadUserException e) {
+//            e.printStackTrace();
+//            view.backToLogin();
+//        }
+//    }
 
     /**
      * This returns to the lobby view. It does not leave the game.
@@ -118,8 +118,6 @@ public class PregamePresenter implements IPresenter, Observer {
         }
 	    if(UIFacade.getInstance().getCurrentGame() == null)
 		    view.switchToLobbyActivity();
-	    if(UIFacade.getInstance().getUser() == null)
-		    view.backToLogin();
     }
 
 	public void unregister() {

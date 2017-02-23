@@ -5,6 +5,7 @@ import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.User;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -32,17 +33,17 @@ public class CreateGameHandler extends HandlerBase {
 				return;
 			}
 
-			Game iGame = Serializer.getInstance().deserializeGame(reqBody);
+			GameInfo gi = Serializer.getInstance().deserializeGameInfo(reqBody);
 
-			if(iGame == null) {
+			if(gi == null) {
 				httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);
 				return;
 			}
 
 			Results results = null;
 			try {
-				iGame = ServerFacade.getInstance().createGame(new User(token), iGame.getName(), iGame.getGameSize());
-				results = new Results(true, iGame);
+				gi = ServerFacade.getInstance().createGame(new User(token), gi.getName(), gi.getGameSize());
+				results = new Results(true, gi);
 			} catch(BadUserException e) {
 				//e.printStackTrace();
 				results = new Results(false, e);

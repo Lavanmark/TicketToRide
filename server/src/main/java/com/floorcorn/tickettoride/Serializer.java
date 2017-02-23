@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 import com.google.gson.Gson;
@@ -46,8 +47,8 @@ public class Serializer {
 	 * @param str json representing a game
 	 * @return game object from json string
 	 */
-	public Game deserializeGame(String str) {
-		return gson.fromJson(str, Game.class);
+	public GameInfo deserializeGameInfo(String str) {
+		return gson.fromJson(str, GameInfo.class);
 	}
 
 	/**

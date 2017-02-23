@@ -74,19 +74,20 @@ public class LobbyPresenter implements IPresenter, Observer {
     }
 
 	public void setCurrentGame(GameInfo game) {
-		//if(game != null)
-			//UIFacade.getInstance().setCurrentGame(game);
-		//TODO fix to be actual game stuff
-	}
+		if(game != null) {
+            try {
+                UIFacade.getInstance().requestGame(game);
+            } catch(BadUserException e) {
+                e.printStackTrace();
+                view.backToLogin();
+            }
+        }
+    }
 
     @Override
     public void update(Observable o, Object arg) {
         if(arg instanceof Set)
 	        view.setGameList(UIFacade.getInstance().getGames());
-	    if(UIFacade.getInstance().getUser() == null) {
-		    unregister();
-		    view.backToLogin();
-	    }
     }
     public void unregister() {
         UIFacade.getInstance().unregisterObserver(this);

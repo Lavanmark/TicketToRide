@@ -79,10 +79,10 @@ public interface IServer {
 	 * @param user contains valid authentication token
 	 * @param gameName name of the game being created
 	 * @param gameSize number of players in the game (2-5)
-	 * @return newly created game object
+	 * @return set of gameinfo objects with the new game
 	 * @throws BadUserException
 	 */
-	public Game createGame(User user, String gameName, int gameSize) throws BadUserException;
+	public GameInfo createGame(User user, String gameName, int gameSize) throws BadUserException;
 
 	/**
 	 * attempts to add the user to the specified game with the specified color.
@@ -96,7 +96,7 @@ public interface IServer {
 	 * @throws GameActionException
 	 * @throws BadUserException
 	 */
-	public Game joinGame(User user, int gameID, PlayerColor color) throws GameActionException, BadUserException;
+	public GameInfo joinGame(User user, int gameID, PlayerColor color) throws GameActionException, BadUserException;
 
 	/**
 	 * will remove the player from the game or cancel it if the player made the game.
@@ -112,5 +112,4 @@ public interface IServer {
 	 * @throws GameActionException
 	 */
 	public boolean leaveGame(User user, int gameID) throws BadUserException, GameActionException;
-	//TODO could return the game so the model is updated?
 }

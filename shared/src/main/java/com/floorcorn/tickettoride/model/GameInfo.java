@@ -13,15 +13,20 @@ import java.util.List;
 
 public class GameInfo {
 
-	protected int gameID = -1;
-	protected ArrayList<PlayerInfo> playerList = null;
-	protected int gameSize = -1;
-	protected String name = null;
+	private int gameID = -1;
+	private ArrayList<PlayerInfo> playerList = null;
+	private int gameSize = -1;
+	private String name = null;
 
-	protected boolean finished = false;
+	private boolean finished = false;
 
-	public GameInfo(int gameID, String name, int gameSize, ArrayList<PlayerInfo> players) {
+	public GameInfo(String name, int gameSize) {
+		this.gameSize = gameSize;
+		this.name = name;
+	}
 
+	public GameInfo(int gameID) {
+		this.gameID = gameID;
 	}
 
 	public GameInfo(Game game) {
@@ -83,8 +88,7 @@ public class GameInfo {
 			if(p.getUserID() == user.getUserID())
 				throw new GameActionException("User already in the game!");
 		}
-		if(hasStarted()) return false;
-		return true;
+		return !hasStarted();
 	}
 
 	/**
@@ -104,6 +108,20 @@ public class GameInfo {
 				avail.add(a);
 			}
 		return avail;
+	}
+
+	/**
+	 * get the player object for the specified user
+	 * @param user contains at least user.id
+	 * @return Player object of the user, null if user not in game
+	 */
+	public PlayerInfo getPlayer(User user) {
+		if(user == null) return null; // Don't throw BadUserException here.
+		for(PlayerInfo p : playerList) {
+			if(p.getUserID() == user.getUserID())
+				return p;
+		}
+		return null;
 	}
 
 	@Override
@@ -127,11 +145,11 @@ public class GameInfo {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Name: " + name + '\n');
-		sb.append("Size: " + gameSize + '\n');
-		sb.append("Players: (" + playerList.size() + "/" + gameSize + ")\n");
+		sb.append("Name: ").append(name).append('\n');
+		sb.append("Size: ").append(gameSize).append('\n');
+		sb.append("Players: (").append(playerList.size()).append("/").append(gameSize).append(")\n");
 		for(PlayerInfo p : playerList)
-			sb.append("    " + p.getName() + "    " + p.getColor() +  "\n");
+			sb.append("    ").append(p.getName()).append("    ").append(p.getColor()).append("\n");
 		return sb.toString();
 	}
 }

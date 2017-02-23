@@ -6,6 +6,7 @@ import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.User;
 import com.sun.net.httpserver.Authenticator;
 import com.sun.net.httpserver.HttpExchange;
@@ -34,7 +35,7 @@ public class LeaveGameHandler extends HandlerBase {
 				return;
 			}
 
-			Game game = Serializer.getInstance().deserializeGame(reqBody);
+			GameInfo game = Serializer.getInstance().deserializeGameInfo(reqBody);
 
 			if(game == null) {
 				httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);

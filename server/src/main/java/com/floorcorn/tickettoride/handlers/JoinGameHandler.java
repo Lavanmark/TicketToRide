@@ -6,6 +6,7 @@ import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 import com.sun.net.httpserver.HttpExchange;
@@ -43,7 +44,7 @@ public class JoinGameHandler extends HandlerBase {
 
 			Results results = null;
 			try {
-				Game game = ServerFacade.getInstance().joinGame(new User(token), player.getGameID(), player.getColor());
+				GameInfo game = ServerFacade.getInstance().joinGame(new User(token), player.getGameID(), player.getColor());
 				results = new Results(true, game);
 			} catch(BadUserException | GameActionException e) {
 				//e.printStackTrace();

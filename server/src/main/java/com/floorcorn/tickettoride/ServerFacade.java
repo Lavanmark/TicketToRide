@@ -57,14 +57,14 @@ public class ServerFacade implements IServer {
 	}
 
 	@Override
-	public Game createGame(User user, String name, int gameSize) throws BadUserException {
+	public GameInfo createGame(User user, String name, int gameSize) throws BadUserException {
 		if(model.authenticate(user.getToken()) != null)
 			return model.addGame(name, gameSize);
 		throw new BadUserException("Could not Authenticate User!");
 	}
 
 	@Override
-	public Game joinGame(User user, int gameID, PlayerColor color) throws BadUserException, GameActionException {
+	public GameInfo joinGame(User user, int gameID, PlayerColor color) throws BadUserException, GameActionException {
 		if((user = model.authenticate(user.getToken())) != null)
 			return model.joinGame(user, gameID, color);
 		throw new BadUserException("Could not Authenticate User!");

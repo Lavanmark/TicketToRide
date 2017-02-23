@@ -6,11 +6,11 @@ package com.floorcorn.tickettoride.model;
 
 public class User {
 
-	protected String username = null; // Must be 4 characters long
-	protected String password = null; // Must be 8 characters long
-	protected String fullName = null; // Can be null
-	protected String token = null;
-	protected int userID = -1;
+	private String username = null; // Must be 4 characters long
+	private String password = null; // Must be 8 characters long
+	private String fullName = null; // Can be null
+	private String token = null;
+	private int userID = -1;
 
 	public static final int AUTH_TOKEN_SIZE = 16;
 
@@ -27,6 +27,13 @@ public class User {
 		this.username = username;
 		this.password = password;
 		this.fullName = fullName;
+	}
+
+	public User(String username, String password, String fullName, int userID) {
+		this.username = username;
+		this.password = password;
+		this.fullName = fullName;
+		this.userID = userID;
 	}
 
 	public User(User user) {

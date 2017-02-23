@@ -36,7 +36,7 @@ public class UIFacade {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
 	    serverProxy.setPort("8080");
-        serverProxy.setHost("10.24.68.187");
+        serverProxy.setHost("192.168.0.100");
     }
     private static UIFacade instance = null;
     public static UIFacade getInstance() {
@@ -167,20 +167,7 @@ public class UIFacade {
         return clientModelRoot.getCurrentGame();
     }
 
-    /**
-     * Updates the current game in the ClientModel. Throws an exception if parameter is null.
-     * @param game Game object
-     */
-    public void setCurrentGame(Game game) {
-        if (game == null) {
-            throw new IllegalArgumentException("The parameter passed to setCurrentGame was null.");
-        }
-        clientModelRoot.setCurrentGame(game);
-    }
-
-	public void requestCurrentGame() throws BadUserException{
-		if(getCurrentGame() == null)
-			throw new InvalidParameterException("No game currently selected!");
+	public void requestGame(GameInfo game) throws BadUserException{
 		Game cgame = serverProxy.getGame(clientModelRoot.getCurrentUser(), clientModelRoot.getCurrentGame().getGameID());
         clientModelRoot.setCurrentGame(cgame);
 	}
@@ -215,8 +202,9 @@ public class UIFacade {
      * @param color Player.PlayerColor color desired by the creating user
      * @return Game object representing the newly created game
      */
-    public Game createGame(String gameName, int playerCount, PlayerColor color) throws GameActionException, BadUserException {
-        Game createdGame = serverProxy.createGame(getUser(), gameName, playerCount);
+    public GameInfo createGame(String gameName, int playerCount, PlayerColor color) throws GameActionException, BadUserException {
+        GameInfo createdGame = serverProxy.createGame(getUser(), gameName, playerCount);
+
         createdGame = joinGame(createdGame.getGameID(), color);
         return createdGame;
     }
@@ -228,8 +216,8 @@ public class UIFacade {
      * @param gameID int game ID
      * @param color PlayerColor color
      */
-    public Game joinGame(int gameID, PlayerColor color) throws GameActionException, BadUserException {
-        Game ret = serverProxy.joinGame(getUser(), gameID, color);
+    public GameInfo joinGame(int gameID, PlayerColor color) throws GameActionException, BadUserException {
+        GameInfo ret = serverProxy.joinGame(getUser(), gameID, color);
 	    requestGames();
 	    return ret;
     }
