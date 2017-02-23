@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -183,6 +184,11 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	@Override
 	public void backToLogin() {
 		startActivity(new Intent(GameListActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+	}
+
+	@Override
+	public Activity getActivity() {
+		return GameListActivity.this;
 	}
 
 	@Override

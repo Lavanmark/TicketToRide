@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.ui.views.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -362,6 +363,16 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
         else
             throw new IllegalArgumentException();
     }
+
+	@Override
+	public void backToLogin() {
+		System.out.println("already at login!");
+	}
+
+	@Override
+	public Activity getActivity() {
+		return LoginActivity.this;
+	}
 
 
 }

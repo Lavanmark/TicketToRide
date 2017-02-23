@@ -7,5 +7,4 @@ package com.floorcorn.tickettoride.ui.views;
 public interface IBoardmapView extends IView {
 
 	void gameStarted();
-	void backToLogin();
 }

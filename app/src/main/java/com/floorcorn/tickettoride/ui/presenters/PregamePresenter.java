@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
+import com.floorcorn.tickettoride.Poller;
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
@@ -55,14 +56,9 @@ public class PregamePresenter implements IPresenter, Observer {
 		return game.getGameSize();
 	}
 
-//    public void requestPlayerList() {
-//        try {
-//            UIFacade.getInstance().requestGame();
-//        } catch(BadUserException e) {
-//            e.printStackTrace();
-//            view.backToLogin();
-//        }
-//    }
+    public void requestPlayerList() {
+		UIFacade.getInstance().pollPlayerList(view);
+    }
 
     /**
      * This returns to the lobby view. It does not leave the game.
@@ -116,8 +112,6 @@ public class PregamePresenter implements IPresenter, Observer {
         } else if (arg instanceof User) {
             user = (User) arg;
         }
-	    if(UIFacade.getInstance().getCurrentGame() == null)
-		    view.switchToLobbyActivity();
     }
 
 	public void unregister() {

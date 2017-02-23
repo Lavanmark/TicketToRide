@@ -19,7 +19,6 @@ public interface ILobbyView extends IView {
     int getNewGamePlayerNumber();
     String getNewGameName();
     void displayMessage(String message);
-    void backToLogin();
     void resumeGame(GameInfo game);
     void startGameView();
 }

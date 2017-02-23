@@ -44,14 +44,15 @@ public class CreateGameHandler extends HandlerBase {
 			try {
 				gi = ServerFacade.getInstance().createGame(new User(token), gi.getName(), gi.getGameSize());
 				results = new Results(true, gi);
+				System.out.println("game created");
 			} catch(BadUserException e) {
-				//e.printStackTrace();
+				e.printStackTrace();
 				results = new Results(false, e);
 			}
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			sendResponseBody(httpExchange, results);
-		} catch(IOException e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
 		}

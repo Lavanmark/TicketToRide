@@ -7,6 +7,7 @@ import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.interfaces.IServer;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.PlayerInfo;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.PlayerColor;
@@ -78,7 +79,7 @@ public class ServerProxy implements IServer {
 
 	@Override
 	public GameInfo joinGame(User user, int gameID, PlayerColor color) throws BadUserException, GameActionException {
-		Results res = clientComm.send(JOIN_GAME, new Player(user.getUserID(), user.getFullName(), gameID, color), user);
+		Results res = clientComm.send(JOIN_GAME, new PlayerInfo(user.getUserID(), user.getFullName(), gameID, color), user);
 		String reser = Serializer.getInstance().serialize(res.getResult());
 		if(res.isSuccess()) {
 			return Serializer.getInstance().deserializeGameInfo(reser);

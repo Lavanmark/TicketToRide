@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -74,6 +75,9 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
                 presenter.cancelGame();
             }
         });
+
+	    displayPlayerList(presenter.getPlayerList());
+	    presenter.requestPlayerList();
     }
 
 	@Override
@@ -155,6 +159,11 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 	@Override
 	public void backToLogin() {
 		startActivity(new Intent(PregameActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+	}
+
+	@Override
+	public Activity getActivity() {
+		return PregameActivity.this;
 	}
 
 	public class PlayerListRecyclerViewAdapter extends RecyclerView.Adapter<PlayerListRecyclerViewAdapter.ViewHolder> {

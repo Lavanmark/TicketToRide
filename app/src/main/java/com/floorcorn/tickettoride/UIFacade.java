@@ -8,6 +8,7 @@ import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.PlayerColor;
+import com.floorcorn.tickettoride.ui.views.IView;
 
 import java.security.InvalidParameterException;
 import java.util.List;
@@ -26,6 +27,7 @@ public class UIFacade {
 
     private ClientModel clientModelRoot;
     private ServerProxy serverProxy;
+    private Poller poller;
 
     // TODO: add all the types of sorting we may want
     public enum GameSortStyle { ASC_GAMEID, DESC_GAMEID };
@@ -37,6 +39,7 @@ public class UIFacade {
         serverProxy = new ServerProxy();
 	    serverProxy.setPort("8080");
         serverProxy.setHost("192.168.0.100");
+        poller = new Poller(serverProxy, clientModelRoot);
     }
     private static UIFacade instance = null;
     public static UIFacade getInstance() {
@@ -168,7 +171,7 @@ public class UIFacade {
     }
 
 	public void requestGame(GameInfo game) throws BadUserException{
-		Game cgame = serverProxy.getGame(clientModelRoot.getCurrentUser(), clientModelRoot.getCurrentGame().getGameID());
+		Game cgame = serverProxy.getGame(clientModelRoot.getCurrentUser(), game.getGameID());
         clientModelRoot.setCurrentGame(cgame);
 	}
 
@@ -221,6 +224,19 @@ public class UIFacade {
 	    requestGames();
 	    return ret;
     }
+
+    public void pollPlayerList(IView view) {
+		resetPollerState();
+	    poller.startPollingPlayerList(view);
+    }
+
+	private void resetPollerState() {
+		if(poller == null) {
+			poller = new Poller(serverProxy, clientModelRoot);
+			return;
+		}
+		poller.stopPolling();
+	}
 
 	public void logout() {
 		clientModelRoot.setCurrentUser(null);

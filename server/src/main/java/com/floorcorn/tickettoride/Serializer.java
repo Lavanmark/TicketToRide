@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.Player;
+import com.floorcorn.tickettoride.model.PlayerInfo;
 import com.floorcorn.tickettoride.model.User;
 import com.google.gson.Gson;
 
@@ -56,7 +57,7 @@ public class Serializer {
 	 * @param str json representing a player
 	 * @return player object from json string
 	 */
-	public Player deserializePlayer(String str) {
-		return gson.fromJson(str, Player.class);
+	public PlayerInfo deserializePlayerInfo(String str) {
+		return gson.fromJson(str, PlayerInfo.class);
 	}
 }

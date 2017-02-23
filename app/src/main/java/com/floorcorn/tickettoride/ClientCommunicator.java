@@ -56,8 +56,10 @@ public class ClientCommunicator {
 			return res;
 		} catch(InterruptedException | ExecutionException e) {
 			e.printStackTrace();
+			myTask.cancel(true);
 			return new Results(false, e);
 		} catch(TimeoutException e) {
+			myTask.cancel(true);
 			e.printStackTrace();
 			return new Results(false, e);
 		}
