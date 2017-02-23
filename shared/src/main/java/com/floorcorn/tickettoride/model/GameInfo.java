@@ -33,9 +33,11 @@ public class GameInfo {
 		gameID = game.getGameID();
 		gameSize = game.getGameSize();
 		name = game.getName();
+		playerList = new ArrayList<PlayerInfo>();
 		for(Player p : game.getPlayerList()) {
 			playerList.add(p.getPlayerInfo());
 		}
+		finished = game.isFinished();
 	}
 
 	public int getGameID() {
@@ -55,7 +57,7 @@ public class GameInfo {
 	}
 
 	public boolean hasStarted() {
-		return playerList.size() == gameSize || isFinished();
+		return playerList != null && (playerList.size() == gameSize || isFinished());
 	}
 
 	public boolean isFinished() {
@@ -68,6 +70,8 @@ public class GameInfo {
 	 * @return true if user is in the game, false otherwise
 	 */
 	public boolean isPlayer(int userID) {
+		if(playerList == null)
+			return false;
 		for(PlayerInfo p : playerList) {
 			if(p.getUserID() == userID)
 				return true;
@@ -84,9 +88,11 @@ public class GameInfo {
 	 */
 	public boolean userCanJoin(User user) throws BadUserException, GameActionException {
 		if(user == null) throw new BadUserException("A null user cannot join!");
-		for(PlayerInfo p : playerList) {
-			if(p.getUserID() == user.getUserID())
-				throw new GameActionException("User already in the game!");
+		if(playerList != null) {
+			for(PlayerInfo p : playerList) {
+				if(p.getUserID() == user.getUserID())
+					throw new GameActionException("User already in the game!");
+			}
 		}
 		return !hasStarted();
 	}
@@ -100,8 +106,9 @@ public class GameInfo {
 				PlayerColor.BLACK, PlayerColor.GREEN,
 				PlayerColor.RED, PlayerColor.YELLOW);
 		List<PlayerColor> taken = new ArrayList<PlayerColor>();
-		for(PlayerInfo p : playerList)
-			taken.add(p.getColor());
+		if(playerList != null)
+			for(PlayerInfo p : playerList)
+				taken.add(p.getColor());
 		List<PlayerColor> avail = new ArrayList<PlayerColor>();
 		for(PlayerColor a : all)
 			if(! taken.contains(a)) {
@@ -117,9 +124,11 @@ public class GameInfo {
 	 */
 	public PlayerInfo getPlayer(User user) {
 		if(user == null) return null; // Don't throw BadUserException here.
-		for(PlayerInfo p : playerList) {
-			if(p.getUserID() == user.getUserID())
-				return p;
+		if(playerList != null){
+			for(PlayerInfo p : playerList) {
+				if(p.getUserID() == user.getUserID())
+					return p;
+			}
 		}
 		return null;
 	}
@@ -129,12 +138,15 @@ public class GameInfo {
 		if(this == o) return true;
 		if(o == null || getClass() != o.getClass()) return false;
 
-		GameInfo game = (GameInfo) o;
+		GameInfo gameInfo = (GameInfo) o;
 
-		if(gameID != game.gameID) return false;
-		if(gameSize != game.gameSize) return false;
-		if(!playerList.equals(game.playerList)) return false;
-		return name.equals(game.name);
+		if(gameID != gameInfo.gameID) return false;
+		if(gameSize != gameInfo.gameSize) return false;
+		if(finished != gameInfo.finished) return false;
+		if(playerList != null ? !playerList.equals(gameInfo.playerList) : gameInfo.playerList != null)
+			return false;
+		return name != null ? name.equals(gameInfo.name) : gameInfo.name == null;
+
 	}
 
 	@Override
