@@ -29,7 +29,10 @@ public class ServerFacade implements IServer {
 			instance = new ServerFacade();
 		return instance;
 	}
-	private ServerFacade() { model = new ServerModel(); }
+	private ServerFacade() {
+		model = new ServerModel();
+		commandManager = new CommandManager();
+	}
 
 	@Override
 	public User login(User user) throws BadUserException {

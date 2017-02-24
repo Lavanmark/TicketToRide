@@ -38,7 +38,7 @@ public class Poller {
                     public void run() {
 	                    if(clientModel.getCurrentGame() != null) {
 		                    try {
-			                    //TODO update this to only get the player list
+			                    //TODO update this to only get the player list?
 			                    clientModel.setCurrentGame(serverProxy.getGame(clientModel.getCurrentUser(), clientModel.getCurrentGame().getGameID()));
 		                    } catch(BadUserException e) {
 			                    e.printStackTrace();
