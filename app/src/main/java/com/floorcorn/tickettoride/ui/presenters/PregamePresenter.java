@@ -59,6 +59,9 @@ public class PregamePresenter implements IPresenter, Observer {
     public void requestPlayerList() {
 		UIFacade.getInstance().pollPlayerList(view);
     }
+	public void stopPolling() {
+		UIFacade.getInstance().stopPolling();
+	}
 
     /**
      * This returns to the lobby view. It does not leave the game.
@@ -75,7 +78,7 @@ public class PregamePresenter implements IPresenter, Observer {
         view.startGame();
     }
 
-	public boolean isConductor() {
+	public boolean canCancel() {
 		return game.getPlayer(user).isConductor();
 	}
 
@@ -101,6 +104,7 @@ public class PregamePresenter implements IPresenter, Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
+	    System.out.println("update");
         if (arg instanceof Game) {
             game = (Game) arg;
 	        if(!game.isPlayer(user.getUserID()))

@@ -36,10 +36,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     private PregamePresenter presenter;
     private RecyclerView playerListView;
     private Button cancelGameButton;
-	private Button refreshButton;
-
 	private PlayerListRecyclerViewAdapter playerListViewAdapter;
-	private ScheduledExecutorService scheduledExecutorService;
 
     /**
      * Sets up the view components including the cancel/leave game button and the player list.
@@ -64,7 +61,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 
         cancelGameButton = (Button) findViewById(R.id.cancelGameButton);
 
-        if(presenter.isConductor())
+        if(presenter.canCancel())
             cancelGameButton.setText("Cancel Game");
         else
             cancelGameButton.setText("Leave Game");
@@ -82,9 +79,8 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 
 	@Override
 	public void onStop () {
-		if(scheduledExecutorService != null)
-			scheduledExecutorService.shutdown();
 		presenter.unregister();
+		presenter.stopPolling();
 		super.onStop();
 	}
 

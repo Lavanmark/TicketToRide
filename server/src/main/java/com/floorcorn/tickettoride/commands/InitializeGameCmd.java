@@ -5,9 +5,15 @@ package com.floorcorn.tickettoride.commands;
  */
 
 public class InitializeGameCmd implements ICommand {
+	private int commandID = -1;
 	@Override
 	public CmdType getType() {
 		return null;
+	}
+
+	@Override
+	public int getCmdID() {
+		return commandID;
 	}
 
 	@Override

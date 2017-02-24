@@ -19,6 +19,7 @@ public class ClientModel extends Observable {
     private User currentUser;
     private Set<GameInfo> gameList;
     private Game currentGame;
+    private int lastCommandExecuted = -1;
 
 	public ClientModel() {
 		currentGame = null;
@@ -70,9 +71,19 @@ public class ClientModel extends Observable {
     }
 
     public void setCurrentGame(Game game) {
+        if(currentGame == null || currentGame.getGameID() != game.getGameID())
+            lastCommandExecuted = -1;
         currentGame = game;
 
         setChanged();
         notifyObservers(currentGame);
+    }
+
+    public void setLastCommandExecuted(int commandID) {
+        lastCommandExecuted = commandID;
+    }
+
+    public int getLastCommandExecuted() {
+        return lastCommandExecuted;
     }
 }

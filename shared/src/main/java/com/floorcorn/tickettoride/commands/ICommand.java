@@ -6,6 +6,7 @@ package com.floorcorn.tickettoride.commands;
 
 public interface ICommand {
 	CmdType getType();
+	int getCmdID();
 	int getGameID();
 	void execute();
 }
