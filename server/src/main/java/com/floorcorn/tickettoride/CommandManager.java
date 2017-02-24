@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride;
 
+
 import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.User;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Tyler on 2/23/2017.
+ * @author Michael
  */
 
 public class CommandManager {

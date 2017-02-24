@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 /**
- * Created by mgard on 2/1/2017.
+ * Created by Michael on 2/1/2017.
  */
 
 public class Serializer {
