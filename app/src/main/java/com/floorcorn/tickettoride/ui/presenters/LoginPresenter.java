@@ -1,9 +1,7 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
 import com.floorcorn.tickettoride.UIFacade;
-import com.floorcorn.tickettoride.clientModel.User;
-import com.floorcorn.tickettoride.exceptions.UserCreationException;
-import com.floorcorn.tickettoride.model.IUser;
+import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.ui.views.ILoginView;
 import com.floorcorn.tickettoride.ui.views.IView;
 
@@ -17,7 +15,7 @@ import java.util.Observer;
 public class LoginPresenter implements IPresenter, Observer {
 
     private ILoginView loginView;
-    private IUser user;
+    private User user;
 
     /**
      * Default constructor for LoginPresenter class. Registers itself with UI facade as observer
@@ -89,7 +87,7 @@ public class LoginPresenter implements IPresenter, Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if(arg instanceof IUser) {
+        if(arg instanceof User) {
             this.user = UIFacade.getInstance().getUser();
             if(this.user == null) {
                 this.loginView.displayMessage("Username/password error -- unable to authenticate");

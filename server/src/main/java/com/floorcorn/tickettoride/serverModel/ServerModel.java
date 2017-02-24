@@ -1,12 +1,11 @@
-package com.floorcorn.tickettoride;
+package com.floorcorn.tickettoride.serverModel;
 
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.model.IUser;
-import com.floorcorn.tickettoride.model.Player;
-import com.floorcorn.tickettoride.serverModel.Game;
-import com.floorcorn.tickettoride.serverModel.User;
+import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.User;
+import com.floorcorn.tickettoride.model.PlayerColor;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -18,17 +17,17 @@ import java.util.Set;
  */
 
 public class ServerModel {
-	private Set<IGame> games; // Stores all games ever. If game is canceled or ends, it remains here with the players so users can get this info.
+	private Set<Game> games; // Stores all games ever. If game is canceled or ends, it remains here with the players so users can get this info.
 	private Set<User> users; // Stores all users ever.
 	private SecureRandom random;
 
 	public ServerModel() {
-		games = new HashSet<IGame>();
+		games = new HashSet<Game>();
 		users = new HashSet<User>();
 		random = new SecureRandom();
 	}
 
-	private void generateToken(IUser u) {
+	private void generateToken(User u) {
 		u.setToken(new BigInteger(130, random).toString(32));
 	}
 
@@ -70,10 +69,10 @@ public class ServerModel {
 	 * @param gameSize number of players in the game
 	 * @return the newly created game
 	 */
-	public IGame addGame(String name, int gameSize) {
-		IGame newGame = new Game(name, gameSize);
+	public GameInfo addGame(String name, int gameSize) {
+		Game newGame = new Game(name, gameSize, IDManager.getNextGameID());
 		games.add(newGame);
-		return newGame;
+		return newGame.getGameInfo();
 	}
 
 	/**
@@ -82,7 +81,7 @@ public class ServerModel {
 	 * @return newly created user
 	 * @throws UserCreationException
 	 */
-	public User addUser(IUser user) throws UserCreationException {
+	public User addUser(User user) throws UserCreationException {
 		if(user.getUsername().length() < 4) throw new UserCreationException("Username too short!");
 		if(user.getPassword().length() < 8) throw new UserCreationException("Password too short!");
 		if(user.getFullName() == null || user.getFullName().length() < 1) user.setFullName(user.getUsername());
@@ -92,7 +91,7 @@ public class ServerModel {
 				throw new UserCreationException("User already exisits!");
 		}
 
-		User newUser = new User(user.getUsername(), user.getPassword(), user.getFullName());
+		User newUser = new User(user.getUsername(), user.getPassword(), user.getFullName(), IDManager.getNextUserID());
 		generateToken(newUser);
 		users.add(newUser);
 		return newUser;
@@ -106,11 +105,11 @@ public class ServerModel {
 	 * @return updated game object
 	 * @throws GameActionException
 	 */
-	public IGame joinGame(IUser user, int gameID, Player.PlayerColor color) throws GameActionException {
-		for(IGame g : games) {
+	public GameInfo joinGame(User user, int gameID, PlayerColor color) throws GameActionException {
+		for(Game g : games) {
 			if(g.getGameID() == gameID) {
 				g.addPlayer(user, color);
-				return g;
+				return g.getGameInfo();
 			}
 		}
 		throw new GameActionException("Could not join game!");
@@ -123,8 +122,8 @@ public class ServerModel {
 	 * @return true if removed, false otherwise
 	 * @throws GameActionException
 	 */
-	public boolean removePlayer(IUser user, int gameID) throws GameActionException {
-		for(IGame g : games) {
+	public boolean removePlayer(User user, int gameID) throws GameActionException {
+		for(Game g : games) {
 			if(g.getGameID() == gameID) {
 				return g.removePlayer(user);
 			}
@@ -137,15 +136,19 @@ public class ServerModel {
 	 * @param gameID ID of the game to be got
 	 * @return game that done did get got
 	 */
-	public IGame getGame(int gameID) {
-		for(IGame g : games) {
+	public Game getGame(int gameID) {
+		for(Game g : games) {
 			if(g.getGameID() == gameID)
 				return g;
 		}
 		return null;
 	}
 
-	public Set<IGame> getGames() {
-		return games;
+	public Set<GameInfo> getGames() {
+		Set<GameInfo> gameInfos = new HashSet<GameInfo>();
+		for(Game g : games) {
+			gameInfos.add(g.getGameInfo());
+		}
+		return gameInfos;
 	}
 }

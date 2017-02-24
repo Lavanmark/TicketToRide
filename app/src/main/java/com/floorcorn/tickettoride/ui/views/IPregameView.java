@@ -37,7 +37,4 @@ public interface IPregameView extends IView {
      * @param message String to display
      */
     public void displayMessage(String message);
-
-    public void backToLogin();
-    void pollPlayerList();
 }

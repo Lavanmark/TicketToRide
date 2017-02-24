@@ -9,7 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.floorcorn.tickettoride.model.IGame;
+import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.ui.views.GameListContent;
 import com.floorcorn.tickettoride.ui.views.activities.GameDetailActivity;
 import com.floorcorn.tickettoride.ui.views.activities.GameListActivity;
@@ -26,7 +27,7 @@ public class GameDetailFragment extends Fragment {
      * The fragment argument representing the item ID that this fragment represents.
      */
     public static final String ARG_GAME_ID = "game_id";
-    private IGame game = null;
+    private GameInfo game = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

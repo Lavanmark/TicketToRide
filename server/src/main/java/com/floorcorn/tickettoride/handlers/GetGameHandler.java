@@ -4,13 +4,13 @@ import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.serverModel.User;
+import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.User;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.util.Set;
 
 /**
  * Created by Tyler on 2/13/17.
@@ -32,16 +32,16 @@ public class GetGameHandler extends HandlerBase {
 				return;
 			}
 
-			IGame iGame = Serializer.getInstance().deserializeGame(reqBody);
+			GameInfo gi = Serializer.getInstance().deserializeGameInfo(reqBody);
 
-			if(iGame == null) {
+			if(gi == null) {
 				httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);
 				return;
 			}
 
 			Results results = null;
 			try {
-				IGame game = ServerFacade.getInstance().getGame(new User(token), iGame.getGameID());
+				Game game = ServerFacade.getInstance().getGame(new User(token), gi.getGameID());
 				results = new Results(true, game);
 			} catch(BadUserException e) {
 				//e.printStackTrace();

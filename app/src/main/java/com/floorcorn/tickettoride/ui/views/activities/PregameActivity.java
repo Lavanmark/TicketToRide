@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -75,7 +76,8 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
             }
         });
 
-	    pollPlayerList();
+	    displayPlayerList(presenter.getPlayerList());
+	    presenter.requestPlayerList();
     }
 
 	@Override
@@ -136,24 +138,6 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
         startActivity(new Intent(PregameActivity.this, GameListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
-	@Override
-	public void pollPlayerList() {
-		scheduledExecutorService = Executors.newScheduledThreadPool(2);
-		scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-
-			@Override
-			public void run() {
-				PregameActivity.this.runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						presenter.requestPlayerList();
-					}
-				});
-			}
-		}, 0, 5, TimeUnit.SECONDS);
-	}
-
     /**
      * Switches to the Boardmap view. This happens when the game is started and we don't need
      * Pregame view anymore.
@@ -175,6 +159,11 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 	@Override
 	public void backToLogin() {
 		startActivity(new Intent(PregameActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+	}
+
+	@Override
+	public Activity getActivity() {
+		return PregameActivity.this;
 	}
 
 	public class PlayerListRecyclerViewAdapter extends RecyclerView.Adapter<PlayerListRecyclerViewAdapter.ViewHolder> {

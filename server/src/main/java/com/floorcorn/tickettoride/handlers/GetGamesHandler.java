@@ -3,8 +3,8 @@ package com.floorcorn.tickettoride.handlers;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.serverModel.User;
+import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.User;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
@@ -28,15 +28,18 @@ public class GetGamesHandler extends HandlerBase {
 
 			Results results = null;
 			try {
-				Set<IGame> games = ServerFacade.getInstance().getGames(new User(token));
+				Set<GameInfo> games = ServerFacade.getInstance().getGames(new User(token));
+				System.out.println(games.size());
 				results = new Results(true, games);
 			} catch(BadUserException e) {
-				//e.printStackTrace();
+				e.printStackTrace();
 				results = new Results(false, e);
 			}
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+			System.out.println("headers sent");
 			sendResponseBody(httpExchange, results);
+			System.out.println("body sent");
 		} catch(IOException e) {
 			e.printStackTrace();
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);

@@ -1,11 +1,10 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
 import com.floorcorn.tickettoride.UIFacade;
-import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.model.IUser;
+import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.ui.views.ILobbyView;
 import com.floorcorn.tickettoride.ui.views.IView;
 
@@ -54,7 +53,7 @@ public class LobbyPresenter implements IPresenter, Observer {
         }
     }
 
-    public Set<IGame> getGameList() {
+    public Set<GameInfo> getGameList() {
         return UIFacade.getInstance().getGames();
     }
 
@@ -66,27 +65,29 @@ public class LobbyPresenter implements IPresenter, Observer {
         }
     }
 
-    public Set<IGame> getGameList(User user){
+    public Set<GameInfo> getGameList(User user){
         return UIFacade.getInstance().getGames(user);
     }
 
-    public IGame getGameInfo(int gameID){ //user clicks on game on the list and it reports back the info of the game. returnt eh game object
-        return UIFacade.getInstance().getGame(gameID);
+    public GameInfo getGameInfo(int gameID){ //user clicks on game on the list and it reports back the info of the game. returnt eh game object
+        return UIFacade.getInstance().getGameInfo(gameID);
     }
 
-	public void setCurrentGame(IGame game) {
-		if(game != null)
-			UIFacade.getInstance().setCurrentGame(game);
-	}
+	public void setCurrentGame(GameInfo game) {
+		if(game != null) {
+            try {
+                UIFacade.getInstance().requestGame(game);
+            } catch(BadUserException e) {
+                e.printStackTrace();
+                view.backToLogin();
+            }
+        }
+    }
 
     @Override
     public void update(Observable o, Object arg) {
         if(arg instanceof Set)
 	        view.setGameList(UIFacade.getInstance().getGames());
-	    if(UIFacade.getInstance().getUser() == null) {
-		    unregister();
-		    view.backToLogin();
-	    }
     }
     public void unregister() {
         UIFacade.getInstance().unregisterObserver(this);

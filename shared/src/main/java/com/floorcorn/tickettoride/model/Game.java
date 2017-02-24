@@ -4,21 +4,48 @@ import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by Tyler on 2/2/2017.
  */
 
-public abstract class IGame {
+public class Game {
 
-	protected int gameID = -1;
-	protected ArrayList<Player> playerList = null;
-	protected int gameSize = -1;
-	protected String name = null;
+	private int gameID = -1;
+	private ArrayList<Player> playerList = null;
+	private int gameSize = -1;
+	private String name = null;
 
-	protected boolean finished = false;
+	private boolean finished = false;
+
+	public Game(Game game) {
+		this.gameID = game.getGameID();
+		this.gameSize = game.getGameSize();
+		this.name = game.getName();
+		this.playerList = new ArrayList<Player>(game.getPlayerList());
+		this.finished = game.isFinished();
+	}
+
+	public Game(String name, int size) {
+		this.name = name;
+		if(size < 2) size = 2;
+		if(size > 5) size = 5;
+		this.gameSize = size;
+		this.playerList = new ArrayList<Player>();
+	}
+
+	public Game(String name, int size, int gameID) {
+		this.name = name;
+		if(size < 2) size = 2;
+		if(size > 5) size = 5;
+		this.gameSize = size;
+		this.playerList = new ArrayList<Player>();
+		this.gameID = gameID;
+	}
+
+	public GameInfo getGameInfo() {
+		return new GameInfo(this);
+	}
 
 	/**
 	 * adds a player to the game
@@ -27,7 +54,7 @@ public abstract class IGame {
 	 * @return the player object just created
 	 * @throws GameActionException
 	 */
-	public Player addPlayer(IUser user, Player.PlayerColor color) throws GameActionException {
+	public Player addPlayer(User user, PlayerColor color) throws GameActionException {
 		if(user == null) throw new GameActionException("Cannot add null User to game!");
 		if(color == null) throw new GameActionException("Color was not selected!");
 		Player np = getPlayer(user);
@@ -45,7 +72,7 @@ public abstract class IGame {
 	 * @return true if player was removed, false if not
 	 * @throws GameActionException
 	 */
-	public boolean removePlayer(IUser user) throws GameActionException {
+	public boolean removePlayer(User user) throws GameActionException {
 		Player player = getPlayer(user);
 		if(player != null) {
 			if(!hasStarted()) {
@@ -76,7 +103,7 @@ public abstract class IGame {
 	 * @throws BadUserException
 	 * @throws GameActionException
 	 */
-	public boolean userCanJoin(IUser user) throws BadUserException, GameActionException {
+	public boolean userCanJoin(User user) throws BadUserException, GameActionException {
 		if(user == null) throw new BadUserException("A null user cannot join!");
 		for(Player p : playerList) {
 			if(p.getUserID() == user.getUserID())
@@ -104,32 +131,13 @@ public abstract class IGame {
 	 * @param user contains at least user.id
 	 * @return Player object of the user, null if user not in game
 	 */
-	public Player getPlayer(IUser user) {
+	public Player getPlayer(User user) {
 		if(user == null) return null; // Don't throw BadUserException here.
 		for(Player p : playerList) {
 			if(p.getUserID() == user.getUserID())
 				return p;
 		}
 		return null;
-	}
-
-	/**
-	 * get a list of available Player.PlayerColors
-	 * @return List of Player.PlayerColors not already in use
-	 */
-	public List<Player.PlayerColor> getAvailableColors() {
-		List<Player.PlayerColor> all = Arrays.asList(Player.PlayerColor.BLUE,
-				Player.PlayerColor.BLACK, Player.PlayerColor.GREEN,
-				Player.PlayerColor.RED, Player.PlayerColor.YELLOW);
-		List<Player.PlayerColor> taken = new ArrayList<Player.PlayerColor>();
-		for(Player p : playerList)
-			taken.add(p.getColor());
-		List<Player.PlayerColor> avail = new ArrayList<Player.PlayerColor>();
-		for(Player.PlayerColor a: all)
-			if(! taken.contains(a)) {
-				avail.add(a);
-			}
-		return avail;
 	}
 
 	public int getGameID() {
@@ -161,7 +169,7 @@ public abstract class IGame {
 		if(this == o) return true;
 		if(o == null || getClass() != o.getClass()) return false;
 
-		IGame game = (IGame) o;
+		Game game = (Game) o;
 
 		if(gameID != game.gameID) return false;
 		if(gameSize != game.gameSize) return false;
@@ -172,16 +180,5 @@ public abstract class IGame {
 	@Override
 	public int hashCode() {
 		return gameID;
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Name: " + name + '\n');
-		sb.append("Size: " + gameSize + '\n');
-		sb.append("Players: (" + playerList.size() + "/" + gameSize + ")\n");
-		for(Player p : playerList)
-			sb.append("    " + p.getName() + "    " + p.getColor() +  "\n");
-		return sb.toString();
 	}
 }

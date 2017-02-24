@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         setContentView(R.layout.activity_boardmap);
 
         presenter = new BoardmapPresenter();
+	    presenter.setView(this);
 
 	    Toolbar mToolbar = (Toolbar) findViewById(R.id.bmap_toolbar);
 	    setSupportActionBar(mToolbar);
@@ -74,4 +76,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     public void backToLogin() {
 	    startActivity(new Intent(BoardmapActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
+
+	@Override
+	public Activity getActivity() {
+		return BoardmapActivity.this;
+	}
 }

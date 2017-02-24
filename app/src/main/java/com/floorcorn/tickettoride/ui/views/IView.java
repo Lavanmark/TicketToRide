@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride.ui.views;
 
+import android.app.Activity;
+
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 
 /**
@@ -17,5 +19,9 @@ public interface IView {
      *
      * @post view.presenter() == presenter
      */
-    public void setPresenter(IPresenter presenter);
+    void setPresenter(IPresenter presenter);
+
+    void backToLogin();
+
+    Activity getActivity();
 }
