@@ -11,6 +11,7 @@ public class Player {
 	private int userID;
 	private PlayerColor color;
 	private String name = null;
+	private boolean turn = false;
 
 	public Player(Player player) {
 		this.playerID = player.getPlayerID();
@@ -18,6 +19,7 @@ public class Player {
 		this.userID = player.getUserID();
 		this.color = player.getColor();
 		this.name = player.getName();
+		this.turn = player.isTurn();
 	}
 
 	public Player(int userID, String name, int gameID, PlayerColor color) {
@@ -65,6 +67,10 @@ public class Player {
 	}
 
 	public boolean isConductor() { return playerID == 0; }
+
+	public boolean isTurn() {
+		return turn;
+	}
 
 	@Override
 	public boolean equals(Object o) {

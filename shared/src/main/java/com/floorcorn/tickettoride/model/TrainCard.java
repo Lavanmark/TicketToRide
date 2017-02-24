@@ -1,20 +1,17 @@
 package com.floorcorn.tickettoride.model;
 
 /**
- * Created by Michael on 2/24/2017.
+ * Created by Kaylee on 2/23/2017.
  */
 
 public class TrainCard {
+    private TrainCardColor color;
 
-    //private TrainCardColor color;
-
-    /*public TrainCard(TrainCardColor color){
-        this.color = color
+    public TrainCard(TrainCardColor tcc){
+        color = tcc;
     }
-    */
 
-    //Replace this constructor with the above once TrainCardColor enum exists.
-    public TrainCard(){}
-
-    // public TrainCardColor getTrainCardColor(){ return this.color; }
+    public TrainCardColor getColor(){
+        return color;
+    }
 }

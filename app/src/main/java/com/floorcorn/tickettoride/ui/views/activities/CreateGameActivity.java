@@ -1,10 +1,8 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -13,14 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
-
-import java.util.Set;
 
 import com.floorcorn.tickettoride.R;
-import com.floorcorn.tickettoride.model.Player;
-import com.floorcorn.tickettoride.ui.presenters.IPresenter;
-import com.floorcorn.tickettoride.ui.views.ILobbyView;
 
 /**
  * This class acts as a dialogue box. It will send data back to the GameListActivity to notify the presenter.

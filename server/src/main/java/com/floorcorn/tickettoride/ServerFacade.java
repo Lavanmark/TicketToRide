@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride;
 
+import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
@@ -10,6 +11,7 @@ import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.serverModel.ServerModel;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -19,6 +21,7 @@ import java.util.Set;
 public class ServerFacade implements IServer {
 
 	private ServerModel model;
+	private CommandManager commandManager;
 
 	private static ServerFacade instance = null;
 	public static ServerFacade getInstance() {
@@ -26,7 +29,10 @@ public class ServerFacade implements IServer {
 			instance = new ServerFacade();
 		return instance;
 	}
-	private ServerFacade() { model = new ServerModel(); }
+	private ServerFacade() {
+		model = new ServerModel();
+		commandManager = new CommandManager();
+	}
 
 	@Override
 	public User login(User user) throws BadUserException {
@@ -44,9 +50,25 @@ public class ServerFacade implements IServer {
 
 	@Override
 	public Game getGame(User user, int gameID) throws BadUserException {
-		if(user != null)
+		if(model.authenticate(user.getToken()) != null)
 			return model.getGame(gameID);
-		throw new BadUserException("User was null!");
+		throw new BadUserException("Could not Authenticate User!");
+	}
+
+	@Override
+	public ArrayList<ICommand> getCommandsSince(User user, int gameID, int lastCommand) throws BadUserException, GameActionException {
+		if((user = model.authenticate(user.getToken())) != null) {
+			return commandManager.getCommandsSince(user, model.getGame(gameID),lastCommand);
+		}
+		throw new BadUserException("Could not Authenticate User!");
+	}
+
+	@Override
+	public ArrayList<ICommand> sendCommand(User user, ICommand command) throws BadUserException, GameActionException {
+		if((user = model.authenticate(user.getToken())) != null) {
+			return commandManager.doCommand(user, model.getGame(command.getGameID()), command);
+		}
+		throw new BadUserException("Could not Authenticate User!");
 	}
 
 	@Override

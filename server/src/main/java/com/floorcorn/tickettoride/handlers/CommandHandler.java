@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.handlers;
 
+
 import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.interfaces.ICommand;
@@ -9,7 +10,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 
 /**
- * Created by Michael on 2/24/2017.
+ * Created by Tyler on 2/24/2017.
+ * @author Michael
  */
 
 public class CommandHandler extends HandlerBase {

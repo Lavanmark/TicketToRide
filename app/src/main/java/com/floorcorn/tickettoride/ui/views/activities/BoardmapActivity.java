@@ -29,30 +29,23 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	    if(getSupportActionBar() != null)
 	        getSupportActionBar().setTitle(presenter.getGameName());
 
+	    checkStarted();
         if(!presenter.gameInProgress()) {
-	        ((TextView)findViewById(R.id.gameStartedText)).setText("Waiting on Players...");
-			launchPreGame();
+	        launchPreGame();
         }
-
     }
 
 	@Override
 	public void onStop() {
 		presenter.unregister();
+		presenter.stopPolling();
 		super.onStop();
 	}
 
     @Override
     protected void onResume(){
         super.onResume();
-        if(getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(presenter.getGameName());
-        }
-        if(!presenter.gameInProgress()) {
-	        ((TextView)findViewById(R.id.gameStartedText)).setText("Waiting on Players...");
-        } else {
-	        ((TextView)findViewById(R.id.gameStartedText)).setText("Game Started!");
-        }
+	    checkStarted();
     }
 
     public void launchPreGame() {
@@ -68,8 +61,13 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     }
 
 	@Override
-	public void gameStarted() {
-		((TextView)findViewById(R.id.gameStartedText)).setText("Game Started!");
+	public void checkStarted() {
+		if(!presenter.gameInProgress()) {
+			((TextView)findViewById(R.id.gameStartedText)).setText("Waiting on Players...");
+		} else {
+			presenter.startPollingCommands();
+			((TextView)findViewById(R.id.gameStartedText)).setText("Game Started!");
+		}
 	}
 
 	@Override

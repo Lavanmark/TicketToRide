@@ -2,6 +2,7 @@ package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.handlers.CommandHandler;
 import com.floorcorn.tickettoride.handlers.CreateGameHandler;
+import com.floorcorn.tickettoride.handlers.GetCommandsHandler;
 import com.floorcorn.tickettoride.handlers.GetGameHandler;
 import com.floorcorn.tickettoride.handlers.GetGamesHandler;
 import com.floorcorn.tickettoride.handlers.JoinGameHandler;
@@ -52,7 +53,9 @@ public class ServerCommunicator {
 		server.createContext(IServer.CREATE_GAME, new CreateGameHandler());
 		server.createContext(IServer.LEAVE_GAME, new LeaveGameHandler());
 		server.createContext(IServer.JOIN_GAME, new JoinGameHandler());
-		server.createContext(IServer.COMMAND, new CommandHandler());
+		server.createContext(IServer.GET_COMMANDS, new GetCommandsHandler());
+		server.createContext(IServer.SEND_COMMAND, new CommandHandler());
+
 	}
 
 	public static void main(String[] args) {

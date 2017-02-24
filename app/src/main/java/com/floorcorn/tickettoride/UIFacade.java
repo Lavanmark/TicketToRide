@@ -230,6 +230,15 @@ public class UIFacade {
 	    poller.startPollingPlayerList(view);
     }
 
+    public void pollCommands(IView view) {
+        resetPollerState();
+        poller.startPollingCommands(view);
+    }
+
+    public void stopPolling() {
+        resetPollerState();
+    }
+
 	private void resetPollerState() {
 		if(poller == null) {
 			poller = new Poller(serverProxy, clientModelRoot);
