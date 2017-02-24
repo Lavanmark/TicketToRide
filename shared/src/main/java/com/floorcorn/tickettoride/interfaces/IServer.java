@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.interfaces;
 
+import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
@@ -8,6 +9,8 @@ import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.PlayerColor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -23,6 +26,8 @@ public interface IServer {
 	String CREATE_GAME = "/createGame";
 	String LEAVE_GAME = "/leaveGame";
 	String JOIN_GAME = "/joinGame";
+	String SEND_COMMAND = "/command";
+	String GET_COMMANDS = "/getCommands";
 
 	/**
 	 * method to log a user in.
@@ -33,7 +38,7 @@ public interface IServer {
 	 * @return the user who was logged in if the username and password were correct, null otherwise
 	 * @throws BadUserException contains a message about the failure (only if user is not formatted correctly)
 	 */
-	public User login(User user) throws BadUserException;
+	User login(User user) throws BadUserException;
 
 	/**
 	 * method to register a new user
@@ -47,7 +52,7 @@ public interface IServer {
 	 * @return completed user that was registered
 	 * @throws UserCreationException
 	 */
-	public User register(User user) throws UserCreationException;
+	User register(User user) throws UserCreationException;
 
 	/**
 	 * retrieves the set of Games from the server
@@ -57,7 +62,7 @@ public interface IServer {
 	 * @return set of all games that exist
 	 * @throws BadUserException
 	 */
-	public Set<GameInfo> getGames(User user) throws BadUserException;
+	Set<GameInfo> getGames(User user) throws BadUserException;
 
 	/**
 	 * retrives a single game based on gameID
@@ -69,7 +74,12 @@ public interface IServer {
 	 * @return Game object corresponding to the gameID, null if game does not exist
 	 * @throws BadUserException
 	 */
-	public Game getGame(User user, int gameID) throws BadUserException;
+	Game getGame(User user, int gameID) throws BadUserException;
+
+
+	ArrayList<ICommand> getCommandsSince(User user, int gameID, int lastCommand) throws BadUserException, GameActionException;
+
+	ArrayList<ICommand> sendCommand(User user, ICommand command) throws BadUserException, GameActionException;
 
 	/**
 	 * will create a new game
@@ -82,7 +92,7 @@ public interface IServer {
 	 * @return set of gameinfo objects with the new game
 	 * @throws BadUserException
 	 */
-	public GameInfo createGame(User user, String gameName, int gameSize) throws BadUserException;
+	GameInfo createGame(User user, String gameName, int gameSize) throws BadUserException;
 
 	/**
 	 * attempts to add the user to the specified game with the specified color.
@@ -96,7 +106,7 @@ public interface IServer {
 	 * @throws GameActionException
 	 * @throws BadUserException
 	 */
-	public GameInfo joinGame(User user, int gameID, PlayerColor color) throws GameActionException, BadUserException;
+	GameInfo joinGame(User user, int gameID, PlayerColor color) throws GameActionException, BadUserException;
 
 	/**
 	 * will remove the player from the game or cancel it if the player made the game.
@@ -111,5 +121,5 @@ public interface IServer {
 	 * @throws BadUserException
 	 * @throws GameActionException
 	 */
-	public boolean leaveGame(User user, int gameID) throws BadUserException, GameActionException;
+	boolean leaveGame(User user, int gameID) throws BadUserException, GameActionException;
 }

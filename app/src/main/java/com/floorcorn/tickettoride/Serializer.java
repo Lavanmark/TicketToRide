@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride;
 
+import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
@@ -8,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -83,5 +85,10 @@ public class Serializer {
 	 */
 	public Set<GameInfo> deserializeGameInfoSet(String json) {
 		return gson.fromJson(json, new TypeToken<Set<GameInfo>>(){}.getType());
+	}
+
+	public ArrayList<ICommand> deserializeCommandList(String json) {
+		//TODO this probably won't work since ICommand is an interface
+		return gson.fromJson(json, new TypeToken<ArrayList<ICommand>>(){}.getType());
 	}
 }
