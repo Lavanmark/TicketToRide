@@ -1,16 +1,17 @@
 package com.floorcorn.tickettoride.interfaces;
 
+
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.TrainCard;
 
 import java.util.List;
 
 /**
- * Created by Michael on 2/24/2017.
+ * Created by Tyler on 2/24/2017.
+ * @author Michael
  */
 
 public interface IClient {
-
     /**
      *  Assigns a new list of players to be stored in the model
      * @param players a list of players to be stored.

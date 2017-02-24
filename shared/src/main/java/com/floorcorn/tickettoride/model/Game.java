@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.model;
 
+import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 
@@ -16,6 +17,9 @@ public class Game {
 	private int gameSize = -1;
 	private String name = null;
 
+
+	private ArrayList<ICommand> commands = null;
+
 	private boolean finished = false;
 
 	public Game(Game game) {
@@ -24,6 +28,7 @@ public class Game {
 		this.name = game.getName();
 		this.playerList = new ArrayList<Player>(game.getPlayerList());
 		this.finished = game.isFinished();
+		this.commands = new ArrayList<>(game.getCommands());
 	}
 
 	public Game(String name, int size) {
@@ -45,6 +50,26 @@ public class Game {
 
 	public GameInfo getGameInfo() {
 		return new GameInfo(this);
+	}
+
+	public void setPlayerList(ArrayList<Player> newPlayers) {
+		this.playerList.clear();
+		this.playerList.addAll(newPlayers);
+	}
+
+	public ArrayList<ICommand> getCommands() {
+		return commands;
+	}
+
+	public void addCommand(ICommand command) {
+		if(command.getCmdID() > getLatestCommandID())
+			this.commands.add(command);
+	}
+
+	public int getLatestCommandID() {
+		if(commands.size() < 0)
+			return -1;
+		return commands.get(commands.size()-1).getCmdID();
 	}
 
 	/**

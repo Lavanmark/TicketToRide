@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride;
 
+import com.floorcorn.tickettoride.commands.ICommand;
+import com.floorcorn.tickettoride.communication.CommandRequest;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
@@ -12,6 +14,8 @@ import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.PlayerColor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -52,6 +56,32 @@ public class ServerProxy implements IServer {
 			return Serializer.getInstance().deserializeGame(reser);
 		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
 			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()).getMessage());
+		return null;
+	}
+
+	@Override
+	public ArrayList<ICommand> getCommandsSince(User user, int gameID, int lastCommand) throws BadUserException, GameActionException {
+		Results res = clientComm.send(GET_COMMANDS, new CommandRequest(gameID, lastCommand), user);
+		String reser = Serializer.getInstance().serialize(res.getResult());
+		if(res.isSuccess()){
+			return Serializer.getInstance().deserializeCommandList(reser);
+		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
+			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()).getMessage());
+		else if(res.getException(GameActionException.class.getSimpleName()) != null)
+			throw new GameActionException(res.getException(GameActionException.class.getSimpleName()).getMessage());
+		return null;
+	}
+
+	@Override
+	public ArrayList<ICommand> sendCommand(User user, ICommand command) throws BadUserException, GameActionException {
+		Results res = clientComm.send(SEND_COMMAND, command, user);
+		String reser = Serializer.getInstance().serialize(res.getResult());
+		if(res.isSuccess()){
+			return Serializer.getInstance().deserializeCommandList(reser);
+		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
+			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()).getMessage());
+		else if(res.getException(GameActionException.class.getSimpleName()) != null)
+			throw new GameActionException(res.getException(GameActionException.class.getSimpleName()).getMessage());
 		return null;
 	}
 
