@@ -23,6 +23,7 @@ public interface IServer {
 	String CREATE_GAME = "/createGame";
 	String LEAVE_GAME = "/leaveGame";
 	String JOIN_GAME = "/joinGame";
+	String COMMAND = "/command";
 
 	/**
 	 * method to log a user in.
