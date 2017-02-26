@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride;
 
+import com.floorcorn.tickettoride.interfaces.ICommand;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.Player;
@@ -59,5 +60,14 @@ public class Serializer {
 	 */
 	public PlayerInfo deserializePlayerInfo(String str) {
 		return gson.fromJson(str, PlayerInfo.class);
+	}
+
+	/**
+	 * converts string of json representing a command to an ICommand object
+	 * @param str json representing a command
+	 * @return ICommand object from json string
+	 */
+	public ICommand deserializeCommand(String str) {
+		return gson.fromJson(str, ICommand.class);
 	}
 }

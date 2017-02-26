@@ -55,6 +55,7 @@ public class ServerCommunicator {
 		server.createContext(IServer.JOIN_GAME, new JoinGameHandler());
 		server.createContext(IServer.GET_COMMANDS, new GetCommandsHandler());
 		server.createContext(IServer.SEND_COMMAND, new CommandHandler());
+
 	}
 
 	public static void main(String[] args) {

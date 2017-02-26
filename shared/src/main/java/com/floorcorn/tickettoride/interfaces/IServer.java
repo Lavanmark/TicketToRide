@@ -29,6 +29,7 @@ public interface IServer {
 	String SEND_COMMAND = "/command";
 	String GET_COMMANDS = "/getCommands";
 
+
 	/**
 	 * method to log a user in.
 	 * @pre user.username exists
