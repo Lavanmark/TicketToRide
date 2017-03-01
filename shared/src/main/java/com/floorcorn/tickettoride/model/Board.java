@@ -144,6 +144,8 @@ public class Board {
         return faceUpCards;
     }
     public void setFaceUpCards(TrainCard[] cards) throws GameActionException {
+	    if(faceUpCards == null)
+		    faceUpCards = new TrainCard[FACEUP_DECK_SIZE];
         if(cards != null && cards.length == FACEUP_DECK_SIZE)
 	        for(int i = 0; i < FACEUP_DECK_SIZE; i++)
 		        faceUpCards[i] = cards[i];
