@@ -45,6 +45,7 @@ public class CreateGameHandler extends HandlerBase {
 				gi = ServerFacade.getInstance().createGame(new User(token), gi.getName(), gi.getGameSize());
 				results = new Results(true, gi);
 				System.out.println("game created");
+				System.out.println(gi.getGameID());
 			} catch(BadUserException e) {
 				e.printStackTrace();
 				results = new Results(false, e);

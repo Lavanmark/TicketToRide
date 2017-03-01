@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 
@@ -19,6 +20,8 @@ public class GameInfo {
 	private String name = null;
 
 	private boolean finished = false;
+
+	private GameInfo(){}
 
 	public GameInfo(String name, int gameSize) {
 		this.gameSize = gameSize;
@@ -101,6 +104,7 @@ public class GameInfo {
 	 * get a list of available PlayerColors
 	 * @return List of PlayerColors not already in use
 	 */
+	@JsonIgnore
 	public List<PlayerColor> getAvailableColors() {
 		List<PlayerColor> all = Arrays.asList(PlayerColor.BLUE,
 				PlayerColor.BLACK, PlayerColor.GREEN,

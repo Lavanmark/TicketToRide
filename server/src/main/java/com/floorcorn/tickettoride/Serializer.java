@@ -1,12 +1,14 @@
 package com.floorcorn.tickettoride;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.floorcorn.tickettoride.interfaces.ICommand;
-import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
-import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.PlayerInfo;
 import com.floorcorn.tickettoride.model.User;
-import com.google.gson.Gson;
+
+import java.io.IOException;
 
 /**
  * Created by Tyler on 2/1/17.
@@ -14,7 +16,7 @@ import com.google.gson.Gson;
 
 public class Serializer {
 
-	private Gson gson;
+	private ObjectMapper mapper = null;
 
 	private static Serializer instance = null;
 	public static Serializer getInstance() {
@@ -23,7 +25,8 @@ public class Serializer {
 		return instance;
 	}
 	private Serializer() {
-		gson = new Gson();
+		mapper = new ObjectMapper();
+		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.OBJECT_AND_NON_CONCRETE);
 	}
 
 	/**
@@ -32,7 +35,12 @@ public class Serializer {
 	 * @return string of json of the object
 	 */
 	public String serialize(Object o) {
-		return gson.toJson(o);
+		try {
+			return mapper.writeValueAsString(o);
+		} catch(JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -41,7 +49,12 @@ public class Serializer {
 	 * @return user object from json string
 	 */
 	public User deserializeUser(String str) {
-		return gson.fromJson(str, User.class);
+		try {
+			return mapper.readValue(str, new TypeReference<User>(){});
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -50,7 +63,12 @@ public class Serializer {
 	 * @return game object from json string
 	 */
 	public GameInfo deserializeGameInfo(String str) {
-		return gson.fromJson(str, GameInfo.class);
+		try {
+			return mapper.readValue(str, new TypeReference<GameInfo>(){});
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -59,7 +77,12 @@ public class Serializer {
 	 * @return player object from json string
 	 */
 	public PlayerInfo deserializePlayerInfo(String str) {
-		return gson.fromJson(str, PlayerInfo.class);
+		try {
+			return mapper.readValue(str, new TypeReference<PlayerInfo>(){});
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -68,6 +91,11 @@ public class Serializer {
 	 * @return ICommand object from json string
 	 */
 	public ICommand deserializeCommand(String str) {
-		return gson.fromJson(str, ICommand.class);
+		try {
+			return mapper.readValue(str, new TypeReference<ICommand>(){});
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

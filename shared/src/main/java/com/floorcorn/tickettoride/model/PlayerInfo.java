@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Created by Tyler on 2/21/17.
  */
@@ -11,6 +13,7 @@ public class PlayerInfo {
 	private PlayerColor color;
 	private String name = null;
 
+	private PlayerInfo(){}
 
 	public PlayerInfo(Player player) {
 		this.playerID = player.getPlayerID();
@@ -56,6 +59,7 @@ public class PlayerInfo {
 		return name;
 	}
 
+	@JsonIgnore
 	public boolean isConductor() { return playerID == 0; }
 
 	@Override
