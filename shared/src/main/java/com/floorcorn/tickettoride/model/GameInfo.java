@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GameInfo {
 
-	private int gameID = -1;
+	private int gameID = Game.NO_GAME_ID;
 	private ArrayList<PlayerInfo> playerList = null;
 	private int gameSize = -1;
 	private String name = null;

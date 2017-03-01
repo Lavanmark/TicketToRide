@@ -13,14 +13,14 @@ public class Route {
     private Boolean claimed;
     private int owner;
 
-    public Route(int rID, City c1, City c2, int l, TrainCardColor tcc, Boolean claim, int o){
+    public Route(int rID, City c1, City c2, int l, TrainCardColor tcc){
         routeID = rID;
         city1 = c1;
         city2 = c2;
         length = l;
         color = tcc;
-        claimed = claim;
-        owner = o;
+        claimed = false;
+        owner = Player.NO_PLAYER_ID;
     }
 
     public int getRouteID(){

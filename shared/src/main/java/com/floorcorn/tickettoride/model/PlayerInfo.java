@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 
 public class PlayerInfo {
-	private int playerID;
-	private int gameID;
-	private int userID;
+	private int playerID = Player.NO_PLAYER_ID;
+	private int gameID = Game.NO_GAME_ID;
+	private int userID = User.NO_USER_ID;
 	private PlayerColor color;
 	private String name = null;
 
@@ -28,7 +28,7 @@ public class PlayerInfo {
 		this.name = name;
 		this.color = color;
 		this.gameID = gameID;
-		this.playerID = -1;
+		this.playerID = Player.NO_PLAYER_ID;
 	}
 
 	public int getPlayerID() {
