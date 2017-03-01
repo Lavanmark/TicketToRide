@@ -4,9 +4,11 @@ import com.floorcorn.tickettoride.clientModel.ClientModel;
 import com.floorcorn.tickettoride.interfaces.IClient;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
+import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Tyler on 2/23/2017.
@@ -36,11 +38,17 @@ public class ClientFacade implements IClient {
 		return clientModel.getLastCommandExecuted();
 	}
 
-	public void setPlayerList(ArrayList<Player> newPlayers) {
+	@Override
+	public void setPlayerList(ArrayList<Player> players) {
 		Game game = clientModel.getCurrentGame();
 		if(game == null)
 			return;
-		game.setPlayerList(newPlayers);
+		game.setPlayerList(players);
 		clientModel.setCurrentGame(game);
+	}
+
+	@Override
+	public void setFaceUpDeck(List<TrainCard> faceUpDeck) {
+
 	}
 }

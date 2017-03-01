@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride.communication;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
@@ -9,12 +11,14 @@ import java.util.HashMap;
 public class Results {
 	private boolean success;
 
+	@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "@resType")
 	private Object result = null;
 	private HashMap<String, Exception> errors = null;
 	private BadUserException badUserException = null;
 	private GameActionException gameActionException = null;
 	private UserCreationException userCreationException = null;
 
+	private Results(){};
 	public Results(boolean success, Object result) {
 		this.success = success;
 		errors = new HashMap<String, Exception>();

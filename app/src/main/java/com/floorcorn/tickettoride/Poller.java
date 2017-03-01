@@ -1,9 +1,7 @@
 package com.floorcorn.tickettoride;
 
-
-import android.app.Activity;
-
 import com.floorcorn.tickettoride.clientModel.ClientModel;
+import com.floorcorn.tickettoride.commands.CommandManager;
 import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
@@ -22,12 +20,12 @@ import java.util.concurrent.TimeUnit;
 public class Poller {
 
 	private ServerProxy serverProxy = null;
-	private ClientFacade clientFacade = null;//TODO change to client facade when done
+	private CommandManager commandManager = null;
 	private ScheduledExecutorService scheduledExecutorService = null;
 
 	public Poller(ServerProxy sp, ClientModel cm) {
 		serverProxy = sp;
-		clientFacade = new ClientFacade(cm);
+		commandManager = new CommandManager(cm);
 	}
 
 	public void startPollingPlayerList(final IView view) {
@@ -40,11 +38,11 @@ public class Poller {
 
                     @Override
                     public void run() {
-	                    if(clientFacade.getGame() != null) {
+	                    if(commandManager.currentGameID() > -1) {
 		                    try {
 			                    System.out.println("requesting player list");
-			                    Game game = serverProxy.getGame(clientFacade.getUser(), clientFacade.getGame().getGameID());
-			                    clientFacade.setPlayerList(game.getPlayerList());
+			                    Game game = serverProxy.getGame(commandManager.getUser(), commandManager.currentGameID());
+			                    commandManager.setPlayerList(game.getPlayerList());
 		                    } catch(BadUserException e) {
 			                    e.printStackTrace();
 			                    view.backToLogin();
@@ -69,25 +67,10 @@ public class Poller {
 
 					@Override
 					public void run() {
-						if(clientFacade.getGame() != null) {
+						if(commandManager.currentGameID() > -1) {
 							try {
-								ArrayList<ICommand> commands = serverProxy.getCommandsSince(clientFacade.getUser(), clientFacade.getGame().getGameID(), clientFacade.getLastExecutedCommand());
-
-								Game game = clientFacade.getGame();
-								if(game == null) {
-									stopPolling();
-									return;
-								}
-
-								if(commands == null || commands.size() == 0)
-									return;
-
-								for(ICommand command : commands) {
-									game.addCommand(command);
-									command.execute();
-								}
-								//TODO maybe update to make the clientfacade do this leg work
-								clientFacade.updateGame(game);
+								ArrayList<ICommand> commands = serverProxy.getCommandsSince(commandManager.getUser(), commandManager.currentGameID(), commandManager.getLastCommandExecuted());
+								commandManager.addCommands(commands);
 							} catch(BadUserException e) {
 								e.printStackTrace();
 								view.backToLogin();
@@ -110,7 +93,7 @@ public class Poller {
 	}
 
 	public void setClientModel(ClientModel cm) {
-		clientFacade.setClientModel(cm);
+		commandManager.setClientModel(cm);
 	}
 
 }
