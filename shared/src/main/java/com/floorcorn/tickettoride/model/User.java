@@ -14,6 +14,10 @@ public class User {
 
 	public static final int AUTH_TOKEN_SIZE = 16;
 
+	private User(){
+
+	}
+
 	public User(String username, String password) {
 		this.username = username;
 		this.password = password;

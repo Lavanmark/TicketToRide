@@ -181,6 +181,8 @@ public class UIFacade {
      */
     public void requestGames() throws BadUserException {
         clientModelRoot.setGames(serverProxy.getGames(getUser()));
+	    for(GameInfo gi : clientModelRoot.getGames())
+		    System.out.println(gi.getGameID() + " " + gi.getName());
     }
 
     /**
@@ -208,6 +210,8 @@ public class UIFacade {
     public GameInfo createGame(String gameName, int playerCount, PlayerColor color) throws GameActionException, BadUserException {
         GameInfo createdGame = serverProxy.createGame(getUser(), gameName, playerCount);
 
+        if(createdGame == null)
+            return null;
         createdGame = joinGame(createdGame.getGameID(), color);
         return createdGame;
     }

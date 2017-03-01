@@ -38,29 +38,15 @@ public class ClientFacade implements IClient {
 		return clientModel.getLastCommandExecuted();
 	}
 
-	public void setPlayerList(ArrayList<Player> newPlayers) {
+	@Override
+	public void setPlayerList(ArrayList<Player> players) {
 		Game game = clientModel.getCurrentGame();
 		if(game == null)
 			return;
-		game.setPlayerList(newPlayers);
+		game.setPlayerList(players);
 		clientModel.setCurrentGame(game);
 	}
 
-	/**
-	 * Assigns a new list of players to be stored in the model
-	 *
-	 * @param players a list of players to be stored.
-	 */
-	@Override
-	public void setPlayerList(List<Player> players) {
-
-	}
-
-	/**
-	 * Assigns a new deck of TrainCards to be stored as the face up deck
-	 *
-	 * @param faceUpDeck the new list of TrainCards to be stored as the face up deck
-	 */
 	@Override
 	public void setFaceUpDeck(List<TrainCard> faceUpDeck) {
 

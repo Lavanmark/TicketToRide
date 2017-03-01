@@ -1,14 +1,15 @@
 package com.floorcorn.tickettoride;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.User;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ import java.util.Set;
 
 public class Serializer {
 
-    private Gson gson = null;
+	private ObjectMapper mapper = null;
 
     private static Serializer instance = null;
 	public static Serializer getInstance() {
@@ -27,7 +28,8 @@ public class Serializer {
 		return instance;
 	}
     private Serializer() {
-	    gson = new Gson();
+	    mapper = new ObjectMapper();
+	    mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.OBJECT_AND_NON_CONCRETE);
     }
 
     /**
@@ -38,7 +40,12 @@ public class Serializer {
     * @return   The String representation of the input object.
      */
     public String serialize(Object obj){
-        return gson.toJson(obj);
+	    try {
+		    return mapper.writeValueAsString(obj);
+	    } catch(JsonProcessingException e) {
+		    e.printStackTrace();
+	    }
+	    return null;
     }
 
     /**
@@ -48,7 +55,12 @@ public class Serializer {
      * @return    a Results object representing the input String
      */
     public Results deserializeResults(String resultsJson) {
-	    return gson.fromJson(resultsJson, Results.class);
+	    try {
+		    return mapper.readValue(resultsJson, new TypeReference<Results>(){});
+	    } catch(IOException e) {
+		    e.printStackTrace();
+	    }
+	    return null;
     }
 
 	/**
@@ -57,7 +69,12 @@ public class Serializer {
 	 * @return User object from string of json
 	 */
 	public User deserializeUser(String userJson) {
-		return gson.fromJson(userJson, User.class);
+		try {
+			return mapper.readValue(userJson, new TypeReference<User>(){});
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -66,7 +83,12 @@ public class Serializer {
 	 * @return game object from the string
 	 */
 	public Game deserializeGame(String gameJson) {
-		return gson.fromJson(gameJson, Game.class);
+		try {
+			return mapper.readValue(gameJson, new TypeReference<Game>(){});
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -75,7 +97,12 @@ public class Serializer {
 	 * @return game object from the string
 	 */
 	public GameInfo deserializeGameInfo(String gameJson) {
-		return gson.fromJson(gameJson, GameInfo.class);
+		try {
+			return mapper.readValue(gameJson, new TypeReference<GameInfo>(){});
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -84,11 +111,20 @@ public class Serializer {
 	 * @return set of games
 	 */
 	public Set<GameInfo> deserializeGameInfoSet(String json) {
-		return gson.fromJson(json, new TypeToken<Set<GameInfo>>(){}.getType());
+		try {
+			return mapper.readValue(json, new TypeReference<Set<GameInfo>>(){});
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public ArrayList<ICommand> deserializeCommandList(String json) {
-		//TODO this probably won't work since ICommand is an interface
-		return gson.fromJson(json, new TypeToken<ArrayList<ICommand>>(){}.getType());
+		try {
+			return mapper.readValue(json, new TypeReference<ArrayList<ICommand>>(){});
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.floorcorn.tickettoride.R;
@@ -35,11 +36,42 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	BoardmapPresenter presenter = null;
 	private Board boardmap;
 
+	//button used to show animation
+	private Button animate;
+
 	// buttons used to open the drawers
 	private Button drawCardsButton;
 	private Button drawDestinationTicketsButton;
 	private Button claimRouteButton;
 	private Button displayHandButton;
+
+	//elements related to Draw Destination Tickets Drawer
+	private Button drawFromDestinationDeck;
+	private ImageButton destTicket1;
+	private ImageButton destTicket2;
+	private ImageButton destTicket3;
+
+
+	//elements related to Draw Cards Drawer
+	private Button drawFromCardDeck;
+	private ImageButton faceup1;
+	private ImageButton faceup2;
+	private ImageButton faceup3;
+	private ImageButton faceup4;
+	private ImageButton faceup5;
+
+	
+	//elements related to Claiming Route
+
+
+
+	//elements related to Player's Hand
+
+
+	//elements related to the PlayerStatus/Turn Icons
+
+
+	//elements related to the map
 
 
 
