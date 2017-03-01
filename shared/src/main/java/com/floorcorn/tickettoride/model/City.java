@@ -22,7 +22,6 @@ public class City {
         City city = (City) o;
 
         return name.equals(city.name);
-
     }
 
     @Override

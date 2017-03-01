@@ -33,7 +33,8 @@ public class CommandManager {
 
 		for(ICommand command : commands) {
 			game.addCommand(command);
-			command.execute();
+			command.execute(clientFacade);
+			clientFacade.setLastExecutedCommand(command.getCmdID());
 		}
 		clientFacade.updateGame(game);
 	}

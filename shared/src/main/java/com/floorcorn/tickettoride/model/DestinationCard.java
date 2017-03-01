@@ -12,11 +12,11 @@ public class DestinationCard {
     private int value;
     private Boolean canDiscard;
 
-    public DestinationCard(City c1, City c2, int v, Boolean cD){
+    public DestinationCard(City c1, City c2, int v){
         city1 = c1;
         city2 = c2;
         value = v;
-        canDiscard = cD;
+        canDiscard = true;
     }
 
     public Boolean isComplete(List<Route> routes){

@@ -2,19 +2,36 @@ package com.floorcorn.tickettoride.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by Tyler on 2/2/2017.
  */
 
 public class Player {
 
-	private int playerID;
-	private int gameID;
-	private int userID;
-	private PlayerColor color;
+	public static final int NO_PLAYER_ID = -1;
+	//info
+	private int playerID = NO_PLAYER_ID;
+	private int gameID = Game.NO_GAME_ID;
+	private int userID = User.NO_USER_ID;
+	private PlayerColor color = null;
 	private String name = null;
-	private boolean turn = false;
 
+	//non info
+	private boolean turn = false;
+	private int score = 0;
+	private int trainCarsLeft = Game.INITIAL_TRAIN_CARS;
+	private int totalTrainCards = 0;
+	private int totalDestinationCards = 0;
+	private List<DestinationCard> destinationCards = null;
+	private Map<TrainCardColor, Integer> trainCards = null;
+	private List<Route> routesClaimed = null;
+
+	// for JACKSON
 	private Player(){}
 
 	public Player(Player player) {
@@ -24,6 +41,13 @@ public class Player {
 		this.color = player.getColor();
 		this.name = player.getName();
 		this.turn = player.isTurn();
+		this.score = player.getScore();
+		this.trainCarsLeft = player.getTrainCarsLeft();
+		this.totalTrainCards = player.getTotalTrainCards();
+		this.totalDestinationCards = player.getTotalDestinationCards();
+		this.destinationCards = player.getDestinationCards();
+		this.trainCards = player.getTrainCards();
+		this.routesClaimed = player.getRoutesClaimed();
 	}
 
 	public Player(int userID, String name, int gameID, PlayerColor color) {
@@ -31,12 +55,30 @@ public class Player {
 		this.name = name;
 		this.color = color;
 		this.gameID = gameID;
-		this.playerID = -1;
+		this.playerID = NO_PLAYER_ID;
+		this.turn = false;
+		this.score = 0;
+		this.trainCarsLeft = Game.INITIAL_TRAIN_CARS;
+		this.totalTrainCards = 0;
+		this.totalDestinationCards = 0;
+		this.destinationCards = new ArrayList<>();
+		this.trainCards = new HashMap<>();
+		this.routesClaimed = new ArrayList<>();
 	}
 
 	@JsonIgnore
 	public PlayerInfo getPlayerInfo() {
 		return new PlayerInfo(this);
+	}
+
+	@JsonIgnore
+	public Player getCensoredPlayer(User user) {
+		if(user.getUserID() == userID)
+			return this;
+		Player p = new Player(this);
+		p.setDestinationCards(new ArrayList<DestinationCard>());
+		p.setTrainCards(new HashMap<TrainCardColor, Integer>());
+		return p;
 	}
 
 	public int getPlayerID() {
@@ -76,6 +118,73 @@ public class Player {
 
 	public boolean isTurn() {
 		return turn;
+	}
+	public void setTurn(boolean turn) {
+		this.turn = turn;
+	}
+
+	//TODO update these getters and setters as needed:
+
+	//==============================================
+	//
+	// GETTERS AND SETTERS MIGHT NOT BE WHAT WE WANT
+	//
+	//==============================================
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public int getTrainCarsLeft() {
+		return trainCarsLeft;
+	}
+
+	public void setTrainCarsLeft(int trainCarsLeft) {
+		this.trainCarsLeft = trainCarsLeft;
+	}
+
+	public int getTotalTrainCards() {
+		return totalTrainCards;
+	}
+
+	public void setTotalTrainCards(int totalTrainCards) {
+		this.totalTrainCards = totalTrainCards;
+	}
+
+	public int getTotalDestinationCards() {
+		return totalDestinationCards;
+	}
+
+	public void setTotalDestinationCards(int totalDestinationCards) {
+		this.totalDestinationCards = totalDestinationCards;
+	}
+
+	public List<DestinationCard> getDestinationCards() {
+		return destinationCards;
+	}
+
+	public void setDestinationCards(List<DestinationCard> destinationCards) {
+		this.destinationCards = destinationCards;
+	}
+
+	public Map<TrainCardColor, Integer> getTrainCards() {
+		return trainCards;
+	}
+
+	public void setTrainCards(Map<TrainCardColor, Integer> trainCards) {
+		this.trainCards = trainCards;
+	}
+
+	public List<Route> getRoutesClaimed() {
+		return routesClaimed;
+	}
+
+	public void setRoutesClaimed(List<Route> routesClaimed) {
+		this.routesClaimed = routesClaimed;
 	}
 
 	@Override

@@ -37,6 +37,10 @@ public class ClientFacade implements IClient {
 	public int getLastExecutedCommand() {
 		return clientModel.getLastCommandExecuted();
 	}
+	public void setLastExecutedCommand(int lastCmdID) {
+		if(clientModel.getLastCommandExecuted() < lastCmdID)
+			clientModel.setLastCommandExecuted(lastCmdID);
+	}
 
 	@Override
 	public void setPlayerList(ArrayList<Player> players) {
