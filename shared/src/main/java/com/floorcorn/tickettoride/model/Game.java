@@ -18,9 +18,10 @@ public class Game {
 	private ArrayList<Player> playerList = null;
 	private int gameSize = -1;
 	private String name = null;
-	private ArrayList<ICommand> commands = null;
-
 	private boolean finished = false;
+
+	private ArrayList<ICommand> commands = null;
+	private Board board = null;
 
 	private Game(){}
 
@@ -31,6 +32,7 @@ public class Game {
 		this.playerList = new ArrayList<Player>(game.getPlayerList());
 		this.finished = game.isFinished();
 		this.commands = new ArrayList<>(game.getCommands());
+		this.board = game.getBoard();
 	}
 
 	public Game(String name, int size, int gameID) {
@@ -41,6 +43,7 @@ public class Game {
 		this.playerList = new ArrayList<Player>();
 		this.gameID = gameID;
 		this.commands = new ArrayList<>();
+		this.board = new Board(new MapFactory().getMarsRoutes());
 	}
 
 	@JsonIgnore
@@ -186,6 +189,14 @@ public class Game {
 
 	public boolean isFinished() {
 		return finished;
+	}
+
+	public Board getBoard() {
+		return board;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
 	}
 
 	@Override

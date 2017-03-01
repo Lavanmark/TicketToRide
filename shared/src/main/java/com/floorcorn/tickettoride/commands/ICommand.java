@@ -1,6 +1,8 @@
 package com.floorcorn.tickettoride.commands;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.floorcorn.tickettoride.interfaces.IClient;
+import com.floorcorn.tickettoride.model.User;
 
 /**
  * Created by Tyler on 2/23/2017.
@@ -19,10 +21,15 @@ public abstract class ICommand {
 	public int getCmdID() {
 		return commandID;
 	}
+	public void setCmdID(int commandID) {
+		this.commandID = commandID;
+	}
 
 	public int getGameID() {
 		return gameID;
 	}
 
-	public abstract void execute();
+	public abstract boolean forPlayer(User user);
+	public abstract ICommand getCmdFor(User user);
+	public abstract void execute(IClient client);
 }

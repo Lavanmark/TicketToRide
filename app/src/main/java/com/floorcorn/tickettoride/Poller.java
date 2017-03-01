@@ -43,6 +43,7 @@ public class Poller {
 			                    System.out.println("requesting player list");
 			                    Game game = serverProxy.getGame(commandManager.getUser(), commandManager.currentGameID());
 			                    commandManager.setPlayerList(game.getPlayerList());
+			                    //TODO probably make this set the game so on start we have all the basics.
 		                    } catch(BadUserException e) {
 			                    e.printStackTrace();
 			                    view.backToLogin();

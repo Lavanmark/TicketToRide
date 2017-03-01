@@ -1,5 +1,8 @@
 package com.floorcorn.tickettoride.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,16 +12,33 @@ import java.util.List;
 public class Board {
     private List<Route> routeList;
     private List<TrainCard> faceUpCards;
-    private DeckManager deckMan;
-    private int longestPath;
+
+	@JsonIgnore
+    private DeckManager deckManager;
+
+	private int longestPath;
     private int longestPathPlayer;
 
-    public Board(List<Route> routeList, List<TrainCard> faceUpCards, DeckManager deckMan, int longestPath, int longestPathPlayer) {
+
+	private Board(){}
+	/**
+	 * Create a new board with the specified routes in route list
+	 * @param routeList list of routes on the boardmap. Remove double routes prior to call.
+	 */
+    public Board(List<Route> routeList) {
         this.routeList = routeList;
-        this.faceUpCards = faceUpCards;
-        this.deckMan = deckMan;
-        this.longestPath = longestPath;
-        this.longestPathPlayer = longestPathPlayer;
+        this.deckManager = new DeckManager();
+        this.faceUpCards = new ArrayList<>();
+        this.longestPath = 0;
+        this.longestPathPlayer = -1;
+    }
+
+    public Board(Board board) {
+        this.routeList = board.getRoutes();
+        this.faceUpCards = board.getFaceUpCards();
+	    this.deckManager = board.deckManager;
+	    this.longestPath = board.getLongestPath();
+	    this.longestPathPlayer = board.getLongestPathPlayer();
     }
 
     public List<Route> getRoutes(){
@@ -26,57 +46,63 @@ public class Board {
     }
 
     public List<Route> getAvailableRoutes(){
-        return null; //return the routes that are available
-        // how do we tell theyre available?
+	    List<Route> routes = new ArrayList<>();
+	    for(Route route : routeList)
+	        if(!route.isClaimed())
+		        routes.add(route);
+        return routes;
     }
 
     public List<Route> getRoutes(City city){
-        return null;
-        //returns the routes connected to the city
-        //probably have to add that data type to the city class
+	    List<Route> cityRoutes = new ArrayList<>();
+	    for(Route route : routeList)
+	        if(route.hasCity(city))
+		        cityRoutes.add(route);
+        return cityRoutes;
     }
 
     public Route getRoute(int routeID){
+	    for(Route route : routeList)
+	        if(route.getRouteID() == routeID)
+		        return route;
         return null;
-        //make a getRoute(routeID) on the Route class and call it in this funciton and then return the result
     }
 
-    public TrainCard drawFromFaceUp(int pos){
-        return faceUpCards.get(pos); // what the heck is pos?
+    public TrainCard drawFromFaceUp(int position){
+        return faceUpCards.get(position);
     }
 
     public TrainCard drawFromTrainCardDeck(){
-        return null;
-        //where is this?
+        return deckManager.drawFromTrainCardDeck();
     }
 
     public void discard(TrainCard card){
-        //discards - calls from other class's fxn
+        deckManager.discard(card);
     }
 
     public void discard(DestinationCard card){
-        //calls from diff class
+        deckManager.discard(card);
     }
 
     public DestinationCard drawFromDestinationCardDeck(){
-        return null;
-        //calls from diferent class
+        return deckManager.drawFromDestinationCardDeck();
     }
 
     public void updateRoute(Route r){
-        //what is this? updating to claimed or something?
-    }
-
-    public void removeDoubleRoutes(){
-        //for 2 players
+	    for(Route route : routeList) {
+		    if(route.getRouteID() == r.getRouteID()) {
+			    //TODO what happens here?
+		    }
+	    }
     }
 
     public int getLongestPath(){
         return longestPath;
     }
 
-    public void getLongestPathPlayer() {
+    public int getLongestPathPlayer() {
         //calculates the longestPath of any player and sets the longestPath variable
+	    return longestPathPlayer;
     }
 
     private void replaceFaceUpCard(){
@@ -90,5 +116,11 @@ public class Board {
 
     private void resetFaceUp(){
         //if there are >3 wild cards then trash all the face up and replace them with new ones.repeat if necessary
+    }
+    public List<TrainCard> getFaceUpCards() {
+        return faceUpCards;
+    }
+    public void setFaceUpCards(List<TrainCard> cards) {
+        faceUpCards = cards;
     }
  }

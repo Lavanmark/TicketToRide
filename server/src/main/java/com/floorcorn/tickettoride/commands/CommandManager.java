@@ -1,4 +1,4 @@
-package com.floorcorn.tickettoride;
+package com.floorcorn.tickettoride.commands;
 
 
 import com.floorcorn.tickettoride.commands.ICommand;
@@ -7,6 +7,7 @@ import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.serverModel.ClientProxy;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 /**
  * Created by Tyler on 2/23/2017.
@@ -27,7 +28,18 @@ public class CommandManager {
 		if(!game.isPlayer(user.getUserID()))
 			return null;
 
-		return null;
+		ArrayList<ICommand> commands = game.getCommands();
+		ListIterator<ICommand> li = commands.listIterator(lastCommand);
+
+		ArrayList<ICommand> newList = new ArrayList<>();
+		while(li.hasNext()) {
+			ICommand cmd = li.next();
+			if(cmd.forPlayer(user))
+				newList.add(cmd);
+			else
+				newList.add(cmd.getCmdFor(user));
+		}
+		return newList;
 	}
 
 	public ArrayList<ICommand> doCommand(User user, Game game, ICommand command) {
@@ -39,7 +51,10 @@ public class CommandManager {
 			//TODO if there are actions they can do not on their turn then allow them. such as discard destination cards
 			return null;
 		}
-
+		clientProxy.setGameToModify(game);
+		//if(clientProxy.getLastExecutedCommand() <)
+		command.execute(clientProxy);
+		//TODO probably need to get the game back to the model and how do we get a list from this since we don't know the last command.
 		return null;
 	}
 }
