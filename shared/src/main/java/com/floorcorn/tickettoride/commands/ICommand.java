@@ -32,6 +32,11 @@ public abstract class ICommand {
 		return gameID;
 	}
 
+	//TODO update everywhere to use this.
+	public void setGameID(int gameID) {
+		this.gameID = gameID;
+	}
+
 	public abstract boolean forPlayer(User user);
 	public abstract ICommand getCmdFor(User user);
 	public abstract void execute(IClient client);

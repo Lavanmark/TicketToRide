@@ -92,6 +92,13 @@ public class Game {
 		return commands.get(commands.size() - 1).getCmdID();
 	}
 
+	@JsonIgnore
+	public ICommand getLastestCommand() {
+		if(!commands.isEmpty())
+			return commands.get(commands.size() - 1);
+		return null;
+	}
+
 	/**
 	 * adds a player to the game
 	 * @param user full user object

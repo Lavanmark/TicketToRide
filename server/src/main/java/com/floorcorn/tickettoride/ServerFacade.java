@@ -89,8 +89,10 @@ public class ServerFacade implements IServer {
 
 	@Override
 	public GameInfo joinGame(User user, int gameID, PlayerColor color) throws BadUserException, GameActionException {
-		if((user = model.authenticate(user.getToken())) != null)
+		if((user = model.authenticate(user.getToken())) != null) {
+			//TODO check if the game shouldve started and if so get those initial commands going.
 			return model.joinGame(user, gameID, color);
+		}
 		throw new BadUserException("Could not Authenticate User!");
 	}
 
