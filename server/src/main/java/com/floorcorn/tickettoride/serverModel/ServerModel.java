@@ -2,13 +2,19 @@ package com.floorcorn.tickettoride.serverModel;
 
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
+import com.floorcorn.tickettoride.model.Board;
+import com.floorcorn.tickettoride.model.DeckManager;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.MapFactory;
+import com.floorcorn.tickettoride.model.Route;
+import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.PlayerColor;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,11 +26,13 @@ public class ServerModel {
 	private Set<Game> games; // Stores all games ever. If game is canceled or ends, it remains here with the players so users can get this info.
 	private Set<User> users; // Stores all users ever.
 	private SecureRandom random;
+	private MapFactory mapFactory;
 
 	public ServerModel() {
 		games = new HashSet<Game>();
 		users = new HashSet<User>();
 		random = new SecureRandom();
+		mapFactory = new MapFactory();
 	}
 
 	private void generateToken(User u) {
@@ -106,13 +114,24 @@ public class ServerModel {
 	 * @throws GameActionException
 	 */
 	public GameInfo joinGame(User user, int gameID, PlayerColor color) throws GameActionException {
+		Game joinedGame = null;
 		for(Game g : games) {
 			if(g.getGameID() == gameID) {
 				g.addPlayer(user, color);
-				return g.getGameInfo();
+				joinedGame = g;
+				break;
 			}
 		}
-		throw new GameActionException("Could not join game!");
+
+		if(joinedGame == null)
+			throw new GameActionException("Could not join game!");
+
+		if(joinedGame.hasStarted() && !joinedGame.isFinished()) {
+			Board board = new Board(mapFactory.getMarsRoutes());
+			board.setDeckManager(new DeckManager());
+			joinedGame.setBoard(board);
+		}
+		return joinedGame.getGameInfo();
 	}
 
 	/**

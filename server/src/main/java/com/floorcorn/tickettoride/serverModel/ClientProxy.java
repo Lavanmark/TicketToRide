@@ -13,7 +13,9 @@ import java.util.List;
  */
 
 public class ClientProxy implements IClient {
+
 	private Game gameToModify = null;
+
 	public Game getGameToModify() {
 		return gameToModify;
 	}
@@ -21,13 +23,19 @@ public class ClientProxy implements IClient {
 		gameToModify = game;
 	}
 
+
+
 	@Override
 	public void setPlayerList(ArrayList<Player> players) {
-
+		//Do nothing.
 	}
 
 	@Override
 	public void setFaceUpDeck(List<TrainCard> faceUpDeck) {
+		//Do nothing.
+	}
 
+	public int getLastExecutedCommand() {
+		return gameToModify.getLatestCommandID();
 	}
 }

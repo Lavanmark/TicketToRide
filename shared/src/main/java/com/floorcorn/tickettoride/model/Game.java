@@ -14,13 +14,19 @@ import java.util.List;
 
 public class Game {
 
-	private int gameID = -1;
+	public static final int NO_GAME_ID = -1;
+	public static final int INITIAL_TRAIN_CARS = 45;
+	public static final int INITIAL_DESTINATION_CARDS = 3;
+	public static final int INITIAL_TRAIN_CARDS = 4;
+
+	private int gameID = NO_GAME_ID;
 	private ArrayList<Player> playerList = null;
 	private int gameSize = -1;
 	private String name = null;
-	private ArrayList<ICommand> commands = null;
-
 	private boolean finished = false;
+
+	private ArrayList<ICommand> commands = null;
+	private Board board = null;
 
 	private Game(){}
 
@@ -31,6 +37,7 @@ public class Game {
 		this.playerList = new ArrayList<Player>(game.getPlayerList());
 		this.finished = game.isFinished();
 		this.commands = new ArrayList<>(game.getCommands());
+		this.board = new Board(game.getBoard());
 	}
 
 	public Game(String name, int size, int gameID) {
@@ -41,11 +48,25 @@ public class Game {
 		this.playerList = new ArrayList<Player>();
 		this.gameID = gameID;
 		this.commands = new ArrayList<>();
+		this.board = new Board(new MapFactory().getMarsRoutes());
+		this.board.setDeckManager(new DeckManager());
 	}
 
 	@JsonIgnore
 	public GameInfo getGameInfo() {
 		return new GameInfo(this);
+	}
+
+	@JsonIgnore
+	public Game getCensoredGame(User user) {
+		Game game = new Game(this);
+		ArrayList<Player> censoredPlayers = new ArrayList<>();
+		for(Player p : playerList)
+			censoredPlayers.add(p.getCensoredPlayer(user));
+		game.setPlayerList(censoredPlayers);
+		game.board.setDeckManager(null);
+		game.commands = new ArrayList<>();
+		return game;
 	}
 
 	public void setPlayerList(ArrayList<Player> newPlayers) {
@@ -67,8 +88,15 @@ public class Game {
 	@JsonIgnore
 	public int getLatestCommandID() {
 		if(commands.size() <= 0)
-			return -1;
-		return commands.get(commands.size()-1).getCmdID();
+			return ICommand.NO_CMD_ID;
+		return commands.get(commands.size() - 1).getCmdID();
+	}
+
+	@JsonIgnore
+	public ICommand getLastestCommand() {
+		if(!commands.isEmpty())
+			return commands.get(commands.size() - 1);
+		return null;
 	}
 
 	/**
@@ -186,6 +214,14 @@ public class Game {
 
 	public boolean isFinished() {
 		return finished;
+	}
+
+	public Board getBoard() {
+		return board;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
 	}
 
 	@Override
