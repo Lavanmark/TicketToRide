@@ -2,15 +2,14 @@ package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.commands.CommandManager;
 import com.floorcorn.tickettoride.commands.ICommand;
-import com.floorcorn.tickettoride.commands.InitializeGameCmd;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.interfaces.IServer;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
-import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.PlayerColor;
+import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.serverModel.ServerModel;
 
 import java.util.ArrayList;
