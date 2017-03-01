@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#3797AF</color>
+    <color name="colorPrimaryDark">#225E6D</color>
+    <color name="colorAccent">#AF4F37</color>
+
+    <color name="colorMarsGrey">#8C8C8C</color>
+    <color name="colorMars">#AF4F37</color>
+    <color name="colorMarsDark">#6D3122</color>
+    <color name="colorMarsLight">#C37B69</color>
+    <color name="colorMarsBright">#f46242</color>
+
+    <color name="colorMarsComplementary">#3797AF</color>
+    <color name="colorMarsComplementaryDark">#225E6D</color>
+    <color name="colorMarsComplementaryLight">#82BECD</color>
+    <color name="colorMarsComplementarySuperLight">#B4D8E1</color>
+
     <color name="color_text_default">#000000</color>
 </resources>
