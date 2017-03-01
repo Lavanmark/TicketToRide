@@ -18,19 +18,75 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.model.Board;
+import com.floorcorn.tickettoride.model.DestinationCard;
+import com.floorcorn.tickettoride.model.Player;
+import com.floorcorn.tickettoride.model.Route;
+import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 public class BoardmapActivity extends AppCompatActivity implements IBoardmapView, NavigationView.OnNavigationItemSelectedListener   {
 
 	BoardmapPresenter presenter = null;
+	private Board boardmap;
 
+	// buttons used to open the drawers
+	private Button drawCardsButton;
+	private Button drawDestinationTicketsButton;
+	private Button claimRouteButton;
+	private Button displayHandButton;
+
+
+
+	/*
+	- presenter:IPresenter
+	- boardmap:Board
+	- drawCardsButton:Button
+	- drawDestinationTicketsButton:Button
+	- placeTrainsButton:Button ???
+	- routeSelectionButton:Button ???
+	- faceUpCardViews:ArrayList<Image>
+	- playerIcons:Set<Image>
+	- placeRouteDrawer:Drawer
+	- drawCardsDrawer:Drawer
+	- chooseDestinationCardDrawer:Drawer
+	- faceUpCards:ArrayList<TrainCard>
+	- drawTrainCardDeck:Image
+	- drawDestinationCardDeck:Button/Image
+	- playerTrainCard:ArrayList<TrainCard>
+	- playerPossibleRoutes:Set<Route>
+
+
+	void setBoard(Board board);
+	void setPlayerTrainCardList(ArrayList<TrainCard> trainCardList);
+	void setPlayerDestinationCardList(Set<DestinationCard> destinationCardList);
+	void setFaceUpTrainCards(ArrayList<TrainCard> faceUpTrainCards);
+	void setDestinationCardChoices(Set<DestinationCard> destinationCardChoices);
+	void setPlayerTurn(Player player);
+	void setScoreboard(Set<Player> playerSet);
+	void setDestinationCardCompleted(DestinationCard destinationCard);
+	void setPlayerPossibleRouteList(Set<Route> routeList);
+	Card getCardDrawn();
+	DestinationCard getDestinationCardPicked();
+	void markRouteClaimed(Route claimed);
+	void displayDrawingDeckDrawer();
+	void hideDrawingDeckDrawer();
+	void displayDestinationCardDrawer();
+
+
+
+	 */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_boardmap);
+
 
         presenter = new BoardmapPresenter();
 	    presenter.setView(this);
@@ -44,56 +100,49 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         if(!presenter.gameInProgress()) {
 	        launchPreGame();
         }
+		else{
+			final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
+			final FrameLayout DRAWER_HOLDER = (FrameLayout) findViewById(R.id.left_drawer_holder);
 
-		final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.boardmapActivity);
-		final FrameLayout drawer_holder = (FrameLayout) findViewById(R.id.nav_view);
+			drawDestinationTicketsButton = (Button)findViewById(R.id.open_dest_button);
+			drawDestinationTicketsButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					displayDestinationCardDrawer(DRAWER, DRAWER_HOLDER);
 
-		Button mButton1 = (Button)findViewById(R.id.open_dest_button);
-		mButton1.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				View layout = inflater.inflate(R.layout.drawer_destinations, null);
-				drawer_holder.removeAllViews();
-				drawer_holder.addView(layout);
-				drawer.openDrawer(GravityCompat.START);
-			}
-		});
+				}
+			});
 
-		Button mButton2 = (Button)findViewById(R.id.open_card_button);
-		mButton2.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				View layout = inflater.inflate(R.layout.drawer_draw_cards, null);
-				drawer_holder.removeAllViews();
-				drawer_holder.addView(layout);
-				drawer.openDrawer(GravityCompat.START);
-			}
-		});
+			drawCardsButton = (Button)findViewById(R.id.open_card_button);
+			drawCardsButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					displayDrawingDeckDrawer(DRAWER, DRAWER_HOLDER);
+
+				}
+			});
 
 
 
-		Button mButton3 = (Button)findViewById(R.id.open_route_button);
-		mButton3.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
+			claimRouteButton = (Button)findViewById(R.id.open_route_button);
+			claimRouteButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					displayDrawingDeckDrawer(DRAWER, DRAWER_HOLDER);
+				}
+			});
 
-				LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				View layout = inflater.inflate(R.layout.drawer_place_routes, null);
-				drawer_holder.removeAllViews();
-				drawer_holder.addView(layout);
-				drawer.openDrawer(GravityCompat.START);
-			}
-		});
+			displayHandButton = (Button)findViewById(R.id.open_hand_button);
+			displayHandButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					DRAWER.openDrawer(GravityCompat.END); //Gravity End is on the right side
+				}
+			});
 
-		Button mButton4 = (Button)findViewById(R.id.open_hand_button);
-		mButton4.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				drawer.openDrawer(GravityCompat.END);
-			}
-		});
+		}
+
+
 
 
 
@@ -135,6 +184,104 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			presenter.startPollingCommands();
 			((TextView)findViewById(R.id.gameStartedText)).setText("Game Started!");
 		}
+	}
+
+	@Override
+	public void setBoard(Board board) {
+
+	}
+
+	@Override
+	public void setPlayerTrainCardList(ArrayList<TrainCard> trainCardList) {
+
+	}
+
+	@Override
+	public void setPlayerDestinationCardList(Set<DestinationCard> destinationCardList) {
+
+	}
+
+	@Override
+	public void setFaceUpTrainCards(ArrayList<TrainCard> faceUpTrainCards) {
+
+	}
+
+	@Override
+	public void setDestinationCardChoices(Set<DestinationCard> destinationCardChoices) {
+
+	}
+
+	@Override
+	public void setPlayerTurn(Player player) {
+
+	}
+
+	@Override
+	public void setScoreboard(Set<Player> playerSet) {
+
+	}
+
+	@Override
+	public void setDestinationCardCompleted(DestinationCard destinationCard) {
+
+	}
+
+	@Override
+	public void setPlayerPossibleRouteList(Set<Route> routeList) {
+
+	}
+
+	@Override
+	public DestinationCard getDestinationCardPicked() {
+		return null;
+	}
+
+	@Override
+	public void markRouteClaimed(Route claimed) {
+
+	}
+
+	@Override
+	public void displayDrawingDeckDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER) {
+		displayLeftDrawer(R.layout.drawer_draw_cards, DRAWER, DRAWER_HOLDER);
+	}
+
+	@Override
+	public void hideDrawingDeckDrawer() {
+
+	}
+
+	/**
+	 *
+	 * @param DRAWER The layout of the Boardmap Activity
+	 * @param DRAWER_HOLDER The layout of the frame that opens the drawer
+     */
+	@Override
+	public void displayDestinationCardDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER) {
+		displayLeftDrawer(R.layout.drawer_destinations, DRAWER, DRAWER_HOLDER);
+	}
+
+	@Override
+	public void hideDestinationDrawer() {
+
+	}
+
+	@Override
+	public void displayClaimRouteDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER) {
+		displayLeftDrawer(R.layout.drawer_place_routes, DRAWER, DRAWER_HOLDER);
+	}
+
+	@Override
+	public void hideRouteDrawer() {
+
+	}
+
+	private void displayLeftDrawer(int drawerID, DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER){
+		LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View layout = inflater.inflate(drawerID, null);
+		DRAWER_HOLDER.removeAllViews();
+		DRAWER_HOLDER.addView(layout);
+		DRAWER.openDrawer(GravityCompat.START);
 	}
 
 	@Override
