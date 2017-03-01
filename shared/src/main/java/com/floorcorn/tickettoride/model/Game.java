@@ -1,10 +1,12 @@
 package com.floorcorn.tickettoride.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Tyler on 2/2/2017.
@@ -16,11 +18,11 @@ public class Game {
 	private ArrayList<Player> playerList = null;
 	private int gameSize = -1;
 	private String name = null;
-
-
 	private ArrayList<ICommand> commands = null;
 
 	private boolean finished = false;
+
+	private Game(){}
 
 	public Game(Game game) {
 		this.gameID = game.getGameID();
@@ -31,14 +33,6 @@ public class Game {
 		this.commands = new ArrayList<>(game.getCommands());
 	}
 
-	public Game(String name, int size) {
-		this.name = name;
-		if(size < 2) size = 2;
-		if(size > 5) size = 5;
-		this.gameSize = size;
-		this.playerList = new ArrayList<Player>();
-	}
-
 	public Game(String name, int size, int gameID) {
 		this.name = name;
 		if(size < 2) size = 2;
@@ -46,13 +40,17 @@ public class Game {
 		this.gameSize = size;
 		this.playerList = new ArrayList<Player>();
 		this.gameID = gameID;
+		this.commands = new ArrayList<>();
 	}
 
+	@JsonIgnore
 	public GameInfo getGameInfo() {
 		return new GameInfo(this);
 	}
 
 	public void setPlayerList(ArrayList<Player> newPlayers) {
+		if(playerList == null)
+			playerList = new ArrayList<>();
 		this.playerList.clear();
 		this.playerList.addAll(newPlayers);
 	}
@@ -66,8 +64,9 @@ public class Game {
 			this.commands.add(command);
 	}
 
+	@JsonIgnore
 	public int getLatestCommandID() {
-		if(commands.size() < 0)
+		if(commands.size() <= 0)
 			return -1;
 		return commands.get(commands.size()-1).getCmdID();
 	}

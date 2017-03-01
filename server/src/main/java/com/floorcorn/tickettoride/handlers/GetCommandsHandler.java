@@ -37,9 +37,7 @@ public class GetCommandsHandler extends HandlerBase {
 			}
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			System.out.println("headers sent");
 			sendResponseBody(httpExchange, results);
-			System.out.println("body sent");
 		} catch(IOException e) {
 			e.printStackTrace();
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);

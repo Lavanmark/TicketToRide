@@ -65,14 +65,6 @@ public class LobbyPresenter implements IPresenter, Observer {
         }
     }
 
-    public Set<GameInfo> getGameList(User user){
-        return UIFacade.getInstance().getGames(user);
-    }
-
-    public GameInfo getGameInfo(int gameID){ //user clicks on game on the list and it reports back the info of the game. returnt eh game object
-        return UIFacade.getInstance().getGameInfo(gameID);
-    }
-
 	public void setCurrentGame(GameInfo game) {
 		if(game != null) {
             try {
