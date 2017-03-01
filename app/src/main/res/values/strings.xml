@@ -65,4 +65,21 @@
     <string name="tab">\u0009</string>
     <string name="refresh_pre_game">Refresh Player List</string>
 
+    <!-- Strings related to boardmap -->
+
+    <string name="green">Green</string>
+    <string name="yellow">Yellow</string>
+    <string name="orange">Orange</string>
+    <string name="red">Red</string>
+    <string name="black">Black</string>
+    <string name="blue">Blue</string>
+    <string name="white">White</string>
+    <string name="purple">Purple</string>
+    <string name="default_card_count">0</string>
+    <string name="default_train_count">45</string>
+    <string name="train_count_label">My Trains</string>
+    <string name="card_count_label">My Cards</string>
+    <string name="destination_count_label">My Destinations</string>
+
+
 </resources>
