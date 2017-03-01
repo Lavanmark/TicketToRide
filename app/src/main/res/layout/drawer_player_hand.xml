@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:layout_gravity="bottom"
+
+    android:id="@+id/drawer_player_hand">
+
+
+
+    <TextView
+        android:text="Your Cards"
+        android:textSize="16dp"
+        android:textColor="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/side_nav_bar"
+        android:paddingBottom="40dp"
+        android:paddingTop="40dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"/>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:dividerPadding="16dp">
+
+        <TextView
+            android:text="@string/card_count_label"
+            android:textSize="14dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:rowCount="8">
+                <TextView
+                    android:text="@string/red"
+                    android:id="@+id/red_card_label"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="4dp"
+                    android:textColor="@android:color/holo_red_dark"/>
+                <TextView
+                    android:text="@string/default_card_count"
+                    android:id="@+id/red_card_count"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="@string/yellow"
+                    android:id="@+id/yellow_card_label"
+                    android:paddingBottom="2dp"
+                    android:textColor="@android:color/holo_orange_light"/>
+                <TextView
+                    android:text="@string/default_card_count"
+                    android:id="@+id/yellow_card_count"
+                    android:paddingBottom="2dp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="@string/orange"
+                    android:id="@+id/orange_card_label"
+                    android:paddingBottom="2dp"
+                    android:textColor="@android:color/holo_orange_dark"/>
+                <TextView
+                    android:text="@string/default_card_count"
+                    android:id="@+id/orange_card_count"
+                    android:paddingBottom="2dp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="Green"
+                    android:id="@+id/green_card_label"
+                    android:paddingBottom="2dp"
+                    android:textColor="@android:color/holo_green_dark"/>
+                <TextView
+                    android:text="@string/default_card_count"
+                    android:id="@+id/green_card_count"
+                    android:paddingBottom="2dp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="@string/blue"
+                    android:id="@+id/blue_card_label"
+                    android:paddingBottom="2dp"
+                    android:textColor="@android:color/holo_blue_dark"/>
+                <TextView
+                    android:text="@string/default_card_count"
+                    android:id="@+id/blue_card_count"
+                    android:paddingBottom="2dp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="@string/purple"
+                    android:id="@+id/purple_card_label"
+                    android:paddingBottom="2dp"
+                    android:textColor="@android:color/holo_purple"/>
+                <TextView
+                    android:text="@string/default_card_count"
+                    android:id="@+id/purple_card_count"
+                    android:paddingBottom="2dp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="@string/black"
+                    android:id="@+id/black_card_label"
+                    android:paddingBottom="2dp"
+                    />
+                <TextView
+                    android:text="@string/default_card_count"
+                    android:id="@+id/black_card_count"
+                    android:paddingBottom="2dp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="@string/white"
+                    android:id="@+id/white_card_label"
+                    android:paddingBottom="2dp"
+                    android:textColor="@color/colorMarsGrey"/>
+                <TextView
+                    android:text="@string/default_card_count"
+                    android:id="@+id/white_card_count"
+                    android:paddingBottom="2dp"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:text="@string/train_count_label"
+                    android:id="@+id/train_label"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="4dp"/>
+                <TextView
+                    android:text="@string/default_train_count"
+                    android:id="@+id/train_count"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="4dp"
+                    android:layout_gravity="center"/>
+            </GridLayout>
+
+        <TextView
+            android:text="@string/destination_count_label"
+            android:textSize="14dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
