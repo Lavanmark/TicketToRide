@@ -3,8 +3,10 @@ package com.floorcorn.tickettoride.serverModel;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.model.Board;
+import com.floorcorn.tickettoride.model.DeckManager;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.MapFactory;
 import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.User;
@@ -24,14 +26,13 @@ public class ServerModel {
 	private Set<Game> games; // Stores all games ever. If game is canceled or ends, it remains here with the players so users can get this info.
 	private Set<User> users; // Stores all users ever.
 	private SecureRandom random;
-
-	private final ArrayList<Route> marsRoutes;
+	private MapFactory mapFactory;
 
 	public ServerModel() {
 		games = new HashSet<Game>();
 		users = new HashSet<User>();
 		random = new SecureRandom();
-		marsRoutes = new ArrayList<>();
+		mapFactory = new MapFactory();
 	}
 
 	private void generateToken(User u) {
@@ -121,11 +122,13 @@ public class ServerModel {
 				break;
 			}
 		}
+
 		if(joinedGame == null)
 			throw new GameActionException("Could not join game!");
-		if(joinedGame.hasStarted() && !joinedGame.isFinished())
-		{
-			Board board = new Board(marsRoutes);
+
+		if(joinedGame.hasStarted() && !joinedGame.isFinished()) {
+			Board board = new Board(mapFactory.getMarsRoutes());
+			board.setDeckManager(new DeckManager());
 			joinedGame.setBoard(board);
 		}
 		return joinedGame.getGameInfo();

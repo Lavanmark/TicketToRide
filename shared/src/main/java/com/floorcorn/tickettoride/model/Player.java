@@ -13,17 +13,18 @@ import java.util.Map;
 
 public class Player {
 
+	public static final int NO_PLAYER_ID = -1;
 	//info
-	private int playerID = -1;
-	private int gameID = -1;
-	private int userID = -1;
+	private int playerID = NO_PLAYER_ID;
+	private int gameID = Game.NO_GAME_ID;
+	private int userID = User.NO_USER_ID;
 	private PlayerColor color = null;
 	private String name = null;
 
 	//non info
 	private boolean turn = false;
 	private int score = 0;
-	private int trainCarsLeft = 0;
+	private int trainCarsLeft = Game.INITIAL_TRAIN_CARS;
 	private int totalTrainCards = 0;
 	private int totalDestinationCards = 0;
 	private List<DestinationCard> destinationCards = null;
@@ -54,10 +55,10 @@ public class Player {
 		this.name = name;
 		this.color = color;
 		this.gameID = gameID;
-		this.playerID = -1;
+		this.playerID = NO_PLAYER_ID;
 		this.turn = false;
 		this.score = 0;
-		this.trainCarsLeft = 45;
+		this.trainCarsLeft = Game.INITIAL_TRAIN_CARS;
 		this.totalTrainCards = 0;
 		this.totalDestinationCards = 0;
 		this.destinationCards = new ArrayList<>();

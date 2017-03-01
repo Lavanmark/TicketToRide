@@ -2,6 +2,7 @@ package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.commands.CommandManager;
 import com.floorcorn.tickettoride.commands.ICommand;
+import com.floorcorn.tickettoride.commands.InitializeGameCmd;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
@@ -52,7 +53,7 @@ public class ServerFacade implements IServer {
 	@Override
 	public Game getGame(User user, int gameID) throws BadUserException {
 		if(model.authenticate(user.getToken()) != null)
-			return model.getGame(gameID);
+			return model.getGame(gameID).getCensoredGame(user);
 		throw new BadUserException("Could not Authenticate User!");
 	}
 

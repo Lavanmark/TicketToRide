@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +11,10 @@ import java.util.List;
  */
 
 public class Board {
+	public static final int FACEUP_DECK_SIZE = 5;
+
     private List<Route> routeList;
-    private List<TrainCard> faceUpCards;
+    private TrainCard[] faceUpCards;
 
 	@JsonIgnore
     private DeckManager deckManager;
@@ -27,19 +30,28 @@ public class Board {
 	 */
     public Board(List<Route> routeList) {
         this.routeList = routeList;
-        this.deckManager = new DeckManager();
-        this.faceUpCards = new ArrayList<>();
+        this.faceUpCards = new TrainCard[FACEUP_DECK_SIZE];
         this.longestPath = 0;
         this.longestPathPlayer = -1;
+	    this.deckManager = null;
     }
 
     public Board(Board board) {
         this.routeList = board.getRoutes();
-        this.faceUpCards = board.getFaceUpCards();
-	    this.deckManager = board.deckManager;
+	    this.faceUpCards = new TrainCard[FACEUP_DECK_SIZE];
+	    try {
+		    setFaceUpCards(board.getFaceUpCards());
+	    } catch(GameActionException e) {
+		    System.err.println(e.getMessage());
+	    }
 	    this.longestPath = board.getLongestPath();
 	    this.longestPathPlayer = board.getLongestPathPlayer();
+	    this.deckManager = board.deckManager;
     }
+
+	public void setDeckManager(DeckManager dm) {
+		deckManager = dm;
+	}
 
     public List<Route> getRoutes(){
         return routeList;
@@ -68,24 +80,34 @@ public class Board {
         return null;
     }
 
-    public TrainCard drawFromFaceUp(int position){
-        return faceUpCards.get(position);
+    public TrainCard drawFromFaceUp(int position) throws GameActionException {
+	    if(faceUpCards.length >= position || position < 0)
+		    throw new GameActionException("Position not accessible in Face Up Cards.");
+        return faceUpCards[position];
     }
 
-    public TrainCard drawFromTrainCardDeck(){
-        return deckManager.drawFromTrainCardDeck();
+    public TrainCard drawFromTrainCardDeck() throws GameActionException {
+	    if(deckManager != null)
+            return deckManager.drawFromTrainCardDeck();
+	    throw new GameActionException("No Deck Manager!");
     }
 
-    public void discard(TrainCard card){
-        deckManager.discard(card);
+    public void discard(TrainCard card) throws GameActionException {
+        if(deckManager != null)
+	        deckManager.discard(card);
+	    throw new GameActionException("No Deck Manager!");
     }
 
-    public void discard(DestinationCard card){
-        deckManager.discard(card);
+    public void discard(DestinationCard card) throws GameActionException {
+        if(deckManager != null)
+	        deckManager.discard(card);
+	    throw new GameActionException("No Deck Manager!");
     }
 
-    public DestinationCard drawFromDestinationCardDeck(){
-        return deckManager.drawFromDestinationCardDeck();
+    public DestinationCard drawFromDestinationCardDeck() throws GameActionException {
+	    if(deckManager != null)
+            return deckManager.drawFromDestinationCardDeck();
+	    throw new GameActionException("No Deck Manager!");
     }
 
     public void updateRoute(Route r){
@@ -106,6 +128,7 @@ public class Board {
     }
 
     private void replaceFaceUpCard(){
+
         //this replaces a card that was drawn from teh face up pile
     }
 
@@ -117,10 +140,14 @@ public class Board {
     private void resetFaceUp(){
         //if there are >3 wild cards then trash all the face up and replace them with new ones.repeat if necessary
     }
-    public List<TrainCard> getFaceUpCards() {
+    public TrainCard[] getFaceUpCards() {
         return faceUpCards;
     }
-    public void setFaceUpCards(List<TrainCard> cards) {
-        faceUpCards = cards;
+    public void setFaceUpCards(TrainCard[] cards) throws GameActionException {
+        if(cards != null && cards.length == FACEUP_DECK_SIZE)
+	        for(int i = 0; i < FACEUP_DECK_SIZE; i++)
+		        faceUpCards[i] = cards[i];
+	    else
+	        throw new GameActionException("List of cards was not correct");
     }
  }

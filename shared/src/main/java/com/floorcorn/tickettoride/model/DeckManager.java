@@ -24,6 +24,8 @@ public class DeckManager {
             }
         }
 
+	    destinationCardDeck = new MapFactory().getMarsDestinationCards();
+
 	    shuffleAllCards();
     }
 
@@ -62,6 +64,7 @@ public class DeckManager {
     }
 
     private void shuffleList(List deck){
+	    //Fisher-Yates shuffle
 	    Random rn = new Random();
 	    for(int i = 0; i < deck.size()-2; i++){
 		    int j = i + (rn.nextInt() % (deck.size() - i + 1));
