@@ -51,10 +51,14 @@ public class CommandManager {
 			//TODO if there are actions they can do not on their turn then allow them. such as discard destination cards
 			return null;
 		}
+		//TODO add chain reaction commands.
 		clientProxy.setGameToModify(game);
-		//if(clientProxy.getLastExecutedCommand() <)
+		int lastCommandClient = command.getCmdID();
+		command.setCmdID(clientProxy.getLastExecutedCommand());
 		command.execute(clientProxy);
-		//TODO probably need to get the game back to the model and how do we get a list from this since we don't know the last command.
-		return null;
+		clientProxy.addCommandToGame(command);
+
+
+		return getCommandsSince(user, game, lastCommandClient);
 	}
 }
