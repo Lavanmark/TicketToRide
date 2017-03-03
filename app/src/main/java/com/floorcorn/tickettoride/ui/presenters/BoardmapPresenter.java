@@ -48,15 +48,12 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	public void stopPolling() {
 		UIFacade.getInstance().stopPolling();
 	}
-
 	public boolean gameInProgress() {
 		return game.hasStarted();
 	}
-
 	public void setUser(User user) {
 		this.user = user;
 	}
-
 	public void setGame(Game game) {
 		this.game = game;
 	}
@@ -69,4 +66,8 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	public void register() {
 		UIFacade.getInstance().registerObserver(this);
 	}
+
+
+
+
 }

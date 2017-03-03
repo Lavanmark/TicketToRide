@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="wrap_content"
+    android:layout_width="200dp"
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:id="@+id/drawer_draw_cards">
@@ -22,7 +22,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="160dp"
         android:layout_height="match_parent"
         android:paddingBottom="16dp"
         android:paddingTop="16dp"
