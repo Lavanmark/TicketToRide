@@ -2,6 +2,7 @@ package com.floorcorn.tickettoride.commands;
 
 
 import com.floorcorn.tickettoride.commands.ICommand;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.serverModel.ClientProxy;
@@ -22,13 +23,16 @@ public class CommandManager {
 		clientProxy = new ClientProxy();
 	}
 
-	public ArrayList<ICommand> getCommandsSince(User user, Game game, int lastCommand) {
+	public ArrayList<ICommand> getCommandsSince(User user, Game game, int lastCommand) throws GameActionException {
 		if(game == null)
-			return null;
+			throw new GameActionException("No game to get commands from!");
 		if(!game.isPlayer(user.getUserID()))
-			return null;
-
+			throw new GameActionException("User is not a player!");
 		ArrayList<ICommand> commands = game.getCommands();
+
+		if(lastCommand < 0 || lastCommand > commands.size())
+			return new ArrayList<>(); //TODO I don't know if this is the best solution...
+
 		ListIterator<ICommand> li = commands.listIterator(lastCommand);
 
 		ArrayList<ICommand> newList = new ArrayList<>();
@@ -42,14 +46,14 @@ public class CommandManager {
 		return newList;
 	}
 
-	public ArrayList<ICommand> doCommand(User user, Game game, ICommand command) {
+	public ArrayList<ICommand> doCommand(User user, Game game, ICommand command) throws GameActionException {
 		if(game == null)
-			return null;
+			throw new GameActionException("No game to get commands from!");
 		if(!game.isPlayer(user.getUserID()))
-			return null;
+			throw new GameActionException("User is not a player!");
 		if(!game.getPlayer(user).isTurn()) {
 			//TODO if there are actions they can do not on their turn then allow them. such as discard destination cards
-			return null;
+			throw new GameActionException("Not your turn!");
 		}
 		//TODO add chain reaction commands.
 		clientProxy.setGameToModify(game);
@@ -57,7 +61,6 @@ public class CommandManager {
 		command.setCmdID(clientProxy.getLastExecutedCommand());
 		command.execute(clientProxy);
 		clientProxy.addCommandToGame(command);
-
 
 		return getCommandsSince(user, game, lastCommandClient);
 	}

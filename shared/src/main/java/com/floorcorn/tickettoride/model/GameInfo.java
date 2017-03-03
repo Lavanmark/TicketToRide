@@ -104,7 +104,6 @@ public class GameInfo {
 	 * get a list of available PlayerColors
 	 * @return List of PlayerColors not already in use
 	 */
-	@JsonIgnore
 	public List<PlayerColor> getAvailableColors() {
 		List<PlayerColor> all = Arrays.asList(PlayerColor.BLUE,
 				PlayerColor.BLACK, PlayerColor.GREEN,

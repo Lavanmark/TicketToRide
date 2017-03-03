@@ -59,13 +59,13 @@ public class ServerFacade implements IServer {
 	@Override
 	public ArrayList<ICommand> getCommandsSince(User user, int gameID, int lastCommand) throws BadUserException, GameActionException {
 		if((user = model.authenticate(user.getToken())) != null) {
-			return commandManager.getCommandsSince(user, model.getGame(gameID),lastCommand);
+			return commandManager.getCommandsSince(user, model.getGame(gameID), lastCommand);
 		}
 		throw new BadUserException("Could not Authenticate User!");
 	}
 
 	@Override
-	public ArrayList<ICommand> sendCommand(User user, ICommand command) throws BadUserException, GameActionException {
+	public ArrayList<ICommand> doCommand(User user, ICommand command) throws BadUserException, GameActionException {
 		if((user = model.authenticate(user.getToken())) != null) {
 			return commandManager.doCommand(user, model.getGame(command.getGameID()), command);
 		}

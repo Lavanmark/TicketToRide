@@ -11,6 +11,8 @@ import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Tyler on 2/2/2017.
@@ -44,8 +46,8 @@ public class CreateGameHandler extends HandlerBase {
 			try {
 				gi = ServerFacade.getInstance().createGame(new User(token), gi.getName(), gi.getGameSize());
 				results = new Results(true, gi);
-				System.out.println("game created");
-				System.out.println(gi.getGameID());
+				Logger.getAnonymousLogger().log(Level.INFO, "game created");
+				//System.out.println(gi.getGameID());
 			} catch(BadUserException e) {
 				e.printStackTrace();
 				results = new Results(false, e);

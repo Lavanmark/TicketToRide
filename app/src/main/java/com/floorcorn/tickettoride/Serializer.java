@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +32,8 @@ public class Serializer {
     private Serializer() {
 	    mapper = new ObjectMapper();
 	    mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.OBJECT_AND_NON_CONCRETE);
+	    mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
+	    mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
     }
 
     /**
@@ -56,7 +60,7 @@ public class Serializer {
      */
     public Results deserializeResults(String resultsJson) {
 	    try {
-		    return mapper.readValue(resultsJson, new TypeReference<Results>(){});
+		    return mapper.readValue(resultsJson, Results.class);
 	    } catch(IOException e) {
 		    e.printStackTrace();
 	    }
@@ -70,7 +74,7 @@ public class Serializer {
 	 */
 	public User deserializeUser(String userJson) {
 		try {
-			return mapper.readValue(userJson, new TypeReference<User>(){});
+			return mapper.readValue(userJson, User.class);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -84,7 +88,7 @@ public class Serializer {
 	 */
 	public Game deserializeGame(String gameJson) {
 		try {
-			return mapper.readValue(gameJson, new TypeReference<Game>(){});
+			return mapper.readValue(gameJson, Game.class);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -98,7 +102,7 @@ public class Serializer {
 	 */
 	public GameInfo deserializeGameInfo(String gameJson) {
 		try {
-			return mapper.readValue(gameJson, new TypeReference<GameInfo>(){});
+			return mapper.readValue(gameJson, GameInfo.class);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}

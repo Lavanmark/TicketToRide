@@ -66,12 +66,10 @@ public class Player {
 		this.routesClaimed = new ArrayList<>();
 	}
 
-	@JsonIgnore
 	public PlayerInfo getPlayerInfo() {
 		return new PlayerInfo(this);
 	}
 
-	@JsonIgnore
 	public Player getCensoredPlayer(User user) {
 		if(user.getUserID() == userID)
 			return this;
@@ -113,7 +111,6 @@ public class Player {
 		return name;
 	}
 
-	@JsonIgnore
 	public boolean isConductor() { return playerID == 0; }
 
 	public boolean isTurn() {
