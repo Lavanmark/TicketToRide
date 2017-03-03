@@ -1,14 +1,19 @@
 package com.floorcorn.tickettoride.handlers;
 
+import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
+import com.floorcorn.tickettoride.commands.ICommand;
+import com.floorcorn.tickettoride.communication.CommandRequest;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.User;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -26,12 +31,19 @@ public class GetCommandsHandler extends HandlerBase {
 				return;
 			}
 
-			Results results = null;
+			String reqBody = getRequestBody(httpExchange);
+			if(reqBody == null || reqBody.isEmpty()) {
+				httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);
+				return;
+			}
+
+			CommandRequest cr = Serializer.getInstance().deserializeCommandRequest(reqBody);
+
+			Results results;
 			try {
-				Set<GameInfo> games = ServerFacade.getInstance().getGames(new User(token));
-				System.out.println(games.size());
-				results = new Results(true, games);
-			} catch(BadUserException e) {
+				ArrayList<ICommand> commands = ServerFacade.getInstance().getCommandsSince(new User(token), cr.getGameID(), cr.getLastCommandID());
+				results = new Results(true, commands);
+			} catch(BadUserException | GameActionException e) {
 				e.printStackTrace();
 				results = new Results(false, e);
 			}

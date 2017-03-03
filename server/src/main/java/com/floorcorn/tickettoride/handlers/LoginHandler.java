@@ -31,7 +31,7 @@ public class LoginHandler extends HandlerBase {
 				userInfo = ServerFacade.getInstance().login(userInfo);
 				results = new Results(true, userInfo);
 			} catch(BadUserException e) {
-				//e.printStackTrace();
+				e.printStackTrace();
 				results = new Results(false, e);
 			}
 

@@ -1,9 +1,11 @@
 package com.floorcorn.tickettoride;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.floorcorn.tickettoride.interfaces.ICommand;
+import com.floorcorn.tickettoride.commands.ICommand;
+import com.floorcorn.tickettoride.communication.CommandRequest;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.PlayerInfo;
 import com.floorcorn.tickettoride.model.User;
@@ -27,6 +29,8 @@ public class Serializer {
 	private Serializer() {
 		mapper = new ObjectMapper();
 		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.OBJECT_AND_NON_CONCRETE);
+		mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
+		mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 	}
 
 	/**
@@ -50,7 +54,7 @@ public class Serializer {
 	 */
 	public User deserializeUser(String str) {
 		try {
-			return mapper.readValue(str, new TypeReference<User>(){});
+			return mapper.readValue(str, User.class);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -64,7 +68,7 @@ public class Serializer {
 	 */
 	public GameInfo deserializeGameInfo(String str) {
 		try {
-			return mapper.readValue(str, new TypeReference<GameInfo>(){});
+			return mapper.readValue(str, GameInfo.class);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -78,7 +82,21 @@ public class Serializer {
 	 */
 	public PlayerInfo deserializePlayerInfo(String str) {
 		try {
-			return mapper.readValue(str, new TypeReference<PlayerInfo>(){});
+			return mapper.readValue(str, PlayerInfo.class);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * converts string of json representing a command request to a CommandRequest object
+	 * @param str json representing a CommandRequest
+	 * @return CommandRequest object from json string
+	 */
+	public CommandRequest deserializeCommandRequest(String str) {
+		try {
+			return mapper.readValue(str, CommandRequest.class);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -87,12 +105,12 @@ public class Serializer {
 
 	/**
 	 * converts string of json representing a command to an ICommand object
-	 * @param str json representing a command
+	 * @param str json representing a CommandRequest
 	 * @return ICommand object from json string
 	 */
 	public ICommand deserializeCommand(String str) {
 		try {
-			return mapper.readValue(str, new TypeReference<ICommand>(){});
+			return mapper.readValue(str, ICommand.class);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}

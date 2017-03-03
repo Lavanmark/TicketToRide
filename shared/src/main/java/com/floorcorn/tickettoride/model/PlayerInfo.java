@@ -59,7 +59,6 @@ public class PlayerInfo {
 		return name;
 	}
 
-	@JsonIgnore
 	public boolean isConductor() { return playerID == 0; }
 
 	@Override

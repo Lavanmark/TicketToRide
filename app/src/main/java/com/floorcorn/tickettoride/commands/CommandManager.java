@@ -45,7 +45,7 @@ public class CommandManager {
 
 	public int currentGameID() {
 		if(clientFacade.getGame() == null)
-			return -1;
+			return Game.NO_GAME_ID;
 		return clientFacade.getGame().getGameID();
 	}
 
