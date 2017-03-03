@@ -62,11 +62,20 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	
 	//elements related to Claiming Route
-
+	
 
 
 	//elements related to Player's Hand
+	private TextView redCount;
+	private TextView orangeCount;
+	private TextView yellowCount;
+	private TextView greenCount;
+	private TextView blueCount;
+	private TextView purpleCount;
+	private TextView blackCount;
+	private TextView whiteCount;
 
+	private TextView trainCount;
 
 	//elements related to the PlayerStatus/Turn Icons
 
