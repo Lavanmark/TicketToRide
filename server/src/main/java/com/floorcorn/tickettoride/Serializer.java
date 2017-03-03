@@ -6,11 +6,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.communication.CommandRequest;
+import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.PlayerInfo;
 import com.floorcorn.tickettoride.model.User;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * Created by Tyler on 2/1/17.
@@ -42,7 +44,7 @@ public class Serializer {
 		try {
 			return mapper.writeValueAsString(o);
 		} catch(JsonProcessingException e) {
-			e.printStackTrace();
+			Corn.log(Level.SEVERE, e.getStackTrace());
 		}
 		return null;
 	}
@@ -56,7 +58,7 @@ public class Serializer {
 		try {
 			return mapper.readValue(str, User.class);
 		} catch(IOException e) {
-			e.printStackTrace();
+			Corn.log(Level.SEVERE, e.getStackTrace());
 		}
 		return null;
 	}
@@ -70,7 +72,7 @@ public class Serializer {
 		try {
 			return mapper.readValue(str, GameInfo.class);
 		} catch(IOException e) {
-			e.printStackTrace();
+			Corn.log(Level.SEVERE, e.getStackTrace());
 		}
 		return null;
 	}
@@ -84,7 +86,7 @@ public class Serializer {
 		try {
 			return mapper.readValue(str, PlayerInfo.class);
 		} catch(IOException e) {
-			e.printStackTrace();
+			Corn.log(Level.SEVERE, e.getStackTrace());
 		}
 		return null;
 	}
@@ -98,7 +100,7 @@ public class Serializer {
 		try {
 			return mapper.readValue(str, CommandRequest.class);
 		} catch(IOException e) {
-			e.printStackTrace();
+			Corn.log(Level.SEVERE, e.getStackTrace());
 		}
 		return null;
 	}
@@ -112,7 +114,7 @@ public class Serializer {
 		try {
 			return mapper.readValue(str, ICommand.class);
 		} catch(IOException e) {
-			e.printStackTrace();
+			Corn.log(Level.SEVERE, e.getStackTrace());
 		}
 		return null;
 	}

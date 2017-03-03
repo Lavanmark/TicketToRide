@@ -4,11 +4,14 @@ import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.User;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Tyler on 1/31/2017.
@@ -18,6 +21,7 @@ public class LoginHandler extends HandlerBase {
 
 	@Override
 	public void handle(HttpExchange httpExchange) throws IOException {
+		Corn.log(Level.FINEST, "Login Handler");
 		try {
 			String reqBody = getRequestBody(httpExchange);
 			if(reqBody == null || reqBody.isEmpty()) {
@@ -26,19 +30,20 @@ public class LoginHandler extends HandlerBase {
 			}
 			User userInfo = Serializer.getInstance().deserializeUser(reqBody);
 
-			Results results = null;
+			Results results;
 			try {
 				userInfo = ServerFacade.getInstance().login(userInfo);
 				results = new Results(true, userInfo);
+				Corn.log("User " + userInfo.getUsername() + " has logged in.");
 			} catch(BadUserException e) {
-				e.printStackTrace();
+				Corn.log(Level.SEVERE, e.getStackTrace());
 				results = new Results(false, e);
 			}
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			sendResponseBody(httpExchange, results);
 		} catch(IOException e){
-			e.printStackTrace();
+			Corn.log(Level.SEVERE, e.getStackTrace());
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
 		}
 	}
