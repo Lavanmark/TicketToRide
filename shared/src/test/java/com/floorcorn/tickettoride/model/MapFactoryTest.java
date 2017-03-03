@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
 
 /**
  * Created by Michael on 3/2/2017.
+ *
  */
 public class MapFactoryTest {
     private MapFactory mapFactory;
@@ -23,6 +24,14 @@ public class MapFactoryTest {
         mapFactory = new MapFactory();
     }
 
+    /**
+     * Test routes loaded from .csv
+     *
+     * NOTE: Make sure to change file names in MapFactory to get
+     * the test data instead of the real .csv. Otherwise these test
+     * cases will fail.
+     * @throws Exception
+     */
     @Test
     public void testGetMarsRoutes() throws Exception {
         ArrayList<Route> res = new ArrayList<>();
@@ -30,7 +39,7 @@ public class MapFactoryTest {
         //Check if any routes were loaded
         try{
             res = new ArrayList<Route>(mapFactory.getMarsRoutes());
-            assertNotSame(res.size(), 0);
+            assertNotEquals(res.size(), 0);
         } catch (Exception e){
             System.err.println(e.getMessage());
             assertTrue(false);
