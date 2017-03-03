@@ -7,6 +7,7 @@ package com.floorcorn.tickettoride.model;
 public class TrainCard {
     private TrainCardColor color;
 
+    private TrainCard(){}
     public TrainCard(TrainCardColor tcc){
         color = tcc;
     }

@@ -80,7 +80,7 @@ public interface IServer {
 
 	ArrayList<ICommand> getCommandsSince(User user, int gameID, int lastCommand) throws BadUserException, GameActionException;
 
-	ArrayList<ICommand> sendCommand(User user, ICommand command) throws BadUserException, GameActionException;
+	ArrayList<ICommand> doCommand(User user, ICommand command) throws BadUserException, GameActionException;
 
 	/**
 	 * will create a new game

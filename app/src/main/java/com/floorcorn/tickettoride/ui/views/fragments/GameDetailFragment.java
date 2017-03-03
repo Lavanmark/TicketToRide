@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
-import com.floorcorn.tickettoride.ui.views.GameListContent;
 import com.floorcorn.tickettoride.ui.views.activities.GameDetailActivity;
 import com.floorcorn.tickettoride.ui.views.activities.GameListActivity;
 import com.floorcorn.tickettoride.R;
@@ -26,15 +24,15 @@ public class GameDetailFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment represents.
      */
-    public static final String ARG_GAME_ID = "game_id";
-    private GameInfo game = null;
+    public static final String ARG_GAME_INFO = "game_info";
+    private String gameInfo = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_GAME_ID)) {
-            game = GameListContent.get(getArguments().getString(ARG_GAME_ID));
+        if (getArguments().containsKey(ARG_GAME_INFO)) {
+            gameInfo = getArguments().getString(ARG_GAME_INFO);
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
@@ -48,8 +46,8 @@ public class GameDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.game_detail, container, false);
         // Show the content as text in a TextView.
-        if (game != null) {
-            ((TextView) rootView.findViewById(R.id.game_detail)).setText(game.toString());
+        if (gameInfo != null) {
+            ((TextView) rootView.findViewById(R.id.game_detail)).setText(gameInfo);
         }
         return rootView;
     }

@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.serverModel;
 
+import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.model.Board;
@@ -29,8 +30,8 @@ public class ServerModel {
 	private MapFactory mapFactory;
 
 	public ServerModel() {
-		games = new HashSet<Game>();
-		users = new HashSet<User>();
+		games = new HashSet<>();
+		users = new HashSet<>();
 		random = new SecureRandom();
 		mapFactory = new MapFactory();
 	}
@@ -45,17 +46,17 @@ public class ServerModel {
 	 * @param password valid password of a user
 	 * @return user who was logged in, or null if bad credentials
 	 */
-	public User authenticate(String username, String password) {
+	public User authenticate(String username, String password) throws BadUserException {
 		for(User u : users) {
 			if(u.getUsername().equals(username)) {
 				if(u.getPassword().equals(password)) {
 					generateToken(u);
 					return u;
 				}
-				return null;
+				throw new BadUserException("Invalid username or password!");
 			}
 		}
-		return null;
+		throw new BadUserException("Invalid username or password!");
 	}
 
 	/**
@@ -63,12 +64,12 @@ public class ServerModel {
 	 * @param token token of specified user to log on
 	 * @return user with corresponding token if login successful, null if not
 	 */
-	public User authenticate(String token) {
+	public User authenticate(String token) throws BadUserException {
 		for(User u : users) {
 			if(u.getToken().equals(token))
 				return u;
 		}
-		return null;
+		throw new BadUserException("Invalid user token!");
 	}
 
 	/**

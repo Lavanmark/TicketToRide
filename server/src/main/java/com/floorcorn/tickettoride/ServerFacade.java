@@ -2,15 +2,14 @@ package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.commands.CommandManager;
 import com.floorcorn.tickettoride.commands.ICommand;
-import com.floorcorn.tickettoride.commands.InitializeGameCmd;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.interfaces.IServer;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
-import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.PlayerColor;
+import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.serverModel.ServerModel;
 
 import java.util.ArrayList;
@@ -60,13 +59,13 @@ public class ServerFacade implements IServer {
 	@Override
 	public ArrayList<ICommand> getCommandsSince(User user, int gameID, int lastCommand) throws BadUserException, GameActionException {
 		if((user = model.authenticate(user.getToken())) != null) {
-			return commandManager.getCommandsSince(user, model.getGame(gameID),lastCommand);
+			return commandManager.getCommandsSince(user, model.getGame(gameID), lastCommand);
 		}
 		throw new BadUserException("Could not Authenticate User!");
 	}
 
 	@Override
-	public ArrayList<ICommand> sendCommand(User user, ICommand command) throws BadUserException, GameActionException {
+	public ArrayList<ICommand> doCommand(User user, ICommand command) throws BadUserException, GameActionException {
 		if((user = model.authenticate(user.getToken())) != null) {
 			return commandManager.doCommand(user, model.getGame(command.getGameID()), command);
 		}
