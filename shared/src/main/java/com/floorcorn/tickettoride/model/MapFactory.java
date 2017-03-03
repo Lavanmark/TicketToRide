@@ -19,15 +19,17 @@ import java.util.logging.Level;
 public class MapFactory {
 
 	//private static final String FILE_STRING = "./shared/src/main/java/com/floorcorn/tickettoride/model/maps/";
-	private static final String FILE_STRING = "." + File.separator + "src"
-											+ File.separator + "main"
-											+ File.separator + "java"
-											+ File.separator + "com"
-											+ File.separator + "floorcorn"
-											+ File.separator + "tickettoride"
-											+ File.separator + "model"
-											+ File.separator + "maps"
-											+ File.separator;
+	private static String FILE_STRING = "."
+            + File.separator + "shared"
+            + File.separator + "src"
+            + File.separator + "main"
+            + File.separator + "java"
+            + File.separator + "com"
+            + File.separator + "floorcorn"
+            + File.separator + "tickettoride"
+            + File.separator + "model"
+            + File.separator + "maps"
+            + File.separator;
 	private static final String FILE_STRING_CITIES = "cities" + File.separator;
 	private static final String FILE_STRING_ROUTES = "routes" + File.separator;
 	private static final String FILE_STRING_DEST = "dest" + File.separator;
@@ -42,10 +44,10 @@ public class MapFactory {
 
 
         //Note: Comment out the above 3 lines and uncomment those 3 below to test.
-        /*Set<City> testCities = readCities("TestCities.csv");
-        marsRoutes = readRoutes("TestRoutes.csv", testCities);
-        marsDest = readDestionationCards("TestDestinationCards.csv", testCities);
-        */
+//        Set<City> testCities = readCities("TestCities.csv");
+//        marsRoutes = readRoutes("TestRoutes.csv", testCities);
+//        marsDest = readDestionationCards("TestDestinationCards.csv", testCities);
+
 
 	}
 
@@ -127,4 +129,8 @@ public class MapFactory {
 		}
 		return new ArrayList<>();
 	}
+
+    public void setFilePath(String path){
+        FILE_STRING = path;
+    }
 }
