@@ -25,8 +25,14 @@ public class MapFactory {
 
 	private void createMarsMap() {
 		Set<City> marsCities = readCities("MarsCities.csv");
-		marsRoutes = readRoutes("MarsRoutes.csv", marsCities);
-		marsDest = readDestionationCards("MarsDestinationCards.csv", marsCities);
+        marsRoutes = readRoutes("MarsRoutes.csv", marsCities);
+        marsDest = readDestionationCards("MarsDestinationCards.csv", marsCities);
+
+        //Note: Comment out the above 3 lines and uncomment those 3 below to test.
+        /*Set<City> testCities = readCities("TestCities.csv");
+        marsRoutes = readRoutes("TestRoutes.csv", testCities);
+        marsDest = readDestionationCards("TestDestinationCards.csv", testCities);
+        */
 	}
 
 	public List<Route> getMarsRoutes() {
