@@ -76,7 +76,7 @@ public class MapFactoryTest {
         assertEquals(res.get(5).getLength(), 3);
 
         assertEquals(res.get(6).getFirstCity().getName().toLowerCase(), "farmington");
-        assertEquals(res.get(6).getFirstCity().getName().toLowerCase(), "kaysville");
+        assertEquals(res.get(6).getSecondCity().getName().toLowerCase(), "kaysville");
         assertEquals(res.get(6).getColor(), TrainCardColor.PURPLE);
         assertEquals(res.get(6).getLength(), 2);
     }
@@ -96,7 +96,7 @@ public class MapFactoryTest {
 
         //Check if correct destination cards were loaded
         DestinationCard testCard = res.get(0);
-        assertEquals(testCard.getFirstCity().getName().toLowerCase(), "apline");
+        assertEquals(testCard.getFirstCity().getName().toLowerCase(), "alpine");
         assertEquals(testCard.getSecondCity().getName().toLowerCase(), "salt lake city");
         assertEquals(testCard.getValue(), 10);
 
