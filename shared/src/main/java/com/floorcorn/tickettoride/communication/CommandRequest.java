@@ -8,6 +8,7 @@ public class CommandRequest {
 	private int gameID = -1;
 	private int lastCommandID = -1;
 
+	private CommandRequest() {}
 	public CommandRequest(int gameID, int lastCommandID) {
 		this.gameID = gameID;
 		this.lastCommandID = lastCommandID;

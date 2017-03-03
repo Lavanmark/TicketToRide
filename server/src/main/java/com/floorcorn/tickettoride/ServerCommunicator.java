@@ -10,6 +10,7 @@ import com.floorcorn.tickettoride.handlers.LeaveGameHandler;
 import com.floorcorn.tickettoride.handlers.LoginHandler;
 import com.floorcorn.tickettoride.handlers.RegisterHandler;
 import com.floorcorn.tickettoride.interfaces.IServer;
+import com.floorcorn.tickettoride.log.Corn;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
@@ -27,7 +28,7 @@ public class ServerCommunicator {
 	 * @param port used as the post the server listens on.
 	 */
 	public ServerCommunicator(String port){
-		System.out.println("Initializing HTTP Server");
+		Corn.log("Initializing HTTP Server");
 		try {
 			server = HttpServer.create(new InetSocketAddress(Integer.parseInt(port)), MAX_WAITING_CONNECTIONS);
 		}
@@ -38,10 +39,10 @@ public class ServerCommunicator {
 
 		server.setExecutor(null); // use the default executor
 
-		System.out.println("Creating contexts");
+		Corn.log("Creating contexts");
 		createContexts();
 
-		System.out.println("Starting server on port: " + port);
+		Corn.log("Starting server on port: " + port);
 		server.start();
 	}
 
@@ -55,13 +56,13 @@ public class ServerCommunicator {
 		server.createContext(IServer.JOIN_GAME, new JoinGameHandler());
 		server.createContext(IServer.GET_COMMANDS, new GetCommandsHandler());
 		server.createContext(IServer.SEND_COMMAND, new CommandHandler());
-
 	}
 
 	public static void main(String[] args) {
 		String port = "8080";
 		if(args.length == 1)
 			port = args[0];
+		new Corn("server.log");
 		new ServerCommunicator(port);
 	}
 }

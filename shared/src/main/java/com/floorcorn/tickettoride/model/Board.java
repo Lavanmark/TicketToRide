@@ -56,6 +56,9 @@ public class Board {
     public List<Route> getRoutes(){
         return routeList;
     }
+	private void setRoutes(List<Route> routes) {
+		routeList = routes;
+	}
 
     public List<Route> getAvailableRoutes(){
 	    List<Route> routes = new ArrayList<>();

@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.serverModel;
 
+import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.interfaces.IClient;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
@@ -37,5 +38,9 @@ public class ClientProxy implements IClient {
 
 	public int getLastExecutedCommand() {
 		return gameToModify.getLatestCommandID();
+	}
+
+	public void addCommandToGame(ICommand command) {
+		gameToModify.addCommand(command);
 	}
 }

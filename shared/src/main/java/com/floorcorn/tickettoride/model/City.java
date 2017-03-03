@@ -7,6 +7,7 @@ package com.floorcorn.tickettoride.model;
 public class City {
     private String name;
 
+    private City(){}
     public City(String n){
         name = n;
     }

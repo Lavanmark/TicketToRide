@@ -25,7 +25,8 @@ public class Game {
 	private String name = null;
 	private boolean finished = false;
 
-	private ArrayList<ICommand> commands = null;
+	@JsonIgnore
+	private ArrayList<ICommand> commands = new ArrayList<>();
 	private Board board = null;
 
 	private Game(){}
@@ -52,12 +53,12 @@ public class Game {
 		this.board.setDeckManager(new DeckManager());
 	}
 
-	@JsonIgnore
+	
 	public GameInfo getGameInfo() {
 		return new GameInfo(this);
 	}
 
-	@JsonIgnore
+	
 	public Game getCensoredGame(User user) {
 		Game game = new Game(this);
 		ArrayList<Player> censoredPlayers = new ArrayList<>();
@@ -85,14 +86,14 @@ public class Game {
 			this.commands.add(command);
 	}
 
-	@JsonIgnore
+	
 	public int getLatestCommandID() {
 		if(commands.size() <= 0)
 			return ICommand.NO_CMD_ID;
 		return commands.get(commands.size() - 1).getCmdID();
 	}
 
-	@JsonIgnore
+	
 	public ICommand getLastestCommand() {
 		if(!commands.isEmpty())
 			return commands.get(commands.size() - 1);
