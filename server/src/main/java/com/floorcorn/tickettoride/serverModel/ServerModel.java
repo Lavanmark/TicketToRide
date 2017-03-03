@@ -30,8 +30,8 @@ public class ServerModel {
 	private MapFactory mapFactory;
 
 	public ServerModel() {
-		games = new HashSet<Game>();
-		users = new HashSet<User>();
+		games = new HashSet<>();
+		users = new HashSet<>();
 		random = new SecureRandom();
 		mapFactory = new MapFactory();
 	}
