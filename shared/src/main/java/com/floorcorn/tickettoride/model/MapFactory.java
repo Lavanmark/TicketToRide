@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class MapFactory {
 
-	private static final String FILE_STRING = "./maps/";
+	private static final String FILE_STRING = "./shared/src/main/java/com/floorcorn/tickettoride/model/maps/";
 	private static final String FILE_STRING_CITIES = "cities/";
 	private static final String FILE_STRING_ROUTES = "routes/";
 	private static final String FILE_STRING_DEST = "dest/";

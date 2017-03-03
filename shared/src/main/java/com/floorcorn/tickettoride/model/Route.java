@@ -13,6 +13,7 @@ public class Route {
     private Boolean claimed;
     private int owner;
 
+    private Route(){}
     public Route(int rID, City c1, City c2, int l, TrainCardColor tcc){
         routeID = rID;
         city1 = c1;
