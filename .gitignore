@@ -9,3 +9,4 @@
 .externalNativeBuild
 *.log
 *.lck
+*.1
