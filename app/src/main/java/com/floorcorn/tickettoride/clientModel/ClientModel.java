@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.clientModel;
 
+import com.floorcorn.tickettoride.GameChatLog;
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
@@ -20,6 +21,7 @@ public class ClientModel extends Observable {
     private Set<GameInfo> gameList;
     private Game currentGame;
     private int lastCommandExecuted = -1;
+    private GameChatLog chatLog;
 
 	public ClientModel() {
 		currentGame = null;
@@ -85,5 +87,13 @@ public class ClientModel extends Observable {
 
     public int getLastCommandExecuted() {
         return lastCommandExecuted;
+    }
+
+    public GameChatLog getChatLog(){
+        return this.chatLog;
+    }
+
+    public void setChatLog(GameChatLog chatLog){
+        this.chatLog = chatLog;
     }
 }

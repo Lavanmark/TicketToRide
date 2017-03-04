@@ -32,4 +32,5 @@ public class ChatManager {
     {
         gameMessageLists.put(gameID, chatLog);
     }
+    
 }
