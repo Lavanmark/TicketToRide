@@ -195,7 +195,11 @@ public class Player {
 	}
 
 	public void addDestinationCard(DestinationCard card){
-		//adds this to the players dest card hand
+		if(destinationCards == null)
+			return;
+		if(destinationCards.contains(card))
+			return;
+		destinationCards.add(card);
 	}
 
 	public void addTrainCard(TrainCard card, int amount){

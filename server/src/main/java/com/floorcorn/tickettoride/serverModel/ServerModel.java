@@ -27,14 +27,12 @@ public class ServerModel {
 	private Set<Game> games; // Stores all games ever. If game is canceled or ends, it remains here with the players so users can get this info.
 	private Set<User> users; // Stores all users ever.
 	private SecureRandom random;
-	private MapFactory mapFactory;
     private ChatManager chatManager;
 
 	public ServerModel() {
 		games = new HashSet<>();
 		users = new HashSet<>();
 		random = new SecureRandom();
-		mapFactory = new MapFactory();
         chatManager = new ChatManager();
 	}
 
@@ -182,42 +180,5 @@ public class ServerModel {
 		if(game.isPlayer(user.getUserID()))
 			return chatManager.addMessage(message);
 		throw new BadUserException("User not in game!");
-	}
-
-	public void startGame(int gameID) {
-		Game game = getGame(gameID);
-		if(game == null)
-			return;
-		if(!game.hasStarted() || game.isFinished())
-			return;
-
-		Board board = new Board(mapFactory.getMarsRoutes());
-		board.setDeckManager(new DeckManager());
-
-		//TODO move to initialize command on server?
-		//TODO add getGame to IClient?
-
-		// Deal initial train cards
-		for(int i = 0; i < Game.INITIAL_TRAIN_CARDS; i++){
-			for(Player p : game.getPlayerList()) {
-				try {
-					//p.addTrainCard(game.getBoard().drawFromTrainCardDeck(), 1);
-				} catch(GameActionException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		//Deal initial destination cards
-		for(int i = 0; i < Game.INITIAL_DESTINATION_CARDS; i++){
-			for(Player p : game.getPlayerList()) {
-				try {
-					//p.addDestination(game.getBoard().drawFromDestinationCardDeck());
-				} catch(GameActionException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		game.setBoard(board);
 	}
 }

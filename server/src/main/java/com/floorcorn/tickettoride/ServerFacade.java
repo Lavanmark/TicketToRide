@@ -8,6 +8,7 @@ import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.interfaces.IServer;
+import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.PlayerColor;
@@ -91,10 +92,9 @@ public class ServerFacade implements IServer {
 	@Override
 	public GameInfo joinGame(User user, int gameID, PlayerColor color) throws BadUserException, GameActionException {
 		if((user = model.authenticate(user.getToken())) != null) {
-			//TODO check if the game shouldve started and if so get those initial commands going.
 			GameInfo game = model.joinGame(user, gameID, color);
 			if(game.hasStarted() && !game.isFinished())
-				model.startGame(game.getGameID());
+				commandManager.startGame(model.getGame(game.getGameID()));
 			return game;
 		}
 		throw new BadUserException("Could not Authenticate User!");

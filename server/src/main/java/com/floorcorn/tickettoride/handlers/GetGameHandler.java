@@ -21,7 +21,7 @@ import java.util.logging.Level;
 public class GetGameHandler extends HandlerBase {
 	@Override
 	public void handle(HttpExchange httpExchange) throws IOException {
-		Corn.log(Level.FINEST, "Get Games Handler");
+		Corn.log(Level.FINEST, "Get Game Handler");
 		try {
 			String token = getAuthenticationToken(httpExchange);
 			if(token == null || token.isEmpty()) {

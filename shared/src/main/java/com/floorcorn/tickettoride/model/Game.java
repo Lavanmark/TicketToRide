@@ -35,7 +35,7 @@ public class Game {
 		this.gameID = game.getGameID();
 		this.gameSize = game.getGameSize();
 		this.name = game.getName();
-		this.playerList = new ArrayList<Player>(game.getPlayerList());
+		this.playerList = new ArrayList<>(game.getPlayerList());
 		this.finished = game.isFinished();
 		this.commands = new ArrayList<>(game.getCommands());
 		this.board = new Board(game.getBoard());

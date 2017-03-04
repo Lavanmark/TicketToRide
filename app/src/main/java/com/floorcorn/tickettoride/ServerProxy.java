@@ -2,6 +2,8 @@ package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.communication.CommandRequest;
+import com.floorcorn.tickettoride.communication.GameChatLog;
+import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
@@ -122,6 +124,16 @@ public class ServerProxy implements IServer {
 		else if(res.getException(GameActionException.class.getSimpleName()) != null)
 			throw new GameActionException(res.getException(GameActionException.class.getSimpleName()));
 		return false;
+	}
+
+	@Override
+	public GameChatLog getChatLog(User user, GameInfo gameInfo) throws BadUserException {
+		return null;
+	}
+
+	@Override
+	public GameChatLog sendChatMessage(User user, Message message) throws BadUserException {
+		return null;
 	}
 
 	public void setHost(String host) {

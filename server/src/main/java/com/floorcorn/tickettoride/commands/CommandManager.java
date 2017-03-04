@@ -64,4 +64,21 @@ public class CommandManager {
 
 		return getCommandsSince(user, game, lastCommandClient);
 	}
+
+	public void startGame(Game game) {
+		if(game == null)
+			return;
+		if(!game.hasStarted() || game.isFinished())
+			return;
+
+		clientProxy.setGameToModify(game);
+
+		ICommand init = new InitializeGameCmd(game.getPlayerList());
+		init.execute(clientProxy);
+		clientProxy.addCommandToGame(init);
+
+		ICommand faceUp = new SetFaceUpDeckCmd(game.getBoard().getFaceUpCards());
+		faceUp.execute(clientProxy);
+		clientProxy.addCommandToGame(faceUp);
+	}
 }
