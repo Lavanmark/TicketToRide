@@ -37,8 +37,9 @@ public class UIFacade {
     private UIFacade() {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
-	    serverProxy.setPort("8080");
-        serverProxy.setHost("192.168.0.100");
+	      serverProxy.setPort("8080");
+        serverProxy.setHost("10.24.69.49");
+
         poller = new Poller(serverProxy, clientModelRoot);
     }
     private static UIFacade instance = null;

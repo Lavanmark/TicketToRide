@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="wrap_content"
+    android:layout_width="400dp"
     android:layout_height="match_parent"
     android:background="#ffffff"
 
@@ -29,7 +29,7 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
             android:paddingBottom="16dp"
             android:paddingTop="16dp"
@@ -44,6 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_selector"
+                android:id="@+id/draw_from_dest_deck"
                 />
             <ImageButton
                 android:id="@+id/dest_card1"
@@ -56,7 +57,7 @@
                 android:adjustViewBounds="true"
                 android:padding="2dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dest_acydalia_viking_1"
+                android:src="@drawable/dest_alba_arsia"
                 android:background="@drawable/selector"/>
             <ImageButton
                 android:id="@+id/dest_card2"
@@ -69,7 +70,7 @@
                 android:adjustViewBounds="true"
                 android:padding="2dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dest_acydalia_viking_1"
+                android:src="@drawable/dest_alba_arsia"
                 android:background="@drawable/selector"/>
             <ImageButton
                 android:id="@+id/dest_card3"
@@ -82,7 +83,7 @@
                 android:adjustViewBounds="true"
                 android:padding="2dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dest_acydalia_viking_1"
+                android:src="@drawable/dest_alba_arsia"
                 android:background="@drawable/selector"/>
 
 
