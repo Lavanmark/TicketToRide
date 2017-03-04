@@ -1,6 +1,8 @@
 package com.floorcorn.tickettoride.interfaces;
 
 import com.floorcorn.tickettoride.commands.ICommand;
+import com.floorcorn.tickettoride.communication.GameChatLog;
+import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
@@ -28,7 +30,8 @@ public interface IServer {
 	String JOIN_GAME = "/joinGame";
 	String SEND_COMMAND = "/command";
 	String GET_COMMANDS = "/getCommands";
-
+	String SEND_CHAT = "/sendChat";
+	String GET_CHAT = "/getChat";
 
 	/**
 	 * method to log a user in.
@@ -123,4 +126,8 @@ public interface IServer {
 	 * @throws GameActionException
 	 */
 	boolean leaveGame(User user, int gameID) throws BadUserException, GameActionException;
+
+	GameChatLog getChatLog(User user, GameInfo gameInfo) throws BadUserException;
+
+	GameChatLog sendChatMessage(User user, Message message) throws BadUserException;
 }

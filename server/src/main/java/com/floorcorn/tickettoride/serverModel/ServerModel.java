@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.serverModel;
 
-import com.floorcorn.tickettoride.GameChatLog;
+import com.floorcorn.tickettoride.communication.GameChatLog;
+import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
@@ -9,14 +10,12 @@ import com.floorcorn.tickettoride.model.DeckManager;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.MapFactory;
-import com.floorcorn.tickettoride.model.Route;
-import com.floorcorn.tickettoride.model.TrainCard;
+import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.PlayerColor;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -131,12 +130,6 @@ public class ServerModel {
 
 		if(joinedGame == null)
 			throw new GameActionException("Could not join game!");
-
-		if(joinedGame.hasStarted() && !joinedGame.isFinished()) {
-			Board board = new Board(mapFactory.getMarsRoutes());
-			board.setDeckManager(new DeckManager());
-			joinedGame.setBoard(board);
-		}
 		return joinedGame.getGameInfo();
 	}
 
@@ -175,5 +168,56 @@ public class ServerModel {
 			gameInfos.add(g.getGameInfo());
 		}
 		return gameInfos;
+	}
+
+	public GameChatLog getChatLog(User user, int gameID) throws BadUserException {
+		Game game = getGame(gameID);
+		if(game.isPlayer(user.getUserID()))
+			return chatManager.getMessages(gameID);
+		throw new BadUserException("User not in game!");
+	}
+
+	public GameChatLog sendMessage(User user, Message message) throws BadUserException {
+		Game game = getGame(message.getGameID());
+		if(game.isPlayer(user.getUserID()))
+			return chatManager.addMessage(message);
+		throw new BadUserException("User not in game!");
+	}
+
+	public void startGame(int gameID) {
+		Game game = getGame(gameID);
+		if(game == null)
+			return;
+		if(!game.hasStarted() || game.isFinished())
+			return;
+
+		Board board = new Board(mapFactory.getMarsRoutes());
+		board.setDeckManager(new DeckManager());
+
+		//TODO move to initialize command on server?
+		//TODO add getGame to IClient?
+
+		// Deal initial train cards
+		for(int i = 0; i < Game.INITIAL_TRAIN_CARDS; i++){
+			for(Player p : game.getPlayerList()) {
+				try {
+					//p.addTrainCard(game.getBoard().drawFromTrainCardDeck(), 1);
+				} catch(GameActionException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		//Deal initial destination cards
+		for(int i = 0; i < Game.INITIAL_DESTINATION_CARDS; i++){
+			for(Player p : game.getPlayerList()) {
+				try {
+					//p.addDestination(game.getBoard().drawFromDestinationCardDeck());
+				} catch(GameActionException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		game.setBoard(board);
 	}
 }

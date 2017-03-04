@@ -2,6 +2,8 @@ package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.commands.CommandManager;
 import com.floorcorn.tickettoride.commands.ICommand;
+import com.floorcorn.tickettoride.communication.GameChatLog;
+import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
@@ -90,7 +92,10 @@ public class ServerFacade implements IServer {
 	public GameInfo joinGame(User user, int gameID, PlayerColor color) throws BadUserException, GameActionException {
 		if((user = model.authenticate(user.getToken())) != null) {
 			//TODO check if the game shouldve started and if so get those initial commands going.
-			return model.joinGame(user, gameID, color);
+			GameInfo game = model.joinGame(user, gameID, color);
+			if(game.hasStarted() && !game.isFinished())
+				model.startGame(game.getGameID());
+			return game;
 		}
 		throw new BadUserException("Could not Authenticate User!");
 	}
@@ -99,6 +104,20 @@ public class ServerFacade implements IServer {
 	public boolean leaveGame(User user, int gameID) throws BadUserException, GameActionException {
 		if((user = model.authenticate(user.getToken())) != null)
 			return model.removePlayer(user, gameID);
+		throw new BadUserException("Could not Authenticate User!");
+	}
+
+	@Override
+	public GameChatLog getChatLog(User user, GameInfo gameInfo) throws BadUserException {
+		if((user = model.authenticate(user.getToken())) != null)
+			return model.getChatLog(user, gameInfo.getGameID());
+		throw new BadUserException("Could not Authenticate User!");
+	}
+
+	@Override
+	public GameChatLog sendChatMessage(User user, Message message) throws BadUserException {
+		if((user = model.authenticate(user.getToken())) != null)
+			return model.sendMessage(user, message);
 		throw new BadUserException("Could not Authenticate User!");
 	}
 }

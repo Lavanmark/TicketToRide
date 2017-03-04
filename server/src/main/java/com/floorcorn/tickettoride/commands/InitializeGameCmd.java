@@ -26,6 +26,7 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 
 	@Override
 	public void execute(IClient client) {
-		client.setPlayerList(players);
+
+		//TODO whats going here?
 	}
 }

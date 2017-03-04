@@ -1,6 +1,6 @@
 package com.floorcorn.tickettoride.clientModel;
 
-import com.floorcorn.tickettoride.GameChatLog;
+import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;

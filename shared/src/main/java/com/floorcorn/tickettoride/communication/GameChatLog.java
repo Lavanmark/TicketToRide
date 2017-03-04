@@ -1,4 +1,4 @@
-package com.floorcorn.tickettoride;
+package com.floorcorn.tickettoride.communication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ public class GameChatLog {
     private List<Message> messageList;
 
     public GameChatLog(){
-
+        messageList = new ArrayList<>();
     }
 
     public void addMessage(Message m){
