@@ -144,6 +144,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		claimRouteButton = (Button)findViewById(R.id.open_route_button);
 		drawCardsButton = (Button)findViewById(R.id.open_card_button);
 
+
 		animateButton = (Button)findViewById(R.id.animateButton);
 
 
@@ -210,6 +211,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 
 
+    }
+
+	@Override
+	public void onStop(){
+		presenter.unregister();
+		presenter.stopPolling();
+		super.onStop();
+	}
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+	    checkStarted();
     }
 
     public void launchPreGame() {
