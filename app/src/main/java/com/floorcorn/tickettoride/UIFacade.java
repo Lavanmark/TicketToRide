@@ -38,7 +38,7 @@ public class UIFacade {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
 	      serverProxy.setPort("8080");
-        serverProxy.setHost("10.24.69.49");
+        serverProxy.setHost("192.168.0.100");
 
         poller = new Poller(serverProxy, clientModelRoot);
     }
@@ -49,6 +49,9 @@ public class UIFacade {
         return instance;
     }
 
+    public int getLongestPathPlayer(){
+        return 0;
+    }
     // Login and register related.
 
     /**

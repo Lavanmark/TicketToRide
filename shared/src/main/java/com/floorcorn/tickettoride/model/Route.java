@@ -69,6 +69,35 @@ public class Route {
         // if not, then return false
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+
+        Route route = (Route) o;
+
+        if(routeID != route.routeID) return false;
+        if(length != route.length) return false;
+        if(owner != route.owner) return false;
+        if(!city1.equals(route.city1)) return false;
+        if(!city2.equals(route.city2)) return false;
+        if(color != route.color) return false;
+        return claimed.equals(route.claimed);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = routeID;
+        result = 31 * result + city1.hashCode();
+        result = 31 * result + city2.hashCode();
+        result = 31 * result + length;
+        result = 31 * result + color.hashCode();
+        result = 31 * result + claimed.hashCode();
+        result = 31 * result + owner;
+        return result;
+    }
+
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append(city1 + " to " + city2);

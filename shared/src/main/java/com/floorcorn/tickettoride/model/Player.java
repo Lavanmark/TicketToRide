@@ -184,6 +184,37 @@ public class Player {
 		this.routesClaimed = routesClaimed;
 	}
 
+	public int getLongestRoute(){
+		//this is the calculation right here
+		return 0;
+	}
+
+	public Boolean removeTrainCars(int amount){
+		//wat
+		return false;
+	}
+
+	public void addDestinationCard(DestinationCard card){
+		if(destinationCards == null)
+			return;
+		if(destinationCards.contains(card))
+			return;
+		destinationCards.add(card);
+	}
+
+	public void addTrainCard(TrainCard card, int amount){
+		//adds this to the players traincard hand
+	}
+
+	public void removeDestinationCard(DestinationCard card){
+		//param should be a list
+	}
+
+	public void removeTrainCard(TrainCard card){
+		//param should be a list
+	}
+
+
 	@Override
 	public boolean equals(Object o) {
 		if(this == o) return true;

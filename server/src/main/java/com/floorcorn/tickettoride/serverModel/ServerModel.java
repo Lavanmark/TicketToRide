@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.serverModel;
 
-import com.floorcorn.tickettoride.GameChatLog;
+import com.floorcorn.tickettoride.communication.GameChatLog;
+import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
@@ -9,14 +10,12 @@ import com.floorcorn.tickettoride.model.DeckManager;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.MapFactory;
-import com.floorcorn.tickettoride.model.Route;
-import com.floorcorn.tickettoride.model.TrainCard;
+import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.PlayerColor;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,14 +27,12 @@ public class ServerModel {
 	private Set<Game> games; // Stores all games ever. If game is canceled or ends, it remains here with the players so users can get this info.
 	private Set<User> users; // Stores all users ever.
 	private SecureRandom random;
-	private MapFactory mapFactory;
     private ChatManager chatManager;
 
 	public ServerModel() {
 		games = new HashSet<>();
 		users = new HashSet<>();
 		random = new SecureRandom();
-		mapFactory = new MapFactory();
         chatManager = new ChatManager();
 	}
 
@@ -131,12 +128,6 @@ public class ServerModel {
 
 		if(joinedGame == null)
 			throw new GameActionException("Could not join game!");
-
-		if(joinedGame.hasStarted() && !joinedGame.isFinished()) {
-			Board board = new Board(mapFactory.getMarsRoutes());
-			board.setDeckManager(new DeckManager());
-			joinedGame.setBoard(board);
-		}
 		return joinedGame.getGameInfo();
 	}
 
@@ -175,5 +166,19 @@ public class ServerModel {
 			gameInfos.add(g.getGameInfo());
 		}
 		return gameInfos;
+	}
+
+	public GameChatLog getChatLog(User user, int gameID) throws BadUserException {
+		Game game = getGame(gameID);
+		if(game.isPlayer(user.getUserID()))
+			return chatManager.getMessages(gameID);
+		throw new BadUserException("User not in game!");
+	}
+
+	public GameChatLog sendMessage(User user, Message message) throws BadUserException {
+		Game game = getGame(message.getGameID());
+		if(game.isPlayer(user.getUserID()))
+			return chatManager.addMessage(message);
+		throw new BadUserException("User not in game!");
 	}
 }

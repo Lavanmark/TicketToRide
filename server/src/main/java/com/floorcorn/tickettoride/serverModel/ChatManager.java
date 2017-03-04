@@ -1,10 +1,9 @@
 package com.floorcorn.tickettoride.serverModel;
 
-import com.floorcorn.tickettoride.GameChatLog;
-import com.floorcorn.tickettoride.Message;
+import com.floorcorn.tickettoride.communication.GameChatLog;
+import com.floorcorn.tickettoride.communication.Message;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,13 +18,17 @@ public class ChatManager {
         this.gameMessageLists = new HashMap<Integer, GameChatLog>();
     }
 
-    public void addMessage(Message message){
+    public GameChatLog addMessage(Message message){
         int gameID = message.getGameID();
-        gameMessageLists.get(gameID).addMessage(message);
+        if(gameMessageLists.containsKey(gameID))
+            gameMessageLists.get(gameID).addMessage(message);
+        return getMessages(message.getGameID());
     }
 
     public GameChatLog getMessages(int gameID){
-        return gameMessageLists.get(gameID);
+        if(gameMessageLists.containsKey(gameID))
+            return gameMessageLists.get(gameID);
+        return null;
     }
 
     public void addGameChatLog(int gameID, GameChatLog chatLog)

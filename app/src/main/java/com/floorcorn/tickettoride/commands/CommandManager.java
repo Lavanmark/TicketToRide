@@ -32,6 +32,7 @@ public class CommandManager {
 			return;
 
 		for(ICommand command : commands) {
+			System.out.println("doing command");
 			game.addCommand(command);
 			command.execute(clientFacade);
 			clientFacade.setLastExecutedCommand(command.getCmdID());
