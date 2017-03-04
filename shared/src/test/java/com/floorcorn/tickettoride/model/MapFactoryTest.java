@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +19,21 @@ import static org.junit.Assert.*;
  */
 public class MapFactoryTest {
     private MapFactory mapFactory;
+    private final String FILE_PATH = "."
+            + File.separator + "src"
+            + File.separator + "main"
+            + File.separator + "java"
+            + File.separator + "com"
+            + File.separator + "floorcorn"
+            + File.separator + "tickettoride"
+            + File.separator + "model"
+            + File.separator + "maps"
+            + File.separator;
 
     @Before
     public void setup(){
         mapFactory = new MapFactory();
+        mapFactory.setFilePath(FILE_PATH);
     }
 
     /**

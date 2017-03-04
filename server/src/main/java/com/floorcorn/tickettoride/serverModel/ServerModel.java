@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.serverModel;
 
+import com.floorcorn.tickettoride.GameChatLog;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
@@ -28,12 +29,14 @@ public class ServerModel {
 	private Set<User> users; // Stores all users ever.
 	private SecureRandom random;
 	private MapFactory mapFactory;
+    private ChatManager chatManager;
 
 	public ServerModel() {
 		games = new HashSet<>();
 		users = new HashSet<>();
 		random = new SecureRandom();
 		mapFactory = new MapFactory();
+        chatManager = new ChatManager();
 	}
 
 	private void generateToken(User u) {
@@ -81,6 +84,8 @@ public class ServerModel {
 	public GameInfo addGame(String name, int gameSize) {
 		Game newGame = new Game(name, gameSize, IDManager.getNextGameID());
 		games.add(newGame);
+        GameChatLog gameChatLog = new GameChatLog();
+		chatManager.addGameChatLog(newGame.getGameID(), gameChatLog);
 		return newGame.getGameInfo();
 	}
 
