@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Board;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Player;
@@ -62,11 +63,20 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	
 	//elements related to Claiming Route
-
+	
 
 
 	//elements related to Player's Hand
+	private TextView redCount;
+	private TextView orangeCount;
+	private TextView yellowCount;
+	private TextView greenCount;
+	private TextView blueCount;
+	private TextView purpleCount;
+	private TextView blackCount;
+	private TextView whiteCount;
 
+	private TextView trainCount;
 
 	//elements related to the PlayerStatus/Turn Icons
 
@@ -129,23 +139,36 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	        getSupportActionBar().setTitle(presenter.getGameName());
 
 	    checkStarted();
+		drawDestinationTicketsButton = (Button)findViewById(R.id.open_dest_button);
+		displayHandButton = (Button)findViewById(R.id.open_hand_button);
+		claimRouteButton = (Button)findViewById(R.id.open_route_button);
+		drawCardsButton = (Button)findViewById(R.id.open_card_button);
+
         if(!presenter.gameInProgress()) {
 	        launchPreGame();
+//TODO: uncomment these for real play
+//			drawDestinationTicketsButton.setEnabled(false);
+//			displayHandButton.setEnabled(false);
+//			claimRouteButton.setEnabled(false);
+//			drawCardsButton.setEnabled(false);
+
         }
-		else{
+		//TODO: uncomment this else for real play
+		//else{
 			final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
 			final FrameLayout DRAWER_HOLDER = (FrameLayout) findViewById(R.id.left_drawer_holder);
 
-			drawDestinationTicketsButton = (Button)findViewById(R.id.open_dest_button);
+			drawDestinationTicketsButton.setEnabled(true);
 			drawDestinationTicketsButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
+					Corn.log("Opening Destination Drawer");
 					displayDestinationCardDrawer(DRAWER, DRAWER_HOLDER);
 
 				}
 			});
 
-			drawCardsButton = (Button)findViewById(R.id.open_card_button);
+			drawCardsButton.setEnabled(true);
 			drawCardsButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
@@ -154,17 +177,15 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 				}
 			});
 
-
-
-			claimRouteButton = (Button)findViewById(R.id.open_route_button);
+			claimRouteButton.setEnabled(true);
 			claimRouteButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					displayDrawingDeckDrawer(DRAWER, DRAWER_HOLDER);
+					displayClaimRouteDrawer(DRAWER, DRAWER_HOLDER);
 				}
 			});
 
-			displayHandButton = (Button)findViewById(R.id.open_hand_button);
+			displayHandButton.setEnabled(true);
 			displayHandButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
@@ -172,7 +193,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 				}
 			});
 
-		}
+		//}
 
 
 
@@ -314,6 +335,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		DRAWER_HOLDER.removeAllViews();
 		DRAWER_HOLDER.addView(layout);
 		DRAWER.openDrawer(GravityCompat.START);
+		Corn.log("Left drawer opened");
 	}
 
 	@Override
