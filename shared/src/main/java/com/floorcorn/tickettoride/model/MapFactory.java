@@ -40,12 +40,11 @@ public class MapFactory {
         marsRoutes = readRoutes("MarsRoutes.csv", marsCities);
         marsDest = readDestionationCards("MarsDestinationCards.csv", marsCities);
 
-
-        //Note: Comment out the above 3 lines and uncomment those 3 below to test.
+		//Note: Comment out the above 3 lines and uncomment those 3 below to test.
         /*Set<City> testCities = readCities("TestCities.csv");
         marsRoutes = readRoutes("TestRoutes.csv", testCities);
         marsDest = readDestionationCards("TestDestinationCards.csv", testCities);
-        */
+		*/
 
 	}
 

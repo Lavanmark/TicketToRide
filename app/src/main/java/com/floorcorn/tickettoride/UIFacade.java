@@ -48,6 +48,9 @@ public class UIFacade {
         return instance;
     }
 
+    public int getLongestPathPlayer(){
+        return 0;
+    }
     // Login and register related.
 
     /**
