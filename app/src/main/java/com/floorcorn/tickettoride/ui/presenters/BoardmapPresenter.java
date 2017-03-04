@@ -68,10 +68,6 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		UIFacade.getInstance().registerObserver(this);
 	}
 
-	public int faceupCardClicked(int i){
-		return R.drawable.dest_acydalia_viking_1;
-	}
-
 
 
 

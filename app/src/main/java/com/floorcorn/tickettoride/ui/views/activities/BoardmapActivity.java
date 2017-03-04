@@ -135,11 +135,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	    checkStarted();
 
+
+
 		//initialize UI elements
+
 		drawDestinationTicketsButton = (Button)findViewById(R.id.open_dest_button);
 		displayHandButton = (Button)findViewById(R.id.open_hand_button);
 		claimRouteButton = (Button)findViewById(R.id.open_route_button);
 		drawCardsButton = (Button)findViewById(R.id.open_card_button);
+
+
+        if(!presenter.gameInProgress()) {
+	        launchPreGame();
+//TODO: uncomment these for real play
 
 		animateButton = (Button)findViewById(R.id.animateButton);
 
