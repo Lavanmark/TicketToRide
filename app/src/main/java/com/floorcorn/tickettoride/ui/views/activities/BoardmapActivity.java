@@ -145,10 +145,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		drawCardsButton = (Button)findViewById(R.id.open_card_button);
 
 
-        if(!presenter.gameInProgress()) {
-	        launchPreGame();
-//TODO: uncomment these for real play
-
 		animateButton = (Button)findViewById(R.id.animateButton);
 
 
@@ -218,7 +214,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     }
 
 	@Override
-	public void onStop() {
+	public void onStop(){
 		presenter.unregister();
 		presenter.stopPolling();
 		super.onStop();
