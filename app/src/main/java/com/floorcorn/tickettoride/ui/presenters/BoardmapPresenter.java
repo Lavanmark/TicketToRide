@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
+import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.User;
