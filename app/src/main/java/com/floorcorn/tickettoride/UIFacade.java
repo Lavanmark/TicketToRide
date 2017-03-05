@@ -406,12 +406,12 @@ public class UIFacade {
     }
 
     /**
-     * Returns the Player whose turn it is.
+     * Returns the Player whose turn it is. Re-throws GameActionException if there is not 1 and
+     * only 1 Player whose turn it is.
      * @return Player object
      */
-    public Player whoseTurn() {
-        //TODO
-        throw new UnsupportedOperationException();
+    public Player whoseTurn() throws GameActionException {
+        return clientModelRoot.whoseTurn();
     }
 
     // Cards.

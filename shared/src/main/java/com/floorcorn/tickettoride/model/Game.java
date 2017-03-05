@@ -30,7 +30,7 @@ public class Game {
 	private ArrayList<ICommand> commands = new ArrayList<>();
 	private Board board = null;
 
-	private Game(){} //<--- what is this doing here? doesnt look right
+	private Game(){} //<--- what is this doing here? doesnt look right (Joseph: who wrote this original comment?)
 
 	public Game(Game game) {
 		this.gameID = game.getGameID();
