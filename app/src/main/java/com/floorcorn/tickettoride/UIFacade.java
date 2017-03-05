@@ -50,7 +50,7 @@ public class UIFacade {
         return instance;
     }
 
-    public int getLongestPathPlayer(User user){
+    public int getLongestPathPlayer(User user){ // pretty sure the getCurrentGame call will work, if not, just pass in a game object as a param
         return getCurrentGame().getPlayer(user).getLongestRoute();
     }
 

@@ -230,6 +230,7 @@ public class Game {
 		for(Player player: playerList){
 			if(player.getLongestRoute() > longestRoute)
 				longestRoute = player.getLongestRoute();
+				board.setLongestRoute(longestRoute); // sets the child
 		}
 	}
 

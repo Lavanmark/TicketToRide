@@ -19,8 +19,8 @@ public class Board {
 	@JsonIgnore
     private DeckManager deckManager;
 
-	private int longestPath;
-    private int longestPathPlayer;
+	private int longestRoute;
+    private int longestRoutePlayer;
 
 
 	private Board(){}
@@ -31,8 +31,8 @@ public class Board {
     public Board(List<Route> routeList) {
         this.routeList = routeList;
         this.faceUpCards = new TrainCard[FACEUP_DECK_SIZE];
-        this.longestPath = 0;
-        this.longestPathPlayer = -1;
+        this.longestRoute = 0;
+        this.longestRoutePlayer = -1;
 	    this.deckManager = null;
     }
 
@@ -44,8 +44,8 @@ public class Board {
 	    } catch(GameActionException e) {
 		    System.err.println(e.getMessage());
 	    }
-	    this.longestPath = board.getLongestPath();
-	    this.longestPathPlayer = board.getLongestPathPlayer();
+	    this.longestRoute = board.getLongestRoute();
+	    //this.longestRoutePlayer = board.getLongestRoutePlayer(player);
 	    this.deckManager = board.deckManager;
     }
 
@@ -121,13 +121,16 @@ public class Board {
 	    }
     }
 
-    public int getLongestPath(){
-        return longestPath;
+    protected void setLongestRoute(int longest){
+        longestRoute = longest;
     }
 
-    public int getLongestPathPlayer() {
-        //calculates the longestPath of any player and sets the longestPath variable
-	    return longestPathPlayer;
+    public int getLongestRoute(){ // simple getter
+        return longestRoute;
+    }
+
+    public int getLongestRoutePlayer(Player player) { //simple getter
+	    return player.getLongestRoute();
     }
 
     private void replaceFaceUpCard(){
