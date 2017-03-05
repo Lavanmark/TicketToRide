@@ -57,6 +57,16 @@ public class UIFacade {
     public int getLongestPath(){
         return getCurrentGame().getLongestRoute();
     }
+
+    public void shouldResetFaceUp(Boolean reset){
+        // sets the boolean in the board class to whatever the param boolean is
+    }
+
+    public void replaceFaceUpCard(){
+        // calls the boards replace face up card fxn to replace the face up card.
+        //go through the game class for these?
+    }
+    
     // Login and register related.
 
     /**

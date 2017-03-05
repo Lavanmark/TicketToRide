@@ -20,8 +20,7 @@ public class Board {
     private DeckManager deckManager;
 
 	private int longestRoute;
-    private int longestRoutePlayer;
-
+    //private int longestRoutePlayer; this does not need to be a private data member. never gets used
 
 	private Board(){}
 	/**
@@ -32,7 +31,7 @@ public class Board {
         this.routeList = routeList;
         this.faceUpCards = new TrainCard[FACEUP_DECK_SIZE];
         this.longestRoute = 0;
-        this.longestRoutePlayer = -1;
+        //this.longestRoutePlayer = -1;
 	    this.deckManager = null;
     }
 
@@ -135,7 +134,7 @@ public class Board {
 
     private void replaceFaceUpCard(){
 
-        //this replaces a card that was drawn from teh face up pile
+        //this replaces a card that was drawn from the face up pile
     }
 
     private Boolean shouldResetFaceUp(){
@@ -146,6 +145,7 @@ public class Board {
     private void resetFaceUp(){
         //if there are >3 wild cards then trash all the face up and replace them with new ones.repeat if necessary
     }
+
     public TrainCard[] getFaceUpCards() {
         return faceUpCards;
     }
