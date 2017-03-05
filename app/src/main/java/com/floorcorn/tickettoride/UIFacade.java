@@ -125,6 +125,7 @@ public class UIFacade {
      * @return Same Game objects, but sorted
      */
     private List<GameInfo> sortGames(Set<GameInfo> games, GameSortStyle sortStyle) {
+        // TODO:
         // Not implemented yet.
         throw new UnsupportedOperationException();
     }
@@ -177,7 +178,13 @@ public class UIFacade {
         return clientModelRoot.getCurrentGame();
     }
 
-	public void requestGame(GameInfo game) throws BadUserException{
+    /**
+     * Requests current game from server. Re-throws a BadUserException if authentication doesn't
+     * work right on server side.
+     * @param game GameInfo object
+     * @throws BadUserException
+     */
+	public void requestGame(GameInfo game) throws BadUserException {
 		Game cgame = serverProxy.getGame(clientModelRoot.getCurrentUser(), game.getGameID());
         clientModelRoot.setCurrentGame(cgame);
 	}
@@ -236,28 +243,46 @@ public class UIFacade {
 	    return ret;
     }
 
+    /**
+     * Resets poller state and starts polling for the player list.
+     * @param view object implements IView
+     */
     public void pollPlayerList(IView view) {
 		resetPollerState();
 	    poller.startPollingPlayerList(view);
     }
 
+    /**
+     * Resets poller state and starts polling for Commands.
+     * @param view object implements IView
+     */
     public void pollCommands(IView view) {
         resetPollerState();
         poller.startPollingCommands(view);
     }
 
+    /**
+     * Stops polling (resets poller state).
+     */
     public void stopPolling() {
         resetPollerState();
     }
 
+    /**
+     * If poller is null, creates a new Poller. Tells poller to stop polling.
+     */
 	private void resetPollerState() {
-		if(poller == null) {
+		if (poller == null) {
 			poller = new Poller(serverProxy, clientModelRoot);
 			return;
 		}
 		poller.stopPolling();
 	}
 
+    /**
+     * Sets client model current user to null, effectively logging out the user and requiring
+     * a new login.
+     */
 	public void logout() {
 		clientModelRoot.setCurrentUser(null);
 	}
@@ -286,112 +311,167 @@ public class UIFacade {
         clientModelRoot.deleteObservers();
     }
 
-    //phase 2 stuff
+    // Phase 2 stuff.
 
-    // score and player related
-    public int getLongestPathPlayer(User user){ // this gets a player's longest path
+    // Score and player related.
+
+    /**
+     * Gets the length of player's longest path.
+     * @param user User object
+     * @return int Length of player's longest path.
+     */
+    public int getLongestPathPlayer(User user) {
         return getCurrentGame().getPlayer(user).getLongestRoute();
     }
 
-    public List<Player> getPlayerLongestPath(){ // this gets a games list of players with the longest path
+    /**
+     * Returns a list of players whose longest paths are the longest path in the game.
+     * @return List of Player objects who have the longest path
+     */
+    public List<Player> getPlayerLongestPath() {
         return getCurrentGame().getPlayerLongestRoute();
     }
 
-    public int getLongestRoute(){
+    /**
+     * Returns the length of the longest route in the current game.
+     * @return int length of longest route
+     */
+    public int getLongestRoute() {
         return getCurrentGame().getLongestRoute();
     }
 
-    public void shouldResetFaceUp(Boolean reset){
-        // sets the boolean in the board class to whatever the param boolean is
+    /**
+     * Sets the boolean in the Board object to whatever the param is. This is whether we should
+     * reset the face up cards.
+     * @param reset boolean -- to reset or not to reset face up, that is the question
+     */
+    public void shouldResetFaceUp(Boolean reset) {
+        throw new UnsupportedOperationException();
     }
 
-    public void replaceFaceUpCard(){
-        // calls the boards replace face up card fxn to replace the face up card.
+    /**
+     * Calls the function on the Board to replace face up card.
+     */
+    public void replaceFaceUpCard() {
         //go through the game class for these?
+        throw new UnsupportedOperationException();
     }
 
-    public int getPlayerScore(Player player){
+    /**
+     * Returns the player's score.
+     * @param player Player object
+     * @return int player's score
+     */
+    public int getPlayerScore(Player player) {
         //TODO
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
-    public int getNumCards(Player player){
+    /**
+     * Returns the number of cards the player has.
+     * @param player PLayer object
+     * @return int number of cards
+     */
+    public int getNumCards(Player player) {
         //TODO
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
-    public Map<TrainCardColor, Integer> getCardMap(){
+    /**
+     *
+     * @return Map of TrainCardColor to Integer
+     */
+    public Map<TrainCardColor, Integer> getCardMap() {
         //TODO
-        return null;
+        throw new UnsupportedOperationException();
     }
 
-    public int getTrainCarsLeft(Player player){
+    /**
+     * Returns the number of train cars left.
+     * @param player Player object
+     * @return int number of cars
+     */
+    public int getTrainCarsLeft(Player player) {
         //TODO
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
-    public List<String> getPlayerNames(){
+    /**
+     * Returns a List of player names.
+     * @return List of String player names
+     */
+    public List<String> getPlayerNames() {
         //TODO
-        return null;
+        throw new UnsupportedOperationException();
     }
 
-    public Player whosTurn(){
+    /**
+     * Returns the Player whose turn it is. Re-throws GameActionException if there is not 1 and
+     * only 1 Player whose turn it is.
+     * @return Player object
+     */
+    public Player whoseTurn() throws GameActionException {
+        return clientModelRoot.whoseTurn();
+    }
+
+    // Cards.
+
+    public TrainCard getFaceUpDeck() {
         //TODO
-        return null;
+        throw new UnsupportedOperationException();
     }
 
-    //cards
-
-    public TrainCard getFaceUpDeck(){
-        //TODO
-        return null;
-    }
-
-    public void drawTrainCardFromDeck(){
+    public void drawTrainCardFromDeck() {
         //no implementation for phase 2
+        throw new UnsupportedOperationException();
     }
 
     public void drawTrainCard(int position) { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
         //implementation?
+        throw new UnsupportedOperationException();
     }
 
-    public void drawDestinationCard(){
+    public void drawDestinationCard() {
         //implementation?
+        throw new UnsupportedOperationException();
     }
 
-    public void discardDesetinationCard(){
+    public void discardDestinationCard() {
         //implementation?
+        throw new UnsupportedOperationException();
     }
 
-    //routes
+    // Routes.
 
-    public void claimRoute(){
+    public void claimRoute() {
         //TODO
+        throw new UnsupportedOperationException();
     }
 
-    public List<Route> getAvailableRoutes(){
+    public List<Route> getAvailableRoutes() {
         //TODO
-        return null;
+        throw new UnsupportedOperationException();
     }
 
-    public Boolean canClaimRoute(Player player,Route route){
+    public Boolean canClaimRoute(Player player, Route route) {
         //TODO
-        return false;
+        throw new UnsupportedOperationException();
     }
 
-    public List<Route> getRoutes(){
+    public List<Route> getRoutes() {
         //TODO
-        return null;
+        throw new UnsupportedOperationException();
     }
 
-    //Chat
+    // Chat functions.
 
-    public GameChatLog getChatMessages(){
+    public GameChatLog getChatMessages() {
         //TODO
-        return null;
+        throw new UnsupportedOperationException();
     }
 
-    public void sendChatMessage(){
+    public void sendChatMessage() {
         //TODO
+        throw new UnsupportedOperationException();
     }
 }
