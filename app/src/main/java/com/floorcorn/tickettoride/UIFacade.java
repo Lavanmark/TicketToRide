@@ -1,18 +1,23 @@
 package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.clientModel.ClientModel;
+import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.Player;
+import com.floorcorn.tickettoride.model.Route;
+import com.floorcorn.tickettoride.model.TrainCard;
+import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.ui.views.IView;
 
 import java.security.InvalidParameterException;
 import java.util.List;
+import java.util.Map;
 import java.util.Observer;
 import java.util.Set;
 
@@ -48,27 +53,6 @@ public class UIFacade {
         if (instance == null)
             instance = new UIFacade();
         return instance;
-    }
-
-    public int getLongestPathPlayer(User user){ // this gets a player's longest path
-        return getCurrentGame().getPlayer(user).getLongestRoute();
-    }
-
-    public List<Player> getPlayerLongestPath(){ // this gets a games list of players with the longest path
-        return getCurrentGame().getPlayerLongestRoute();
-    }
-
-    public int getLongestRoute(){
-        return getCurrentGame().getLongestRoute();
-    }
-
-    public void shouldResetFaceUp(Boolean reset){
-        // sets the boolean in the board class to whatever the param boolean is
-    }
-
-    public void replaceFaceUpCard(){
-        // calls the boards replace face up card fxn to replace the face up card.
-        //go through the game class for these?
     }
 
     // Login and register related.
@@ -302,4 +286,112 @@ public class UIFacade {
         clientModelRoot.deleteObservers();
     }
 
+    //phase 2 stuff
+
+    // score and player related
+    public int getLongestPathPlayer(User user){ // this gets a player's longest path
+        return getCurrentGame().getPlayer(user).getLongestRoute();
+    }
+
+    public List<Player> getPlayerLongestPath(){ // this gets a games list of players with the longest path
+        return getCurrentGame().getPlayerLongestRoute();
+    }
+
+    public int getLongestRoute(){
+        return getCurrentGame().getLongestRoute();
+    }
+
+    public void shouldResetFaceUp(Boolean reset){
+        // sets the boolean in the board class to whatever the param boolean is
+    }
+
+    public void replaceFaceUpCard(){
+        // calls the boards replace face up card fxn to replace the face up card.
+        //go through the game class for these?
+    }
+
+    public int getPlayerScore(Player player){
+        //TODO
+        return 0;
+    }
+
+    public int getNumCards(Player player){
+        //TODO
+        return 0;
+    }
+
+    public Map<TrainCardColor, Integer> getCardMap(){
+        //TODO
+        return null;
+    }
+
+    public int getTrainCarsLeft(Player player){
+        //TODO
+        return 0;
+    }
+
+    public List<String> getPlayerNames(){
+        //TODO
+        return null;
+    }
+
+    public Player whosTurn(){
+        //TODO
+        return null;
+    }
+
+    //cards
+
+    public TrainCard getFaceUpDeck(){
+        //TODO
+        return null;
+    }
+
+    public void drawTrainCardFromDeck(){
+        //no implementation for phase 2
+    }
+
+    public void drawTrainCard(int position) { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
+        //implementation?
+    }
+
+    public void drawDestinationCard(){
+        //implementation?
+    }
+
+    public void discardDesetinationCard(){
+        //implementation?
+    }
+
+    //routes
+
+    public void claimRoute(){
+        //TODO
+    }
+
+    public List<Route> getAvailableRoutes(){
+        //TODO
+        return null;
+    }
+
+    public Boolean canClaimRoute(Player player,Route route){
+        //TODO
+        return false;
+    }
+
+    public List<Route> getRoutes(){
+        //TODO
+        return null;
+    }
+
+    //Chat
+
+    public GameChatLog getChatMessages(){
+        //TODO
+        return null;
+    }
+
+    public void sendChatMessage(){
+        //TODO
+    }
 }
