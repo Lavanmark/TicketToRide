@@ -50,11 +50,15 @@ public class UIFacade {
         return instance;
     }
 
-    public int getLongestPathPlayer(User user){ // pretty sure the getCurrentGame call will work, if not, just pass in a game object as a param
+    public int getLongestPathPlayer(User user){ // this gets a player's longest path
         return getCurrentGame().getPlayer(user).getLongestRoute();
     }
 
-    public int getLongestPath(){
+    public List<Player> getPlayerLongestPath(){ // this gets a games list of players with the longest path
+        return getCurrentGame().getPlayerLongestRoute();
+    }
+
+    public int getLongestRoute(){
         return getCurrentGame().getLongestRoute();
     }
 
@@ -66,7 +70,7 @@ public class UIFacade {
         // calls the boards replace face up card fxn to replace the face up card.
         //go through the game class for these?
     }
-    
+
     // Login and register related.
 
     /**

@@ -226,6 +226,15 @@ public class Game {
 		this.board = board;
 	}
 
+	public List<Player> getPlayerLongestRoute(){ // returns 1..* players with the longest route. 10 points goes to all those who are tied for the longest route
+		List<Player> playerLongestRoute = new ArrayList<Player>();
+		for(Player player: playerList){
+			if(player.getLongestRoute() == longestRoute)
+				playerLongestRoute.add(player);
+		}
+		return playerLongestRoute;
+	}
+
 	public void calculateLongestRoute(){ // gets the longest route from each player to determine the longest route in the entire game.
 		for(Player player: playerList){
 			if(player.getLongestRoute() > longestRoute)
