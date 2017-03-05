@@ -52,7 +52,7 @@ public class ClientFacade implements IClient {
 	}
 
 	@Override
-	public void setFaceUpDeck(List<TrainCard> faceUpDeck) {
+	public void setFaceUpDeck(TrainCard[] faceUpDeck) {
 
 	}
 }

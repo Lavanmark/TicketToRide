@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.interfaces;
 
 
+import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.TrainCard;
 
@@ -17,11 +18,13 @@ public interface IClient {
      *  Assigns a new list of players to be stored in the model
      * @param players a list of players to be stored.
      */
-    public void setPlayerList(ArrayList<Player> players);
+    void setPlayerList(ArrayList<Player> players);
 
     /**
      * Assigns a new deck of TrainCards to be stored as the face up deck
      * @param faceUpDeck the new list of TrainCards to be stored as the face up deck
      */
-    public void setFaceUpDeck(List<TrainCard> faceUpDeck);
+    void setFaceUpDeck(TrainCard[] faceUpDeck);
+
+    Game getGame();
 }

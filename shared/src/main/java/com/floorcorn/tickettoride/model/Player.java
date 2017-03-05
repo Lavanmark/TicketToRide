@@ -30,6 +30,7 @@ public class Player {
 	private List<DestinationCard> destinationCards = null;
 	private Map<TrainCardColor, Integer> trainCards = null;
 	private List<Route> routesClaimed = null;
+	private int longestRoute = 0;
 
 	// for JACKSON
 	private Player(){}
@@ -183,6 +184,50 @@ public class Player {
 	public void setRoutesClaimed(List<Route> routesClaimed) {
 		this.routesClaimed = routesClaimed;
 	}
+
+	public int calcualteLongestRoute(){
+		//this is the calculation right here
+
+		/*
+		for each city that the player is connected to
+			for each path the player own connected to that city
+				count the number of consecutive trains from that city
+				recurse at each city
+
+		sets longestRoute variable
+		 */
+		return 0;
+	}
+
+	public int getLongestRoute(){ // just a simple getter
+		return longestRoute;
+	}
+
+	public Boolean removeTrainCars(int amount){
+		//wat
+		return false;
+	}
+
+	public void addDestinationCard(DestinationCard card){
+		if(destinationCards == null)
+			return;
+		if(destinationCards.contains(card))
+			return;
+		destinationCards.add(card);
+	}
+
+	public void addTrainCard(TrainCard card, int amount){
+		//adds this to the players traincard hand
+	}
+
+	public void removeDestinationCard(DestinationCard card){
+		//param should be a list
+	}
+
+	public void removeTrainCard(TrainCard card){
+		//param should be a list
+	}
+
 
 	@Override
 	public boolean equals(Object o) {

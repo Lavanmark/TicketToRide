@@ -96,4 +96,9 @@ public class User {
 		result = 31 * result + userID;
 		return result;
 	}
+
+	@Override
+	public String toString() {
+		return username;
+	}
 }

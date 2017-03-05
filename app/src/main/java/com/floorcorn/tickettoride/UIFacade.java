@@ -6,6 +6,7 @@ import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.ui.views.IView;
@@ -38,7 +39,7 @@ public class UIFacade {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
 	      serverProxy.setPort("8080");
-        serverProxy.setHost("10.24.69.49");
+        serverProxy.setHost("192.168.0.100");
 
         poller = new Poller(serverProxy, clientModelRoot);
     }
@@ -49,6 +50,13 @@ public class UIFacade {
         return instance;
     }
 
+    public int getLongestPathPlayer(User user){
+        return getCurrentGame().getPlayer(user).getLongestRoute();
+    }
+
+    public int getLongestPath(){
+        return getCurrentGame().getLongestRoute();
+    }
     // Login and register related.
 
     /**

@@ -24,18 +24,19 @@ public class Game {
 	private int gameSize = -1;
 	private String name = null;
 	private boolean finished = false;
+	private int longestRoute = 0;
 
 	@JsonIgnore
 	private ArrayList<ICommand> commands = new ArrayList<>();
 	private Board board = null;
 
-	private Game(){}
+	private Game(){} //<--- what is this doing here? doesnt look right
 
 	public Game(Game game) {
 		this.gameID = game.getGameID();
 		this.gameSize = game.getGameSize();
 		this.name = game.getName();
-		this.playerList = new ArrayList<Player>(game.getPlayerList());
+		this.playerList = new ArrayList<>(game.getPlayerList());
 		this.finished = game.isFinished();
 		this.commands = new ArrayList<>(game.getCommands());
 		this.board = new Board(game.getBoard());
@@ -223,6 +224,17 @@ public class Game {
 
 	public void setBoard(Board board) {
 		this.board = board;
+	}
+
+	public void calculateLongestRoute(){ // gets the longest route from each player to determine the longest route in the entire game.
+		for(Player player: playerList){
+			if(player.getLongestRoute() > longestRoute)
+				longestRoute = player.getLongestRoute();
+		}
+	}
+
+	public int getLongestRoute(){ // just a simple getter
+		return longestRoute;
 	}
 
 	@Override

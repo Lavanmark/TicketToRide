@@ -2,26 +2,30 @@ package com.floorcorn.tickettoride.handlers;
 
 import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
+import com.floorcorn.tickettoride.commands.ICommand;
+import com.floorcorn.tickettoride.communication.GameChatLog;
+import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.log.Corn;
-import com.floorcorn.tickettoride.model.Game;
-import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.User;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 /**
- * Created by Tyler on 2/13/17.
+ * Created by Tyler on 3/3/2017.
  */
 
-public class GetGameHandler extends HandlerBase {
+public class SendChatHandler extends HandlerBase {
+
 	@Override
 	public void handle(HttpExchange httpExchange) throws IOException {
-		Corn.log(Level.FINEST, "Get Game Handler");
+		Corn.log(Level.FINEST, "Send Chat Handler");
 		try {
 			String token = getAuthenticationToken(httpExchange);
 			if(token == null || token.isEmpty()) {
@@ -35,18 +39,13 @@ public class GetGameHandler extends HandlerBase {
 				return;
 			}
 
-			GameInfo gi = Serializer.getInstance().deserializeGameInfo(reqBody);
-
-			if(gi == null) {
-				httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);
-				return;
-			}
+			Message message = Serializer.getInstance().deserializeMessage(reqBody);
 
 			Results results;
 			try {
-				Game game = ServerFacade.getInstance().getGame(new User(token), gi.getGameID());
-				results = new Results(true, game);
-				Corn.log("Game: " + game.getGameID() + " returned to user.");
+				GameChatLog chats = ServerFacade.getInstance().sendChatMessage(new User(token), message);
+				results = new Results(true, chats);
+				Corn.log("Message added to log, returning chat log object.");
 			} catch(BadUserException e) {
 				Corn.log(Level.SEVERE, e.getStackTrace());
 				results = new Results(false, e);
@@ -54,7 +53,7 @@ public class GetGameHandler extends HandlerBase {
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			sendResponseBody(httpExchange, results);
-		} catch(IOException e) {
+		} catch(Exception e) {
 			Corn.log(Level.SEVERE, e.getStackTrace());
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
 		}

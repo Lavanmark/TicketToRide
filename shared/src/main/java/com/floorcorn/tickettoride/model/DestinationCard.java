@@ -12,6 +12,7 @@ public class DestinationCard {
     private int value;
     private Boolean canDiscard;
 
+    private DestinationCard(){}
     public DestinationCard(City c1, City c2, int v){
         city1 = c1;
         city2 = c2;
@@ -38,5 +39,28 @@ public class DestinationCard {
 
     public Boolean canDiscard(){
         return canDiscard;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+
+        DestinationCard that = (DestinationCard) o;
+
+        if(value != that.value) return false;
+        if(!city1.equals(that.city1)) return false;
+        if(!city2.equals(that.city2)) return false;
+        return canDiscard.equals(that.canDiscard);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = city1.hashCode();
+        result = 31 * result + city2.hashCode();
+        result = 31 * result + value;
+        result = 31 * result + canDiscard.hashCode();
+        return result;
     }
 }

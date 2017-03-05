@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.communication.CommandRequest;
+import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.PlayerInfo;
@@ -113,6 +114,15 @@ public class Serializer {
 	public ICommand deserializeCommand(String str) {
 		try {
 			return mapper.readValue(str, ICommand.class);
+		} catch(IOException e) {
+			Corn.log(Level.SEVERE, e.getStackTrace());
+		}
+		return null;
+	}
+
+	public Message deserializeMessage(String str) {
+		try {
+			return mapper.readValue(str, Message.class);
 		} catch(IOException e) {
 			Corn.log(Level.SEVERE, e.getStackTrace());
 		}
