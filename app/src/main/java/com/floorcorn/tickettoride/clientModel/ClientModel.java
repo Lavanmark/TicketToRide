@@ -101,12 +101,10 @@ public class ClientModel extends Observable {
     }
 
     /**
-     * Returns the Player whose turn it is. Throws a GameActionException if there is not one and
-     * only one Player whose turn it is.
+     * Returns the Player whose turn it is.
      * @return Player object whose turn it is
-     * @throws GameActionException if there are less than 1 or more than 1 Player whose turn it is
      */
-    public Player whoseTurn() throws GameActionException {
+    public Player whoseTurn() {
         int count = 0;
         Player retval = null;
         for (Player p : currentGame.getPlayerList()) {
@@ -115,17 +113,9 @@ public class ClientModel extends Observable {
                 count++;
             }
         }
-        if (count > 1) {
-            Corn.log("Client model trying to determine whose turn found that more than one" +
-                    "person think it's their turn.");
-            throw new GameActionException("Client model shows it is the turn of more than one" +
-                    "Player");
-        } else if (count < 1) {
-            Corn.log("Client model trying to determine whose turn found that no one has it" +
-                    "set that it is their turn.");
-            throw new GameActionException("Client model shows it is the turn of no one");
-        } else {
-            return retval;
-        }
+
+        assert count == 1 : "Number of players whose turn it is is not 1, it is: " + count;
+
+        return retval;
     }
 }
