@@ -50,13 +50,27 @@ public class UIFacade {
         return instance;
     }
 
-    public int getLongestPathPlayer(User user){
+    public int getLongestPathPlayer(User user){ // this gets a player's longest path
         return getCurrentGame().getPlayer(user).getLongestRoute();
     }
 
-    public int getLongestPath(){
+    public List<Player> getPlayerLongestPath(){ // this gets a games list of players with the longest path
+        return getCurrentGame().getPlayerLongestRoute();
+    }
+
+    public int getLongestRoute(){
         return getCurrentGame().getLongestRoute();
     }
+
+    public void shouldResetFaceUp(Boolean reset){
+        // sets the boolean in the board class to whatever the param boolean is
+    }
+
+    public void replaceFaceUpCard(){
+        // calls the boards replace face up card fxn to replace the face up card.
+        //go through the game class for these?
+    }
+
     // Login and register related.
 
     /**
