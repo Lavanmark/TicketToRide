@@ -6,6 +6,7 @@ import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.ui.views.IView;
@@ -49,8 +50,12 @@ public class UIFacade {
         return instance;
     }
 
-    public int getLongestPathPlayer(){
-        return 0;
+    public int getLongestPathPlayer(User user){
+        return getCurrentGame().getPlayer(user).getLongestRoute();
+    }
+
+    public int getLongestPath(){
+        return getCurrentGame().getLongestRoute();
     }
     // Login and register related.
 
