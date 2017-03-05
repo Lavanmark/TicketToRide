@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -35,15 +36,16 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
     private PregamePresenter presenter;
     private RecyclerView playerListView;
     private Button cancelGameButton;
-	private Button refreshButton;
-
 	private PlayerListRecyclerViewAdapter playerListViewAdapter;
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 	private ScheduledExecutorService scheduledExecutorService;
 
 =======
 	private ScheduledExecutorService scheduledExecutorService;
+>>>>>>> master
+=======
 >>>>>>> master
 
     /**
@@ -71,7 +73,7 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 
         cancelGameButton = (Button) findViewById(R.id.cancelGameButton);
 
-        if(presenter.isConductor())
+        if(presenter.canCancel())
             cancelGameButton.setText("Cancel Game");
         else
             cancelGameButton.setText("Leave Game");
@@ -84,15 +86,21 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
         });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		pollPlayerList();
 
 =======
 	    pollPlayerList();
 >>>>>>> master
+=======
+	    displayPlayerList(presenter.getPlayerList());
+	    presenter.requestPlayerList();
+>>>>>>> master
     }
 
 	@Override
 	public void onStop () {
+<<<<<<< HEAD
 <<<<<<< HEAD
 		System.out.println("PregameActivity onStop");
 		presenter.stopStartGamePoller();
@@ -100,6 +108,10 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 		if(scheduledExecutorService != null)
 			scheduledExecutorService.shutdown();
 		presenter.unregister();
+>>>>>>> master
+=======
+		presenter.unregister();
+		presenter.stopPolling();
 >>>>>>> master
 		super.onStop();
 	}
@@ -162,24 +174,6 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
         startActivity(new Intent(PregameActivity.this, GameListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
-	@Override
-	public void pollPlayerList() {
-		scheduledExecutorService = Executors.newScheduledThreadPool(2);
-		scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-
-			@Override
-			public void run() {
-				PregameActivity.this.runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						presenter.requestPlayerList();
-					}
-				});
-			}
-		}, 0, 5, TimeUnit.SECONDS);
-	}
-
     /**
      * Switches to the Boardmap view. This happens when the game is started and we don't need
      * Pregame view anymore.
@@ -228,6 +222,11 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 	public void backToLogin() {
 		startActivity(new Intent(PregameActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 >>>>>>> master
+	}
+
+	@Override
+	public Activity getActivity() {
+		return PregameActivity.this;
 	}
 
 	public class PlayerListRecyclerViewAdapter extends RecyclerView.Adapter<PlayerListRecyclerViewAdapter.ViewHolder> {

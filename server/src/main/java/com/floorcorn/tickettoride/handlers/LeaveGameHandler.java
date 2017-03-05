@@ -5,13 +5,16 @@ import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.serverModel.User;
+import com.floorcorn.tickettoride.log.Corn;
+import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.User;
 import com.sun.net.httpserver.Authenticator;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.logging.Level;
 
 /**
  * Created by Tyler on 2/2/2017.
@@ -21,6 +24,7 @@ public class LeaveGameHandler extends HandlerBase {
 
 	@Override
 	public void handle(HttpExchange httpExchange) throws IOException {
+		Corn.log(Level.FINEST, "Leave Game Handler");
 		try {
 			String token = getAuthenticationToken(httpExchange);
 			if(token == null || token.isEmpty()) {
@@ -34,26 +38,27 @@ public class LeaveGameHandler extends HandlerBase {
 				return;
 			}
 
-			IGame iGame = Serializer.getInstance().deserializeGame(reqBody);
+			GameInfo game = Serializer.getInstance().deserializeGameInfo(reqBody);
 
-			if(iGame == null) {
+			if(game == null) {
 				httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);
 				return;
 			}
 
-			Results results = null;
+			Results results;
 			try {
-				boolean left = ServerFacade.getInstance().leaveGame(new User(token), iGame.getGameID());
+				boolean left = ServerFacade.getInstance().leaveGame(new User(token), game.getGameID());
 				results = new Results(true, null);
+				Corn.log("User " + (left ? "has left" : "could not leave"));
 			} catch(BadUserException | GameActionException e) {
-				//e.printStackTrace();
+				Corn.log(Level.SEVERE, e.getStackTrace());
 				results = new Results(false, e);
 			}
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			sendResponseBody(httpExchange, results);
 		} catch(IOException e) {
-			e.printStackTrace();
+			Corn.log(Level.SEVERE, e.getStackTrace());
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
 		}
 	}

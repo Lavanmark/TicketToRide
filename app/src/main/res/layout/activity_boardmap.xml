@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:id="@+id/boardmapActivity"
     tools:context="com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
+
+    <include
+        layout="@layout/app_bar_navigator"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        >
+        android:layout_height="match_parent" />
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/bmap_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            android:layout_weight="1"/>
-    </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:text="@string/game_started"
-        android:textSize="@dimen/heading_login"
-        android:textColorHighlight="@color/colorAccent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/gameStartedText"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textStyle="normal|bold"
-        android:textColor="@android:color/black"
-        android:layout_below="@+id/app_bar"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
 
-</RelativeLayout>
+
+
+    <FrameLayout
+        android:id="@+id/left_drawer_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true">
+        <include layout="@layout/drawer_destinations"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/right_drawer_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:fitsSystemWindows="true">
+        <include layout="@layout/drawer_player_hand"/>
+    </FrameLayout>
+
+</android.support.v4.widget.DrawerLayout>
 
 

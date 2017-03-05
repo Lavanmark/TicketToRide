@@ -7,4 +7,6 @@
 /build
 /captures
 .externalNativeBuild
-app/src/main/java/com/floorcorn/tickettoride/ui/presenters/LoginPresenter.java
+*.log
+*.lck
+*.1

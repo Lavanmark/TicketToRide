@@ -3,13 +3,15 @@ package com.floorcorn.tickettoride.handlers;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.serverModel.User;
+import com.floorcorn.tickettoride.log.Corn;
+import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.User;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * Created by Tyler on 2/2/2017.
@@ -19,6 +21,7 @@ public class GetGamesHandler extends HandlerBase {
 
 	@Override
 	public void handle(HttpExchange httpExchange) throws IOException {
+		Corn.log(Level.FINEST, "Get Games Handler");
 		try {
 			String token = getAuthenticationToken(httpExchange);
 			if(token == null || token.isEmpty()) {
@@ -26,19 +29,20 @@ public class GetGamesHandler extends HandlerBase {
 				return;
 			}
 
-			Results results = null;
+			Results results;
 			try {
-				Set<IGame> games = ServerFacade.getInstance().getGames(new User(token));
+				Set<GameInfo> games = ServerFacade.getInstance().getGames(new User(token));
 				results = new Results(true, games);
+				Corn.log("Game list of " + games.size() + " returned to client.");
 			} catch(BadUserException e) {
-				//e.printStackTrace();
+				Corn.log(Level.SEVERE, e.getStackTrace());
 				results = new Results(false, e);
 			}
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			sendResponseBody(httpExchange, results);
 		} catch(IOException e) {
-			e.printStackTrace();
+			Corn.log(Level.SEVERE, e.getStackTrace());
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
 		}
 	}

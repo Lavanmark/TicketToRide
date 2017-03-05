@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_navigator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity"
+    tools:showIn="@layout/activity_boardmap"
+     >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gameStartedText"
+        />
+    
+    <LinearLayout
+        android:id="@+id/playerTokenHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/gameStartedText"
+        android:layout_centerHorizontal="true">
+
+        <ImageButton
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher"
+            android:id="@+id/yellowPlayer" />
+        <ImageButton
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher"
+            android:id="@+id/greenplayer" />
+        <ImageButton
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher"
+            android:id="@+id/redplayer" />
+        <ImageButton
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher"
+            android:id="@+id/blueplayer" />
+        <ImageButton
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher"
+            android:id="@+id/blackplayer" />
+        
+    </LinearLayout>
+
+
+
+    <FrameLayout
+        android:id="@+id/mapFrame"
+        android:paddingTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="530dp"
+        android:layout_below="@id/playerTokenHolder"
+        android:background="@drawable/map"
+        android:layout_centerHorizontal="true">
+    </FrameLayout>
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mapFrame"
+        android:layout_centerHorizontal="true">
+        <Button
+            android:text="Draw Card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/open_card_button" />
+
+        <Button
+            android:text="Place Route"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/open_route_button" />
+
+        <Button
+            android:text="Destination Drawer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/open_dest_button" />
+
+        <Button
+            android:text="Open Hand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/open_hand_button" />
+
+        <Button
+            android:text="Animate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/animateButton" />
+        
+    </LinearLayout>
+
+
+    
+
+
+
+
+</RelativeLayout>

@@ -4,13 +4,15 @@ import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.serverModel.User;
+import com.floorcorn.tickettoride.log.Corn;
+import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.User;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * Created by Tyler on 2/13/17.
@@ -19,6 +21,7 @@ import java.util.Set;
 public class GetGameHandler extends HandlerBase {
 	@Override
 	public void handle(HttpExchange httpExchange) throws IOException {
+		Corn.log(Level.FINEST, "Get Game Handler");
 		try {
 			String token = getAuthenticationToken(httpExchange);
 			if(token == null || token.isEmpty()) {
@@ -32,26 +35,27 @@ public class GetGameHandler extends HandlerBase {
 				return;
 			}
 
-			IGame iGame = Serializer.getInstance().deserializeGame(reqBody);
+			GameInfo gi = Serializer.getInstance().deserializeGameInfo(reqBody);
 
-			if(iGame == null) {
+			if(gi == null) {
 				httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);
 				return;
 			}
 
-			Results results = null;
+			Results results;
 			try {
-				IGame game = ServerFacade.getInstance().getGame(new User(token), iGame.getGameID());
+				Game game = ServerFacade.getInstance().getGame(new User(token), gi.getGameID());
 				results = new Results(true, game);
+				Corn.log("Game: " + game.getGameID() + " returned to user.");
 			} catch(BadUserException e) {
-				//e.printStackTrace();
+				Corn.log(Level.SEVERE, e.getStackTrace());
 				results = new Results(false, e);
 			}
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			sendResponseBody(httpExchange, results);
 		} catch(IOException e) {
-			e.printStackTrace();
+			Corn.log(Level.SEVERE, e.getStackTrace());
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
 		}
 	}

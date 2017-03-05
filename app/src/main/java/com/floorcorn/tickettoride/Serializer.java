@@ -1,24 +1,27 @@
 package com.floorcorn.tickettoride;
 
-import com.floorcorn.tickettoride.clientModel.Game;
-import com.floorcorn.tickettoride.clientModel.User;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.communication.Results;
-import com.floorcorn.tickettoride.exceptions.BadUserException;
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.model.IUser;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.User;
 
-import java.lang.reflect.Type;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
- * Created by mgard on 2/1/2017.
+ * Created by Michael on 2/1/2017.
  */
 
 public class Serializer {
 
-    private Gson gson = null;
+	private ObjectMapper mapper = null;
 
     private static Serializer instance = null;
 	public static Serializer getInstance() {
@@ -27,7 +30,10 @@ public class Serializer {
 		return instance;
 	}
     private Serializer() {
-	    gson = new Gson();
+	    mapper = new ObjectMapper();
+	    mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.OBJECT_AND_NON_CONCRETE);
+	    mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
+	    mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
     }
 
     /**
@@ -38,7 +44,12 @@ public class Serializer {
     * @return   The String representation of the input object.
      */
     public String serialize(Object obj){
-        return gson.toJson(obj);
+	    try {
+		    return mapper.writeValueAsString(obj);
+	    } catch(JsonProcessingException e) {
+		    e.printStackTrace();
+	    }
+	    return null;
     }
 
     /**
@@ -48,7 +59,12 @@ public class Serializer {
      * @return    a Results object representing the input String
      */
     public Results deserializeResults(String resultsJson) {
-	    return gson.fromJson(resultsJson, Results.class);
+	    try {
+		    return mapper.readValue(resultsJson, Results.class);
+	    } catch(IOException e) {
+		    e.printStackTrace();
+	    }
+	    return null;
     }
 
 	/**
@@ -56,8 +72,13 @@ public class Serializer {
 	 * @param userJson string of json representing a user
 	 * @return User object from string of json
 	 */
-	public IUser deserializeUser(String userJson) {
-		return gson.fromJson(userJson, User.class);
+	public User deserializeUser(String userJson) {
+		try {
+			return mapper.readValue(userJson, User.class);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -65,8 +86,27 @@ public class Serializer {
 	 * @param gameJson string of json representing the game
 	 * @return game object from the string
 	 */
-	public Game deserializeIGame(String gameJson) {
-		return gson.fromJson(gameJson, Game.class);
+	public Game deserializeGame(String gameJson) {
+		try {
+			return mapper.readValue(gameJson, Game.class);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * converts a string into a Game object
+	 * @param gameJson string of json representing the game
+	 * @return game object from the string
+	 */
+	public GameInfo deserializeGameInfo(String gameJson) {
+		try {
+			return mapper.readValue(gameJson, GameInfo.class);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -74,18 +114,21 @@ public class Serializer {
 	 * @param json string of json representing a set of games
 	 * @return set of games
 	 */
-	public Set<IGame> deserializeGameSet(String json) {
-		return gson.fromJson(json, new TypeToken<Set<Game>>(){}.getType());
+	public Set<GameInfo> deserializeGameInfoSet(String json) {
+		try {
+			return mapper.readValue(json, new TypeReference<Set<GameInfo>>(){});
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	/**
-	 * potentially deserializes a class of any type
-	 * PROBABLY SHOULDNT CALL??
-	 * @param reser string of json
-	 * @param type type/class of the json
-	 * @return object of the type parameter from the json string.
-	 */
-	public Object deserialze(String reser, Type type) {
-		return gson.fromJson(reser, type);
+	public ArrayList<ICommand> deserializeCommandList(String json) {
+		try {
+			return mapper.readValue(json, new TypeReference<ArrayList<ICommand>>(){});
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

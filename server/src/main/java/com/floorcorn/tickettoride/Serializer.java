@@ -1,10 +1,19 @@
 package com.floorcorn.tickettoride;
 
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.model.Player;
-import com.floorcorn.tickettoride.serverModel.Game;
-import com.floorcorn.tickettoride.serverModel.User;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.floorcorn.tickettoride.commands.ICommand;
+import com.floorcorn.tickettoride.communication.CommandRequest;
+import com.floorcorn.tickettoride.communication.Message;
+import com.floorcorn.tickettoride.log.Corn;
+import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.PlayerInfo;
+import com.floorcorn.tickettoride.model.User;
+
+import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * Created by Tyler on 2/1/17.
@@ -12,7 +21,7 @@ import com.google.gson.Gson;
 
 public class Serializer {
 
-	private Gson gson;
+	private ObjectMapper mapper = null;
 
 	private static Serializer instance = null;
 	public static Serializer getInstance() {
@@ -21,7 +30,10 @@ public class Serializer {
 		return instance;
 	}
 	private Serializer() {
-		gson = new Gson();
+		mapper = new ObjectMapper();
+		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.OBJECT_AND_NON_CONCRETE);
+		mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
+		mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 	}
 
 	/**
@@ -30,7 +42,12 @@ public class Serializer {
 	 * @return string of json of the object
 	 */
 	public String serialize(Object o) {
-		return gson.toJson(o);
+		try {
+			return mapper.writeValueAsString(o);
+		} catch(JsonProcessingException e) {
+			Corn.log(Level.SEVERE, e.getStackTrace());
+		}
+		return null;
 	}
 
 	/**
@@ -39,7 +56,12 @@ public class Serializer {
 	 * @return user object from json string
 	 */
 	public User deserializeUser(String str) {
-		return gson.fromJson(str, User.class);
+		try {
+			return mapper.readValue(str, User.class);
+		} catch(IOException e) {
+			Corn.log(Level.SEVERE, e.getStackTrace());
+		}
+		return null;
 	}
 
 	/**
@@ -47,8 +69,13 @@ public class Serializer {
 	 * @param str json representing a game
 	 * @return game object from json string
 	 */
-	public IGame deserializeGame(String str) {
-		return gson.fromJson(str, Game.class);
+	public GameInfo deserializeGameInfo(String str) {
+		try {
+			return mapper.readValue(str, GameInfo.class);
+		} catch(IOException e) {
+			Corn.log(Level.SEVERE, e.getStackTrace());
+		}
+		return null;
 	}
 
 	/**
@@ -56,7 +83,49 @@ public class Serializer {
 	 * @param str json representing a player
 	 * @return player object from json string
 	 */
-	public Player deserializePlayer(String str) {
-		return gson.fromJson(str, Player.class);
+	public PlayerInfo deserializePlayerInfo(String str) {
+		try {
+			return mapper.readValue(str, PlayerInfo.class);
+		} catch(IOException e) {
+			Corn.log(Level.SEVERE, e.getStackTrace());
+		}
+		return null;
+	}
+
+	/**
+	 * converts string of json representing a command request to a CommandRequest object
+	 * @param str json representing a CommandRequest
+	 * @return CommandRequest object from json string
+	 */
+	public CommandRequest deserializeCommandRequest(String str) {
+		try {
+			return mapper.readValue(str, CommandRequest.class);
+		} catch(IOException e) {
+			Corn.log(Level.SEVERE, e.getStackTrace());
+		}
+		return null;
+	}
+
+	/**
+	 * converts string of json representing a command to an ICommand object
+	 * @param str json representing a CommandRequest
+	 * @return ICommand object from json string
+	 */
+	public ICommand deserializeCommand(String str) {
+		try {
+			return mapper.readValue(str, ICommand.class);
+		} catch(IOException e) {
+			Corn.log(Level.SEVERE, e.getStackTrace());
+		}
+		return null;
+	}
+
+	public Message deserializeMessage(String str) {
+		try {
+			return mapper.readValue(str, Message.class);
+		} catch(IOException e) {
+			Corn.log(Level.SEVERE, e.getStackTrace());
+		}
+		return null;
 	}
 }

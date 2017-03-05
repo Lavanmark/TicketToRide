@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,14 +17,12 @@ import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.UIFacade;
-import com.floorcorn.tickettoride.clientModel.Game;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.model.Player;
+import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.presenters.LobbyPresenter;
-import com.floorcorn.tickettoride.ui.views.GameListContent;
 import com.floorcorn.tickettoride.ui.views.ILobbyView;
 import com.floorcorn.tickettoride.ui.views.fragments.GameDetailFragment;
 
@@ -41,6 +40,9 @@ import java.util.Set;
  */
 public class GameListActivity extends AppCompatActivity implements ILobbyView {
 
+	public static final String JOIN_BUTTON_TEXT = "Join";
+	public static final String RESUME_BUTTON_TEXT = "Resume";
+
 	/**
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet
 	 * device.
@@ -51,7 +53,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	static final int JOIN_GAME_REQUEST = 2;
 
 	//model references
-	private Player.PlayerColor playerColor;
+	private PlayerColor playerColor;
 	private int playerNumber;
 	private String gameName;
 	private int gameID;
@@ -77,14 +79,11 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 		Button mCreateGameButton = (Button) findViewById(R.id.createGameButton);
 		Button mRefreshGameButton = (Button) findViewById(R.id.refreshListButton);
 
-
-
 		mCreateGameButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				//starts the CreateGameActivity as a dialogue
 				startActivityForResult(new Intent(view.getContext(), CreateGameActivity.class), CREATE_GAME_REQUEST);
-
 			}
 
 
@@ -103,7 +102,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 
 		mGameListRecyclerView = findViewById(R.id.game_list);
 		assert mGameListRecyclerView != null;
-		List<IGame> games = new ArrayList<IGame>();
+		List<GameInfo> games = new ArrayList<GameInfo>();
 		if(presenter.getGameList() != null) {
 			games.clear();
 			games.addAll(presenter.getGameList());
@@ -111,10 +110,6 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 		setupRecyclerView((RecyclerView) mGameListRecyclerView, games);
 
 		if(findViewById(R.id.game_detail_container) != null) {
-			// The detail container view will be present only in the
-			// large-screen layouts (res/values-w900dp).
-			// If this view is present, then the
-			// activity should be in two-pane mode.
 			mTwoPane = true;
 		}
 	}
@@ -141,14 +136,14 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	}
 
 	@Override
-	public void setGameList(Set<IGame> gameList) {
+	public void setGameList(Set<GameInfo> gameList) {
 		if(gameList == null) {
-			displayMessage("Game list from server was null");
+			displayMessage("GameInfo list from server was null");
 		} else {
 			displayMessage("The server has " + gameList.size() + " games.");
 			mGameListRecyclerView = findViewById(R.id.game_list);
 			assert mGameListRecyclerView != null;
-			List<IGame> games = new ArrayList<IGame>(gameList);
+			List<GameInfo> games = new ArrayList<GameInfo>(gameList);
 			GameItemRecyclerViewAdapter a = (GameItemRecyclerViewAdapter) ((RecyclerView) mGameListRecyclerView).getAdapter();
 			a.swapList(games);
 		}
@@ -160,7 +155,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	}
 
 	@Override
-	public Player.PlayerColor getPlayerColor() {
+	public PlayerColor getPlayerColor() {
 		return this.playerColor;
 	}
 
@@ -186,7 +181,12 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	}
 
 	@Override
-	public void resumeGame(IGame game) {
+	public Activity getActivity() {
+		return GameListActivity.this;
+	}
+
+	@Override
+	public void resumeGame(GameInfo game) {
 		presenter.setCurrentGame(game);
 		startGameView();
 	}
@@ -232,19 +232,19 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 		color = color.toLowerCase();
 		switch(color) {
 			case "black":
-				playerColor = Player.PlayerColor.BLACK;
+				playerColor = PlayerColor.BLACK;
 				break;
 			case "yellow":
-				playerColor = Player.PlayerColor.YELLOW;
+				playerColor = PlayerColor.YELLOW;
 				break;
 			case "blue":
-				playerColor = Player.PlayerColor.BLUE;
+				playerColor = PlayerColor.BLUE;
 				break;
 			case "green":
-				playerColor = Player.PlayerColor.GREEN;
+				playerColor = PlayerColor.GREEN;
 				break;
 			case "red":
-				playerColor = Player.PlayerColor.RED;
+				playerColor = PlayerColor.RED;
 				break;
 		}
 	}
@@ -275,20 +275,16 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	 *
 	 * @param recyclerView
 	 */
-	private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<IGame> games) {
-		recyclerView.setAdapter(new GameItemRecyclerViewAdapter(recyclerView, games));
+	private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<GameInfo> games) {
+		recyclerView.setAdapter(new GameItemRecyclerViewAdapter(games));
 	}
 
 	public class GameItemRecyclerViewAdapter extends RecyclerView.Adapter<GameItemRecyclerViewAdapter.ViewHolder> {
-		private RecyclerView rv;
-		private GameListContent glc = null;
-		private int mSelectedPosition;
-		private View mSelectedView;
 
-		GameItemRecyclerViewAdapter(RecyclerView rv, List<IGame> items) {
-			glc = new GameListContent(items);
-			mSelectedPosition = -1;
-			this.rv = rv;
+		public List<GameInfo> items;
+
+		GameItemRecyclerViewAdapter(List<GameInfo> items) {
+			this.items = items;
 		}
 
 		@Override
@@ -298,14 +294,15 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 			return new ViewHolder(view);
 		}
 
-		void swapList(List<IGame> list) {
-			GameListContent.setGamesList(list);
+		void swapList(List<GameInfo> list) {
+			this.items.clear();
+			this.items.addAll(list);
 			notifyDataSetChanged();
 		}
 
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, int position) {
-			holder.mItem = (Game) GameListContent.get(position);
+			holder.mItem = this.items.get(position);
 			holder.mIdView.setText(String.valueOf(position));
 			if(holder.mItem == null)
 				return;
@@ -316,29 +313,20 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 			} catch(BadUserException e) {
 				backToLogin();
 			} catch(GameActionException e) {
-				holder.mJoinButton.setText("Resume");
 				holder.mJoinButton.setEnabled(true);
 			}
+
+			if(holder.mItem.isPlayer(UIFacade.getInstance().getUser().getUserID()))
+				holder.mJoinButton.setText(RESUME_BUTTON_TEXT);
+			else
+				holder.mJoinButton.setText(JOIN_BUTTON_TEXT);
+
 			holder.mView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if(!v.isSelected()) {
-						if (mSelectedView != null) {
-							// deselect the previously selected view
-							mSelectedView.setSelected(false);
-						}
-						mSelectedPosition = rv.getChildAdapterPosition(v);
-						mSelectedView = v;
-					} else {
-						mSelectedPosition = -1;
-						mSelectedView = null;
-					}
-					v.setSelected(!v.isSelected());
-					v.setActivated(v.isSelected());
-
 					if(mTwoPane) {
 						Bundle arguments = new Bundle();
-						arguments.putString(GameDetailFragment.ARG_GAME_ID, String.valueOf(holder.mItem.getGameID()));
+						arguments.putString(GameDetailFragment.ARG_GAME_INFO, holder.mItem.toString());
 						GameDetailFragment fragment = new GameDetailFragment();
 						fragment.setArguments(arguments);
 						getSupportFragmentManager().beginTransaction()
@@ -347,27 +335,17 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 					} else {
 						Context context = v.getContext();
 						Intent intent = new Intent(context, GameDetailActivity.class);
-						intent.putExtra(GameDetailFragment.ARG_GAME_ID, String.valueOf(holder.mItem.getGameID()));
+						intent.putExtra(GameDetailFragment.ARG_GAME_INFO, holder.mItem.toString());
 
 						context.startActivity(intent);
 					}
 				}
 			});
-			if (position == mSelectedPosition) {
-				holder.itemView.setSelected(true);
-
-				// keep track of the currently selected view when recycled
-				mSelectedView = holder.mView;
-			} else {
-				holder.itemView.setSelected(false);
-			}
-			if(mSelectedView != null)
-				mSelectedView.setActivated(true);
 		}
 
 		@Override
 		public int getItemCount() {
-			return GameListContent.getSize();
+			return this.items.size();
 		}
 
 		class ViewHolder extends RecyclerView.ViewHolder {
@@ -376,7 +354,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 			final TextView mContentView;
 			final TextView mStatusView;
 			final Button mJoinButton;
-			Game mItem;
+			GameInfo mItem;
 
 			ViewHolder(View view) {
 				super(view);
@@ -389,12 +367,12 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 					@Override
 					public void onClick(View v) {
 
-						if(mJoinButton.getText().equals("Join")) {
+						if(mJoinButton.getText().equals(JOIN_BUTTON_TEXT)) {
 							Intent intent = new Intent(v.getContext(), JoinGameActivity.class);
 							intent.putExtra("game_name", mItem.getName());
-							List<Player.PlayerColor> colList = mItem.getAvailableColors();
+							List<PlayerColor> colList = mItem.getAvailableColors();
 							ArrayList<String> strList = new ArrayList<>();
-							for(Player.PlayerColor p :colList){
+							for(PlayerColor p :colList){
 								strList.add(String.valueOf(p));
 							}
 							intent.putStringArrayListExtra("colList", strList);

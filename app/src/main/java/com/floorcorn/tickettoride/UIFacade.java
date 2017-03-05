@@ -1,13 +1,15 @@
 package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.clientModel.ClientModel;
-import com.floorcorn.tickettoride.clientModel.User;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
-import com.floorcorn.tickettoride.model.IUser;
+import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.Player;
-import com.floorcorn.tickettoride.model.IGame;
+import com.floorcorn.tickettoride.model.User;
+import com.floorcorn.tickettoride.model.PlayerColor;
+import com.floorcorn.tickettoride.ui.views.IView;
 
 import java.security.InvalidParameterException;
 import java.util.List;
@@ -26,6 +28,7 @@ public class UIFacade {
 
     private ClientModel clientModelRoot;
     private ServerProxy serverProxy;
+    private Poller poller;
 
     // TODO: add all the types of sorting we may want
     public enum GameSortStyle { ASC_GAMEID, DESC_GAMEID };
@@ -35,14 +38,37 @@ public class UIFacade {
     private UIFacade() {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
-	    serverProxy.setPort("8080");
+	      serverProxy.setPort("8080");
         serverProxy.setHost("192.168.0.100");
+
+        poller = new Poller(serverProxy, clientModelRoot);
     }
     private static UIFacade instance = null;
     public static UIFacade getInstance() {
         if (instance == null)
             instance = new UIFacade();
         return instance;
+    }
+
+    public int getLongestPathPlayer(User user){ // this gets a player's longest path
+        return getCurrentGame().getPlayer(user).getLongestRoute();
+    }
+
+    public List<Player> getPlayerLongestPath(){ // this gets a games list of players with the longest path
+        return getCurrentGame().getPlayerLongestRoute();
+    }
+
+    public int getLongestRoute(){
+        return getCurrentGame().getLongestRoute();
+    }
+
+    public void shouldResetFaceUp(Boolean reset){
+        // sets the boolean in the board class to whatever the param boolean is
+    }
+
+    public void replaceFaceUpCard(){
+        // calls the boards replace face up card fxn to replace the face up card.
+        //go through the game class for these?
     }
 
     // Login and register related.
@@ -54,7 +80,7 @@ public class UIFacade {
      * @param password String password
      */
     public void login(String username, String password) throws BadUserException {
-        IUser user = new User(username, password);
+        User user = new User(username, password);
         user = serverProxy.login(user);
 	    clientModelRoot.setCurrentUser(user);
         requestGames();
@@ -70,7 +96,7 @@ public class UIFacade {
      * @param lastname String lastname
      */
     public void register(String username, String password, String firstname, String lastname) throws UserCreationException {
-        IUser user = new User(username, password, firstname + " " + lastname);
+        User user = new User(username, password, firstname + " " + lastname);
         user = serverProxy.register(user);
 	    clientModelRoot.setCurrentUser(user);
         try {
@@ -86,35 +112,35 @@ public class UIFacade {
      * Gets the current user from the ClientModel.
      * @return User object from ClientModel
      */
-    public IUser getUser() {
+    public User getUser() {
         return clientModelRoot.getCurrentUser();
     }
 
     /**
      * Returns the games from the ClientModel.
-     * @return Set of IGame objects from the ClientModel
+     * @return Set of Game objects from the ClientModel
      */
-    public Set<IGame> getGames() {
+    public Set<GameInfo> getGames() {
         return clientModelRoot.getGames();
     }
 
     /**
      * Returns the games that the user has joined.
      * @param user User object
-     * @return Set of IGame objects from the ClientModel
+     * @return Set of Game objects from the ClientModel
      */
-    public Set<IGame> getGames(IUser user) {
+    public Set<GameInfo> getGames(User user) {
 	    user = new User(user);
         return clientModelRoot.getGames(user);
     }
 
     /**
      * Sorts some games according to the sort style.
-     * @param games Set of IGame objects to sort
+     * @param games Set of Game objects to sort
      * @param sortStyle GameSortStyle enum variable designates how to sort
-     * @return Same IGame objects, but sorted
+     * @return Same Game objects, but sorted
      */
-    private List<IGame> sortGames(Set<IGame> games, GameSortStyle sortStyle) {
+    private List<GameInfo> sortGames(Set<GameInfo> games, GameSortStyle sortStyle) {
         // Not implemented yet.
         throw new UnsupportedOperationException();
     }
@@ -122,10 +148,10 @@ public class UIFacade {
     /**
      * Gets the games from ClientModel and sorts them before returning. See GameSortStyle enum.
      * @param sortStyle GameSortStyle enum designates what order of sort to do
-     * @return List of IGame objects from the ClientModel, sorted
+     * @return List of Game objects from the ClientModel, sorted
      */
-    public List<IGame> getGames(GameSortStyle sortStyle) {
-        Set<IGame> gamesSet = getGames();
+    public List<GameInfo> getGames(GameSortStyle sortStyle) {
+        Set<GameInfo> gamesSet = getGames();
         return sortGames(gamesSet, sortStyle);
     }
 
@@ -134,39 +160,40 @@ public class UIFacade {
      * returning. See GameSortStyle enum.
      * @param user User object
      * @param sortStyle GameSortStyle enum designates what order of sort to do
-     * @return List of IGame objects from the ClientModel, sorted
+     * @return List of Game objects from the ClientModel, sorted
      */
-    public List<IGame> getGames(IUser user, GameSortStyle sortStyle) {
+    public List<GameInfo> getGames(User user, GameSortStyle sortStyle) {
 	    user = new User(user);
-        Set<IGame> gamesSet = getGames(user);
+        Set<GameInfo> gamesSet = getGames(user);
         return sortGames(gamesSet, sortStyle);
     }
 
     /**
-     * Returns IGame that matches the gameID parameter. Will return null if games returned from
+     * Returns Game that matches the gameID parameter. Will return null if games returned from
      * ClientModel is null or if gameID not found in games.
      * @param gameID int ID
-     * @return IGame matching gameID from ClientModel games; can be null
+     * @return Game matching gameID from ClientModel games; can be null
      */
-    public IGame getGame(int gameID) {
-        Set<IGame> games = getGames();
+    public GameInfo getGameInfo(int gameID) {
+        Set<GameInfo> games = getGames();
         if (games == null) return null;
-        for (IGame game : games) {
-            if (game.getGameID() == gameID) {
-                return game;
+        for (GameInfo gi : games) {
+            if (gi.getGameID() == gameID) {
+                return gi;
             }
         }
         return null;
     }
 
     /**
-     * Returns the IGame from ClientModel.getCurrentGame().
-     * @return IGame object
+     * Returns the Game from ClientModel.getCurrentGame().
+     * @return Game object
      */
-    public IGame getCurrentGame() {
+    public Game getCurrentGame() {
         return clientModelRoot.getCurrentGame();
     }
 
+<<<<<<< HEAD
     /**
      * Updates the current game in the ClientModel. Throws an exception if parameter is null.
      * @param game IGame object
@@ -191,6 +218,10 @@ public class UIFacade {
         System.out.println("clientModelRoot current game in request current game: " + clientModelRoot.getCurrentGame());
 =======
 		IGame cgame = serverProxy.getGame(clientModelRoot.getCurrentUser(), clientModelRoot.getCurrentGame().getGameID());
+=======
+	public void requestGame(GameInfo game) throws BadUserException{
+		Game cgame = serverProxy.getGame(clientModelRoot.getCurrentUser(), game.getGameID());
+>>>>>>> master
         clientModelRoot.setCurrentGame(cgame);
 >>>>>>> master
 	}
@@ -201,6 +232,8 @@ public class UIFacade {
      */
     public void requestGames() throws BadUserException {
         clientModelRoot.setGames(serverProxy.getGames(getUser()));
+	    for(GameInfo gi : clientModelRoot.getGames())
+		    System.out.println(gi.getGameID() + " " + gi.getName());
     }
 
     /**
@@ -223,10 +256,13 @@ public class UIFacade {
      * @param gameName String game name
      * @param playerCount int number of players (this should be between 2 and 5)
      * @param color Player.PlayerColor color desired by the creating user
-     * @return IGame object representing the newly created game
+     * @return Game object representing the newly created game
      */
-    public IGame createGame(String gameName, int playerCount, Player.PlayerColor color) throws GameActionException, BadUserException {
-        IGame createdGame = serverProxy.createGame(getUser(), gameName, playerCount);
+    public GameInfo createGame(String gameName, int playerCount, PlayerColor color) throws GameActionException, BadUserException {
+        GameInfo createdGame = serverProxy.createGame(getUser(), gameName, playerCount);
+
+        if(createdGame == null)
+            return null;
         createdGame = joinGame(createdGame.getGameID(), color);
         return createdGame;
     }
@@ -238,11 +274,33 @@ public class UIFacade {
      * @param gameID int game ID
      * @param color PlayerColor color
      */
-    public IGame joinGame(int gameID, Player.PlayerColor color) throws GameActionException, BadUserException {
-        IGame ret = serverProxy.joinGame(getUser(), gameID, color);
+    public GameInfo joinGame(int gameID, PlayerColor color) throws GameActionException, BadUserException {
+        GameInfo ret = serverProxy.joinGame(getUser(), gameID, color);
 	    requestGames();
 	    return ret;
     }
+
+    public void pollPlayerList(IView view) {
+		resetPollerState();
+	    poller.startPollingPlayerList(view);
+    }
+
+    public void pollCommands(IView view) {
+        resetPollerState();
+        poller.startPollingCommands(view);
+    }
+
+    public void stopPolling() {
+        resetPollerState();
+    }
+
+	private void resetPollerState() {
+		if(poller == null) {
+			poller = new Poller(serverProxy, clientModelRoot);
+			return;
+		}
+		poller.stopPolling();
+	}
 
 	public void logout() {
 		clientModelRoot.setCurrentUser(null);

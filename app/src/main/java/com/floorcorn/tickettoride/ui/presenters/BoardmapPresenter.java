@@ -1,9 +1,9 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
+import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.UIFacade;
-import com.floorcorn.tickettoride.clientModel.User;
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.model.IUser;
+import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
 
@@ -18,8 +18,8 @@ import java.util.Observer;
 public class BoardmapPresenter implements IPresenter, Observer {
 
     private IBoardmapView view = null;
-	private IGame game = null;
-	private IUser user = null;
+	private Game game = null;
+	private User user = null;
 
 	public BoardmapPresenter() {
 		this.game = UIFacade.getInstance().getCurrentGame();
@@ -37,23 +37,25 @@ public class BoardmapPresenter implements IPresenter, Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if(arg instanceof IGame) {
-	        game = UIFacade.getInstance().getCurrentGame();
+        if(arg instanceof Game) {
+	        game = (Game)arg;
+	        view.checkStarted();
         }
-
-	    if(UIFacade.getInstance().getUser() == null) {
-		    view.backToLogin();
-	    }
     }
+
+	public void startPollingCommands() {
+		UIFacade.getInstance().pollCommands(view);
+	}
+	public void stopPolling() {
+		UIFacade.getInstance().stopPolling();
+	}
 	public boolean gameInProgress() {
 		return game.hasStarted();
 	}
-
-	public void setUser(IUser user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
-
-	public void setGame(IGame game) {
+	public void setGame(Game game) {
 		this.game = game;
 	}
 	public String getGameName(){
@@ -65,4 +67,8 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	public void register() {
 		UIFacade.getInstance().registerObserver(this);
 	}
+
+
+
+
 }

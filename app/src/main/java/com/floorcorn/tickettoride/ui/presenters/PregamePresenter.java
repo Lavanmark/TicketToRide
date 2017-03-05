@@ -1,28 +1,24 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
+<<<<<<< HEAD
 import android.os.Handler;
 
+=======
+import com.floorcorn.tickettoride.Poller;
+>>>>>>> master
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
-import com.floorcorn.tickettoride.model.IGame;
-import com.floorcorn.tickettoride.model.IUser;
+import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.views.IPregameView;
 import com.floorcorn.tickettoride.ui.views.IView;
 import com.floorcorn.tickettoride.ui.views.activities.PregameActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Exchanger;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Joseph Hansen
@@ -30,8 +26,8 @@ import java.util.concurrent.TimeUnit;
 
 public class PregamePresenter implements IPresenter, Observer {
     private IPregameView view;
-    private IGame game;
-    private IUser user;
+    private Game game;
+    private User user;
 
 <<<<<<< HEAD
 //    private Handler h;
@@ -109,13 +105,11 @@ public class PregamePresenter implements IPresenter, Observer {
 	}
 
     public void requestPlayerList() {
-        try {
-            UIFacade.getInstance().requestCurrentGame();
-        } catch(BadUserException e) {
-            e.printStackTrace();
-            view.backToLogin();
-        }
+		UIFacade.getInstance().pollPlayerList(view);
     }
+	public void stopPolling() {
+		UIFacade.getInstance().stopPolling();
+	}
 
     /**
      * This returns to the lobby view. It does not leave the game.
@@ -172,7 +166,7 @@ public class PregamePresenter implements IPresenter, Observer {
         view.startGame();
     }
 
-	public boolean isConductor() {
+	public boolean canCancel() {
 		return game.getPlayer(user).isConductor();
 	}
 
@@ -198,22 +192,31 @@ public class PregamePresenter implements IPresenter, Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
+<<<<<<< HEAD
         System.out.println("Called update in PregamePresenter. Arg is " + arg);
         if (arg instanceof IGame) {
             game = (IGame) arg;
+=======
+	    System.out.println("update");
+        if (arg instanceof Game) {
+            game = (Game) arg;
+>>>>>>> master
 	        if(!game.isPlayer(user.getUserID()))
 		        view.switchToLobbyActivity();
             if (game.hasStarted())
                 startGame();
+<<<<<<< HEAD
 //            else
 //                updatePlayerList();
         } else if (arg instanceof IUser) {
             user = (IUser) arg;
+=======
+            else
+                updatePlayerList();
+        } else if (arg instanceof User) {
+            user = (User) arg;
+>>>>>>> master
         }
-	    if(UIFacade.getInstance().getCurrentGame() == null)
-		    view.switchToLobbyActivity();
-	    if(UIFacade.getInstance().getUser() == null)
-		    view.backToLogin();
     }
 
 	public void unregister() {

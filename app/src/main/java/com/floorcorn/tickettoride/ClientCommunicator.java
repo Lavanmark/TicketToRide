@@ -3,7 +3,7 @@ package com.floorcorn.tickettoride;
 import android.os.AsyncTask;
 
 import com.floorcorn.tickettoride.communication.Results;
-import com.floorcorn.tickettoride.model.IUser;
+import com.floorcorn.tickettoride.model.User;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +39,7 @@ public class ClientCommunicator {
 	 * @param authUser user object containing authentication token. (optional)
 	 * @return The Results object sent back from the Server
 	 */
-	public Results send(String urlPath, Object request, IUser authUser) {
+	public Results send(String urlPath, Object request, User authUser) {
 		//System.out.println("sending");
 		Object[] params = new Object[3];
 		String urlString = "http://" + host + ":" + port + urlPath;
@@ -56,8 +56,10 @@ public class ClientCommunicator {
 			return res;
 		} catch(InterruptedException | ExecutionException e) {
 			e.printStackTrace();
+			myTask.cancel(true);
 			return new Results(false, e);
 		} catch(TimeoutException e) {
+			myTask.cancel(true);
 			e.printStackTrace();
 			return new Results(false, e);
 		}
@@ -84,11 +86,11 @@ public class ClientCommunicator {
 
 			String urlString = (String) objects[0];
 			Object request = (Object) objects[1];
-			IUser authUser = (IUser) objects[2];
+			User authUser = (User) objects[2];
 			return sendHelper(urlString, request, authUser);
 		}
 
-		public Results sendHelper(String urlString, Object request, IUser authUser) {
+		public Results sendHelper(String urlString, Object request, User authUser) {
 			try {
 				String stringToSend = null;
 				if(request != null)
@@ -114,9 +116,8 @@ public class ClientCommunicator {
 				http.connect();
 
 				if(stringToSend != null) {
-					String reqData = stringToSend;
 					OutputStream reqBody = http.getOutputStream();
-					writeString(reqData, reqBody);
+					writeString(stringToSend, reqBody);
 
 					reqBody.close();
 				}
