@@ -46,7 +46,7 @@ public class PregamePresenter implements IPresenter, Observer {
 
     /**
      * // NOTE: I do not think this method, that we put in the design doc, is needed.
-     * @return
+     * @return a List of Player objects
      */
     public List<Player> getPlayerList() {
         return game.getPlayerList();
@@ -118,6 +118,9 @@ public class PregamePresenter implements IPresenter, Observer {
         }
     }
 
+    /**
+     * Unregisters this presenter from observing the model and stuff.
+     */
 	public void unregister() {
 		UIFacade.getInstance().unregisterObserver(this);
 	}
