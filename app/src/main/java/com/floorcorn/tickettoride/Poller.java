@@ -76,6 +76,7 @@ public class Poller {
 							try {
 								ArrayList<ICommand> commands = serverProxy.getCommandsSince(commandManager.getUser(), commandManager.currentGameID(), commandManager.getLastCommandExecuted());
 								commandManager.addCommands(commands);
+								System.out.println("getting commands");
 							} catch(BadUserException e) {
 								e.printStackTrace();
 								view.backToLogin();

@@ -24,7 +24,7 @@ public interface IBoardmapView extends IView {
 	void setBoard(Board board);
 	void setPlayerTrainCardList(ArrayList<TrainCard> trainCardList);
 	void setPlayerDestinationCardList(Set<DestinationCard> destinationCardList);
-	void setFaceUpTrainCards(ArrayList<TrainCard> faceUpTrainCards);
+	void setFaceUpTrainCards();
 	void setDestinationCardChoices(Set<DestinationCard> destinationCardChoices);
 	void setPlayerTurn(Player player);
 	void setScoreboard(Set<Player> playerSet);

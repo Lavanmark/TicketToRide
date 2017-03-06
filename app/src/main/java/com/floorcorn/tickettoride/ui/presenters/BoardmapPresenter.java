@@ -44,8 +44,11 @@ public class BoardmapPresenter implements IPresenter, Observer {
     public void update(Observable o, Object arg) {
         if(arg instanceof Game) {
 	        game = (Game)arg;
-	        if(game.hasStarted()) //TODO this might break since it launches pregame...
-	            view.checkStarted();
+	        if(!game.hasStarted()) {
+		        view.checkStarted();
+	        } else {
+		        view.setFaceUpTrainCards();
+	        }
         }
 	    if(arg instanceof GameChatLog) {
 		    view.setChatLog((GameChatLog)arg);
@@ -93,6 +96,10 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		TrainCard[] faceUp = UIFacade.getInstance().getFaceUpCards();
 		int[] imageId = new int[5];
 		for (int i = 0; i < faceUp.length; i++) {
+			if(faceUp[i] == null) {
+				imageId[i] = R.drawable.card_black;
+				continue;
+			}
 			TrainCardColor color = faceUp[i].getColor();
 			switch (color) {
 				case RED:

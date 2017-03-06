@@ -273,8 +273,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	}
 
 	@Override
-	public void setFaceUpTrainCards(ArrayList<TrainCard> faceUpTrainCards) {
-
+	public void setFaceUpTrainCards() {
+		//TODO maybe limit to if the drawer is open...
+		//setFaceupImages();
 	}
 
 	@Override
@@ -312,27 +313,32 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	}
 
-	@Override
-	public void displayDrawingDeckDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER) {
-//		faceupCards[1].setImageResource(R.drawable.card_blue);
-//		faceupCards[2].setImageResource(R.drawable.card_wild);
-		displayLeftDrawer(R.layout.drawer_draw_cards, DRAWER, DRAWER_HOLDER);
-		drawFromCardDeck = (Button)findViewById(R.id.draw_from_card_deck);
+	private void setFaceupImages() {
 		faceupCards[0] = (ImageButton)findViewById(R.id.card1);
 		faceupCards[1] = (ImageButton)findViewById(R.id.card2);
 		faceupCards[2] = (ImageButton)findViewById(R.id.card3);
 		faceupCards[3] = (ImageButton)findViewById(R.id.card4);
 		faceupCards[4] = (ImageButton)findViewById(R.id.card5);
 
-		int imageId[] = new int[0];
+		int[] imageId;
 		try {
 			imageId = presenter.getFaceupCardColors();
 			for(int i = 0; i < MAXFACEUP; i++){
-				faceupCards[1].setImageResource(imageId[i]);
+				faceupCards[i].setImageResource(imageId[i]);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void displayDrawingDeckDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER) {
+//		faceupCards[1].setImageResource(R.drawable.card_blue);
+//		faceupCards[2].setImageResource(R.drawable.card_wild);
+		displayLeftDrawer(R.layout.drawer_draw_cards, DRAWER, DRAWER_HOLDER);
+		drawFromCardDeck = (Button)findViewById(R.id.draw_from_card_deck);
+
+		setFaceupImages();
 
 		drawFromCardDeck.setOnClickListener(new View.OnClickListener() {
 			@Override
