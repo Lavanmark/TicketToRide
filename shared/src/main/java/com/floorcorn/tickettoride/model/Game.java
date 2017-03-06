@@ -30,7 +30,7 @@ public class Game {
 	private ArrayList<ICommand> commands = new ArrayList<>();
 	private Board board = null;
 
-	private Game(){} //<--- what is this doing here? doesnt look right
+	private Game(){} //<--- what is this doing here? doesnt look right (Joseph: who wrote this original comment?)
 
 	public Game(Game game) {
 		this.gameID = game.getGameID();
@@ -87,15 +87,22 @@ public class Game {
 			this.commands.add(command);
 	}
 
-	
+
+	/**
+	 * Returns the ID of the game's last command.
+	 * @return int ID of the last command
+	 */
 	public int getLatestCommandID() {
 		if(commands.size() <= 0)
 			return ICommand.NO_CMD_ID;
 		return commands.get(commands.size() - 1).getCmdID();
 	}
 
-	
-	public ICommand getLastestCommand() {
+	/**
+	 * Returns this game's last command.
+	 * @return object that implements ICommand
+	 */
+	public ICommand getLatestCommand() {
 		if(!commands.isEmpty())
 			return commands.get(commands.size() - 1);
 		return null;
@@ -226,10 +233,20 @@ public class Game {
 		this.board = board;
 	}
 
+	public List<Player> getPlayerLongestRoute(){ // returns 1..* players with the longest route. 10 points goes to all those who are tied for the longest route
+		List<Player> playerLongestRoute = new ArrayList<Player>();
+		for(Player player: playerList){
+			if(player.getLongestRoute() == longestRoute)
+				playerLongestRoute.add(player);
+		}
+		return playerLongestRoute;
+	}
+
 	public void calculateLongestRoute(){ // gets the longest route from each player to determine the longest route in the entire game.
 		for(Player player: playerList){
 			if(player.getLongestRoute() > longestRoute)
 				longestRoute = player.getLongestRoute();
+				board.setLongestRoute(longestRoute); // sets the child
 		}
 	}
 

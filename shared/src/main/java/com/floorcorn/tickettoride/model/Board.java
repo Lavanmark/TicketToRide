@@ -19,9 +19,8 @@ public class Board {
 	@JsonIgnore
     private DeckManager deckManager;
 
-	private int longestPath;
-    private int longestPathPlayer;
-
+	private int longestRoute;
+    //private int longestRoutePlayer; this does not need to be a private data member. never gets used
 
 	private Board(){}
 	/**
@@ -31,8 +30,8 @@ public class Board {
     public Board(List<Route> routeList) {
         this.routeList = routeList;
         this.faceUpCards = new TrainCard[FACEUP_DECK_SIZE];
-        this.longestPath = 0;
-        this.longestPathPlayer = -1;
+        this.longestRoute = 0;
+        //this.longestRoutePlayer = -1;
 	    this.deckManager = null;
     }
 
@@ -44,8 +43,8 @@ public class Board {
 	    } catch(GameActionException e) {
 		    System.err.println(e.getMessage());
 	    }
-	    this.longestPath = board.getLongestPath();
-	    this.longestPathPlayer = board.getLongestPathPlayer();
+	    this.longestRoute = board.getLongestRoute();
+	    //this.longestRoutePlayer = board.getLongestRoutePlayer(player);
 	    this.deckManager = board.deckManager;
     }
 
@@ -121,18 +120,21 @@ public class Board {
 	    }
     }
 
-    public int getLongestPath(){
-        return longestPath;
+    protected void setLongestRoute(int longest){
+        longestRoute = longest;
     }
 
-    public int getLongestPathPlayer() {
-        //calculates the longestPath of any player and sets the longestPath variable
-	    return longestPathPlayer;
+    public int getLongestRoute(){ // simple getter
+        return longestRoute;
+    }
+
+    public int getLongestRoutePlayer(Player player) { //simple getter
+	    return player.getLongestRoute();
     }
 
     private void replaceFaceUpCard(){
 
-        //this replaces a card that was drawn from teh face up pile
+        //this replaces a card that was drawn from the face up pile
     }
 
     private Boolean shouldResetFaceUp(){
@@ -143,6 +145,7 @@ public class Board {
     private void resetFaceUp(){
         //if there are >3 wild cards then trash all the face up and replace them with new ones.repeat if necessary
     }
+
     public TrainCard[] getFaceUpCards() {
         return faceUpCards;
     }

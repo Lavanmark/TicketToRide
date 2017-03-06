@@ -3,6 +3,8 @@ package com.floorcorn.tickettoride.ui.presenters;
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.TrainCard;
+import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
@@ -44,7 +46,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
     }
 
 	public void startPollingCommands() {
-		UIFacade.getInstance().pollCommands(view);
+		UIFacade.getInstance().pollCurrentGameParts(view);
 	}
 	public void stopPolling() {
 		UIFacade.getInstance().stopPolling();
@@ -69,6 +71,41 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	}
 
 
-
-
+	public int[] getFaceupCardColors() throws Exception {
+		if (!gameInProgress()){
+			throw new Exception("Game not Started");
+		}
+		TrainCard[] faceUp = UIFacade.getInstance().getFaceUpCards();
+		int[] imageId = new int[5];
+		for (int i = 0; i < faceUp.length; i++) {
+			TrainCardColor color = faceUp[i].getColor();
+			switch (color) {
+				case RED:
+					imageId[i] = R.drawable.card_red;
+					break;
+				case GREEN:
+					imageId[i] = R.drawable.card_green;
+					break;
+				case BLUE:
+					imageId[i] = R.drawable.card_blue;
+					break;
+				case YELLOW:
+					imageId[i] = R.drawable.card_yellow;
+					break;
+				case PURPLE:
+					imageId[i] = R.drawable.card_purple;
+					break;
+				case BLACK:
+					imageId[i] = R.drawable.card_black;
+					break;
+				case ORANGE:
+					imageId[i] = R.drawable.card_orange;
+					break;
+				case WILD:
+					imageId[i] = R.drawable.card_wild;
+					break;
+			}
+		}
+		return imageId;
+	}
 }

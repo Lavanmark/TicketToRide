@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride;
 import android.os.AsyncTask;
 
 import com.floorcorn.tickettoride.communication.Results;
+import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.User;
 
 import java.io.IOException;
@@ -40,18 +41,22 @@ public class ClientCommunicator {
 	 * @return The Results object sent back from the Server
 	 */
 	public Results send(String urlPath, Object request, User authUser) {
-		//System.out.println("sending");
+		Corn.log("ClientCommunicator sending");
+
 		Object[] params = new Object[3];
 		String urlString = "http://" + host + ":" + port + urlPath;
 		params[0] = urlString;
 		params[1] = request;
 		params[2] = authUser;
 		TaskHandler myTask = new TaskHandler();
+
 		myTask.execute(params);
-		//System.out.println("receiving");
+
+		Corn.log("ClientCommunicator receiving");
+
 		try {
 			Results res = myTask.get(5, TimeUnit.SECONDS);
-			//System.out.println(res.isSuccess());
+			Corn.log("ClientCommunicator res.isSuccess(): " + res.isSuccess());
 			myTask.cancel(true);
 			return res;
 		} catch(InterruptedException | ExecutionException e) {
@@ -95,7 +100,7 @@ public class ClientCommunicator {
 				String stringToSend = null;
 				if(request != null)
 					stringToSend = Serializer.getInstance().serialize(request);
-				//System.out.println(stringToSend);
+				Corn.log("ClientCommunicator stringToSend: " + stringToSend);
 				URL url = new URL(urlString);
 
 				HttpURLConnection http = (HttpURLConnection) url.openConnection();
@@ -121,22 +126,26 @@ public class ClientCommunicator {
 				if(http.getResponseCode() == HttpURLConnection.HTTP_OK) {
 					InputStream respBody = http.getInputStream();
 					String respData = readString(respBody);
-					//System.out.println("success");
+					Corn.log("ClientCommunicator success");
 					return Serializer.getInstance().deserializeResults(respData);
 				} else {
-					//System.out.println("bad stuff");
-					//System.out.println(http.getResponseCode());
-					//System.out.println(http.getResponseMessage());
+					Corn.log("ClientCommunicator bad stuff: " + http.getResponseCode());
+					Corn.log(http.getResponseMessage());
 					return new Results(false, new Exception(http.getResponseMessage()));
 				}
 			} catch(Exception e) {
 				e.printStackTrace();
-				//System.out.println("error");
+				Corn.log("ClientCommunicator error");
 				return new Results(false, e);
 			}
 		}
 
-
+		/**
+		 * Reading string from InputStream.
+		 * @param is InputStream object
+		 * @return String object
+		 * @throws IOException
+		 */
 		private String readString(InputStream is) throws IOException {
 			StringBuilder sb = new StringBuilder();
 			InputStreamReader sr = new InputStreamReader(is);
@@ -149,7 +158,12 @@ public class ClientCommunicator {
 
 		}
 
-
+		/**
+		 * Writing string to an OutputStream.
+		 * @param str String object
+		 * @param os OutputStream object
+		 * @throws IOException
+		 */
 		private void writeString(String str, OutputStream os) throws IOException {
 			OutputStreamWriter sw = new OutputStreamWriter(os);
 			sw.write(str);
