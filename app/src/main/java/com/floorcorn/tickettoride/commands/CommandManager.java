@@ -61,4 +61,12 @@ public class CommandManager {
 	public void setClientModel(ClientModel cm) {
 		clientFacade.setClientModel(cm);
 	}
+
+	public Game getGame() {
+		return clientFacade.getGame();
+	}
+
+	public ClientFacade getClientFacade() {
+		return clientFacade;
+	}
 }
