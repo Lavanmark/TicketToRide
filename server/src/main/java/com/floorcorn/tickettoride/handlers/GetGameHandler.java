@@ -48,14 +48,15 @@ public class GetGameHandler extends HandlerBase {
 				results = new Results(true, game);
 				Corn.log("Game: " + game.getGameID() + " returned to user.");
 			} catch(BadUserException e) {
-				Corn.log(Level.SEVERE, e.getStackTrace());
+				Corn.log(Level.SEVERE, e.getMessage());
 				results = new Results(false, e);
 			}
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			sendResponseBody(httpExchange, results);
-		} catch(IOException e) {
-			Corn.log(Level.SEVERE, e.getStackTrace());
+		} catch(Exception e) {
+			e.printStackTrace();
+			Corn.log(Level.SEVERE, e.getMessage());
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
 		}
 	}

@@ -47,7 +47,9 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	        if(!game.hasStarted()) {
 		        view.checkStarted();
 	        } else {
+		        view.checkStarted();
 		        view.setFaceUpTrainCards();
+		        view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
 	        }
         }
 	    if(arg instanceof GameChatLog) {
@@ -59,7 +61,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		UIFacade.getInstance().pollCurrentGameParts(view);
 	}
 	public void stopPolling() {
-		UIFacade.getInstance().stopPolling();
+		UIFacade.getInstance().stopPollingGameStuff();
 	}
 	public boolean gameInProgress() {
 		return game.hasStarted();

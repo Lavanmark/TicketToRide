@@ -251,7 +251,7 @@ public class UIFacade {
      * @param view object implements IView
      */
     public void pollPlayerList(IView view) {
-		resetPollerState();
+		stopPollingGameStuff();
 	    poller.startPollingPlayerList(view);
     }
 
@@ -260,7 +260,7 @@ public class UIFacade {
      * @param view object implements IView
      */
     public void pollCurrentGameParts(IView view) {
-        resetPollerState();
+        stopPollingPlayers();
         poller.startPollingCommands(view);
         poller.startPollingChat(view);
     }
@@ -268,9 +268,20 @@ public class UIFacade {
     /**
      * Stops polling (resets poller state).
      */
-    public void stopPolling() {
-        resetPollerState();
+    public void stopPollingPlayers() {
+	    if (poller == null) {
+		    poller = new Poller(serverProxy, clientModelRoot);
+		    return;
+	    }
+	    poller.stopPollingPlayers();
     }
+	public void stopPollingGameStuff() {
+		if (poller == null) {
+			poller = new Poller(serverProxy, clientModelRoot);
+			return;
+		}
+		poller.stopPollingCmdChat();
+	}
 
     /**
      * If poller is null, creates a new Poller. Tells poller to stop polling.

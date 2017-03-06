@@ -29,11 +29,13 @@ import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.TrainCard;
+import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 
 public class BoardmapActivity extends AppCompatActivity implements IBoardmapView, NavigationView.OnNavigationItemSelectedListener   {
@@ -74,6 +76,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private TextView purpleCount;
 	private TextView blackCount;
 	private TextView whiteCount;
+	private TextView wildCount;
 
 	private TextView trainCount;
 
@@ -150,9 +153,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		displayHandButton = (Button)findViewById(R.id.open_hand_button);
 		claimRouteButton = (Button)findViewById(R.id.open_route_button);
 		drawCardsButton = (Button)findViewById(R.id.open_card_button);
-
-
 		animateButton = (Button)findViewById(R.id.animateButton);
+
+	    redCount = (TextView)findViewById(R.id.red_card_count);
+	    orangeCount = (TextView)findViewById(R.id.orange_card_count);
+	    yellowCount = (TextView)findViewById(R.id.yellow_card_count);
+	    greenCount = (TextView)findViewById(R.id.green_card_count);
+	    blueCount = (TextView)findViewById(R.id.blue_card_count);
+	    purpleCount = (TextView)findViewById(R.id.purple_card_count);
+	    blackCount = (TextView)findViewById(R.id.black_card_count);
+	    whiteCount = (TextView)findViewById(R.id.white_card_count);
+	    wildCount = (TextView)findViewById(R.id.wild_card_count);
+
+	    trainCount = (TextView)findViewById(R.id.train_count);
 
 	    //CHAT
 	    chatLayout = (LinearLayout)findViewById(R.id.chatHolder);
@@ -194,6 +207,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		    @Override
 		    public void onClick(View view) {
 			    DRAWER.openDrawer(GravityCompat.END); //Gravity End is on the right side
+			    //TODO maybe this needs its own function to get all this information set up.
 		    }
 	    });
 
@@ -263,8 +277,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	}
 
 	@Override
-	public void setPlayerTrainCardList(ArrayList<TrainCard> trainCardList) {
+	public void setPlayerTrainCardList(Map<TrainCardColor, Integer> cards) {
+		redCount.setText(String.valueOf(cards.containsKey(TrainCardColor.RED)? cards.get(TrainCardColor.RED) : 0));
 
+		orangeCount.setText(String.valueOf(cards.containsKey(TrainCardColor.ORANGE)? cards.get(TrainCardColor.ORANGE) : 0));
+		yellowCount.setText(String.valueOf(cards.containsKey(TrainCardColor.YELLOW)? cards.get(TrainCardColor.YELLOW) : 0));
+		greenCount.setText(String.valueOf(cards.containsKey(TrainCardColor.GREEN)? cards.get(TrainCardColor.GREEN) : 0));
+		blueCount.setText(String.valueOf(cards.containsKey(TrainCardColor.BLUE)? cards.get(TrainCardColor.BLUE) : 0));
+		purpleCount.setText(String.valueOf(cards.containsKey(TrainCardColor.PURPLE)? cards.get(TrainCardColor.PURPLE) : 0));
+		blackCount.setText(String.valueOf(cards.containsKey(TrainCardColor.BLACK)? cards.get(TrainCardColor.BLACK) : 0));
+		whiteCount.setText(String.valueOf(cards.containsKey(TrainCardColor.WHITE)? cards.get(TrainCardColor.WHITE) : 0));
+		wildCount.setText(String.valueOf(cards.containsKey(TrainCardColor.WILD)? cards.get(TrainCardColor.WILD) : 0));
+		for(TrainCardColor color : TrainCardColor.values())
+			System.out.println(color.name() + ": " + cards.get(color));
 	}
 
 	@Override
@@ -274,7 +299,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	@Override
 	public void setFaceUpTrainCards() {
-		//TODO maybe limit to if the drawer is open...
+		//TODO must limit to if the drawer is open
 		//setFaceupImages();
 	}
 

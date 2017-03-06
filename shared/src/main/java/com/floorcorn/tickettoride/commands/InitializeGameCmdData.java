@@ -16,7 +16,7 @@ public abstract class InitializeGameCmdData extends ICommand {
 		return players;
 	}
 	public void setPlayers(ArrayList<Player> players) {
-		this.players = players;
+		this.players = new ArrayList<>(players);
 	}
 
 	@Override

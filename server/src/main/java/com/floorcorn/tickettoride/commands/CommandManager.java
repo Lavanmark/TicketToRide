@@ -34,7 +34,7 @@ public class CommandManager {
 
 		if(lastCommand < 0)
 			lastCommand = 0;
-		if(lastCommand >= commands.size())
+		if(lastCommand >= game.getLatestCommandID())
 			return new ArrayList<>(); //TODO I don't know if this is the best solution...
 
 

@@ -33,6 +33,8 @@ public class Poller {
 	}
 
 	public void startPollingPlayerList(final IView view) {
+		if(playerPollSES != null)
+			playerPollSES.shutdown();
 		playerPollSES = Executors.newScheduledThreadPool(1);
 		playerPollSES.scheduleAtFixedRate(new Runnable() {
 
@@ -63,6 +65,8 @@ public class Poller {
 	}
 
 	public void startPollingCommands(final IView view) {
+		if(commandPollSES != null)
+			commandPollSES.shutdown();
 		commandPollSES = Executors.newScheduledThreadPool(1);
 		commandPollSES.scheduleAtFixedRate(new Runnable() {
 
@@ -94,6 +98,8 @@ public class Poller {
 	}
 
 	public void startPollingChat(final IView view) {
+		if(chatPollSES != null)
+			chatPollSES.shutdown();
 		chatPollSES = Executors.newScheduledThreadPool(1);
 		chatPollSES.scheduleAtFixedRate(new Runnable() {
 
@@ -128,6 +134,16 @@ public class Poller {
 			chatPollSES.shutdown();
 		if(playerPollSES != null)
 			playerPollSES.shutdown();
+		if(commandPollSES != null)
+			commandPollSES.shutdown();
+	}
+	public void stopPollingPlayers() {
+		if(playerPollSES != null)
+			playerPollSES.shutdown();
+	}
+	public void stopPollingCmdChat() {
+		if(chatPollSES != null)
+			chatPollSES.shutdown();
 		if(commandPollSES != null)
 			commandPollSES.shutdown();
 	}
