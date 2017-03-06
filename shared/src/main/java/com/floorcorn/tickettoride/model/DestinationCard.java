@@ -20,6 +20,7 @@ public class DestinationCard {
         value = v;
         canDiscard = true;
         resName = res;
+        System.out.println("new Destination Card: "+resName);
     }
 
     public Boolean isComplete(List<Route> routes){

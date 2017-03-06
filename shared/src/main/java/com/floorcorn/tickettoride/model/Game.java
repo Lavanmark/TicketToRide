@@ -28,6 +28,7 @@ public class Game {
 
 	@JsonIgnore
 	private ArrayList<ICommand> commands = new ArrayList<>();
+
 	private Board board = null;
 
 
@@ -68,7 +69,6 @@ public class Game {
 		for(Player p : playerList)
 			censoredPlayers.add(p.getCensoredPlayer(user));
 		game.setPlayerList(censoredPlayers);
-		game.board.setDeckManager(null);
 		game.commands = new ArrayList<>();
 		return game;
 	}

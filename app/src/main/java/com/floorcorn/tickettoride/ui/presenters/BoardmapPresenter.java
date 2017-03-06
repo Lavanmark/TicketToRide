@@ -1,6 +1,6 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
-import android.graphics.drawable.Drawable;
+import android.content.Context;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.UIFacade;
@@ -158,7 +158,8 @@ public class BoardmapPresenter implements IPresenter, Observer {
 				DestId[i] = R.drawable.card_black;
 				continue;
 			} else {
-				DestId[i] = getResId(destinationCards[i].getResName(), Drawable.class);
+
+				DestId[i] = getResId(destinationCards[i].getResName(), view.getActivity().getBaseContext());
 			}
 		}
 		return DestId;
@@ -170,11 +171,13 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	 * @param c the class the resource is in, i.e. Drawable
      * @return int of the resource
      */
-	public static int getResId(String resName, Class<?> c) {
+	public static int getResId(String resName, Context context) {
 
 		try {
-			Field idField = c.getDeclaredField(resName);
-			return idField.getInt(idField);
+			//Field idField = c.getDeclaredField(resName);
+			//return idField.getInt(idField);
+			System.out.println(resName);
+			return context.getResources().getIdentifier(resName, "drawable", context.getPackageName());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return -1;
