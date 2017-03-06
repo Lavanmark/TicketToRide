@@ -19,15 +19,10 @@ public class GameChatLog {
     }
 
     public List<Message> getRecentMessages(){
-        if(messageList.size() < 20)
-        {
-            return messageList;
-        }
         List<Message> recentMessages = new ArrayList<>();
-        for(int i = messageList.size(); i > messageList.size() - 20; i--){
+        for(int i = (messageList.size() > 20? messageList.size() - 20 : 0); i < messageList.size(); i++){
             recentMessages.add(messageList.get(i));
         }
-
         return recentMessages;
     }
 }
