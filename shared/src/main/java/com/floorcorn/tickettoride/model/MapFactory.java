@@ -16,6 +16,10 @@ import java.util.logging.Level;
  * Created by Tyler on 3/1/17.
  */
 
+/**
+ * This class makes maps for Ticket to Ride, meaning it makes lists of routes and destination
+ * cards and things like that. It reads the info from .csv files.
+ */
 public class MapFactory {
 
 	//private static final String FILE_STRING = "./shared/src/main/java/com/floorcorn/tickettoride/model/maps/";

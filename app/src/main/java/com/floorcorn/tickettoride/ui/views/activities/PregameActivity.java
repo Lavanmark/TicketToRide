@@ -152,11 +152,18 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
+	/**
+	 * Uses a new Intent to go back to Login. Clears to top.
+	 */
 	@Override
 	public void backToLogin() {
 		startActivity(new Intent(PregameActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 	}
 
+	/**
+	 * Returns this activity.
+	 * @return Activity object
+	 */
 	@Override
 	public Activity getActivity() {
 		return PregameActivity.this;

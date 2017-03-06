@@ -2,8 +2,11 @@ package com.floorcorn.tickettoride.clientModel;
 
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.UIFacade;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 
 import java.util.HashSet;
@@ -95,5 +98,24 @@ public class ClientModel extends Observable {
 
     public void setChatLog(GameChatLog chatLog){
         this.chatLog = chatLog;
+    }
+
+    /**
+     * Returns the Player whose turn it is.
+     * @return Player object whose turn it is
+     */
+    public Player whoseTurn() {
+        int count = 0;
+        Player retval = null;
+        for (Player p : currentGame.getPlayerList()) {
+            if (p.isTurn()) {
+                retval = p;
+                count++;
+            }
+        }
+
+        assert count == 1 : "Number of players whose turn it is is not 1, it is: " + count;
+
+        return retval;
     }
 }
