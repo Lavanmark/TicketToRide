@@ -31,6 +31,9 @@ public class CommandManager {
 		if(commands == null || commands.size() == 0)
 			return;
 
+		if(commands.get(0).getCmdID() <= clientFacade.getLastExecutedCommand())
+			return;
+
 		for(ICommand command : commands) {
 			System.out.println("doing command");
 			game.addCommand(command);

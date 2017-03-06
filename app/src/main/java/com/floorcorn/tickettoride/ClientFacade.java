@@ -60,8 +60,6 @@ public class ClientFacade implements IClient {
 	@Override
 	public void setFaceUpDeck(TrainCard[] faceUpDeck) {
 		Game game = clientModel.getCurrentGame();
-		for(TrainCard t : faceUpDeck)
-			System.out.println(t.getColor());
 		if(game == null)
 			return;
 		try {
