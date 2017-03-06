@@ -1,6 +1,5 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
-import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.User;
@@ -44,7 +43,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
     }
 
 	public void startPollingCommands() {
-		UIFacade.getInstance().pollCommands(view);
+		UIFacade.getInstance().pollCurrentGameParts(view);
 	}
 	public void stopPolling() {
 		UIFacade.getInstance().stopPolling();

@@ -259,9 +259,10 @@ public class UIFacade {
      * Resets poller state and starts polling for Commands.
      * @param view object implements IView
      */
-    public void pollCommands(IView view) {
+    public void pollCurrentGameParts(IView view) {
         resetPollerState();
         poller.startPollingCommands(view);
+        poller.startPollingChat(view);
     }
 
     /**
@@ -279,7 +280,7 @@ public class UIFacade {
 			poller = new Poller(serverProxy, clientModelRoot);
 			return;
 		}
-		poller.stopPolling();
+		poller.stopPollingAll();
 	}
 
     /**
