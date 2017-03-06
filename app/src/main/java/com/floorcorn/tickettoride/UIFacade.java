@@ -2,6 +2,7 @@ package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.clientModel.ClientModel;
 import com.floorcorn.tickettoride.communication.GameChatLog;
+import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
@@ -475,12 +476,14 @@ public class UIFacade {
     // Chat functions.
 
     public GameChatLog getChatMessages() {
-        //TODO
-        throw new UnsupportedOperationException();
+        return clientModelRoot.getChatLog();
     }
 
-    public void sendChatMessage() {
-        //TODO
-        throw new UnsupportedOperationException();
+    public void addChatMessage(Message message) {
+        clientModelRoot.addChatMessage(message);
+    }
+
+    public void setChatLog(GameChatLog gameChatLog){
+        clientModelRoot.setChatLog(gameChatLog);
     }
 }

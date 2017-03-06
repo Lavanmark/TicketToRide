@@ -2,6 +2,7 @@ package com.floorcorn.tickettoride.clientModel;
 
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.UIFacade;
+import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Game;
@@ -96,6 +97,9 @@ public class ClientModel extends Observable {
         return this.chatLog;
     }
 
+    public void addChatMessage(Message message){
+        chatLog.addMessage(message);
+    }
     public void setChatLog(GameChatLog chatLog){
         this.chatLog = chatLog;
     }
