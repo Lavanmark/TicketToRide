@@ -52,14 +52,15 @@ public class JoinGameHandler extends HandlerBase {
 				results = new Results(true, game);
 				Corn.log("Player joined game: " + game.getGameID());
 			} catch(BadUserException | GameActionException e) {
-				Corn.log(Level.SEVERE, e.getStackTrace());
+				Corn.log(Level.SEVERE, e.getMessage());
 				results = new Results(false, e);
 			}
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			sendResponseBody(httpExchange, results);
 		} catch(Exception e) {
-			Corn.log(Level.SEVERE, e.getStackTrace());
+			e.printStackTrace();
+			Corn.log(Level.SEVERE, e.getMessage());
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
 		}
 	}

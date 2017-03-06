@@ -46,14 +46,14 @@ public class CommandHandler extends HandlerBase {
 		        results = new Results(true, commands);
 		        Corn.log("Command executed and " + commands.size() + "commands returned to client.");
 	        } catch(BadUserException | GameActionException e) {
-		        Corn.log(Level.SEVERE, e.getStackTrace());
+		        Corn.log(Level.SEVERE, e.getMessage());
 		        results = new Results(false, e);
 	        }
 
 	        httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 	        sendResponseBody(httpExchange, results);
         } catch(Exception e) {
-	        Corn.log(Level.SEVERE, e.getStackTrace());
+	        Corn.log(Level.SEVERE, e.getMessage());
             httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
         }
     }

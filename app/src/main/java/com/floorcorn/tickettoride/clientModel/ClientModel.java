@@ -77,7 +77,7 @@ public class ClientModel extends Observable {
     }
 
     public void setCurrentGame(Game game) {
-        if(currentGame == null || currentGame.getGameID() != game.getGameID())
+        if(currentGame == null || currentGame.getGameID() != game.getGameID() || currentGame.getLatestCommandID() != game.getLatestCommandID())
             lastCommandExecuted = -1;
         currentGame = game;
 
@@ -97,11 +97,11 @@ public class ClientModel extends Observable {
         return this.chatLog;
     }
 
-    public void addChatMessage(Message message){
-        chatLog.addMessage(message);
-    }
     public void setChatLog(GameChatLog chatLog){
         this.chatLog = chatLog;
+
+        setChanged();
+        notifyObservers(this.chatLog);
     }
 
     /**

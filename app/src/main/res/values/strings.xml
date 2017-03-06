@@ -75,6 +75,7 @@
     <string name="blue">Blue</string>
     <string name="white">White</string>
     <string name="purple">Purple</string>
+    <string name="wild">Wild</string>
     <string name="default_card_count">0</string>
     <string name="default_train_count">45</string>
     <string name="train_count_label">My Trains</string>

@@ -2,6 +2,9 @@ package com.floorcorn.tickettoride.ui.presenters;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.UIFacade;
+import com.floorcorn.tickettoride.communication.GameChatLog;
+import com.floorcorn.tickettoride.communication.Message;
+import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
@@ -41,15 +44,24 @@ public class BoardmapPresenter implements IPresenter, Observer {
     public void update(Observable o, Object arg) {
         if(arg instanceof Game) {
 	        game = (Game)arg;
-	        view.checkStarted();
+	        if(!game.hasStarted()) {
+		        view.checkStarted();
+	        } else {
+		        view.checkStarted();
+		        view.setFaceUpTrainCards();
+		        view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
+	        }
         }
+	    if(arg instanceof GameChatLog) {
+		    view.setChatLog((GameChatLog)arg);
+	    }
     }
 
 	public void startPollingCommands() {
 		UIFacade.getInstance().pollCurrentGameParts(view);
 	}
 	public void stopPolling() {
-		UIFacade.getInstance().stopPolling();
+		UIFacade.getInstance().stopPollingGameStuff();
 	}
 	public boolean gameInProgress() {
 		return game.hasStarted();
@@ -70,6 +82,18 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		UIFacade.getInstance().registerObserver(this);
 	}
 
+	public void sendMessage(String text) {
+		try {
+			UIFacade.getInstance().sendChatMessage(new Message(text, game.getGameID(), game.getPlayer(user).getName()));
+		} catch(BadUserException e) {
+			e.printStackTrace();
+			view.backToLogin();
+		}
+	}
+
+	public int getTrainCars() {
+		return game.getPlayer(user).getTrainCarsLeft();
+	}
 
 	public int[] getFaceupCardColors() throws Exception {
 		if (!gameInProgress()){
@@ -77,7 +101,12 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		}
 		TrainCard[] faceUp = UIFacade.getInstance().getFaceUpCards();
 		int[] imageId = new int[5];
-		for (int i = 0; i < faceUp.length; i++) {
+		for (int i = 0; i < 5; i++) {
+			if(faceUp[i] == null) {
+				//TODO add the back of a card image
+				imageId[i] = R.drawable.card_black;
+				continue;
+			}
 			TrainCardColor color = faceUp[i].getColor();
 			switch (color) {
 				case RED:
@@ -100,6 +129,9 @@ public class BoardmapPresenter implements IPresenter, Observer {
 					break;
 				case ORANGE:
 					imageId[i] = R.drawable.card_orange;
+					break;
+				case WHITE:
+					imageId[i] = R.drawable.card_white;
 					break;
 				case WILD:
 					imageId[i] = R.drawable.card_wild;

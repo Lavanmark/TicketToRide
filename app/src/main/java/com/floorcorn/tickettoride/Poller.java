@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride;
 import com.floorcorn.tickettoride.clientModel.ClientModel;
 import com.floorcorn.tickettoride.commands.CommandManager;
 import com.floorcorn.tickettoride.commands.ICommand;
+import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.Game;
@@ -32,6 +33,8 @@ public class Poller {
 	}
 
 	public void startPollingPlayerList(final IView view) {
+		if(playerPollSES != null)
+			playerPollSES.shutdown();
 		playerPollSES = Executors.newScheduledThreadPool(1);
 		playerPollSES.scheduleAtFixedRate(new Runnable() {
 
@@ -62,6 +65,8 @@ public class Poller {
 	}
 
 	public void startPollingCommands(final IView view) {
+		if(commandPollSES != null)
+			commandPollSES.shutdown();
 		commandPollSES = Executors.newScheduledThreadPool(1);
 		commandPollSES.scheduleAtFixedRate(new Runnable() {
 
@@ -73,6 +78,7 @@ public class Poller {
 					public void run() {
 						if(commandManager.currentGameID() > -1) {
 							try {
+								System.out.println("getting commands");
 								ArrayList<ICommand> commands = serverProxy.getCommandsSince(commandManager.getUser(), commandManager.currentGameID(), commandManager.getLastCommandExecuted());
 								commandManager.addCommands(commands);
 							} catch(BadUserException e) {
@@ -92,6 +98,8 @@ public class Poller {
 	}
 
 	public void startPollingChat(final IView view) {
+		if(chatPollSES != null)
+			chatPollSES.shutdown();
 		chatPollSES = Executors.newScheduledThreadPool(1);
 		chatPollSES.scheduleAtFixedRate(new Runnable() {
 
@@ -103,10 +111,10 @@ public class Poller {
 					public void run() {
 						if(commandManager.currentGameID() > -1) {
 							try {
-								System.out.println("requesting player list");
-								Game game = serverProxy.getGame(commandManager.getUser(), commandManager.currentGameID());
-								commandManager.setPlayerList(game.getPlayerList());
-								//TODO probably make this set the game so on start we have all the basics.
+								System.out.println("getting chat log");
+								GameChatLog gameChatLog = serverProxy.getChatLog(commandManager.getUser(), commandManager.getGame().getGameInfo());
+								commandManager.getClientFacade().setChatLog(gameChatLog);
+								//TODO this is an awful way to do this.
 							} catch(BadUserException e) {
 								e.printStackTrace();
 								view.backToLogin();
@@ -118,7 +126,7 @@ public class Poller {
 					}
 				});
 			}
-		}, 0, 5, TimeUnit.SECONDS);
+		}, 0, 1, TimeUnit.SECONDS);
 	}
 
 	public void stopPollingAll() {
@@ -126,6 +134,16 @@ public class Poller {
 			chatPollSES.shutdown();
 		if(playerPollSES != null)
 			playerPollSES.shutdown();
+		if(commandPollSES != null)
+			commandPollSES.shutdown();
+	}
+	public void stopPollingPlayers() {
+		if(playerPollSES != null)
+			playerPollSES.shutdown();
+	}
+	public void stopPollingCmdChat() {
+		if(chatPollSES != null)
+			chatPollSES.shutdown();
 		if(commandPollSES != null)
 			commandPollSES.shutdown();
 	}

@@ -154,7 +154,7 @@ public class Board {
 		    faceUpCards = new TrainCard[FACEUP_DECK_SIZE];
         if(cards != null && cards.length == FACEUP_DECK_SIZE)
 	        for(int i = 0; i < FACEUP_DECK_SIZE; i++)
-		        faceUpCards[i] = cards[i];
+		        faceUpCards[i] = new TrainCard((cards[i] != null ? cards[i].getColor() : null));
 	    else
 	        throw new GameActionException("List of cards was not correct");
     }

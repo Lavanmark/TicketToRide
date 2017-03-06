@@ -50,14 +50,14 @@ public class CreateGameHandler extends HandlerBase {
 				results = new Results(true, gi);
 				Corn.log("Created game with id: " + gi.getGameID());
 			} catch(BadUserException e) {
-				Corn.log(Level.SEVERE, e.getStackTrace());
+				Corn.log(Level.SEVERE, e.getMessage());
 				results = new Results(false, e);
 			}
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			sendResponseBody(httpExchange, results);
 		} catch(Exception e) {
-			Corn.log(Level.SEVERE, e.getStackTrace());
+			Corn.log(Level.SEVERE, e.getMessage());
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
 		}
 	}

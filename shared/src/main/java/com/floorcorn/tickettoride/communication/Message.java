@@ -11,17 +11,16 @@ public class Message {
 
     private String content;
     private int gameID = Game.NO_GAME_ID;
-    private int playerID = Player.NO_PLAYER_ID;
-	//TODO could give the message a playername instead and then it is auto added to the chat?
+    private String playerName = "";
 
     private Message(){}
     public Message(String content) {
         this.content = content;
     }
-	public Message(String content, int gameID, int playerID) {
+	public Message(String content, int gameID, String playerName) {
 		this.content = content;
 		this.gameID = gameID;
-		this.playerID = playerID;
+		this.playerName = playerName;
 	}
 
     public void setGameID(int id){
@@ -32,19 +31,12 @@ public class Message {
         return this.gameID;
     }
 
-    public void setMessageContent(String content){
-        this.content = content;
-    }
-
     public String getMessageContent(){
         return content;
     }
 
-    public int getPlayerID() {
-        return playerID;
-    }
-
-    public void setPlayerID(int playerID) {
-        this.playerID = playerID;
+    @Override
+    public String toString() {
+        return playerName + ": " + content;
     }
 }
