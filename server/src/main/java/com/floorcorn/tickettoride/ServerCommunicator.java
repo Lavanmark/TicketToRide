@@ -2,6 +2,7 @@ package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.handlers.CommandHandler;
 import com.floorcorn.tickettoride.handlers.CreateGameHandler;
+import com.floorcorn.tickettoride.handlers.GetChatHandler;
 import com.floorcorn.tickettoride.handlers.GetCommandsHandler;
 import com.floorcorn.tickettoride.handlers.GetGameHandler;
 import com.floorcorn.tickettoride.handlers.GetGamesHandler;
@@ -9,6 +10,7 @@ import com.floorcorn.tickettoride.handlers.JoinGameHandler;
 import com.floorcorn.tickettoride.handlers.LeaveGameHandler;
 import com.floorcorn.tickettoride.handlers.LoginHandler;
 import com.floorcorn.tickettoride.handlers.RegisterHandler;
+import com.floorcorn.tickettoride.handlers.SendChatHandler;
 import com.floorcorn.tickettoride.interfaces.IServer;
 import com.floorcorn.tickettoride.log.Corn;
 import com.sun.net.httpserver.HttpServer;
@@ -56,6 +58,8 @@ public class ServerCommunicator {
 		server.createContext(IServer.JOIN_GAME, new JoinGameHandler());
 		server.createContext(IServer.GET_COMMANDS, new GetCommandsHandler());
 		server.createContext(IServer.SEND_COMMAND, new CommandHandler());
+		server.createContext(IServer.GET_CHAT, new GetChatHandler());
+		server.createContext(IServer.SEND_CHAT, new SendChatHandler());
 	}
 
 	public static void main(String[] args) {

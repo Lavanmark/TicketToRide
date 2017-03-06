@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.ui.views;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.FrameLayout;
 
+import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.model.Board;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Player;
@@ -23,12 +24,14 @@ public interface IBoardmapView extends IView {
 	void setBoard(Board board);
 	void setPlayerTrainCardList(ArrayList<TrainCard> trainCardList);
 	void setPlayerDestinationCardList(Set<DestinationCard> destinationCardList);
-	void setFaceUpTrainCards(ArrayList<TrainCard> faceUpTrainCards);
+	void setFaceUpTrainCards();
 	void setDestinationCardChoices(Set<DestinationCard> destinationCardChoices);
 	void setPlayerTurn(Player player);
 	void setScoreboard(Set<Player> playerSet);
 	void setDestinationCardCompleted(DestinationCard destinationCard);
 	void setPlayerPossibleRouteList(Set<Route> routeList);
+
+	void setChatLog(GameChatLog log);
 
 	//TODO: Card getCardDrawn();
 

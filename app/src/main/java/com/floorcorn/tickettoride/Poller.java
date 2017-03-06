@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride;
 import com.floorcorn.tickettoride.clientModel.ClientModel;
 import com.floorcorn.tickettoride.commands.CommandManager;
 import com.floorcorn.tickettoride.commands.ICommand;
+import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.Game;
@@ -75,6 +76,7 @@ public class Poller {
 							try {
 								ArrayList<ICommand> commands = serverProxy.getCommandsSince(commandManager.getUser(), commandManager.currentGameID(), commandManager.getLastCommandExecuted());
 								commandManager.addCommands(commands);
+								System.out.println("getting commands");
 							} catch(BadUserException e) {
 								e.printStackTrace();
 								view.backToLogin();
@@ -103,10 +105,10 @@ public class Poller {
 					public void run() {
 						if(commandManager.currentGameID() > -1) {
 							try {
-								System.out.println("requesting player list");
-								Game game = serverProxy.getGame(commandManager.getUser(), commandManager.currentGameID());
-								commandManager.setPlayerList(game.getPlayerList());
-								//TODO probably make this set the game so on start we have all the basics.
+								System.out.println("getting chat log");
+								GameChatLog gameChatLog = serverProxy.getChatLog(commandManager.getUser(), commandManager.getGame().getGameInfo());
+								commandManager.getClientFacade().setChatLog(gameChatLog);
+								//TODO this is an awful way to do this.
 							} catch(BadUserException e) {
 								e.printStackTrace();
 								view.backToLogin();
@@ -118,7 +120,7 @@ public class Poller {
 					}
 				});
 			}
-		}, 0, 5, TimeUnit.SECONDS);
+		}, 0, 1, TimeUnit.SECONDS);
 	}
 
 	public void stopPollingAll() {

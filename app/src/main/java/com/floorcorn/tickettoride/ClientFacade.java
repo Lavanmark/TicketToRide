@@ -1,6 +1,8 @@
 package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.clientModel.ClientModel;
+import com.floorcorn.tickettoride.communication.GameChatLog;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.interfaces.IClient;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
@@ -34,6 +36,10 @@ public class ClientFacade implements IClient {
 		return clientModel.getCurrentUser();
 	}
 
+	public void setChatLog(GameChatLog chatLog) {
+		clientModel.setChatLog(chatLog);
+	}
+
 	public int getLastExecutedCommand() {
 		return clientModel.getLastCommandExecuted();
 	}
@@ -53,6 +59,15 @@ public class ClientFacade implements IClient {
 
 	@Override
 	public void setFaceUpDeck(TrainCard[] faceUpDeck) {
-
+		Game game = clientModel.getCurrentGame();
+		for(TrainCard t : faceUpDeck)
+			System.out.println(t.getColor());
+		if(game == null)
+			return;
+		try {
+			game.getBoard().setFaceUpCards(faceUpDeck);
+		} catch(GameActionException e) {
+			e.printStackTrace();
+		}
 	}
 }

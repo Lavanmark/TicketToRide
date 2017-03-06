@@ -202,14 +202,15 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-100sp"/>
+                android:layout_marginTop="-100sp"
+                android:id="@+id/chatMessageField"/>
             <Button
                 android:text="Send Message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="-75sp"
                 android:background="@drawable/button_selector_blue"
-                />
+                android:id="@+id/sendMessageButton"/>
 
 
         </LinearLayout>

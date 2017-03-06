@@ -11,18 +11,11 @@
     tools:showIn="@layout/activity_boardmap"
      >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/gameStartedText"
-        />
-    
     <LinearLayout
         android:id="@+id/playerTokenHolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@id/gameStartedText"
         android:layout_centerHorizontal="true">
 
         <ImageButton

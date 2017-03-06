@@ -14,11 +14,15 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.communication.GameChatLog;
+import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Board;
 import com.floorcorn.tickettoride.model.DestinationCard;
@@ -80,6 +84,12 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 
 
+	//elements related to chat
+	private LinearLayout chatLayout;
+	private Button sendMessageBut;
+	private EditText chatTextField;
+
+
 	/*
 	- presenter:IPresenter
 	- boardmap:Board
@@ -133,9 +143,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	    if(getSupportActionBar() != null)
 	        getSupportActionBar().setTitle(presenter.getGameName());
 
-	    checkStarted();
-
-
 
 		//initialize UI elements
 
@@ -147,70 +154,52 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 		animateButton = (Button)findViewById(R.id.animateButton);
 
+	    //CHAT
+	    chatLayout = (LinearLayout)findViewById(R.id.chatHolder);
+	    chatTextField = (EditText)findViewById(R.id.chatMessageField);
+	    sendMessageBut = (Button)findViewById(R.id.sendMessageButton);
+	    sendMessageBut.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+				if(chatTextField.getText().toString().isEmpty())
+					return;
+			    if(!presenter.gameInProgress())
+				    return;
+			    presenter.sendMessage(chatTextField.getText().toString());
+			    chatTextField.setText("");
+		    }
+	    });
+	    final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
+	    final FrameLayout DRAWER_HOLDER = (FrameLayout) findViewById(R.id.left_drawer_holder);
+	    drawDestinationTicketsButton.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View view) {
+			    Corn.log("Opening Destination Drawer");
+			    displayDestinationCardDrawer(DRAWER, DRAWER_HOLDER);
+		    }
+	    });
+	    drawCardsButton.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View view) {
+			    displayDrawingDeckDrawer(DRAWER, DRAWER_HOLDER);
+		    }
+	    });
+	    claimRouteButton.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View view) {
+			    displayClaimRouteDrawer(DRAWER, DRAWER_HOLDER);
+		    }
+	    });
+	    displayHandButton.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View view) {
+			    DRAWER.openDrawer(GravityCompat.END); //Gravity End is on the right side
+		    }
+	    });
 
-
-//  TODO: you can click out of the PreGame Activity. Why?
-        if(!presenter.gameInProgress()) {
-	        launchPreGame();
-//	TODO: uncomment these for real play
-//			drawDestinationTicketsButton.setEnabled(false);
-//			displayHandButton.setEnabled(false);
-//			claimRouteButton.setEnabled(false);
-//			drawCardsButton.setEnabled(false);
-
-
-        }
-//  TODO: uncomment this else for real play
-		//else{
-			final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
-			final FrameLayout DRAWER_HOLDER = (FrameLayout) findViewById(R.id.left_drawer_holder);
-
-			drawDestinationTicketsButton.setEnabled(true);
-			drawDestinationTicketsButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					Corn.log("Opening Destination Drawer");
-					displayDestinationCardDrawer(DRAWER, DRAWER_HOLDER);
-
-
-				}
-			});
-
-			drawCardsButton.setEnabled(true);
-			drawCardsButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					displayDrawingDeckDrawer(DRAWER, DRAWER_HOLDER);
-
-
-				}
-			});
-
-			claimRouteButton.setEnabled(true);
-			claimRouteButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					displayClaimRouteDrawer(DRAWER, DRAWER_HOLDER);
-				}
-			});
-
-			displayHandButton.setEnabled(true);
-			displayHandButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					DRAWER.openDrawer(GravityCompat.END); //Gravity End is on the right side
-				}
-			});
-
-		//}
-
-
-
-
-
-
-
-
+	    checkStarted();
+	    if(!presenter.gameInProgress())
+		    launchPreGame();
     }
 
 	@Override
@@ -241,10 +230,30 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	@Override
 	public void checkStarted() {
 		if(!presenter.gameInProgress()) {
-			((TextView)findViewById(R.id.gameStartedText)).setText("Waiting on Players...");
+			//  TODO: you can click out of the PreGame Activity. Why?
+			//Tyler - IDK how to prevent it and still go back to game list...
+			drawDestinationTicketsButton.setEnabled(false);
+			displayHandButton.setEnabled(false);
+			claimRouteButton.setEnabled(false);
+			drawCardsButton.setEnabled(false);
+			sendMessageBut.setEnabled(false);
 		} else {
 			presenter.startPollingCommands();
-			((TextView)findViewById(R.id.gameStartedText)).setText("Game Started!");
+			drawDestinationTicketsButton.setEnabled(true);
+			drawCardsButton.setEnabled(true);
+			claimRouteButton.setEnabled(true);
+			displayHandButton.setEnabled(true);
+			sendMessageBut.setEnabled(true);
+		}
+	}
+
+	@Override
+	public void setChatLog(GameChatLog log) {
+		chatLayout.removeAllViews();
+		for(Message message : log.getRecentMessages()) {
+			TextView tv = new TextView(chatLayout.getContext());
+			tv.setText(message.toString());
+			chatLayout.addView(tv);
 		}
 	}
 
@@ -264,8 +273,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	}
 
 	@Override
-	public void setFaceUpTrainCards(ArrayList<TrainCard> faceUpTrainCards) {
-
+	public void setFaceUpTrainCards() {
+		//TODO maybe limit to if the drawer is open...
+		//setFaceupImages();
 	}
 
 	@Override
@@ -303,27 +313,32 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	}
 
-	@Override
-	public void displayDrawingDeckDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER) {
-//		faceupCards[1].setImageResource(R.drawable.card_blue);
-//		faceupCards[2].setImageResource(R.drawable.card_wild);
-		displayLeftDrawer(R.layout.drawer_draw_cards, DRAWER, DRAWER_HOLDER);
-		drawFromCardDeck = (Button)findViewById(R.id.draw_from_card_deck);
+	private void setFaceupImages() {
 		faceupCards[0] = (ImageButton)findViewById(R.id.card1);
 		faceupCards[1] = (ImageButton)findViewById(R.id.card2);
 		faceupCards[2] = (ImageButton)findViewById(R.id.card3);
 		faceupCards[3] = (ImageButton)findViewById(R.id.card4);
 		faceupCards[4] = (ImageButton)findViewById(R.id.card5);
 
-		int imageId[] = new int[0];
+		int[] imageId;
 		try {
 			imageId = presenter.getFaceupCardColors();
 			for(int i = 0; i < MAXFACEUP; i++){
-				faceupCards[1].setImageResource(imageId[i]);
+				faceupCards[i].setImageResource(imageId[i]);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void displayDrawingDeckDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER) {
+//		faceupCards[1].setImageResource(R.drawable.card_blue);
+//		faceupCards[2].setImageResource(R.drawable.card_wild);
+		displayLeftDrawer(R.layout.drawer_draw_cards, DRAWER, DRAWER_HOLDER);
+		drawFromCardDeck = (Button)findViewById(R.id.draw_from_card_deck);
+
+		setFaceupImages();
 
 		drawFromCardDeck.setOnClickListener(new View.OnClickListener() {
 			@Override
