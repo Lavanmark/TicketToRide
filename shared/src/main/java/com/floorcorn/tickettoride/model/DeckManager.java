@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride.model;
 
+import com.floorcorn.tickettoride.log.Corn;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -66,9 +68,11 @@ public class DeckManager {
     private void shuffleList(List deck){
 	    //Fisher-Yates shuffle
 	    Random rn = new Random();
-	    for(int i = 0; i < deck.size()-2; i++){
-		    int j = i + (rn.nextInt() % (deck.size() - i + 1));
-		    swap(i, j, deck);
+	    for(int times = 0; times < 3; times++) { //TODO probably too much...
+		    for(int i = 0; i < deck.size() - 2; i++) {
+			    int j = i + (rn.nextInt() % (deck.size() - i + 1));
+			    swap(i, j, deck);
+		    }
 	    }
     }
 

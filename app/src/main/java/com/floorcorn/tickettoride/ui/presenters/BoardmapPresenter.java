@@ -95,8 +95,9 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		}
 		TrainCard[] faceUp = UIFacade.getInstance().getFaceUpCards();
 		int[] imageId = new int[5];
-		for (int i = 0; i < faceUp.length; i++) {
+		for (int i = 0; i < 5; i++) {
 			if(faceUp[i] == null) {
+				//TODO add the back of a card image
 				imageId[i] = R.drawable.card_black;
 				continue;
 			}
@@ -122,6 +123,9 @@ public class BoardmapPresenter implements IPresenter, Observer {
 					break;
 				case ORANGE:
 					imageId[i] = R.drawable.card_orange;
+					break;
+				case WHITE:
+					imageId[i] = R.drawable.card_white;
 					break;
 				case WILD:
 					imageId[i] = R.drawable.card_wild;

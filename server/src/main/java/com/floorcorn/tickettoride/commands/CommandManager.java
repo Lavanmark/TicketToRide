@@ -31,7 +31,6 @@ public class CommandManager {
 		if(!game.isPlayer(user.getUserID()))
 			throw new GameActionException("User is not a player!");
 		ArrayList<ICommand> commands = game.getCommands();
-		Corn.log(Level.INFO, "Game has x commands: " + commands.size());
 
 		if(lastCommand < 0)
 			lastCommand = 0;
