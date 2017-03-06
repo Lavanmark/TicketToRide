@@ -87,15 +87,22 @@ public class Game {
 			this.commands.add(command);
 	}
 
-	
+
+	/**
+	 * Returns the ID of the game's last command.
+	 * @return int ID of the last command
+	 */
 	public int getLatestCommandID() {
 		if(commands.size() <= 0)
 			return ICommand.NO_CMD_ID;
 		return commands.get(commands.size() - 1).getCmdID();
 	}
 
-	
-	public ICommand getLastestCommand() {
+	/**
+	 * Returns this game's last command.
+	 * @return object that implements ICommand
+	 */
+	public ICommand getLatestCommand() {
 		if(!commands.isEmpty())
 			return commands.get(commands.size() - 1);
 		return null;
