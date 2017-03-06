@@ -21,7 +21,10 @@ public class Poller {
 
 	private ServerProxy serverProxy = null;
 	private CommandManager commandManager = null;
-	private ScheduledExecutorService scheduledExecutorService = null;
+	private ScheduledExecutorService playerPollSES = null;
+	private ScheduledExecutorService commandPollSES = null;
+	private ScheduledExecutorService chatPollSES = null;
+
 
 	public Poller(ServerProxy sp, ClientModel cm) {
 		serverProxy = sp;
@@ -29,8 +32,8 @@ public class Poller {
 	}
 
 	public void startPollingPlayerList(final IView view) {
-		scheduledExecutorService = Executors.newScheduledThreadPool(1);
-        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+		playerPollSES = Executors.newScheduledThreadPool(1);
+		playerPollSES.scheduleAtFixedRate(new Runnable() {
 
             @Override
             public void run() {
@@ -47,10 +50,10 @@ public class Poller {
 		                    } catch(BadUserException e) {
 			                    e.printStackTrace();
 			                    view.backToLogin();
-			                    stopPolling();
+			                    stopPollingAll();
 		                    }
 	                    } else {
-		                    stopPolling();
+		                    stopPollingAll();
 	                    }
                     }
                 });
@@ -59,8 +62,8 @@ public class Poller {
 	}
 
 	public void startPollingCommands(final IView view) {
-		scheduledExecutorService = Executors.newScheduledThreadPool(1);
-		scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+		commandPollSES = Executors.newScheduledThreadPool(1);
+		commandPollSES.scheduleAtFixedRate(new Runnable() {
 
 			@Override
 			public void run() {
@@ -75,12 +78,42 @@ public class Poller {
 							} catch(BadUserException e) {
 								e.printStackTrace();
 								view.backToLogin();
-								stopPolling();
+								stopPollingAll();
 							} catch(GameActionException e) {
 								e.printStackTrace();
 							}
 						} else {
-							stopPolling();
+							stopPollingAll();
+						}
+					}
+				});
+			}
+		}, 0, 1, TimeUnit.SECONDS);
+	}
+
+	public void startPollingChat(final IView view) {
+		chatPollSES = Executors.newScheduledThreadPool(1);
+		chatPollSES.scheduleAtFixedRate(new Runnable() {
+
+			@Override
+			public void run() {
+				view.getActivity().runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						if(commandManager.currentGameID() > -1) {
+							try {
+								System.out.println("requesting player list");
+								Game game = serverProxy.getGame(commandManager.getUser(), commandManager.currentGameID());
+								commandManager.setPlayerList(game.getPlayerList());
+								//TODO probably make this set the game so on start we have all the basics.
+							} catch(BadUserException e) {
+								e.printStackTrace();
+								view.backToLogin();
+								stopPollingAll();
+							}
+						} else {
+							stopPollingAll();
 						}
 					}
 				});
@@ -88,9 +121,13 @@ public class Poller {
 		}, 0, 5, TimeUnit.SECONDS);
 	}
 
-	public void stopPolling() {
-		if(scheduledExecutorService != null)
-			scheduledExecutorService.shutdown();
+	public void stopPollingAll() {
+		if(chatPollSES != null)
+			chatPollSES.shutdown();
+		if(playerPollSES != null)
+			playerPollSES.shutdown();
+		if(commandPollSES != null)
+			commandPollSES.shutdown();
 	}
 
 	public void setClientModel(ClientModel cm) {
