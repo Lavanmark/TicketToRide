@@ -165,6 +165,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	    whiteCount = (TextView)findViewById(R.id.white_card_count);
 	    wildCount = (TextView)findViewById(R.id.wild_card_count);
 
+
 	    trainCount = (TextView)findViewById(R.id.train_count);
 
 	    //CHAT
@@ -244,8 +245,10 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	@Override
 	public void checkStarted() {
 		if(!presenter.gameInProgress()) {
-			//  TODO: you can click out of the PreGame Activity. Why?
+			//  TODO: you can click out of the PreGame Activity. Why? - Lily
 			//Tyler - IDK how to prevent it and still go back to game list...
+			// Probably isn't a big deal. The actions are grayed out until game start
+			// and we do want to allow users to go back to the game lobby if they want.
 			drawDestinationTicketsButton.setEnabled(false);
 			displayHandButton.setEnabled(false);
 			claimRouteButton.setEnabled(false);
@@ -271,9 +274,16 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		}
 	}
 
+	/**
+	 * Sets the boardmap to the parameter.
+	 *
+	 * I'm not sure what checks we want to do here...
+	 *
+	 * @param board Board object
+	 */
 	@Override
 	public void setBoard(Board board) {
-
+		this.boardmap = board;
 	}
 
 	@Override

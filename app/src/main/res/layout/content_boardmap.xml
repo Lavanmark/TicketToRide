@@ -19,35 +19,37 @@
         android:layout_centerHorizontal="true">
 
         <ImageButton
-            android:text="Button"
+            android:id="@+id/yellowPlayer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_launcher"
-            android:id="@+id/yellowPlayer" />
+            android:text="Button" />
+
+        <ImageButton
+            android:id="@+id/greenPlayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher"
+            android:text="Button" />
+
+        <ImageButton
+            android:id="@+id/redPlayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher"
+            android:text="Button" />
         <ImageButton
             android:text="Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_launcher"
-            android:id="@+id/greenplayer" />
+            android:id="@+id/bluePlayer" />
         <ImageButton
             android:text="Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_launcher"
-            android:id="@+id/redplayer" />
-        <ImageButton
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"
-            android:id="@+id/blueplayer" />
-        <ImageButton
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"
-            android:id="@+id/blackplayer" />
+            android:id="@+id/blackPlayer" />
         
     </LinearLayout>
 
