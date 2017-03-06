@@ -97,11 +97,11 @@ public class ClientModel extends Observable {
         return this.chatLog;
     }
 
-    public void addChatMessage(Message message){
-        chatLog.addMessage(message);
-    }
     public void setChatLog(GameChatLog chatLog){
         this.chatLog = chatLog;
+
+        setChanged();
+        notifyObservers(this.chatLog);
     }
 
     /**

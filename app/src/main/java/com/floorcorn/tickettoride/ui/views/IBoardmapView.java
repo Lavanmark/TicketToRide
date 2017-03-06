@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.ui.views;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.FrameLayout;
 
+import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.model.Board;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Player;
@@ -29,6 +30,8 @@ public interface IBoardmapView extends IView {
 	void setScoreboard(Set<Player> playerSet);
 	void setDestinationCardCompleted(DestinationCard destinationCard);
 	void setPlayerPossibleRouteList(Set<Route> routeList);
+
+	void setChatLog(GameChatLog log);
 
 	//TODO: Card getCardDrawn();
 

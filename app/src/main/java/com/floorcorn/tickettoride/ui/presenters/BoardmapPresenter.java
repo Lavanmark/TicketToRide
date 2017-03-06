@@ -1,6 +1,9 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
 import com.floorcorn.tickettoride.UIFacade;
+import com.floorcorn.tickettoride.communication.GameChatLog;
+import com.floorcorn.tickettoride.communication.Message;
+import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
@@ -38,8 +41,12 @@ public class BoardmapPresenter implements IPresenter, Observer {
     public void update(Observable o, Object arg) {
         if(arg instanceof Game) {
 	        game = (Game)arg;
-	        view.checkStarted();
+	        if(game.hasStarted()) //TODO this might break since it launches pregame...
+	            view.checkStarted();
         }
+	    if(arg instanceof GameChatLog) {
+		    view.setChatLog((GameChatLog)arg);
+	    }
     }
 
 	public void startPollingCommands() {
@@ -67,7 +74,14 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		UIFacade.getInstance().registerObserver(this);
 	}
 
-
+	public void sendMessage(String text) {
+		try {
+			UIFacade.getInstance().sendChatMessage(new Message(text, game.getGameID(), game.getPlayer(user).getName()));
+		} catch(BadUserException e) {
+			e.printStackTrace();
+			view.backToLogin();
+		}
+	}
 
 
 }

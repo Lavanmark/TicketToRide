@@ -437,6 +437,7 @@ public class UIFacade {
         TYLER, you were questioning if you wanted to implement this or not, but here it is
      */
     public void drawTrainCard(int position) throws GameActionException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
+	    //TODO without a deck manager this is always going to throw exceptions
         clientModelRoot.getCurrentGame().getBoard().drawFromFaceUp(position);
     }
 
@@ -444,6 +445,7 @@ public class UIFacade {
         TYLER, you were questioning if you wanted to implement this or not, but here it is
      */
     public void drawDestinationCard() throws GameActionException {
+	    //TODO without a deck manager this is always going to throw exceptions
         clientModelRoot.getCurrentGame().getBoard().drawFromDestinationCardDeck();
     }
 
@@ -451,13 +453,14 @@ public class UIFacade {
         TYLER, you were questioning if you wanted to implement this or not, but here it is
      */
     public void discardDestinationCard(DestinationCard destinationCard) throws GameActionException {
+	    //TODO without a deck manager this is always going to throw exceptions
         clientModelRoot.getCurrentGame().getBoard().discard(destinationCard);
     }
 
     // Routes.
 
     public void claimRoute(Route route, User user) {
-        clientModelRoot.getCurrentGame().getPlayer(user).claimRoute(route);
+        route.claim(clientModelRoot.getCurrentGame().getPlayer(user));
     }
 
     public List<Route> getAvailableRoutes() {
@@ -465,9 +468,8 @@ public class UIFacade {
     }
 
     public Boolean canClaimRoute(Route route) {
-        if(clientModelRoot.getCurrentGame().getBoard().getAvailableRoutes().contains(route)) // does the contain method work?
-            return true;
-        return false;
+	    Player player = clientModelRoot.getCurrentGame().getPlayer(clientModelRoot.getCurrentUser());
+	    return route.canClaim(player);
     }
 
     public List<Route> getRoutes() {
@@ -480,11 +482,7 @@ public class UIFacade {
         return clientModelRoot.getChatLog();
     }
 
-    public void addChatMessage(Message message) {
-        clientModelRoot.addChatMessage(message);
-    }
-
-    public void setChatLog(GameChatLog gameChatLog){
-        clientModelRoot.setChatLog(gameChatLog);
+    public void sendChatMessage(Message message) throws BadUserException {
+        serverProxy.sendChatMessage(clientModelRoot.getCurrentUser(), message);
     }
 }
