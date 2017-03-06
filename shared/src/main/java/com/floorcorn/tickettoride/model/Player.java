@@ -1,6 +1,8 @@
 package com.floorcorn.tickettoride.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.log.Corn;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,9 +48,9 @@ public class Player {
 		this.trainCarsLeft = player.getTrainCarsLeft();
 		this.totalTrainCards = player.getTotalTrainCards();
 		this.totalDestinationCards = player.getTotalDestinationCards();
-		this.destinationCards = player.getDestinationCards();
-		this.trainCards = player.getTrainCards();
-		this.routesClaimed = player.getRoutesClaimed();
+		this.destinationCards = new ArrayList<>(player.getDestinationCards());
+		this.trainCards = new HashMap<>(player.getTrainCards());
+		this.routesClaimed = new ArrayList<>(player.getRoutesClaimed());
 	}
 
 	public Player(int userID, String name, int gameID, PlayerColor color) {
@@ -73,7 +75,7 @@ public class Player {
 
 	public Player getCensoredPlayer(User user) {
 		if(user.getUserID() == userID)
-			return this;
+			return new Player(this);
 		Player p = new Player(this);
 		p.setDestinationCards(new ArrayList<DestinationCard>());
 		p.setTrainCards(new HashMap<TrainCardColor, Integer>());
@@ -133,32 +135,16 @@ public class Player {
 		return score;
 	}
 
-	public void setScore(int score) {
-		this.score = score;
-	}
-
 	public int getTrainCarsLeft() {
 		return trainCarsLeft;
-	}
-
-	public void setTrainCarsLeft(int trainCarsLeft) {
-		this.trainCarsLeft = trainCarsLeft;
 	}
 
 	public int getTotalTrainCards() {
 		return totalTrainCards;
 	}
 
-	public void setTotalTrainCards(int totalTrainCards) {
-		this.totalTrainCards = totalTrainCards;
-	}
-
 	public int getTotalDestinationCards() {
 		return totalDestinationCards;
-	}
-
-	public void setTotalDestinationCards(int totalDestinationCards) {
-		this.totalDestinationCards = totalDestinationCards;
 	}
 
 	public List<DestinationCard> getDestinationCards() {
@@ -166,7 +152,8 @@ public class Player {
 	}
 
 	public void setDestinationCards(List<DestinationCard> destinationCards) {
-		this.destinationCards = destinationCards;
+		this.destinationCards = new ArrayList<>(destinationCards);
+		totalDestinationCards = this.destinationCards.size();
 	}
 
 	public Map<TrainCardColor, Integer> getTrainCards() {
@@ -174,19 +161,24 @@ public class Player {
 	}
 
 	public void setTrainCards(Map<TrainCardColor, Integer> trainCards) {
-		this.trainCards = trainCards;
+		this.trainCards = new HashMap<>(trainCards);
+		this.totalTrainCards = 0;
+		for(TrainCardColor tcc : this.trainCards.keySet())
+			this.totalTrainCards += this.trainCards.get(tcc);
 	}
 
 	public List<Route> getRoutesClaimed() {
 		return routesClaimed;
 	}
 
-	public void setRoutesClaimed(List<Route> routesClaimed) {
-		this.routesClaimed = routesClaimed;
+
+	public void claimRoute(Route route){
+		routesClaimed.add(route);
 	}
 
 	public int calcualteLongestRoute(){
 		//this is the calculation right here
+		//TODO calculate this and calculate on claim route
 
 		/*
 		for each city that the player is connected to
@@ -204,8 +196,12 @@ public class Player {
 	}
 
 	public Boolean removeTrainCars(int amount){
-		//wat
-		return false;
+		if(trainCarsLeft >= amount) {
+			trainCarsLeft -= amount;
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public void addDestinationCard(DestinationCard card){
@@ -214,18 +210,34 @@ public class Player {
 		if(destinationCards.contains(card))
 			return;
 		destinationCards.add(card);
+		totalDestinationCards++;
 	}
 
 	public void addTrainCard(TrainCard card, int amount){
-		//adds this to the players traincard hand
+		int cur = 0;
+		if(trainCards.containsKey(card.getColor()))
+			cur = trainCards.get(card.getColor());
+		trainCards.put(card.getColor(), cur + amount);
+		totalTrainCards++;
 	}
 
 	public void removeDestinationCard(DestinationCard card){
-		//param should be a list
+		//param should be a list?
+		//TODO gotta make this work...
+		//TODO also discard these.
 	}
 
 	public void removeTrainCard(TrainCard card){
-		//param should be a list
+		//param should be a list?
+		//TODO the cards never get discarded...
+		if(!trainCards.containsKey(card.getColor()))
+			return;
+		if(trainCards.get(card.getColor()) <= 0) {
+			trainCards.put(card.getColor(), trainCards.get(card.getColor()) - 1);
+			totalTrainCards--;
+		} else {
+			Corn.log("Player is out of cards!");
+		}
 	}
 
 

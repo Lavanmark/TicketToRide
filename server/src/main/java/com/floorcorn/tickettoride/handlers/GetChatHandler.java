@@ -48,14 +48,14 @@ public class GetChatHandler extends HandlerBase {
 				results = new Results(true, chatLog);
 				Corn.log("Returning chat log to client.");
 			} catch(BadUserException e) {
-				Corn.log(Level.SEVERE, e.getStackTrace());
+				Corn.log(Level.SEVERE, e.getMessage());
 				results = new Results(false, e);
 			}
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			sendResponseBody(httpExchange, results);
 		} catch(IOException e) {
-			Corn.log(Level.SEVERE, e.getStackTrace());
+			Corn.log(Level.SEVERE, e.getMessage());
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
 		}
 	}

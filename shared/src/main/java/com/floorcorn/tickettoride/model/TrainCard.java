@@ -32,4 +32,11 @@ public class TrainCard {
     public int hashCode() {
         return color.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "TrainCard{" +
+                "color=" + color +
+                '}';
+    }
 }

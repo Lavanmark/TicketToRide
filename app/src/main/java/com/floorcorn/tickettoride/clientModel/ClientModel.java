@@ -2,6 +2,7 @@ package com.floorcorn.tickettoride.clientModel;
 
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.UIFacade;
+import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Game;
@@ -76,7 +77,7 @@ public class ClientModel extends Observable {
     }
 
     public void setCurrentGame(Game game) {
-        if(currentGame == null || currentGame.getGameID() != game.getGameID())
+        if(currentGame == null || currentGame.getGameID() != game.getGameID() || currentGame.getLatestCommandID() != game.getLatestCommandID())
             lastCommandExecuted = -1;
         currentGame = game;
 
@@ -98,6 +99,9 @@ public class ClientModel extends Observable {
 
     public void setChatLog(GameChatLog chatLog){
         this.chatLog = chatLog;
+
+        setChanged();
+        notifyObservers(this.chatLog);
     }
 
     /**

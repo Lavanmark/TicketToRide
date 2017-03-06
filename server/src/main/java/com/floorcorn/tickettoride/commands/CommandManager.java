@@ -3,12 +3,14 @@ package com.floorcorn.tickettoride.commands;
 
 import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.serverModel.ClientProxy;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.logging.Level;
 
 /**
  * Created by Tyler on 2/23/2017.
@@ -30,8 +32,11 @@ public class CommandManager {
 			throw new GameActionException("User is not a player!");
 		ArrayList<ICommand> commands = game.getCommands();
 
-		if(lastCommand < 0 || lastCommand > commands.size())
+		if(lastCommand < 0)
+			lastCommand = 0;
+		if(lastCommand >= game.getLatestCommandID())
 			return new ArrayList<>(); //TODO I don't know if this is the best solution...
+
 
 		ListIterator<ICommand> li = commands.listIterator(lastCommand);
 
@@ -74,10 +79,12 @@ public class CommandManager {
 		clientProxy.setGameToModify(game);
 
 		ICommand init = new InitializeGameCmd(game.getPlayerList());
+		init.setCmdID(0);
 		init.execute(clientProxy);
 		clientProxy.addCommandToGame(init);
 
 		ICommand faceUp = new SetFaceUpDeckCmd(game.getBoard().getFaceUpCards());
+		faceUp.setCmdID(1);
 		faceUp.execute(clientProxy);
 		clientProxy.addCommandToGame(faceUp);
 	}

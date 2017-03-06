@@ -128,11 +128,21 @@ public class ServerProxy implements IServer {
 
 	@Override
 	public GameChatLog getChatLog(User user, GameInfo gameInfo) throws BadUserException {
+		Results res = clientComm.send(GET_CHAT, gameInfo, user);
+		if(res.isSuccess()) {
+			return (GameChatLog) res.getResult();
+		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
+			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()));
 		return null;
 	}
 
 	@Override
 	public GameChatLog sendChatMessage(User user, Message message) throws BadUserException {
+		Results res = clientComm.send(SEND_CHAT, message, user);
+		if(res.isSuccess()) {
+			return (GameChatLog) res.getResult();
+		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
+			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()));
 		return null;
 	}
 

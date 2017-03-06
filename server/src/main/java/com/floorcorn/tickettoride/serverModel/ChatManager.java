@@ -15,7 +15,7 @@ public class ChatManager {
     private Map<Integer, GameChatLog> gameMessageLists;
 
     public ChatManager(){
-        this.gameMessageLists = new HashMap<Integer, GameChatLog>();
+        this.gameMessageLists = new HashMap<>();
     }
 
     public GameChatLog addMessage(Message message){
@@ -31,8 +31,7 @@ public class ChatManager {
         return null;
     }
 
-    public void addGameChatLog(int gameID, GameChatLog chatLog)
-    {
+    public void addGameChatLog(int gameID, GameChatLog chatLog) {
         gameMessageLists.put(gameID, chatLog);
     }
     

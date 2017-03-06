@@ -26,13 +26,13 @@ public class SetFaceUpDeckCmd extends SetFaceUpDeckCmdData {
 	public void execute(IClient client) {
 		TrainCard card = null;
 		try {
-			card = client.getGame().getBoard().drawFromTrainCardDeck();
+			for(int i = 0; i < Board.FACEUP_DECK_SIZE; i++)
+				if(faceUpDeck[i] == null)
+					faceUpDeck[i] = client.getGame().getBoard().drawFromTrainCardDeck();
 		} catch(GameActionException e) {
 			e.printStackTrace();
 		}
-		for(int i = 0; i < Board.FACEUP_DECK_SIZE; i++)
-			if(faceUpDeck[i] == null)
-				faceUpDeck[i] = card; //Don't break because more slots may be empty
+
 		client.setFaceUpDeck(faceUpDeck);
 	}
 }
