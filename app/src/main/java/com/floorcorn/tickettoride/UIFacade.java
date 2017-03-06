@@ -2,6 +2,7 @@ package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.clientModel.ClientModel;
 import com.floorcorn.tickettoride.communication.GameChatLog;
+import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
@@ -258,9 +259,10 @@ public class UIFacade {
      * Resets poller state and starts polling for Commands.
      * @param view object implements IView
      */
-    public void pollCommands(IView view) {
+    public void pollCurrentGameParts(IView view) {
         resetPollerState();
         poller.startPollingCommands(view);
+        poller.startPollingChat(view);
     }
 
     /**
@@ -278,7 +280,7 @@ public class UIFacade {
 			poller = new Poller(serverProxy, clientModelRoot);
 			return;
 		}
-		poller.stopPolling();
+		poller.stopPollingAll();
 	}
 
     /**
@@ -475,12 +477,14 @@ public class UIFacade {
     // Chat functions.
 
     public GameChatLog getChatMessages() {
-        //TODO
-        throw new UnsupportedOperationException();
+        return clientModelRoot.getChatLog();
     }
 
-    public void sendChatMessage() {
-        //TODO
-        throw new UnsupportedOperationException();
+    public void addChatMessage(Message message) {
+        clientModelRoot.addChatMessage(message);
+    }
+
+    public void setChatLog(GameChatLog gameChatLog){
+        clientModelRoot.setChatLog(gameChatLog);
     }
 }
