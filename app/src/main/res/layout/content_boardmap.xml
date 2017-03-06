@@ -24,14 +24,12 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_launcher"
             android:text="Button" />
-
         <ImageButton
             android:id="@+id/greenPlayer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_launcher"
             android:text="Button" />
-
         <ImageButton
             android:id="@+id/redPlayer"
             android:layout_width="wrap_content"
