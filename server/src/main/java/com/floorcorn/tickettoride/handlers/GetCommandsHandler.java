@@ -48,7 +48,7 @@ public class GetCommandsHandler extends HandlerBase {
 				results = new Results(true, commands);
 				Corn.log("Returning " + commands.size() + " commands to client.");
 			} catch(BadUserException | GameActionException e) {
-				Corn.log(Level.SEVERE, e.getStackTrace());
+				Corn.log(Level.SEVERE, e.getMessage());
 				results = new Results(false, e);
 			}
 

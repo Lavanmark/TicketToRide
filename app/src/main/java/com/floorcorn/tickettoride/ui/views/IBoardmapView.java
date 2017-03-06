@@ -9,8 +9,10 @@ import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.TrainCard;
+import com.floorcorn.tickettoride.model.TrainCardColor;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -22,7 +24,7 @@ public interface IBoardmapView extends IView {
 	void checkStarted();
 
 	void setBoard(Board board);
-	void setPlayerTrainCardList(ArrayList<TrainCard> trainCardList);
+	void setPlayerTrainCardList(Map<TrainCardColor, Integer> cards);
 	void setPlayerDestinationCardList(Set<DestinationCard> destinationCardList);
 	void setFaceUpTrainCards();
 	void setDestinationCardChoices(Set<DestinationCard> destinationCardChoices);

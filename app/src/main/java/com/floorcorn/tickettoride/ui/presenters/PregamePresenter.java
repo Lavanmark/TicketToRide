@@ -60,7 +60,7 @@ public class PregamePresenter implements IPresenter, Observer {
 		UIFacade.getInstance().pollPlayerList(view);
     }
 	public void stopPolling() {
-		UIFacade.getInstance().stopPolling();
+		UIFacade.getInstance().stopPollingPlayers();
 	}
 
     /**

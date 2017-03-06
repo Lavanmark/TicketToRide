@@ -2,6 +2,7 @@ package com.floorcorn.tickettoride.commands;
 
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.interfaces.IClient;
+import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Board;
 import com.floorcorn.tickettoride.model.DeckManager;
 import com.floorcorn.tickettoride.model.Game;
@@ -36,7 +37,7 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 		board.setDeckManager(new DeckManager());
 
 		// Deal initial train cards
-		for(int i = 0; i < Game.INITIAL_TRAIN_CARDS; i++){
+		for(int i = 0; i < Game.INITIAL_TRAIN_CARDS; i++) {
 			for(Player p : players) {
 				try {
 					p.addTrainCard(board.drawFromTrainCardDeck(), 1);
@@ -47,7 +48,7 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 		}
 
 		//Deal initial destination cards
-		for(int i = 0; i < Game.INITIAL_DESTINATION_CARDS; i++){
+		for(int i = 0; i < Game.INITIAL_DESTINATION_CARDS; i++) {
 			for(Player p : players) {
 				try {
 					p.addDestinationCard(board.drawFromDestinationCardDeck());
@@ -56,6 +57,8 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 				}
 			}
 		}
+		for(Player p : players)
+			Corn.log(p.getTotalTrainCards());
 		//TODO make setboard a method on client?
 		client.getGame().setBoard(board);
 		client.setPlayerList(players);
