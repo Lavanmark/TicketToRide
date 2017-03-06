@@ -91,6 +91,10 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		}
 	}
 
+	public int getTrainCars() {
+		return game.getPlayer(user).getTrainCarsLeft();
+	}
+
 	public int[] getFaceupCardColors() throws Exception {
 		if (!gameInProgress()){
 			throw new Exception("Game not Started");

@@ -33,6 +33,8 @@ public class CommandManager {
 
 		//if(commands.get(0).getCmdID() <= clientFacade.getLastExecutedCommand())
 		//	return;
+		// ^^^^^^ these lines cause the commands to never be executed.
+		//TODO no way to prevent repeat commands now...
 
 		for(ICommand command : commands) {
 			System.out.println("doing command");

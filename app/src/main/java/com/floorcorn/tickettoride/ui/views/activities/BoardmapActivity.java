@@ -279,7 +279,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	@Override
 	public void setPlayerTrainCardList(Map<TrainCardColor, Integer> cards) {
 		redCount.setText(String.valueOf(cards.containsKey(TrainCardColor.RED)? cards.get(TrainCardColor.RED) : 0));
-
 		orangeCount.setText(String.valueOf(cards.containsKey(TrainCardColor.ORANGE)? cards.get(TrainCardColor.ORANGE) : 0));
 		yellowCount.setText(String.valueOf(cards.containsKey(TrainCardColor.YELLOW)? cards.get(TrainCardColor.YELLOW) : 0));
 		greenCount.setText(String.valueOf(cards.containsKey(TrainCardColor.GREEN)? cards.get(TrainCardColor.GREEN) : 0));
@@ -288,8 +287,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		blackCount.setText(String.valueOf(cards.containsKey(TrainCardColor.BLACK)? cards.get(TrainCardColor.BLACK) : 0));
 		whiteCount.setText(String.valueOf(cards.containsKey(TrainCardColor.WHITE)? cards.get(TrainCardColor.WHITE) : 0));
 		wildCount.setText(String.valueOf(cards.containsKey(TrainCardColor.WILD)? cards.get(TrainCardColor.WILD) : 0));
-		for(TrainCardColor color : TrainCardColor.values())
-			System.out.println(color.name() + ": " + cards.get(color));
+
+		//TODO this should probably get its own function
+		trainCount.setText(String.valueOf(presenter.getTrainCars()));
 	}
 
 	@Override
