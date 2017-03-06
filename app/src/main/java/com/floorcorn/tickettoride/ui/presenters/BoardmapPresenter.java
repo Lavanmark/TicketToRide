@@ -1,10 +1,13 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
+import android.graphics.drawable.Drawable;
+
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
@@ -12,6 +15,8 @@ import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -30,6 +35,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		this.game = UIFacade.getInstance().getCurrentGame();
 		this.user = UIFacade.getInstance().getUser();
 		register();
+
 	}
 
     @Override
@@ -139,5 +145,39 @@ public class BoardmapPresenter implements IPresenter, Observer {
 			}
 		}
 		return imageId;
+	}
+	public int[] getDestinationCards() throws Exception {
+		if (!gameInProgress()){
+			throw new Exception("Game not Started");
+		}
+		DestinationCard[] destinationCards = UIFacade.getInstance().drawDestinationCard();
+		int[] DestId = new int[3];
+		for (int i = 0; i < 3; i++) {
+			if (destinationCards[i] == null) {
+				//TODO add the back of a card image
+				DestId[i] = R.drawable.card_black;
+				continue;
+			} else {
+				DestId[i] = getResId(destinationCards[i].getResName(), Drawable.class);
+			}
+		}
+		return DestId;
+	}
+
+	/**
+	 * Takes a string and converts it to a resource Id
+	 * @param resName string of teh resource name, i.e. dest_card_name
+	 * @param c the class the resource is in, i.e. Drawable
+     * @return int of the resource
+     */
+	public static int getResId(String resName, Class<?> c) {
+
+		try {
+			Field idField = c.getDeclaredField(resName);
+			return idField.getInt(idField);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
 	}
 }

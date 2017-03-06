@@ -47,7 +47,7 @@ public class UIFacade {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
 	      serverProxy.setPort("8080");
-        serverProxy.setHost("192.168.0.100");
+        serverProxy.setHost("10.24.214.51");
 
         poller = new Poller(serverProxy, clientModelRoot);
     }
@@ -455,10 +455,23 @@ public class UIFacade {
 
     /*
         TYLER, you were questioning if you wanted to implement this or not, but here it is
+
+
      */
-    public void drawDestinationCard() throws GameActionException {
+
+    /**
+     *
+     * @return Array of 3 Destination Cards
+     * @throws GameActionException
+     */
+    public DestinationCard[] drawDestinationCard() throws GameActionException {
 	    //TODO without a deck manager this is always going to throw exceptions
-        clientModelRoot.getCurrentGame().getBoard().drawFromDestinationCardDeck();
+        DestinationCard[] threeDestCards = new DestinationCard[3];
+        for (int i = 0; i < 3; i++){
+            threeDestCards[i] = clientModelRoot.getCurrentGame().getBoard().drawFromDestinationCardDeck();
+        }
+        return threeDestCards;
+
     }
 
     /*
@@ -468,6 +481,8 @@ public class UIFacade {
 	    //TODO without a deck manager this is always going to throw exceptions
         clientModelRoot.getCurrentGame().getBoard().discard(destinationCard);
     }
+
+
 
     // Routes.
 
