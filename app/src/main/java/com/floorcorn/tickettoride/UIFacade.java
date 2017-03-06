@@ -5,6 +5,7 @@ import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
+import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.Player;
@@ -16,6 +17,7 @@ import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.ui.views.IView;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Observer;
@@ -351,11 +353,13 @@ public class UIFacade {
 
     /**
      * Calls the function on the Board to replace face up card.
+     *
+     * potentially going to be handled by the commands, so dont need this fxn
      */
-    public void replaceFaceUpCard() {
-        //go through the game class for these?
-        throw new UnsupportedOperationException();
-    }
+//    public void replaceFaceUpCard() {
+//        //go through the game class for these?
+//        throw new UnsupportedOperationException();
+//    }
 
     /**
      * Returns the player's score.
@@ -363,8 +367,7 @@ public class UIFacade {
      * @return int player's score
      */
     public int getPlayerScore(Player player) {
-        //TODO
-        throw new UnsupportedOperationException();
+        return player.getScore();
     }
 
     /**
@@ -372,18 +375,20 @@ public class UIFacade {
      * @param player PLayer object
      * @return int number of cards
      */
-    public int getNumCards(Player player) {
-        //TODO
-        throw new UnsupportedOperationException();
+    public int getNumTrainCards(Player player) {
+        return player.getTotalTrainCards();
+    }
+
+    public int getNumDestinationCards(Player player){
+        return player.getTotalDestinationCards();
     }
 
     /**
      *
      * @return Map of TrainCardColor to Integer
      */
-    public Map<TrainCardColor, Integer> getCardMap() {
-        //TODO
-        throw new UnsupportedOperationException();
+    public Map<TrainCardColor, Integer> getCardMap(Player player) {
+        return player.getTrainCards();
     }
 
     /**
@@ -392,8 +397,7 @@ public class UIFacade {
      * @return int number of cars
      */
     public int getTrainCarsLeft(Player player) {
-        //TODO
-        throw new UnsupportedOperationException();
+        return player.getTrainCarsLeft();
     }
 
     /**
@@ -401,8 +405,11 @@ public class UIFacade {
      * @return List of String player names
      */
     public List<String> getPlayerNames() {
-        //TODO
-        throw new UnsupportedOperationException();
+        List<String> names = new ArrayList<String>();
+        for(Player player: clientModelRoot.getCurrentGame().getPlayerList()){
+            names.add(player.getName());
+        }
+        return names;
     }
 
     /**
@@ -415,9 +422,8 @@ public class UIFacade {
 
     // Cards.
 
-    public TrainCard getFaceUpDeck() {
-        //TODO
-        throw new UnsupportedOperationException();
+    public TrainCard[] getFaceUpCards() {
+        return clientModelRoot.getCurrentGame().getBoard().getFaceUpCards();
     }
 
     public void drawTrainCardFromDeck() {
@@ -425,41 +431,45 @@ public class UIFacade {
         throw new UnsupportedOperationException();
     }
 
-    public void drawTrainCard(int position) { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
-        //implementation?
-        throw new UnsupportedOperationException();
+    /*
+        TYLER, you were questioning if you wanted to implement this or not, but here it is
+     */
+    public void drawTrainCard(int position) throws GameActionException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
+        clientModelRoot.getCurrentGame().getBoard().drawFromFaceUp(position);
     }
 
-    public void drawDestinationCard() {
-        //implementation?
-        throw new UnsupportedOperationException();
+    /*
+        TYLER, you were questioning if you wanted to implement this or not, but here it is
+     */
+    public void drawDestinationCard() throws GameActionException {
+        clientModelRoot.getCurrentGame().getBoard().drawFromDestinationCardDeck();
     }
 
-    public void discardDestinationCard() {
-        //implementation?
-        throw new UnsupportedOperationException();
+    /*
+        TYLER, you were questioning if you wanted to implement this or not, but here it is
+     */
+    public void discardDestinationCard(DestinationCard destinationCard) throws GameActionException {
+        clientModelRoot.getCurrentGame().getBoard().discard(destinationCard);
     }
 
     // Routes.
 
-    public void claimRoute() {
-        //TODO
-        throw new UnsupportedOperationException();
+    public void claimRoute(Route route, User user) {
+        clientModelRoot.getCurrentGame().getPlayer(user).claimRoute(route);
     }
 
     public List<Route> getAvailableRoutes() {
-        //TODO
-        throw new UnsupportedOperationException();
+        return clientModelRoot.getCurrentGame().getBoard().getAvailableRoutes();
     }
 
-    public Boolean canClaimRoute(Player player, Route route) {
-        //TODO
-        throw new UnsupportedOperationException();
+    public Boolean canClaimRoute(Route route) {
+        if(clientModelRoot.getCurrentGame().getBoard().getAvailableRoutes().contains(route)) // does the contain method work?
+            return true;
+        return false;
     }
 
     public List<Route> getRoutes() {
-        //TODO
-        throw new UnsupportedOperationException();
+        return clientModelRoot.getCurrentGame().getBoard().getRoutes();
     }
 
     // Chat functions.

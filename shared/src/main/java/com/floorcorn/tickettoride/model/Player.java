@@ -185,6 +185,10 @@ public class Player {
 		this.routesClaimed = routesClaimed;
 	}
 
+	public void claimRoute(Route route){
+		routesClaimed.add(route);
+	}
+
 	public int calcualteLongestRoute(){
 		//this is the calculation right here
 
