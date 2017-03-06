@@ -324,11 +324,20 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		faceupCards[3] = (ImageButton)findViewById(R.id.card4);
 		faceupCards[4] = (ImageButton)findViewById(R.id.card5);
 
-		faceupCards[1].setImageResource(R.drawable.card_blue);
+		int imageId[] = new int[0];
+		try {
+			imageId = presenter.getFaceupCardColors();
+			for(int i = 0; i < MAXFACEUP; i++){
+				faceupCards[1].setImageResource(imageId[i]);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		drawFromCardDeck.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				//presenter.drawNextCard();
 				//TODO
 			}
 		});
@@ -336,7 +345,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			faceupCards[i].setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-
+				//presenter.faceupClicked();
 					//TODO
 				}
 			});

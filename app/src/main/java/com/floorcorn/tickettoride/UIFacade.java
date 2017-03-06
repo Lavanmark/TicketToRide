@@ -47,7 +47,7 @@ public class UIFacade {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
 	      serverProxy.setPort("8080");
-        serverProxy.setHost("192.168.0.100");
+        serverProxy.setHost("192.168.1.112");
 
         poller = new Poller(serverProxy, clientModelRoot);
     }
@@ -389,8 +389,9 @@ public class UIFacade {
      *
      * @return Map of TrainCardColor to Integer
      */
-    public Map<TrainCardColor, Integer> getCardMap(Player player) {
-        return player.getTrainCards();
+    public Map<TrainCardColor, Integer> getCardMap(User user) {
+
+        return clientModelRoot.getCurrentGame().getPlayer(user).getTrainCards();
     }
 
     /**
