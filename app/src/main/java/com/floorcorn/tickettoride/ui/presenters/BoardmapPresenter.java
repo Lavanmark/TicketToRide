@@ -6,12 +6,14 @@ import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -47,7 +49,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	        if(!game.hasStarted()) {
 		        view.checkStarted();
 	        } else {
-		        view.checkStarted();
+		        view.checkStarted(); //If you remove this you need to call setup buttons... (and call tyler...)
 		        view.setFaceUpTrainCards();
 		        view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
 	        }
@@ -139,5 +141,12 @@ public class BoardmapPresenter implements IPresenter, Observer {
 			}
 		}
 		return imageId;
+	}
+
+	public ArrayList<Player> getPlayers() {
+		return game.getPlayerList();
+	}
+	public int getGameSize() {
+		return game.getGameSize();
 	}
 }
