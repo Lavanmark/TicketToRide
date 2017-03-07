@@ -283,13 +283,16 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 				but.setTextColor(Color.BLACK);
 			else
 				but.setTextColor(Color.WHITE);
+			but.setText(p.getName());
 			but.setBackgroundColor(getPlayerColor(p.getColor()));
 			//TODO check if the player is self. If so it should open the drawer.
 			but.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					//TODO might need to update on every player list because p is final
-					Snackbar.make(playerIcons, p.getCriticalPlayerInfo(), Snackbar.LENGTH_LONG).show();
+					Snackbar snackbar = Snackbar.make(playerIcons, p.getCriticalPlayerInfo(), Snackbar.LENGTH_LONG);
+					((TextView)snackbar.getView().findViewById(android.support.design.R.id.snackbar_text)).setMaxLines(6);
+					snackbar.show();
 				}
 			});
 		}
