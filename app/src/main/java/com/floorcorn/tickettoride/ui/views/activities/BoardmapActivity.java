@@ -188,19 +188,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		    @Override
 		    public void onClick(View view) {
 			    Corn.log("Opening Destination Drawer");
-			    displayDestinationCardDrawer(DRAWER, DRAWER_HOLDER);
+                presenter.displayDestinationCardDrawer(DRAWER, DRAWER_HOLDER);
 		    }
 	    });
 	    drawCardsButton.setOnClickListener(new View.OnClickListener() {
 		    @Override
 		    public void onClick(View view) {
-			    displayDrawingDeckDrawer(DRAWER, DRAWER_HOLDER);
+                presenter.displayDrawDrawer(DRAWER, DRAWER_HOLDER);
 		    }
 	    });
 	    claimRouteButton.setOnClickListener(new View.OnClickListener() {
 		    @Override
 		    public void onClick(View view) {
-			    displayClaimRouteDrawer(DRAWER, DRAWER_HOLDER);
+                presenter.displayPlaceRouteDrawer(DRAWER, DRAWER_HOLDER);
 		    }
 	    });
 	    displayHandButton.setOnClickListener(new View.OnClickListener() {
@@ -215,6 +215,18 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	    if(!presenter.gameInProgress())
 		    launchPreGame();
     }
+
+	public boolean drawDrawerIsOpen(){
+		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
+        if(DRAWER.isDrawerOpen(GravityCompat.START)) {
+            LinearLayout tempFrame = (LinearLayout) findViewById(R.id.drawer_draw_cards);
+            if(tempFrame != null){
+                return true;
+            }
+            return false;
+        }
+        return false;
+	}
 
 	@Override
 	public void onStop(){
