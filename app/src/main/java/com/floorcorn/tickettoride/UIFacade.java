@@ -190,6 +190,7 @@ public class UIFacade {
      */
 	public void requestGame(GameInfo game) throws BadUserException {
 		Game cgame = serverProxy.getGame(clientModelRoot.getCurrentUser(), game.getGameID());
+		//System.out.println("still gonna do it");
         clientModelRoot.setCurrentGame(cgame);
 	}
 
@@ -199,8 +200,8 @@ public class UIFacade {
      */
     public void requestGames() throws BadUserException {
         clientModelRoot.setGames(serverProxy.getGames(getUser()));
-	    for(GameInfo gi : clientModelRoot.getGames())
-		    System.out.println(gi.getGameID() + " " + gi.getName());
+	    //for(GameInfo gi : clientModelRoot.getGames())
+		//    System.out.println(gi.getGameID() + " " + gi.getName());
     }
 
     /**
@@ -287,7 +288,7 @@ public class UIFacade {
     /**
      * If poller is null, creates a new Poller. Tells poller to stop polling.
      */
-	private void resetPollerState() {
+	public void stopPollingAll() {
 		if (poller == null) {
 			poller = new Poller(serverProxy, clientModelRoot);
 			return;
@@ -312,7 +313,8 @@ public class UIFacade {
      * @param obs Observer object
      */
     public void registerObserver(Observer obs) {
-        clientModelRoot.addObserver(obs);
+        //System.out.println("register " + obs.getClass().getSimpleName());
+	    clientModelRoot.addObserver(obs);
     }
 
     /**
@@ -320,11 +322,13 @@ public class UIFacade {
      * @param obs Observer object
      */
     public void unregisterObserver(Observer obs) {
-        clientModelRoot.deleteObserver(obs);
+        //System.out.println("unregister " + obs.getClass().getSimpleName());
+	    clientModelRoot.deleteObserver(obs);
     }
 
     public void clearObservers() {
-        clientModelRoot.deleteObservers();
+	    //System.out.println("clear observers");
+	    clientModelRoot.deleteObservers();
     }
 
     // Phase 2 stuff.

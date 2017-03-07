@@ -46,7 +46,6 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		this.game = UIFacade.getInstance().getCurrentGame();
 		this.user = UIFacade.getInstance().getUser();
 		register();
-
 	}
 
     @Override
@@ -308,7 +307,6 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	public void drawNewDestinationCards() {
 		try {
 			UIFacade.getInstance().drawDestinationCards();
-
 		} catch(GameActionException e) {
 			e.printStackTrace();
 		}

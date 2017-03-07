@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.ui.presenters;
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.ui.views.ILobbyView;
@@ -21,8 +22,7 @@ public class LobbyPresenter implements IPresenter, Observer {
     private ILobbyView view;
 
     public LobbyPresenter() {
-        view = null;
-        UIFacade.getInstance().registerObserver(this);
+        register();
     }
 
     @Override
@@ -80,6 +80,8 @@ public class LobbyPresenter implements IPresenter, Observer {
     public void update(Observable o, Object arg) {
         if(arg instanceof Set)
 	        view.setGameList(UIFacade.getInstance().getGames());
+	    if(arg instanceof Game)
+		    view.startGameView();
     }
     public void unregister() {
         UIFacade.getInstance().unregisterObserver(this);
