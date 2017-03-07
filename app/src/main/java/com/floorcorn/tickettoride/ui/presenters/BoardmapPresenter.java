@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
+import android.content.Context;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -9,6 +10,8 @@ import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.TrainCard;
@@ -17,9 +20,10 @@ import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -34,6 +38,9 @@ public class BoardmapPresenter implements IPresenter, Observer {
     private IBoardmapView view = null;
 	private Game game = null;
 	private User user = null;
+
+	private boolean discarding = false;
+	private DestinationCard[] destCardsToDiscard;
 
 	public BoardmapPresenter() {
 		this.game = UIFacade.getInstance().getCurrentGame();
@@ -59,6 +66,9 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		        view.checkStarted();
 		        view.setFaceUpTrainCards();
 		        view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
+				view.setPlayerDestinationCardList(game.getPlayer(user).getDestinationCards());
+		        if(!discarding)
+		            view.setDestinationCardChoices();
 	        }
         }
 	    if(arg instanceof GameChatLog) {
@@ -91,11 +101,11 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		UIFacade.getInstance().registerObserver(this);
 	}
 
+
     //This method compares the old game object to the new one to see what changes have been made.
     public void getChanges(Game newGame){
         TrainCardColor newCard = getNewCardDrawn(newGame);
-        if(newCard != null)
-        {
+        if(newCard != null) {
             String toDisplay = "You drew a " + newCard.name() + " card";
             Toast.makeText(view.getActivity(), toDisplay, Toast.LENGTH_LONG).show();
         }
@@ -160,8 +170,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		int[] imageId = new int[5];
 		for (int i = 0; i < 5; i++) {
 			if(faceUp[i] == null) {
-				//TODO add the back of a card image
-				imageId[i] = R.drawable.card_black;
+				imageId[i] = R.drawable.back_trains;
 				continue;
 			}
 			TrainCardColor color = faceUp[i].getColor();
@@ -198,9 +207,79 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		return imageId;
 	}
 
-	public ArrayList<Player> getPlayers() {
+	public void setDiscarding(boolean areu) {
+		discarding = areu;
+	}
+
+	public int[] getDiscardableDestinationCards() throws Exception {
+		if (!gameInProgress()){
+			throw new Exception("Game not Started");
+		}
+		destCardsToDiscard = game.getPlayer(user).getDiscardableDestinationCards();
+		if(destCardsToDiscard == null)
+			return null;
+
+		int[] DestId = new int[destCardsToDiscard.length];
+		for (int i = 0; i < destCardsToDiscard.length; i++) {
+			if (destCardsToDiscard[i] == null) {
+				DestId[i] = R.drawable.back_destinations;
+			} else {
+				DestId[i] = getResId(destCardsToDiscard[i].getResName(), view.getActivity().getBaseContext());
+			}
+		}
+		return DestId;
+	}
+
+	public int getDiscardableCount() {
+		if(game.getPlayer(user).getDiscardableDestinationCards() != null) {
+			if(game.getPlayer(user).getDestinationCards().size() == 3)
+				return 1;
+			return 2;
+		}
+		return 0;
+	}
+
+	/**
+	 * Takes a string and converts it to a resource Id.
+	 * Used to match the destination card object to the correct image
+	 * @param resName string of teh resource name, i.e. dest_card_name
+	 * @param context the class the resource is in, i.e. Drawable
+     * @return int of the resource
+     */
+	public static int getResId(String resName, Context context) {
+
+		try {
+			//Field idField = c.getDeclaredField(resName);
+			//return idField.getInt(idField);
+			System.out.println(resName);
+			return context.getResources().getIdentifier(resName, "drawable", context.getPackageName());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
+	public void discardDestination(int index) {
+		if(destCardsToDiscard == null)
+			return;
+		try {
+			UIFacade.getInstance().discardDestinationCard(destCardsToDiscard[index]);
+		} catch (GameActionException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void doneDiscarding() {
+		destCardsToDiscard = null;
+		discarding = false;
+		UIFacade.getInstance().stopDiscarding();
+
+	}
+
+	public ArrayList<Player> getPlayers(){
 		return game.getPlayerList();
 	}
+
 	public int getGameSize() {
 		return game.getGameSize();
 	}
@@ -209,7 +288,27 @@ public class BoardmapPresenter implements IPresenter, Observer {
 
 	}
 
-	public void drawFromDeck(){
-		UIFacade.getInstance().drawTrainCardFromDeck();
+	public void drawTrainCardFromDeck(){
+		try {
+			UIFacade.getInstance().drawTrainCardFromDeck();
+		} catch(GameActionException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void drawFromFaceUp(int position) {
+		try {
+			UIFacade.getInstance().drawTrainCard(position);
+		} catch(GameActionException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void drawNewDestinationCards() {
+		try {
+			UIFacade.getInstance().drawDestinationCards();
+		} catch(GameActionException e) {
+			e.printStackTrace();
+		}
 	}
 }

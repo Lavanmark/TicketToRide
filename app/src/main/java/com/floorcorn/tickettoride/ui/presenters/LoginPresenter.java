@@ -90,6 +90,7 @@ public class LoginPresenter implements IPresenter, Observer {
         if(arg instanceof User) {
             this.user = UIFacade.getInstance().getUser();
             if(this.user == null) {
+                //TODO this won't ever happen as the arg can't be null
                 this.loginView.displayMessage("Username/password error -- unable to authenticate");
                 return;
             }

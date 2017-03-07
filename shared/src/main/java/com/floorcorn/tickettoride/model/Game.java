@@ -28,6 +28,7 @@ public class Game {
 
 	@JsonIgnore
 	private ArrayList<ICommand> commands = new ArrayList<>();
+
 	private Board board = null;
 
 
@@ -68,7 +69,6 @@ public class Game {
 		for(Player p : playerList)
 			censoredPlayers.add(p.getCensoredPlayer(user));
 		game.setPlayerList(censoredPlayers);
-		game.board.setDeckManager(null);
 		game.commands = new ArrayList<>();
 		return game;
 	}
@@ -201,6 +201,22 @@ public class Game {
 				return p;
 		}
 		return null;
+	}
+
+	public void drawTrainCardFromDeck(User user) throws GameActionException {
+		Player player = getPlayer(user);
+		if(player == null)
+			return;
+		if(player.isTurn())
+			player.addTrainCard(board.drawFromTrainCardDeck(), 1);
+	}
+
+	public void drawFaceUpCard(User user, int postition) throws GameActionException {
+		Player player = getPlayer(user);
+		if(player == null)
+			return;
+		if(player.isTurn())
+			player.addTrainCard(board.drawFromFaceUp(postition), 1);
 	}
 
 	public int getGameID() {

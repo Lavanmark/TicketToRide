@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.ui.views;
 
 import android.support.v4.widget.DrawerLayout;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.floorcorn.tickettoride.communication.GameChatLog;
@@ -12,6 +13,7 @@ import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,9 +27,9 @@ public interface IBoardmapView extends IView {
 
 	void setBoard(Board board);
 	void setPlayerTrainCardList(Map<TrainCardColor, Integer> cards);
-	void setPlayerDestinationCardList(Set<DestinationCard> destinationCardList);
+	void setPlayerDestinationCardList(List<DestinationCard> destinationCardList);
 	void setFaceUpTrainCards();
-	void setDestinationCardChoices(Set<DestinationCard> destinationCardChoices);
+	void setDestinationCardChoices();
 	void setPlayerTurn(Player player);
 	void setScoreboard(Set<Player> playerSet);
 	void setDestinationCardCompleted(DestinationCard destinationCard);
@@ -35,9 +37,6 @@ public interface IBoardmapView extends IView {
 
 	void setChatLog(GameChatLog log);
 
-	//TODO: Card getCardDrawn();
-
-	DestinationCard getDestinationCardPicked();
 	void markRouteClaimed(Route claimed);
 	void displayDrawingDeckDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER);
 	void hideDrawingDeckDrawer();

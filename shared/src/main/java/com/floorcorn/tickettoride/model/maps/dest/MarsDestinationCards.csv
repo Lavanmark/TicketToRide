@@ -1,32 +1,32 @@
-Opportunity Rover,Viking 2,12
-La Verrier,Utopia,9
-Valles Marineras,Syrtis Major,13
-Green,Cerberus,15
-Alba,Arsia,6
-Alba,Spirit Rover,22
-Copernicus,Deuternilus,17
-Pheonix Lander,Huygens,20
-Olympus,Vastitas Borealis,14
-Holden,Isidis,11
-Pathfinder,Hellas,13
-Elysium,Huxley,10
-Arcadia,Solis,12
-Vastitas Borealis,Kepler,17
-Cassini,Hellas,8
-Vastitas Borealis,Le Verrier,10
-Amazonis,Cydonia,16
-Ascraeus,Huxley,23
-Barabashov,Spirit Rover,25
-Pavonis,Utopia,20
-Viking 1,Viking 2,17
-Argyre,Acydalia,11
-Amazonis,Cereberus,30
-Acydalia,Huxley,25
-Acydalia,Viking 1,6
-Copernicus,Kepler,24
-Vastitas Borealis,Huxley,12
-Pheonix Lander,Argyre,14
-Viking 2,Green,12
-Solis,Elysium,21
-Elysium,Arcadia,24
-Amazonis,Viking 2,23
+Acydalia,Huxley,25,dest_acydalia_huxley
+Acydalia,Viking 1,6,dest_acydalia_viking_1
+Alba,Arsia,6,dest_alba_arsia
+Alba,Spirit Rover,22,dest_alba_spirit_rover
+Amazonis,Cydonia,16,dest_amazonis_cydonia
+Amazonis,Cerberus,30,dest_amazonis_cerberus
+Amazonis,Viking 2,23,dest_amazonis_viking_2
+Arcadia,Solis,12,dest_arcadia_solis
+Argyre,Acydalia,11,dest_argyre_acydalia
+Ascraeus,Huxley,23,dest_ascraeus_huxley
+Barabashov,Spirit Rover,25,dest_barabashov_spirit_rover
+Cassini,Hellas,8,dest_cassini_hellas
+Copernicus,Deuteronilus,17,dest_copernicus_deuteronilus
+Copernicus,Kepler,24,dest_copernicus_kepler
+Elysium,Huxley,10,dest_elysium_huxley
+Elysium,Arcadia,24,dest_elysium_arcadia
+Green,Cerberus,15,dest_green_cerberus
+Holden,Isidis,11,dest_holden_isidis
+Le Verrier,Utopia,9,dest_le_verrier_utopia
+Olympus,Vastitas Borealis,14,dest_olympus_vastitas_borealis
+Opportunity Rover,Viking 2,12,dest_opportunity_rover_viking_2
+Pathfinder,Hellas,13,dest_pathfinder_hellas
+Pavonis,Utopia,20,dest_pavonis_utopia
+Pheonix Lander,Huygens,20,dest_pheonix_lander_huygens
+Pheonix Lander,Argyre,14,dest_pheonix_lander_argyre
+Solis,Elysium,21,dest_solis_elysium
+Valles Marineras,Syrtis Major,13,dest_valles_mariner_syrtis_major
+Vastitas Borealis,Kepler,17,dest_vastitas_borealis_kepler
+Vastitas Borealis,Le Verrier,10,dest_vastitas_borealis_le_verrier
+Vastitas Borealis,Huxley,12,dest_vastitas_borealis_huxley
+Viking 1,Viking 2,17,dest_viking_1_viking_2
+Viking 2,Green,12,dest_viking_2_green

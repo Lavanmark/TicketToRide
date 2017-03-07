@@ -63,9 +63,12 @@ public class ClientModel extends Observable {
     }
 
     public void setGames(Set<GameInfo> gList) {
-        gameList = gList;
+	    if(gList == null)
+		    gameList = new HashSet<>();
+	    else
+            gameList = new HashSet<>(gList);
 
-        setChanged();
+	    setChanged();
         notifyObservers(gameList);
     }
 
@@ -121,5 +124,10 @@ public class ClientModel extends Observable {
         assert count == 1 : "Number of players whose turn it is is not 1, it is: " + count;
 
         return retval;
+    }
+
+    public void notifyGameChanged() {
+        setChanged();
+        notifyObservers(this.currentGame);
     }
 }

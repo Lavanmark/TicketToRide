@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.floorcorn.tickettoride.R;
@@ -31,13 +32,13 @@ import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.Route;
-import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -60,6 +61,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	//elements related to Draw Destination Tickets Drawer
 	private Button drawFromDestinationDeck;
+	private Button keepDestinations;
 	private ImageButton destinationTickets[] = new ImageButton[MAXDESTINATIONS];
 
 	//elements related to Draw Cards Drawer
@@ -82,6 +84,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private TextView wildCount;
 
 	private TextView trainCount;
+
+	private LinearLayout destinationTicketHolder;
 
 	//elements related to the PlayerStatus/Turn Icons
 	private LinearLayout playerIcons;
@@ -171,7 +175,16 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	    trainCount = (TextView)findViewById(R.id.train_count);
 
+		destinationTicketHolder = (LinearLayout)findViewById(R.id.destinationHolder);
+
 	    //CHAT
+	    final ScrollView scrollView = (ScrollView)findViewById(R.id.chatScroll);
+	    scrollView.post(new Runnable() {
+		    @Override
+		    public void run() {
+			    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+		    }
+	    });
 	    chatLayout = (LinearLayout)findViewById(R.id.chatHolder);
 	    chatTextField = (EditText)findViewById(R.id.chatMessageField);
 	    sendMessageBut = (Button)findViewById(R.id.sendMessageButton);
@@ -186,6 +199,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			    chatTextField.setText("");
 		    }
 	    });
+
+
 	    final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
 	    final FrameLayout DRAWER_HOLDER = (FrameLayout) findViewById(R.id.left_drawer_holder);
 	    drawDestinationTicketsButton.setOnClickListener(new View.OnClickListener() {
@@ -214,6 +229,12 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			    //TODO maybe this needs its own function to get all this information set up.
 		    }
 	    });
+	    animateButton.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+			    presenter.animate();
+		    }
+	    });
 
 		playerIcons = (LinearLayout)findViewById(R.id.playerTokenHolder);
 	    for(int i = 0; i < presenter.getGameSize(); i++) {
@@ -229,7 +250,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		    launchPreGame();
     }
 
-	public boolean drawDrawerIsOpen(){
+	private boolean drawDrawerIsOpen(){
 		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
         if(DRAWER.isDrawerOpen(GravityCompat.START)) {
             LinearLayout tempFrame = (LinearLayout) findViewById(R.id.drawer_draw_cards);
@@ -239,6 +260,17 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
             return false;
         }
         return false;
+	}
+	private boolean destinationDrawerIsOpen(){
+		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
+		if(DRAWER.isDrawerOpen(GravityCompat.START)) {
+			LinearLayout tempFrame = (LinearLayout) findViewById(R.id.drawer_destinations);
+			if(tempFrame != null){
+				return true;
+			}
+			return false;
+		}
+		return false;
 	}
 
 	@Override
@@ -357,20 +389,32 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		trainCount.setText(String.valueOf(presenter.getTrainCars()));
 	}
 
+	/**
+	 * This is in the player hand
+	 * @param destinationCardList
+     */
 	@Override
-	public void setPlayerDestinationCardList(Set<DestinationCard> destinationCardList) {
-
+	public void setPlayerDestinationCardList(List<DestinationCard> destinationCardList) {
+		destinationTicketHolder.removeAllViews();
+		for(DestinationCard destinationCard : destinationCardList) {
+			TextView tv = new TextView(destinationTicketHolder.getContext());
+			String s = destinationCard.toString();
+			tv.setText(s);
+			destinationTicketHolder.addView(tv);
+		}
 	}
 
 	@Override
 	public void setFaceUpTrainCards() {
 		//TODO must limit to if the drawer is open
-		//setFaceupImages();
+		if(drawDrawerIsOpen())
+			setFaceupImages();
 	}
 
 	@Override
-	public void setDestinationCardChoices(Set<DestinationCard> destinationCardChoices) {
-
+	public void setDestinationCardChoices() {
+		if(destinationDrawerIsOpen())
+			buildDestinationDrawer();
 	}
 
 	@Override
@@ -391,11 +435,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	@Override
 	public void setPlayerPossibleRouteList(Set<Route> routeList) {
 
-	}
-
-	@Override
-	public DestinationCard getDestinationCardPicked() {
-		return null;
 	}
 
 	@Override
@@ -423,8 +462,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	@Override
 	public void displayDrawingDeckDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER) {
-//		faceupCards[1].setImageResource(R.drawable.card_blue);
-//		faceupCards[2].setImageResource(R.drawable.card_wild);
 		displayLeftDrawer(R.layout.drawer_draw_cards, DRAWER, DRAWER_HOLDER);
 		drawFromCardDeck = (Button)findViewById(R.id.draw_from_card_deck);
 
@@ -433,16 +470,15 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		drawFromCardDeck.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//presenter.drawNextCard();
-				//TODO
+				presenter.drawTrainCardFromDeck();
 			}
 		});
 		for(int i = 0; i < MAXFACEUP; i++){
+			final int temp = i;
 			faceupCards[i].setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-				//presenter.faceupClicked();
-					//TODO
+					presenter.drawFromFaceUp(temp);
 				}
 			});
 		}
@@ -454,6 +490,33 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	}
 
+	private void setDestinationImages(){
+		destinationTickets[0] = (ImageButton)findViewById(R.id.dest_card1);
+		destinationTickets[1] = (ImageButton)findViewById(R.id.dest_card2);
+		destinationTickets[2] = (ImageButton)findViewById(R.id.dest_card3);
+
+		int[] imageId;
+		try {
+			imageId = presenter.getDiscardableDestinationCards();
+			if(imageId == null)
+				imageId = new int[]{R.drawable.back_destinations, R.drawable.back_destinations, R.drawable.back_destinations};
+			for(int i = 0; i < 3; i++) {
+				destinationTickets[i].setSelected(false);
+				if(i >= imageId.length) {
+					destinationTickets[i].setBackgroundResource(R.drawable.back_destinations);
+					destinationTickets[i].setClickable(false);
+				} else {
+					destinationTickets[i].setImageResource(imageId[i]);
+					if(imageId[i] == R.drawable.back_destinations)
+						destinationTickets[i].setClickable(false);
+					else
+						destinationTickets[i].setClickable(true);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	/**
 	 *
 	 * @param DRAWER The layout of the Boardmap Activity
@@ -462,29 +525,62 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	@Override
 	public void displayDestinationCardDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER) {
 		displayLeftDrawer(R.layout.drawer_destinations, DRAWER, DRAWER_HOLDER);
+
+		buildDestinationDrawer();
+	}
+
+	private void buildDestinationDrawer() {
 		drawFromDestinationDeck = (Button)findViewById(R.id.draw_from_dest_deck);
-		destinationTickets[0] = (ImageButton)findViewById(R.id.dest_card1);
-		destinationTickets[1] = (ImageButton)findViewById(R.id.dest_card2);
-		destinationTickets[2] = (ImageButton)findViewById(R.id.dest_card3);
+		drawFromDestinationDeck.setEnabled(false);
+		keepDestinations = (Button) findViewById(R.id.keepCards);
+		keepDestinations.setEnabled(false);
 
-		destinationTickets[0].setImageResource(R.drawable.dest_acydalia_viking_1);
+		setDestinationImages();
 
-		drawFromDestinationDeck.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//TODO
-			}
-		});
-		for(int i = 0; i < MAXDESTINATIONS; i++){
-			destinationTickets[i].setOnClickListener(new View.OnClickListener() {
+		if(presenter.getDiscardableCount() == 0) {
+			presenter.setDiscarding(false);
+			drawFromDestinationDeck.setEnabled(true);
+			drawFromDestinationDeck.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					//TODO
+					drawFromDestinationDeck.setEnabled(false);
+					presenter.drawNewDestinationCards();
+				}
+			});
+		} else {
+			presenter.setDiscarding(true);
+			//Set images
+			for(int i = 0; i < MAXDESTINATIONS; i++) {
+				destinationTickets[i].setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						v.setSelected(!v.isSelected());
+						int notSelectedCount = 0;
+						for(ImageButton ib : destinationTickets)
+							if(!ib.isSelected())
+								notSelectedCount++;
+						if(notSelectedCount <= presenter.getDiscardableCount())
+							keepDestinations.setEnabled(true);
+						else
+							keepDestinations.setEnabled(false);
+					}
+				});
+			}
+
+			//Setup keep button
+
+			keepDestinations.setEnabled(false);
+			keepDestinations.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					for(int i = 0; i < MAXDESTINATIONS; i++) {
+						if(!destinationTickets[i].isSelected() && destinationTickets[i].isClickable())
+							presenter.discardDestination(i);
+					}
+					presenter.doneDiscarding();
 				}
 			});
 		}
-
-
 	}
 
 	@Override

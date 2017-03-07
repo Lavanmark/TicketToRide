@@ -10,14 +10,17 @@ public class DestinationCard {
     private City city1;
     private City city2;
     private int value;
+    private String resName;
     private Boolean canDiscard;
 
     private DestinationCard(){}
-    public DestinationCard(City c1, City c2, int v){
+    public DestinationCard(City c1, City c2, int v, String res){
         city1 = c1;
         city2 = c2;
         value = v;
         canDiscard = true;
+        resName = res;
+        System.out.println("new Destination Card: "+resName);
     }
 
     public Boolean isComplete(List<Route> routes){
@@ -37,8 +40,13 @@ public class DestinationCard {
         return city2;
     }
 
+    public String getResName() { return resName;}
+
     public Boolean canDiscard(){
         return canDiscard;
+    }
+    public void setCanDiscard(boolean discard) {
+        canDiscard = discard;
     }
 
     @Override
@@ -63,4 +71,12 @@ public class DestinationCard {
         result = 31 * result + canDiscard.hashCode();
         return result;
     }
+
+    @Override
+    public String toString(){
+        String s = city1.getName() + " to " + city2.getName() +": " + value;
+        return s;
+    }
+
+
 }

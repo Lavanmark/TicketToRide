@@ -57,8 +57,12 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 				}
 			}
 		}
-		for(Player p : players)
-			Corn.log(p.getTotalTrainCards());
+		for(Player p : players) {
+			if(p.isConductor())
+				p.setTurn(true);
+			else
+				p.setTurn(false);
+		}
 		//TODO make setboard a method on client?
 		client.getGame().setBoard(board);
 		client.setPlayerList(players);

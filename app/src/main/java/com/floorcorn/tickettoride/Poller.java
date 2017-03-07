@@ -80,6 +80,11 @@ public class Poller {
 							try {
 								System.out.println("getting commands");
 								ArrayList<ICommand> commands = serverProxy.getCommandsSince(commandManager.getUser(), commandManager.currentGameID(), commandManager.getLastCommandExecuted());
+								if(commands == null) {
+									stopPollingAll();
+									view.backToLogin();
+									return;
+								}
 								commandManager.addCommands(commands);
 							} catch(BadUserException e) {
 								e.printStackTrace();
@@ -113,6 +118,11 @@ public class Poller {
 							try {
 								System.out.println("getting chat log");
 								GameChatLog gameChatLog = serverProxy.getChatLog(commandManager.getUser(), commandManager.getGame().getGameInfo());
+								if(gameChatLog == null) {
+									stopPollingAll();
+									view.backToLogin();
+									return;
+								}
 								commandManager.getClientFacade().setChatLog(gameChatLog);
 								//TODO this is an awful way to do this.
 							} catch(BadUserException e) {

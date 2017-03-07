@@ -123,7 +123,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	@Override
 	public void onResume() {
 		presenter.register();
-		presenter.setCurrentGame(null);
+		presenter.setCurrentGame(null); //TODO pointless call...
 		presenter.requestGames();
 		super.onResume();
 	}
@@ -178,6 +178,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 
 	@Override
 	public void backToLogin() {
+		presenter.unregister();
 		startActivity(new Intent(GameListActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 	}
 
@@ -189,11 +190,11 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	@Override
 	public void resumeGame(GameInfo game) {
 		presenter.setCurrentGame(game);
-		startGameView();
 	}
 
 	@Override
 	public void startGameView(){
+		presenter.unregister();
 		startActivity(new Intent(GameListActivity.this, BoardmapActivity.class));
 	}
 

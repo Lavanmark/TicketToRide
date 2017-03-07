@@ -266,7 +266,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     }
 
 	public void onStop() {
-		presenter.clearObservers();
 		super.onStop();
 	}
 
@@ -353,6 +352,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
     public void launchNextActivity() {
         Intent i = new Intent(LoginActivity.this, GameListActivity.class);
 	    //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    presenter.unregister();
         startActivity(i);
     }
 
