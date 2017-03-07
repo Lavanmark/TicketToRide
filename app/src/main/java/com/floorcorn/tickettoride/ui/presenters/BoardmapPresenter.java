@@ -7,6 +7,7 @@ import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.TrainCard;
@@ -150,7 +151,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		if (!gameInProgress()){
 			throw new Exception("Game not Started");
 		}
-		DestinationCard[] destinationCards = UIFacade.getInstance().drawDestinationCard();
+		DestinationCard[] destinationCards = game.getPlayer(user).getInitialDestinationCards();
 		int[] DestId = new int[3];
 		for (int i = 0; i < 3; i++) {
 			if (destinationCards[i] == null) {
@@ -158,7 +159,6 @@ public class BoardmapPresenter implements IPresenter, Observer {
 				DestId[i] = R.drawable.card_black;
 				continue;
 			} else {
-
 				DestId[i] = getResId(destinationCards[i].getResName(), view.getActivity().getBaseContext());
 			}
 		}
@@ -166,9 +166,10 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	}
 
 	/**
-	 * Takes a string and converts it to a resource Id
+	 * Takes a string and converts it to a resource Id.
+	 * Used to match the destination card object to the correct image
 	 * @param resName string of teh resource name, i.e. dest_card_name
-	 * @param c the class the resource is in, i.e. Drawable
+	 * @param context the class the resource is in, i.e. Drawable
      * @return int of the resource
      */
 	public static int getResId(String resName, Context context) {
@@ -182,5 +183,36 @@ public class BoardmapPresenter implements IPresenter, Observer {
 			e.printStackTrace();
 			return -1;
 		}
+	}
+
+	public void discardDestination(int index) {
+		DestinationCard toDiscard = game.getPlayer(user).getDestinationCards().get(index);
+		try {
+			UIFacade.getInstance().discardDestinationCard(toDiscard);
+			this.keepTwoDestinations();
+		} catch (GameActionException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	public void keepTwoDestinations(){
+		/*TODO: case that the user wants to keep two destination cards
+			called after discarding one
+			Should clear the destinations from the destination drawer,
+			and make sure the player's hand was updated
+		 */
+	}
+
+	public void keepThreeDestinations() {
+		/*TODO: case that the user wants to keep all three destination cards
+			The model won't change, but we need to clear the destination cards
+			that we want to keep from the drawer.
+		 */
+
+	}
+
+	public void disableKeepThree() {
+		view.getKeepThree().setEnabled(false);
 	}
 }

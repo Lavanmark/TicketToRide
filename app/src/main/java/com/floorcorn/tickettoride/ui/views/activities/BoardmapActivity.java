@@ -57,6 +57,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	//elements related to Draw Destination Tickets Drawer
 	private Button drawFromDestinationDeck;
+	private Button keepThreeDestinations;
 	private ImageButton destinationTickets[] = new ImageButton[MAXDESTINATIONS];
 
 	//elements related to Draw Cards Drawer
@@ -414,7 +415,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		drawFromDestinationDeck = (Button)findViewById(R.id.draw_from_dest_deck);
 
 		setDestinationImages();
-
+		drawFromDestinationDeck.setEnabled(false);
 		drawFromDestinationDeck.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -422,13 +423,25 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			}
 		});
 		for(int i = 0; i < MAXDESTINATIONS; i++){
+			final int j = i;
 			destinationTickets[i].setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					presenter.discardDestination(j);
+					presenter.disableKeepThree();
 					//TODO
 				}
 			});
 		}
+		keepThreeDestinations = (Button)findViewById(R.id.keepThree);
+		keepThreeDestinations.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				presenter.keepThreeDestinations();
+			}
+		});
+
+
 
 
 	}
@@ -446,6 +459,12 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	@Override
 	public void hideRouteDrawer() {
 
+	}
+
+	@Override
+	public Button getKeepThree() {
+		//TODO: assert that the drawer is open
+		return keepThreeDestinations;
 	}
 
 	private void displayLeftDrawer(int drawerID, DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER){
