@@ -168,7 +168,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		for (int i = 0; i < 5; i++) {
 			if(faceUp[i] == null) {
 				//TODO add the back of a card image
-				imageId[i] = R.drawable.card_black;
+				imageId[i] = R.drawable.back_trains;
 				continue;
 			}
 			TrainCardColor color = faceUp[i].getColor();
@@ -213,7 +213,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		for (int i = 0; i < 3; i++) {
 			if (destinationCards[i] == null) {
 				//TODO add the back of a card image
-				DestId[i] = R.drawable.card_black;
+				DestId[i] = R.drawable.back_destinations;
 				continue;
 			} else {
 				DestId[i] = getResId(destinationCards[i].getResName(), view.getActivity().getBaseContext());

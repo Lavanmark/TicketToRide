@@ -216,6 +216,8 @@ public class Player {
 	}
 
 	public void addTrainCard(TrainCard card, int amount){
+		if(card == null)
+			return;
 		int cur = 0;
 		if(trainCards.containsKey(card.getColor()))
 			cur = trainCards.get(card.getColor());
