@@ -15,7 +15,8 @@ public class DeckManager {
     private List<TrainCard> trainCardDiscard;
     private List<DestinationCard> destinationCardDeck;
 
-    public DeckManager() {
+	private DeckManager(){}
+    public DeckManager(boolean shuffle) {
 	    trainCardDeck = new ArrayList<>();
 	    trainCardDiscard = new ArrayList<>();
 	    destinationCardDeck = new ArrayList<>();
@@ -28,7 +29,8 @@ public class DeckManager {
 
 	    destinationCardDeck = new MapFactory().getMarsDestinationCards();
 
-	    shuffleAllCards();
+	    if(shuffle)
+	        shuffleAllCards();
     }
 
     public void shuffleAllCards(){

@@ -3,9 +3,11 @@ package com.floorcorn.tickettoride.ui.views.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +29,7 @@ import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Board;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Player;
+import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
@@ -82,6 +85,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private TextView trainCount;
 
 	//elements related to the PlayerStatus/Turn Icons
+	private LinearLayout playerIcons;
 
 
 	//elements related to the map
@@ -189,19 +193,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		    @Override
 		    public void onClick(View view) {
 			    Corn.log("Opening Destination Drawer");
-			    displayDestinationCardDrawer(DRAWER, DRAWER_HOLDER);
+                presenter.displayDestinationCardDrawer(DRAWER, DRAWER_HOLDER);
 		    }
 	    });
 	    drawCardsButton.setOnClickListener(new View.OnClickListener() {
 		    @Override
 		    public void onClick(View view) {
-			    displayDrawingDeckDrawer(DRAWER, DRAWER_HOLDER);
+                presenter.displayDrawDrawer(DRAWER, DRAWER_HOLDER);
 		    }
 	    });
 	    claimRouteButton.setOnClickListener(new View.OnClickListener() {
 		    @Override
 		    public void onClick(View view) {
-			    displayClaimRouteDrawer(DRAWER, DRAWER_HOLDER);
+                presenter.displayPlaceRouteDrawer(DRAWER, DRAWER_HOLDER);
 		    }
 	    });
 	    displayHandButton.setOnClickListener(new View.OnClickListener() {
@@ -212,10 +216,31 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		    }
 	    });
 
+		playerIcons = (LinearLayout)findViewById(R.id.playerTokenHolder);
+	    for(int i = 0; i < presenter.getGameSize(); i++) {
+		    Button but = new Button(playerIcons.getContext());
+		    but.setText("PLAYER " + i);
+		    but.setTextColor(Color.WHITE);
+		    but.setBackgroundColor(Color.GRAY);
+		    playerIcons.addView(but);
+	    }
+
 	    checkStarted();
 	    if(!presenter.gameInProgress())
 		    launchPreGame();
     }
+
+	public boolean drawDrawerIsOpen(){
+		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
+        if(DRAWER.isDrawerOpen(GravityCompat.START)) {
+            LinearLayout tempFrame = (LinearLayout) findViewById(R.id.drawer_draw_cards);
+            if(tempFrame != null){
+                return true;
+            }
+            return false;
+        }
+        return false;
+	}
 
 	@Override
 	public void onStop(){
@@ -259,7 +284,47 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			claimRouteButton.setEnabled(true);
 			displayHandButton.setEnabled(true);
 			sendMessageBut.setEnabled(true);
+			setupPlayerIcons();
 		}
+	}
+
+	private void setupPlayerIcons() {
+		ArrayList<Player> players = presenter.getPlayers();
+		for(final Player p : players) {
+			Button but = (Button)playerIcons.getChildAt(p.getPlayerID());
+			if(p.isTurn())
+				but.setTextColor(Color.BLACK);
+			else
+				but.setTextColor(Color.WHITE);
+			but.setText(p.getName());
+			but.setBackgroundColor(getPlayerColor(p.getColor()));
+			//TODO check if the player is self. If so it should open the drawer.
+			but.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					//TODO might need to update on every player list because p is final
+					Snackbar snackbar = Snackbar.make(playerIcons, p.getCriticalPlayerInfo(), Snackbar.LENGTH_LONG);
+					((TextView)snackbar.getView().findViewById(android.support.design.R.id.snackbar_text)).setMaxLines(6);
+					snackbar.show();
+				}
+			});
+		}
+	}
+
+	private int getPlayerColor(PlayerColor pc) {
+		switch(pc) {
+			case RED:
+				return Color.RED;
+			case GREEN:
+				return Color.GREEN;
+			case BLACK:
+				return Color.BLACK;
+			case BLUE:
+				return Color.BLUE;
+			case YELLOW:
+				return Color.YELLOW;
+		}
+		return 0;
 	}
 
 	@Override

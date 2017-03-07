@@ -54,7 +54,7 @@ public class Game {
 		this.gameID = gameID;
 		this.commands = new ArrayList<>();
 		this.board = new Board(new MapFactory().getMarsRoutes());
-		this.board.setDeckManager(new DeckManager());
+		this.board.setDeckManager(new DeckManager(true));
 	}
 
 	
