@@ -47,7 +47,7 @@ public class UIFacade {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
         serverProxy.setPort("8080");
-        serverProxy.setHost("192.168.1.112");
+        serverProxy.setHost("192.168.0.100");
 
         poller = new Poller(serverProxy, clientModelRoot);
     }
@@ -440,9 +440,10 @@ public class UIFacade {
         return clientModelRoot.getCurrentGame().getBoard().getFaceUpCards();
     }
 
-    public void drawTrainCardFromDeck() {
-        //no implementation for phase 2
-        throw new UnsupportedOperationException();
+    public void drawTrainCardFromDeck() throws GameActionException {
+        Game game = clientModelRoot.getCurrentGame();
+	    game.drawTrainCardFromDeck(clientModelRoot.getCurrentUser());
+	    clientModelRoot.setCurrentGame(game);
     }
 
     /*
@@ -478,8 +479,9 @@ public class UIFacade {
         TYLER, you were questioning if you wanted to implement this or not, but here it is
      */
     public void discardDestinationCard(DestinationCard destinationCard) throws GameActionException {
-	    //TODO without a deck manager this is always going to throw exceptions
-        clientModelRoot.getCurrentGame().getBoard().discard(destinationCard);
+        Game game = clientModelRoot.getCurrentGame();
+	    game.getBoard().discard(destinationCard);
+	    clientModelRoot.setCurrentGame(game);
     }
 
 

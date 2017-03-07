@@ -215,6 +215,12 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			    //TODO maybe this needs its own function to get all this information set up.
 		    }
 	    });
+	    animateButton.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+			    presenter.animate();
+		    }
+	    });
 
 		playerIcons = (LinearLayout)findViewById(R.id.playerTokenHolder);
 	    for(int i = 0; i < presenter.getGameSize(); i++) {
@@ -432,8 +438,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		drawFromCardDeck.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//presenter.drawNextCard();
-				//TODO
+				presenter.drawFromDeck();
 			}
 		});
 		for(int i = 0; i < MAXFACEUP; i++){
