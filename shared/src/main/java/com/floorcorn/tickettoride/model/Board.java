@@ -146,17 +146,19 @@ public class Board {
 				    faceUpCards[i] = drawFromTrainCardDeck();
 			    } catch(GameActionException e) {
 				    e.printStackTrace();
+				    System.out.println("Out of Cards!");
+				    break;
 			    }
 		    }
 	    }
-	    if(shouldResetFaceUp())
+	    while(shouldResetFaceUp())
 		    resetFaceUp();
     }
 
     private Boolean shouldResetFaceUp(){
 	    int wildcount = 0;
 	    for(int i = 0; i < FACEUP_DECK_SIZE; i++)
-		    if(faceUpCards[i].getColor() == TrainCardColor.WILD)
+		    if(faceUpCards[i] != null && faceUpCards[i].getColor() == TrainCardColor.WILD)
 			    wildcount++;
 	    return wildcount >= 3;
     }
@@ -168,6 +170,8 @@ public class Board {
 			    faceUpCards[i] = drawFromTrainCardDeck();
 		    } catch(GameActionException e) {
 			    e.printStackTrace();
+			    System.out.println("Out of Cards!");
+			    break;
 		    }
 	    }
     }

@@ -63,9 +63,12 @@ public class ClientModel extends Observable {
     }
 
     public void setGames(Set<GameInfo> gList) {
-        gameList = gList;
+	    if(gList == null)
+		    gameList = new HashSet<>();
+	    else
+            gameList = new HashSet<>(gList);
 
-        setChanged();
+	    setChanged();
         notifyObservers(gameList);
     }
 

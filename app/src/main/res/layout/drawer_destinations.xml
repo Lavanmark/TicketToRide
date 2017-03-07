@@ -88,8 +88,8 @@
 
 
             <Button
-                android:text="Keep All Three"
-                android:id="@+id/keepThree"
+                android:text="Keep Selected Cards"
+                android:id="@+id/keepCards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_selector"

@@ -6,6 +6,7 @@ import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
+import com.floorcorn.tickettoride.model.Board;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
@@ -189,6 +190,7 @@ public class UIFacade {
      */
 	public void requestGame(GameInfo game) throws BadUserException {
 		Game cgame = serverProxy.getGame(clientModelRoot.getCurrentUser(), game.getGameID());
+		//System.out.println("still gonna do it");
         clientModelRoot.setCurrentGame(cgame);
 	}
 
@@ -198,8 +200,8 @@ public class UIFacade {
      */
     public void requestGames() throws BadUserException {
         clientModelRoot.setGames(serverProxy.getGames(getUser()));
-	    for(GameInfo gi : clientModelRoot.getGames())
-		    System.out.println(gi.getGameID() + " " + gi.getName());
+	    //for(GameInfo gi : clientModelRoot.getGames())
+		//    System.out.println(gi.getGameID() + " " + gi.getName());
     }
 
     /**
@@ -286,7 +288,7 @@ public class UIFacade {
     /**
      * If poller is null, creates a new Poller. Tells poller to stop polling.
      */
-	private void resetPollerState() {
+	public void stopPollingAll() {
 		if (poller == null) {
 			poller = new Poller(serverProxy, clientModelRoot);
 			return;
@@ -311,7 +313,8 @@ public class UIFacade {
      * @param obs Observer object
      */
     public void registerObserver(Observer obs) {
-        clientModelRoot.addObserver(obs);
+        //System.out.println("register " + obs.getClass().getSimpleName());
+	    clientModelRoot.addObserver(obs);
     }
 
     /**
@@ -319,11 +322,13 @@ public class UIFacade {
      * @param obs Observer object
      */
     public void unregisterObserver(Observer obs) {
-        clientModelRoot.deleteObserver(obs);
+        //System.out.println("unregister " + obs.getClass().getSimpleName());
+	    clientModelRoot.deleteObserver(obs);
     }
 
     public void clearObservers() {
-        clientModelRoot.deleteObservers();
+	    //System.out.println("clear observers");
+	    clientModelRoot.deleteObservers();
     }
 
     // Phase 2 stuff.
@@ -404,22 +409,32 @@ public class UIFacade {
      * @return Array of 3 Destination Cards
      * @throws GameActionException
      */
-    public DestinationCard[] drawDestinationCard() throws GameActionException {
-	    //TODO without a deck manager this is always going to throw exceptions
-        DestinationCard[] threeDestCards = new DestinationCard[3];
-        for (int i = 0; i < 3; i++){
-            threeDestCards[i] = clientModelRoot.getCurrentGame().getBoard().drawFromDestinationCardDeck();
-        }
-        return threeDestCards;
+    public void drawDestinationCards() throws GameActionException {
+	    Player player = clientModelRoot.getCurrentGame().getPlayer(getUser());
+	    Board board = clientModelRoot.getCurrentGame().getBoard();
+		for (int i = 0; i < 3; i++){
+			DestinationCard card = board.drawFromDestinationCardDeck();
+			if(card != null)
+				player.addDestinationCard(card);
+			else
+				break;
+		}
+	    clientModelRoot.notifyGameChanged();
     }
 
     /*
         TYLER, you were questioning if you wanted to implement this or not, but here it is
      */
     public void discardDestinationCard(DestinationCard destinationCard) throws GameActionException {
+	    clientModelRoot.getCurrentGame().getPlayer(clientModelRoot.getCurrentUser()).removeDestinationCard(destinationCard);
         clientModelRoot.getCurrentGame().getBoard().discard(destinationCard);
 	    clientModelRoot.notifyGameChanged();
     }
+
+	public void stopDiscarding() {
+		clientModelRoot.getCurrentGame().getPlayer(clientModelRoot.getCurrentUser()).markAllNotDiscardable();
+		clientModelRoot.notifyGameChanged();
+	}
 
 
 

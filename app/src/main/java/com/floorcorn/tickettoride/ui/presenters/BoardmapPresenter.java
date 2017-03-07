@@ -39,11 +39,13 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	private Game game = null;
 	private User user = null;
 
+	private boolean discarding = false;
+	private DestinationCard[] destCardsToDiscard;
+
 	public BoardmapPresenter() {
 		this.game = UIFacade.getInstance().getCurrentGame();
 		this.user = UIFacade.getInstance().getUser();
 		register();
-
 	}
 
     @Override
@@ -65,6 +67,8 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		        view.setFaceUpTrainCards();
 		        view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
 				view.setPlayerDestinationCardList(game.getPlayer(user).getDestinationCards());
+		        if(!discarding)
+		            view.setDestinationCardChoices();
 	        }
         }
 	    if(arg instanceof GameChatLog) {
@@ -101,8 +105,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
     //This method compares the old game object to the new one to see what changes have been made.
     public void getChanges(Game newGame){
         TrainCardColor newCard = getNewCardDrawn(newGame);
-        if(newCard != null)
-        {
+        if(newCard != null) {
             String toDisplay = "You drew a " + newCard.name() + " card";
             Toast.makeText(view.getActivity(), toDisplay, Toast.LENGTH_LONG).show();
         }
@@ -167,8 +170,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		int[] imageId = new int[5];
 		for (int i = 0; i < 5; i++) {
 			if(faceUp[i] == null) {
-				//TODO add the back of a card image
-				imageId[i] = R.drawable.card_black;
+				imageId[i] = R.drawable.back_trains;
 				continue;
 			}
 			TrainCardColor color = faceUp[i].getColor();
@@ -204,22 +206,37 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		}
 		return imageId;
 	}
-	public int[] getDestinationCards() throws Exception {
+
+	public void setDiscarding(boolean areu) {
+		discarding = areu;
+	}
+
+	public int[] getDiscardableDestinationCards() throws Exception {
 		if (!gameInProgress()){
 			throw new Exception("Game not Started");
 		}
-		DestinationCard[] destinationCards = game.getPlayer(user).getInitialDestinationCards();
-		int[] DestId = new int[3];
-		for (int i = 0; i < 3; i++) {
-			if (destinationCards[i] == null) {
-				//TODO add the back of a card image
-				DestId[i] = R.drawable.card_black;
-				continue;
+		destCardsToDiscard = game.getPlayer(user).getDiscardableDestinationCards();
+		if(destCardsToDiscard == null)
+			return null;
+
+		int[] DestId = new int[destCardsToDiscard.length];
+		for (int i = 0; i < destCardsToDiscard.length; i++) {
+			if (destCardsToDiscard[i] == null) {
+				DestId[i] = R.drawable.back_destinations;
 			} else {
-				DestId[i] = getResId(destinationCards[i].getResName(), view.getActivity().getBaseContext());
+				DestId[i] = getResId(destCardsToDiscard[i].getResName(), view.getActivity().getBaseContext());
 			}
 		}
 		return DestId;
+	}
+
+	public int getDiscardableCount() {
+		if(game.getPlayer(user).getDiscardableDestinationCards() != null) {
+			if(game.getPlayer(user).getDestinationCards().size() == 3)
+				return 1;
+			return 2;
+		}
+		return 0;
 	}
 
 	/**
@@ -243,34 +260,20 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	}
 
 	public void discardDestination(int index) {
-		DestinationCard toDiscard = game.getPlayer(user).getDestinationCards().get(index);
+		if(destCardsToDiscard == null)
+			return;
 		try {
-			UIFacade.getInstance().discardDestinationCard(toDiscard);
-			this.keepTwoDestinations();
+			UIFacade.getInstance().discardDestinationCard(destCardsToDiscard[index]);
 		} catch (GameActionException e) {
 			e.printStackTrace();
 		}
 	}
 
+	public void doneDiscarding() {
+		destCardsToDiscard = null;
+		discarding = false;
+		UIFacade.getInstance().stopDiscarding();
 
-	public void keepTwoDestinations(){
-		/*TODO: case that the user wants to keep two destination cards
-			called after discarding one
-			Should clear the destinations from the destination drawer,
-			and make sure the player's hand was updated
-		 */
-	}
-
-	public void keepThreeDestinations() {
-		/*TODO: case that the user wants to keep all three destination cards
-			The model won't change, but we need to clear the destination cards
-			that we want to keep from the drawer.
-		 */
-
-	}
-
-	public void disableKeepThree() {
-		view.getKeepThree().setEnabled(false);
 	}
 
 	public ArrayList<Player> getPlayers(){
@@ -296,6 +299,14 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	public void drawFromFaceUp(int position) {
 		try {
 			UIFacade.getInstance().drawTrainCard(position);
+		} catch(GameActionException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void drawNewDestinationCards() {
+		try {
+			UIFacade.getInstance().drawDestinationCards();
 		} catch(GameActionException e) {
 			e.printStackTrace();
 		}

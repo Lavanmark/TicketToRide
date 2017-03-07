@@ -45,6 +45,9 @@ public class DestinationCard {
     public Boolean canDiscard(){
         return canDiscard;
     }
+    public void setCanDiscard(boolean discard) {
+        canDiscard = discard;
+    }
 
     @Override
     public boolean equals(Object o) {

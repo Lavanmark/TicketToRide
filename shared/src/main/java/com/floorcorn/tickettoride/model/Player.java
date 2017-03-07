@@ -151,9 +151,20 @@ public class Player {
 		return destinationCards;
 	}
 
-	public DestinationCard[] getInitialDestinationCards() {
-		DestinationCard[] cardArray = new DestinationCard[destinationCards.size()];
-		cardArray = destinationCards.toArray(cardArray);
+	public DestinationCard[] getDiscardableDestinationCards() {
+		int discardable = 0;
+		for(DestinationCard dc : destinationCards)
+			if(dc.canDiscard())
+				discardable++;
+
+		if(discardable == 0)
+			return null;
+
+		DestinationCard[] cardArray = new DestinationCard[discardable];
+		int i = 0;
+		for(DestinationCard dc : destinationCards)
+			if(dc.canDiscard())
+				cardArray[i++] = dc;
 		return cardArray;
 	}
 
@@ -216,6 +227,8 @@ public class Player {
 	}
 
 	public void addTrainCard(TrainCard card, int amount){
+		if(card == null)
+			return;
 		int cur = 0;
 		if(trainCards.containsKey(card.getColor()))
 			cur = trainCards.get(card.getColor());
@@ -224,9 +237,12 @@ public class Player {
 	}
 
 	public void removeDestinationCard(DestinationCard card){
-		//param should be a list?
-		//TODO gotta make this work...
-		//TODO also discard these.
+		destinationCards.remove(card);
+	}
+
+	public void markAllNotDiscardable() {
+		for(DestinationCard dc : destinationCards)
+			dc.setCanDiscard(false);
 	}
 
 	public void removeTrainCard(TrainCard card){
