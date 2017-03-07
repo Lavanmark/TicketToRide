@@ -29,7 +29,7 @@ public interface IBoardmapView extends IView {
 	void setPlayerTrainCardList(Map<TrainCardColor, Integer> cards);
 	void setPlayerDestinationCardList(List<DestinationCard> destinationCardList);
 	void setFaceUpTrainCards();
-	void setDestinationCardChoices(Set<DestinationCard> destinationCardChoices);
+	void setDestinationCardChoices();
 	void setPlayerTurn(Player player);
 	void setScoreboard(Set<Player> playerSet);
 	void setDestinationCardCompleted(DestinationCard destinationCard);
@@ -37,9 +37,6 @@ public interface IBoardmapView extends IView {
 
 	void setChatLog(GameChatLog log);
 
-	//TODO: Card getCardDrawn();
-
-	DestinationCard getDestinationCardPicked();
 	void markRouteClaimed(Route claimed);
 	void displayDrawingDeckDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER);
 	void hideDrawingDeckDrawer();
@@ -47,6 +44,4 @@ public interface IBoardmapView extends IView {
 	void hideDestinationDrawer();
 	void displayClaimRouteDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER);
 	void hideRouteDrawer();
-
-	Button getKeepThree();
 }
