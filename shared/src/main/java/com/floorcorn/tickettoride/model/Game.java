@@ -26,6 +26,8 @@ public class Game {
 	private boolean finished = false;
 	private int longestRoute = 0;
 
+	private TrainCard lastDrawn = null;
+
 	@JsonIgnore
 	private ArrayList<ICommand> commands = new ArrayList<>();
 
@@ -207,16 +209,34 @@ public class Game {
 		Player player = getPlayer(user);
 		if(player == null)
 			return;
-		if(player.isTurn())
-			player.addTrainCard(board.drawFromTrainCardDeck(), 1);
+		if(player.isTurn()) {
+			//player.addTrainCard(board.drawFromTrainCardDeck(), 1);
+			//NOTE: The above line works fine, below implemented for animation purposes.
+			this.lastDrawn = board.drawFromTrainCardDeck();
+			player.addTrainCard(lastDrawn, 1);
+		}
 	}
 
-	public void drawFaceUpCard(User user, int postition) throws GameActionException {
+	/** This method accesses data used solely for animation. Can be removed later. **/
+	public TrainCard getLastDrawn(){
+		return this.lastDrawn;
+	}
+
+	/** This method is also just for animation **/
+	public void setLastDrawn(TrainCard card){
+		this.lastDrawn = card;
+	}
+
+	public void drawFaceUpCard(User user, int position) throws GameActionException {
 		Player player = getPlayer(user);
 		if(player == null)
 			return;
-		if(player.isTurn())
-			player.addTrainCard(board.drawFromFaceUp(postition), 1);
+		if(player.isTurn()) {
+			//player.addTrainCard(board.drawFromFaceUp(position), 1);
+			//NOTE: above line works, below added just for animation purposes.
+			this.lastDrawn = board.drawFromFaceUp(position);
+			player.addTrainCard(this.lastDrawn, position);
+		}
 	}
 
 	public int getGameID() {

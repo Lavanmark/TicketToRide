@@ -250,6 +250,31 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		    launchPreGame();
     }
 
+	/** These next few methods serve the purposes of the animation and are not needed after that.**/
+
+	@Override
+	public void displayDrawingDeckDrawer(){
+		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
+		final FrameLayout DRAWER_HOLDER = (FrameLayout) findViewById(R.id.left_drawer_holder);
+		Corn.log("Opening Drawing Drawer");
+		presenter.displayDrawDrawer(DRAWER, DRAWER_HOLDER);
+	}
+
+	@Override
+	public void displayDestinationCardDrawer(){
+		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
+		final FrameLayout DRAWER_HOLDER = (FrameLayout) findViewById(R.id.left_drawer_holder);
+		Corn.log("Opening Destination Drawer");
+		presenter.displayDestinationCardDrawer(DRAWER, DRAWER_HOLDER);
+	}
+
+	@Override
+	public void displayHandDrawer(){
+		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
+		final FrameLayout DRAWER_HOLDER = (FrameLayout) findViewById(R.id.left_drawer_holder);
+		DRAWER.openDrawer(GravityCompat.END);
+	}
+
 	private boolean drawDrawerIsOpen(){
 		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
         if(DRAWER.isDrawerOpen(GravityCompat.START)) {
@@ -487,7 +512,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	@Override
 	public void hideDrawingDeckDrawer() {
-
+		closeLeftDrawer();
 	}
 
 	private void setDestinationImages(){
@@ -585,7 +610,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	@Override
 	public void hideDestinationDrawer() {
-
+		closeLeftDrawer();
 	}
 
 	@Override
@@ -595,7 +620,12 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	@Override
 	public void hideRouteDrawer() {
+		closeLeftDrawer();
+	}
 
+	private void closeLeftDrawer(){
+		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
+		DRAWER.closeDrawer(GravityCompat.START);
 	}
 
 	private void displayLeftDrawer(int drawerID, DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER){
@@ -626,5 +656,16 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	@Override
 	public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 		return false;
+	}
+
+	@Override
+	public void animate_ClickOnDestinationCards(){
+		this.destinationTickets[0].performClick();
+		this.destinationTickets[1].performClick();
+	}
+
+	@Override
+	public void animate_takeDestinationCards(){
+		this.keepDestinations.performClick();
 	}
 }

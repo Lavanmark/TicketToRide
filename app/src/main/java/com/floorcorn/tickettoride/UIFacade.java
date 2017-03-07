@@ -48,7 +48,7 @@ public class UIFacade {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
         serverProxy.setPort("8080");
-        serverProxy.setHost("192.168.0.100");
+        serverProxy.setHost("10.24.215.82");
 
         poller = new Poller(serverProxy, clientModelRoot);
     }
@@ -389,6 +389,10 @@ public class UIFacade {
 	    clientModelRoot.notifyGameChanged();
     }
 
+    public void drawTrainCardFromDeck_animation() throws GameActionException {
+        clientModelRoot.getCurrentGame().drawTrainCardFromDeck(clientModelRoot.getCurrentUser());
+        clientModelRoot.notifyGameChanged();
+    }
     /*
         TYLER, you were questioning if you wanted to implement this or not, but here it is
      */

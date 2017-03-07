@@ -38,10 +38,16 @@ public interface IBoardmapView extends IView {
 	void setChatLog(GameChatLog log);
 
 	void markRouteClaimed(Route claimed);
+	void displayDrawingDeckDrawer();
 	void displayDrawingDeckDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER);
 	void hideDrawingDeckDrawer();
 	void displayDestinationCardDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER);
+	void displayDestinationCardDrawer();
 	void hideDestinationDrawer();
 	void displayClaimRouteDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER);
 	void hideRouteDrawer();
+
+	void displayHandDrawer();
+	void animate_ClickOnDestinationCards();
+	void animate_takeDestinationCards();
 }
