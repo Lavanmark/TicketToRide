@@ -64,6 +64,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		        view.checkStarted();
 		        view.setFaceUpTrainCards();
 		        view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
+				view.setPlayerDestinationCardList(game.getPlayer(user).getDestinationCards());
 	        }
         }
 	    if(arg instanceof GameChatLog) {

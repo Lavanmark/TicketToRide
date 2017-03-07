@@ -168,7 +168,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
-            android:paddingLeft="25dp">
+            android:paddingLeft="25dp"
+            android:orientation="vertical">
             <TextView
                 android:text="DESTINATION"
                 android:textSize="14dp"
