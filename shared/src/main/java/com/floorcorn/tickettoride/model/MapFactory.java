@@ -80,6 +80,7 @@ public class MapFactory {
 				if(!line.isEmpty())
 					cities.add(new City(line));
 			}
+			br.close();
 			return cities;
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -105,6 +106,7 @@ public class MapFactory {
 						routes.add(new Route(routeID++, city1, city2, length, color));
 				}
 			}
+			br.close();
 			return routes;
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -128,6 +130,7 @@ public class MapFactory {
 						dest.add(new DestinationCard(city1, city2, value, resource));
 				}
 			}
+			br.close();
 			return dest;
 		} catch(IOException e) {
 			e.printStackTrace();

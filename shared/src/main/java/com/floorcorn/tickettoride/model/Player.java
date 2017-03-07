@@ -157,20 +157,16 @@ public class Player {
 		return cardArray;
 	}
 
-	public void setDestinationCards(List<DestinationCard> destinationCards) {
+	private void setDestinationCards(List<DestinationCard> destinationCards) {
 		this.destinationCards = new ArrayList<>(destinationCards);
-		totalDestinationCards = this.destinationCards.size();
 	}
 
 	public Map<TrainCardColor, Integer> getTrainCards() {
 		return trainCards;
 	}
 
-	public void setTrainCards(Map<TrainCardColor, Integer> trainCards) {
+	private void setTrainCards(Map<TrainCardColor, Integer> trainCards) {
 		this.trainCards = new HashMap<>(trainCards);
-		this.totalTrainCards = 0;
-		for(TrainCardColor tcc : this.trainCards.keySet())
-			this.totalTrainCards += this.trainCards.get(tcc);
 	}
 
 	public List<Route> getRoutesClaimed() {

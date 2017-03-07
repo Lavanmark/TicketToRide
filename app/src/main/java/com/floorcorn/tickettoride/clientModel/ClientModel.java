@@ -122,4 +122,9 @@ public class ClientModel extends Observable {
 
         return retval;
     }
+
+    public void notifyGameChanged() {
+        setChanged();
+        notifyObservers(this.currentGame);
+    }
 }

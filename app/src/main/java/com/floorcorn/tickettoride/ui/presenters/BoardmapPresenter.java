@@ -285,7 +285,19 @@ public class BoardmapPresenter implements IPresenter, Observer {
 
 	}
 
-	public void drawFromDeck(){
-		UIFacade.getInstance().drawTrainCardFromDeck();
+	public void drawTrainCardFromDeck(){
+		try {
+			UIFacade.getInstance().drawTrainCardFromDeck();
+		} catch(GameActionException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void drawFromFaceUp(int position) {
+		try {
+			UIFacade.getInstance().drawTrainCard(position);
+		} catch(GameActionException e) {
+			e.printStackTrace();
+		}
 	}
 }
