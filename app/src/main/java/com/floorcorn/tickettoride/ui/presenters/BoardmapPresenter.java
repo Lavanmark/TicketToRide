@@ -1,15 +1,12 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
-import android.support.v4.widget.DrawerLayout;
-import android.widget.FrameLayout;
-import android.widget.Toast;
-
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
@@ -18,6 +15,8 @@ import com.floorcorn.tickettoride.ui.views.IView;
 
 import java.util.Iterator;
 import java.util.Map;
+
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -49,8 +48,6 @@ public class BoardmapPresenter implements IPresenter, Observer {
     @Override
     public void update(Observable o, Object arg) {
         if(arg instanceof Game) {
-            getChanges((Game)arg);
-
 	        game = (Game)arg;
 	        if(!game.hasStarted()) {
 		        view.checkStarted();
@@ -63,41 +60,6 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	    if(arg instanceof GameChatLog) {
 		    view.setChatLog((GameChatLog)arg);
 	    }
-
-    }
-
-    //This method compares the old game object to the new one to see what changes have been made.
-    public void getChanges(Game newGame){
-        TrainCardColor newCard = getNewCardDrawn(newGame);
-        if(newCard != null)
-        {
-            String toDisplay = "You drew a " + newCard.name() + " card";
-            Toast.makeText(view.getActivity(), toDisplay, Toast.LENGTH_LONG).show();
-        }
-
-    }
-
-
-    public TrainCardColor getNewCardDrawn(Game newGame) {
-        Map<TrainCardColor, Integer> oldCards = game.getPlayer(user).getTrainCards();
-        Map<TrainCardColor, Integer> newCards = newGame.getPlayer(user).getTrainCards();
-        Iterator oldIt = oldCards.entrySet().iterator();
-        Iterator newIt = newCards.entrySet().iterator();
-        while(oldIt.hasNext()) {
-            Map.Entry oldPair = (Map.Entry) oldIt.next();
-            Map.Entry newPair = (Map.Entry) newIt.next();
-            //If there is a new card of an existing type
-            if(oldPair.getValue() != newPair.getValue()){
-                return (TrainCardColor) newPair.getKey();
-            }
-            if(!oldPair.getKey().equals(newPair.getKey())){
-                return (TrainCardColor) newPair.getKey();
-            }
-        }
-        if(newCards.size() == oldCards.size()){
-            return null;
-        }
-        return (TrainCardColor)((Map.Entry)oldIt.next()).getKey();
     }
 
 	public void startPollingCommands() {
@@ -125,21 +87,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		UIFacade.getInstance().registerObserver(this);
 	}
 
-    public void displayDrawDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER){
-        view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
-        view.displayDrawingDeckDrawer(DRAWER, DRAWER_HOLDER);
-    }
-
-    public void displayDestinationCardDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER){
-        view.displayDestinationCardDrawer(DRAWER, DRAWER_HOLDER);
-    }
-
-    public void displayPlaceRouteDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER){
-        view.displayClaimRouteDrawer(DRAWER, DRAWER_HOLDER);
-    }
-
-
-    public void sendMessage(String text) {
+	public void sendMessage(String text) {
 		try {
 			UIFacade.getInstance().sendChatMessage(new Message(text, game.getGameID(), game.getPlayer(user).getName()));
 		} catch(BadUserException e) {
@@ -196,6 +144,13 @@ public class BoardmapPresenter implements IPresenter, Observer {
 			}
 		}
 		return imageId;
+	}
+
+	public ArrayList<Player> getPlayers() {
+		return game.getPlayerList();
+	}
+	public int getGameSize() {
+		return game.getGameSize();
 	}
 
 	public void animate(){

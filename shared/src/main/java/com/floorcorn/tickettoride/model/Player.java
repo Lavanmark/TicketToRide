@@ -240,6 +240,17 @@ public class Player {
 		}
 	}
 
+	public String getCriticalPlayerInfo() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Name: ").append(name).append("\n");
+		sb.append("Color: ").append(color).append("\n");
+		sb.append("Score: ").append(score).append("\n");
+		sb.append("Train Cards: ").append(totalTrainCards).append("\n");
+		sb.append("Destination Cards: ").append(totalDestinationCards).append("\n");
+		sb.append("Train Cars: ").append(trainCarsLeft);
+
+		return sb.toString();
+	}
 
 	@Override
 	public boolean equals(Object o) {
