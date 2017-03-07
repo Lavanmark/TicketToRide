@@ -96,7 +96,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		UIFacade.getInstance().registerObserver(this);
 	}
 
-	public void sendMessage(String text) {
+
     //This method compares the old game object to the new one to see what changes have been made.
     public void getChanges(Game newGame){
         TrainCardColor newCard = getNewCardDrawn(newGame);
@@ -270,10 +270,12 @@ public class BoardmapPresenter implements IPresenter, Observer {
 
 	public void disableKeepThree() {
 		view.getKeepThree().setEnabled(false);
+	}
 
-	public ArrayList<Player> getPlayers() {
+	public ArrayList<Player> getPlayers(){
 		return game.getPlayerList();
 	}
+
 	public int getGameSize() {
 		return game.getGameSize();
 	}
