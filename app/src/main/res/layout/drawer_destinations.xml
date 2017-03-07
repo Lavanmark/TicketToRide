@@ -57,7 +57,7 @@
                 android:adjustViewBounds="true"
                 android:padding="2dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dest_alba_arsia"
+                android:src="@drawable/back_destinations"
                 android:background="@drawable/selector"/>
             <ImageButton
                 android:id="@+id/dest_card2"
@@ -70,7 +70,7 @@
                 android:adjustViewBounds="true"
                 android:padding="2dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dest_alba_arsia"
+                android:src="@drawable/back_destinations"
                 android:background="@drawable/selector"/>
             <ImageButton
                 android:id="@+id/dest_card3"
@@ -83,12 +83,13 @@
                 android:adjustViewBounds="true"
                 android:padding="2dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/dest_alba_arsia"
+                android:src="@drawable/back_destinations"
                 android:background="@drawable/selector"/>
 
 
             <Button
-                android:text="End Turn"
+                android:text="Keep All Three"
+                android:id="@+id/keepThree"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_selector"

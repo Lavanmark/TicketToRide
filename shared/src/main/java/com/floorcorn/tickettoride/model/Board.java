@@ -16,7 +16,6 @@ public class Board {
     private List<Route> routeList;
     private TrainCard[] faceUpCards;
 
-	@JsonIgnore
     private DeckManager deckManager;
 
 	private int longestRoute;
@@ -33,6 +32,7 @@ public class Board {
         this.longestRoute = 0;
         //this.longestRoutePlayer = -1;
 	    this.deckManager = null;
+        System.out.println("Board built from routeList");
     }
 
     public Board(Board board) {
@@ -46,6 +46,7 @@ public class Board {
 	    this.longestRoute = board.getLongestRoute();
 	    //this.longestRoutePlayer = board.getLongestRoutePlayer(player);
 	    this.deckManager = board.deckManager;
+        System.out.println("Board built from Board");
     }
 
 	public void setDeckManager(DeckManager dm) {

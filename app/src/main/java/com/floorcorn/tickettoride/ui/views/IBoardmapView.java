@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.ui.views;
 
 import android.support.v4.widget.DrawerLayout;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.floorcorn.tickettoride.communication.GameChatLog;
@@ -45,4 +46,6 @@ public interface IBoardmapView extends IView {
 	void hideDestinationDrawer();
 	void displayClaimRouteDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER);
 	void hideRouteDrawer();
+
+	Button getKeepThree();
 }
