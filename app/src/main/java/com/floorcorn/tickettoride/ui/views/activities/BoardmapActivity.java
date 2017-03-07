@@ -31,13 +31,13 @@ import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.Route;
-import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -83,6 +83,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private TextView wildCount;
 
 	private TextView trainCount;
+
+	private LinearLayout destinationTicketHolder;
 
 	//elements related to the PlayerStatus/Turn Icons
 	private LinearLayout playerIcons;
@@ -171,6 +173,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	    wildCount = (TextView)findViewById(R.id.wild_card_count);
 
 	    trainCount = (TextView)findViewById(R.id.train_count);
+
+		destinationTicketHolder = (LinearLayout)findViewById(R.id.destinationHolder);
 
 	    //CHAT
 	    chatLayout = (LinearLayout)findViewById(R.id.chatHolder);
@@ -358,9 +362,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		trainCount.setText(String.valueOf(presenter.getTrainCars()));
 	}
 
+	/**
+	 * This is in the player hand
+	 * @param destinationCardList
+     */
 	@Override
-	public void setPlayerDestinationCardList(Set<DestinationCard> destinationCardList) {
-
+	public void setPlayerDestinationCardList(List<DestinationCard> destinationCardList) {
+		destinationTicketHolder.removeAllViews();
+		for(DestinationCard destinationCard : destinationCardList) {
+			TextView tv = new TextView(destinationTicketHolder.getContext());
+			String s = destinationCard.toString();
+			tv.setText(s);
+			destinationTicketHolder.addView(tv);
+		}
 	}
 
 	@Override
@@ -492,8 +506,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			destinationTickets[i].setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					v.setSelected(true);
 					presenter.discardDestination(j);
-					presenter.disableKeepThree();
 					//TODO
 				}
 			});
