@@ -11,10 +11,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -24,6 +27,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.log.Corn;
@@ -36,6 +40,8 @@ import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +75,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private ImageButton faceupCards[] = new ImageButton[MAXFACEUP];
 
 	//elements related to Claiming Route
+	private RecyclerView routeRecyclerView;
 	
 
 
@@ -591,6 +598,23 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	@Override
 	public void displayClaimRouteDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER) {
 		displayLeftDrawer(R.layout.drawer_place_routes, DRAWER, DRAWER_HOLDER);
+		routeRecyclerView = (RecyclerView) findViewById(R.id.route_recycler);
+		assert routeRecyclerView != null;
+		List<Route> routes = presenter.getRoutes();
+		setupRecyclerView((RecyclerView)routeRecyclerView, routes);
+
+
+	}
+
+	/**
+	 * This sets up the Recycler view with an adapter
+	 *
+	 * @param recyclerView
+	 */
+	private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Route> routes) {
+		recyclerView.setLayoutManager(new LinearLayoutManager(this));
+		recyclerView.setAdapter(new RouteRecyclerViewAdapter(routes));
+
 	}
 
 	@Override
@@ -626,5 +650,81 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	@Override
 	public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 		return false;
+	}
+
+	public class RouteRecyclerViewAdapter
+			extends RecyclerView.Adapter<RouteRecyclerViewAdapter.ViewHolder> {
+
+		public List<Route> routes;
+
+		RouteRecyclerViewAdapter(List<Route> routes) {
+			this.routes = routes;
+		}
+
+		@Override
+		public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+			//View view = new TextView(parent.getContext());
+			View view = LayoutInflater.from(parent.getContext())
+					.inflate(R.layout.claim_list_content, parent, false);
+			ViewHolder viewHolder = new ViewHolder(view);
+			return viewHolder;
+		}
+
+		void swapList(List<Route> list) {
+			this.routes.clear();
+			this.routes.addAll(list);
+			notifyDataSetChanged();
+		}
+
+		public class ViewHolder extends RecyclerView.ViewHolder {
+
+			public LinearLayout itemLayout;
+			public TextView city1;
+			public TextView city2;
+			public TextView routeColor;
+			public TextView routeLength;
+			public Button claimButton;
+
+			ViewHolder(View itemView) {
+				super(itemView);
+				itemLayout = (LinearLayout) itemView;
+				city1 = (TextView)itemLayout.getRootView().findViewById(R.id.city1);
+				city2 = (TextView)itemLayout.getRootView().findViewById(R.id.city2);
+				routeColor = (TextView)itemLayout.getRootView().findViewById(R.id.color);
+				routeLength = (TextView)itemLayout.getRootView().findViewById(R.id.length);
+				claimButton = (Button)itemLayout.getRootView().findViewById(R.id.claimButton);
+
+
+			}
+		}
+
+		@Override
+		public void onBindViewHolder(final ViewHolder holder, int position) {
+			Route r = routes.get(position);
+			holder.city1.setText(r.getFirstCity().getName());
+			holder.city2.setText(r.getSecondCity().getName());
+			holder.routeColor.setText(r.getColor().toString());
+			holder.routeLength.setText(String.valueOf(r.getLength()));
+			//TODO: canClaim? When is the button enabled or disabled?
+
+			holder.claimButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					presenter.claimButtonClicked(v);
+				}
+			});
+
+
+		}
+
+		/**
+		 * Returns the total number of items in the data set held by the adapter.
+		 *
+		 * @return The total number of items in this adapter.
+		 */
+		@Override
+		public int getItemCount() {
+			return this.routes.size();
+		}
 	}
 }
