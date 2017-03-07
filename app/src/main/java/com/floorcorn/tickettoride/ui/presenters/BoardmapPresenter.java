@@ -291,18 +291,18 @@ public class BoardmapPresenter implements IPresenter, Observer {
 			public void run() {
 				animateDraw1();
 			}
-		}, 5000);
+		}, 2000);
 	}
 
 	private void animateDraw1(){
 		final Handler handler = new Handler();
-		//Wait 5 seconds then draw from slot 1;
+		//Wait 2 seconds (1 from previous method) then draw from slot 1;
 		handler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
 				drawFromFaceUp(1);
 			}
-		}, 5000);
+		}, 1000);
 		//Wait 5 seconds, then animate route selection
 		handler.postDelayed(new Runnable() {
 			@Override
@@ -343,6 +343,63 @@ public class BoardmapPresenter implements IPresenter, Observer {
 				view.hideDestinationDrawer();
 			}
 		}, 7000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                animateChatMessages();
+            }
+        }, 9000);
+
+	}
+
+    private void animateChatMessages(){
+        //if(UIFacade.getInstance().getCurrentGame().getPlayerList().size() > 1) {
+        UIFacade.getInstance().stopPollingAll();
+        final Handler handler = new Handler();
+        int i = 1;
+        for(final Player p : UIFacade.getInstance().getCurrentGame().getPlayerList()){
+
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        UIFacade.getInstance().animate_sendChatMessage(new Message("Hey, my name is " + p.getName()));
+                    } catch (BadUserException e){
+                        e.printStackTrace();
+                    }
+                }
+            }, 1500 * i);
+            i++;
+        }
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.hideHandDrawer();
+            }
+        }, 7000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                UIFacade.getInstance().pollCurrentGameParts(view);
+                animateUpdateOtherPlayersTrainCards();
+            }
+        }, 9000);
+    }
+
+	private void animateUpdateOtherPlayersTrainCards(){
+
+        view.animate_showOtherPlayerInfo();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                UIFacade.getInstance().animate_AddTrainCardForOtherPlayer();
+                view.animate_showOtherPlayerInfo();
+            }
+        }, 3000);
 	}
 
 	/*********************** END ANIMATION METHODS *********************************/
@@ -353,7 +410,6 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		} catch(GameActionException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Drew");
 	}
 
 	public void drawFromFaceUp(int position) {

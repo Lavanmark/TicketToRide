@@ -392,7 +392,32 @@ public class UIFacade {
     public void drawTrainCardFromDeck_animation() throws GameActionException {
         clientModelRoot.getCurrentGame().drawTrainCardFromDeck(clientModelRoot.getCurrentUser());
         clientModelRoot.notifyGameChanged();
+
     }
+
+    /** This method adds one train card to another player's hand. Just for animation. **/
+    public void animate_AddTrainCardForOtherPlayer(){
+        Player p = clientModelRoot.getCurrentGame().getPlayerList().get(0);
+        if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
+            Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
+            TrainCard t = new TrainCard(TrainCardColor.GREEN);
+            p2.addTrainCard(t,1);
+            System.out.println(t.getColor().name());
+            clientModelRoot.notifyGameChanged();
+        }
+    }
+
+    public void animate_sendChatMessage(Message m) throws BadUserException{
+        GameChatLog log = clientModelRoot.getChatLog();
+        log.addMessage(m);
+        clientModelRoot.setChatLog(log);
+        clientModelRoot.notifyGameChanged();
+    }
+
+    public void animate_stopPollingChat(){
+        poller.stopPollingCmdChat();
+    }
+
     /*
         TYLER, you were questioning if you wanted to implement this or not, but here it is
      */

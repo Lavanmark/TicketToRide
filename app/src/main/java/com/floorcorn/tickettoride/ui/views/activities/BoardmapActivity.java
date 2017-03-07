@@ -275,6 +275,12 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		DRAWER.openDrawer(GravityCompat.END);
 	}
 
+	@Override
+	public void hideHandDrawer(){
+		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
+		final FrameLayout DRAWER_HOLDER = (FrameLayout) findViewById(R.id.left_drawer_holder);
+		DRAWER.closeDrawer(GravityCompat.END);
+	}
 	private boolean drawDrawerIsOpen(){
 		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
         if(DRAWER.isDrawerOpen(GravityCompat.START)) {
@@ -668,4 +674,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	public void animate_takeDestinationCards(){
 		this.keepDestinations.performClick();
 	}
+
+    @Override
+    public void animate_showOtherPlayerInfo(){
+        this.playerIcons.getChildAt(presenter.getPlayers().get(1).getPlayerID()).performClick();
+    }
 }
