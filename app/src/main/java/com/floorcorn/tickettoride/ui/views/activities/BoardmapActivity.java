@@ -386,7 +386,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	@Override
 	public void setFaceUpTrainCards() {
 		//TODO must limit to if the drawer is open
-		//setFaceupImages();
+		if(drawDrawerIsOpen())
+			setFaceupImages();
 	}
 
 	@Override
@@ -452,15 +453,15 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		drawFromCardDeck.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				presenter.drawFromDeck();
+				presenter.drawTrainCardFromDeck();
 			}
 		});
 		for(int i = 0; i < MAXFACEUP; i++){
+			final int temp = i;
 			faceupCards[i].setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-				//presenter.faceupClicked();
-					//TODO
+					presenter.drawFromFaceUp(temp);
 				}
 			});
 		}

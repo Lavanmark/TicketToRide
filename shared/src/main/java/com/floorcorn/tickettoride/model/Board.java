@@ -84,7 +84,7 @@ public class Board {
     }
 
     public TrainCard drawFromFaceUp(int position) throws GameActionException {
-	    if(faceUpCards.length >= position || position < 0)
+	    if(faceUpCards.length <= position || position < 0)
 		    throw new GameActionException("Position not accessible in Face Up Cards.");
 	    TrainCard toReturn = faceUpCards[position];
 	    faceUpCards[position] = null;

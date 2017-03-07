@@ -355,46 +355,6 @@ public class UIFacade {
         return getCurrentGame().getLongestRoute();
     }
 
-    /**
-     * Sets the boolean in the Board object to whatever the param is. This is whether we should
-     * reset the face up cards.
-     * @param reset boolean -- to reset or not to reset face up, that is the question
-     */
-    public void shouldResetFaceUp(Boolean reset) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Calls the function on the Board to replace face up card.
-     *
-     * potentially going to be handled by the commands, so dont need this fxn
-     */
-//    public void replaceFaceUpCard() {
-//        //go through the game class for these?
-//        throw new UnsupportedOperationException();
-//    }
-
-    /**
-     * Returns the player's score.
-     * @param player Player object
-     * @return int player's score
-     */
-    public int getPlayerScore(Player player) {
-        return player.getScore();
-    }
-
-    /**
-     * Returns the number of cards the player has.
-     * @param player PLayer object
-     * @return int number of cards
-     */
-    public int getNumTrainCards(Player player) {
-        return player.getTotalTrainCards();
-    }
-
-    public int getNumDestinationCards(Player player){
-        return player.getTotalDestinationCards();
-    }
 
     /**
      *
@@ -403,27 +363,6 @@ public class UIFacade {
     public Map<TrainCardColor, Integer> getCardMap(User user) {
 
         return clientModelRoot.getCurrentGame().getPlayer(user).getTrainCards();
-    }
-
-    /**
-     * Returns the number of train cars left.
-     * @param player Player object
-     * @return int number of cars
-     */
-    public int getTrainCarsLeft(Player player) {
-        return player.getTrainCarsLeft();
-    }
-
-    /**
-     * Returns a List of player names.
-     * @return List of String player names
-     */
-    public List<String> getPlayerNames() {
-        List<String> names = new ArrayList<String>();
-        for(Player player: clientModelRoot.getCurrentGame().getPlayerList()){
-            names.add(player.getName());
-        }
-        return names;
     }
 
     /**
@@ -441,9 +380,8 @@ public class UIFacade {
     }
 
     public void drawTrainCardFromDeck() throws GameActionException {
-        Game game = clientModelRoot.getCurrentGame();
-	    game.drawTrainCardFromDeck(clientModelRoot.getCurrentUser());
-	    clientModelRoot.setCurrentGame(game);
+	    clientModelRoot.getCurrentGame().drawTrainCardFromDeck(clientModelRoot.getCurrentUser());
+	    clientModelRoot.notifyGameChanged();
     }
 
     /*
@@ -451,7 +389,8 @@ public class UIFacade {
      */
     public void drawTrainCard(int position) throws GameActionException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
 	    //TODO without a deck manager this is always going to throw exceptions
-        clientModelRoot.getCurrentGame().getBoard().drawFromFaceUp(position);
+        clientModelRoot.getCurrentGame().drawFaceUpCard(clientModelRoot.getCurrentUser(), position);
+	    clientModelRoot.notifyGameChanged();
     }
 
     /*
@@ -472,16 +411,14 @@ public class UIFacade {
             threeDestCards[i] = clientModelRoot.getCurrentGame().getBoard().drawFromDestinationCardDeck();
         }
         return threeDestCards;
-
     }
 
     /*
         TYLER, you were questioning if you wanted to implement this or not, but here it is
      */
     public void discardDestinationCard(DestinationCard destinationCard) throws GameActionException {
-        Game game = clientModelRoot.getCurrentGame();
-	    game.getBoard().discard(destinationCard);
-	    clientModelRoot.setCurrentGame(game);
+        clientModelRoot.getCurrentGame().getBoard().discard(destinationCard);
+	    clientModelRoot.notifyGameChanged();
     }
 
 
@@ -490,6 +427,7 @@ public class UIFacade {
 
     public void claimRoute(Route route, User user) {
         route.claim(clientModelRoot.getCurrentGame().getPlayer(user));
+	    clientModelRoot.notifyGameChanged();
     }
 
     public List<Route> getAvailableRoutes() {

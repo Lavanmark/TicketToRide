@@ -211,6 +211,14 @@ public class Game {
 			player.addTrainCard(board.drawFromTrainCardDeck(), 1);
 	}
 
+	public void drawFaceUpCard(User user, int postition) throws GameActionException {
+		Player player = getPlayer(user);
+		if(player == null)
+			return;
+		if(player.isTurn())
+			player.addTrainCard(board.drawFromFaceUp(postition), 1);
+	}
+
 	public int getGameID() {
 		return gameID;
 	}
