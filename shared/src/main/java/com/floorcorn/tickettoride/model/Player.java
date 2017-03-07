@@ -151,6 +151,12 @@ public class Player {
 		return destinationCards;
 	}
 
+	public DestinationCard[] getInitialDestinationCards() {
+		DestinationCard[] cardArray = new DestinationCard[destinationCards.size()];
+		cardArray = destinationCards.toArray(cardArray);
+		return cardArray;
+	}
+
 	public void setDestinationCards(List<DestinationCard> destinationCards) {
 		this.destinationCards = new ArrayList<>(destinationCards);
 		totalDestinationCards = this.destinationCards.size();

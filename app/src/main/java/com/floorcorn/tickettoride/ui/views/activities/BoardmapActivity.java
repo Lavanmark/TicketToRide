@@ -60,6 +60,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	//elements related to Draw Destination Tickets Drawer
 	private Button drawFromDestinationDeck;
+	private Button keepThreeDestinations;
 	private ImageButton destinationTickets[] = new ImageButton[MAXDESTINATIONS];
 
 	//elements related to Draw Cards Drawer
@@ -423,8 +424,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	@Override
 	public void displayDrawingDeckDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER) {
-//		faceupCards[1].setImageResource(R.drawable.card_blue);
-//		faceupCards[2].setImageResource(R.drawable.card_wild);
 		displayLeftDrawer(R.layout.drawer_draw_cards, DRAWER, DRAWER_HOLDER);
 		drawFromCardDeck = (Button)findViewById(R.id.draw_from_card_deck);
 
@@ -454,6 +453,21 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	}
 
+	public void setDestinationImages(){
+		destinationTickets[0] = (ImageButton)findViewById(R.id.dest_card1);
+		destinationTickets[1] = (ImageButton)findViewById(R.id.dest_card2);
+		destinationTickets[2] = (ImageButton)findViewById(R.id.dest_card3);
+
+		int[] imageId;
+		try {
+			imageId = presenter.getDestinationCards();
+			for(int i = 0; i < MAXDESTINATIONS; i++){
+				destinationTickets[i].setImageResource(imageId[i]);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	/**
 	 *
 	 * @param DRAWER The layout of the Boardmap Activity
@@ -462,13 +476,11 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	@Override
 	public void displayDestinationCardDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER) {
 		displayLeftDrawer(R.layout.drawer_destinations, DRAWER, DRAWER_HOLDER);
+
 		drawFromDestinationDeck = (Button)findViewById(R.id.draw_from_dest_deck);
-		destinationTickets[0] = (ImageButton)findViewById(R.id.dest_card1);
-		destinationTickets[1] = (ImageButton)findViewById(R.id.dest_card2);
-		destinationTickets[2] = (ImageButton)findViewById(R.id.dest_card3);
 
-		destinationTickets[0].setImageResource(R.drawable.dest_acydalia_viking_1);
-
+		setDestinationImages();
+		drawFromDestinationDeck.setEnabled(false);
 		drawFromDestinationDeck.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -476,13 +488,25 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			}
 		});
 		for(int i = 0; i < MAXDESTINATIONS; i++){
+			final int j = i;
 			destinationTickets[i].setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					presenter.discardDestination(j);
+					presenter.disableKeepThree();
 					//TODO
 				}
 			});
 		}
+		keepThreeDestinations = (Button)findViewById(R.id.keepThree);
+		keepThreeDestinations.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				presenter.keepThreeDestinations();
+			}
+		});
+
+
 
 
 	}
@@ -500,6 +524,12 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	@Override
 	public void hideRouteDrawer() {
 
+	}
+
+	@Override
+	public Button getKeepThree() {
+		//TODO: assert that the drawer is open
+		return keepThreeDestinations;
 	}
 
 	private void displayLeftDrawer(int drawerID, DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER){
