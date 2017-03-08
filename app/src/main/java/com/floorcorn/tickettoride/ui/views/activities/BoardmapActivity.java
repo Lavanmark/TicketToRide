@@ -725,11 +725,13 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, int position) {
 			final Route r = routes.get(position);
+			if (r.getOwner() >= 0)
+				holder.itemView.setBackgroundColor(getPlayerColor(presenter.getPlayerColor(r.getOwner())));
 			holder.city1.setText(r.getFirstCity().getName());
 			holder.city2.setText(r.getSecondCity().getName());
 			holder.routeColor.setText(r.getColor().toString());
 			holder.routeLength.setText(String.valueOf(r.getLength()));
-			if(presenter.canClaim(r))
+			if (presenter.canClaim(r))
 				holder.claimButton.setEnabled(true);
 			else
 				holder.claimButton.setEnabled(false);
