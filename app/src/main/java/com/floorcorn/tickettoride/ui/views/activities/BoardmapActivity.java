@@ -107,46 +107,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private Button sendMessageBut;
 	private EditText chatTextField;
 
-
-	/*
-	- presenter:IPresenter
-	- boardmap:Board
-	- drawCardsButton:Button
-	- drawDestinationTicketsButton:Button
-	- placeTrainsButton:Button ???
-	- routeSelectionButton:Button ???
-	- faceUpCardViews:ArrayList<Image>
-	- playerIcons:Set<Image>
-	- placeRouteDrawer:Drawer
-	- drawCardsDrawer:Drawer
-	- chooseDestinationCardDrawer:Drawer
-	- faceUpCards:ArrayList<TrainCard>
-	- drawTrainCardDeck:Image
-	- drawDestinationCardDeck:Button/Image
-	- playerTrainCard:ArrayList<TrainCard>
-	- playerPossibleRoutes:Set<Route>
-
-
-	void setBoard(Board board);
-	void setPlayerTrainCardList(ArrayList<TrainCard> trainCardList);
-	void setPlayerDestinationCardList(Set<DestinationCard> destinationCardList);
-	void setFaceUpTrainCards(ArrayList<TrainCard> faceUpTrainCards);
-	void setDestinationCardChoices(Set<DestinationCard> destinationCardChoices);
-	void setPlayerTurn(Player player);
-	void setScoreboard(Set<Player> playerSet);
-	void setDestinationCardCompleted(DestinationCard destinationCard);
-	void setPlayerPossibleRouteList(Set<Route> routeList);
-	Card getCardDrawn();
-	DestinationCard getDestinationCardPicked();
-	void markRouteClaimed(Route claimed);
-	void displayDrawingDeckDrawer();
-	void hideDrawingDeckDrawer();
-	void displayDestinationCardDrawer();
-
-
-
-	 */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,7 +120,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	    setSupportActionBar(mToolbar);
 	    if(getSupportActionBar() != null)
 	        getSupportActionBar().setTitle(presenter.getGameName());
-
 
 		//initialize UI elements
 
@@ -288,6 +247,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		final FrameLayout DRAWER_HOLDER = (FrameLayout) findViewById(R.id.left_drawer_holder);
 		DRAWER.closeDrawer(GravityCompat.END);
 	}
+
 	private boolean drawDrawerIsOpen(){
 		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
         if(DRAWER.isDrawerOpen(GravityCompat.START)) {
@@ -299,6 +259,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         }
         return false;
 	}
+
 	private boolean destinationDrawerIsOpen(){
 		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
 		if(DRAWER.isDrawerOpen(GravityCompat.START)) {
@@ -360,15 +321,15 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private void setupPlayerIcons() {
 		ArrayList<Player> players = presenter.getPlayers();
 		for(final Player p : players) {
-			Button but = (Button)playerIcons.getChildAt(p.getPlayerID());
+			Button button = (Button)playerIcons.getChildAt(p.getPlayerID());
 			if(p.isTurn())
-				but.setTextColor(Color.BLACK);
+				button.setTextColor(Color.BLACK);
 			else
-				but.setTextColor(Color.WHITE);
-			but.setText(p.getName());
-			but.setBackgroundColor(getPlayerColor(p.getColor()));
+				button.setTextColor(Color.WHITE);
+			button.setText(p.getName());
+			button.setBackgroundColor(getPlayerColor(p.getColor()));
 			//TODO check if the player is self. If so it should open the drawer.
-			but.setOnClickListener(new View.OnClickListener() {
+			button.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					//TODO might need to update on every player list because p is final
@@ -383,15 +344,15 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private int getPlayerColor(PlayerColor pc) {
 		switch(pc) {
 			case RED:
-				return Color.RED;
+				return Color.rgb(215,8,8); //red
 			case GREEN:
-				return Color.GREEN;
+				return Color.rgb(22,215,8); //green
 			case BLACK:
-				return Color.BLACK;
+				return Color.rgb(64,64,64); //black
 			case BLUE:
-				return Color.BLUE;
+				return Color.rgb(8,105,215); //blue
 			case YELLOW:
-				return Color.YELLOW;
+				return Color.rgb(213,228,9); //yellow
 		}
 		return 0;
 	}
@@ -435,16 +396,15 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	public void setPlayerDestinationCardList(List<DestinationCard> destinationCardList) {
 		destinationTicketHolder.removeAllViews();
 		for(DestinationCard destinationCard : destinationCardList) {
-			TextView tv = new TextView(destinationTicketHolder.getContext());
+			TextView textView = new TextView(destinationTicketHolder.getContext());
 			String s = destinationCard.toString();
-			tv.setText(s);
-			destinationTicketHolder.addView(tv);
+			textView.setText(s);
+			destinationTicketHolder.addView(textView);
 		}
 	}
 
 	@Override
 	public void setFaceUpTrainCards() {
-		//TODO must limit to if the drawer is open
 		if(drawDrawerIsOpen())
 			setFaceupImages();
 	}
@@ -606,7 +566,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			}
 
 			//Setup keep button
-
 			keepDestinations.setEnabled(false);
 			keepDestinations.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -633,8 +592,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		assert routeRecyclerView != null;
 		List<Route> routes = presenter.getRoutes();
 		setupRecyclerView((RecyclerView)routeRecyclerView, routes);
-
-
 	}
 
 	/**
@@ -645,7 +602,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Route> routes) {
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		recyclerView.setAdapter(new RouteRecyclerViewAdapter(routes));
-
 	}
 
 	@Override
@@ -765,8 +721,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 				routeColor = (TextView)itemLayout.getRootView().findViewById(R.id.color);
 				routeLength = (TextView)itemLayout.getRootView().findViewById(R.id.length);
 				claimButton = (Button)itemLayout.getRootView().findViewById(R.id.claimButton);
-
-
 			}
 		}
 
@@ -785,8 +739,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 					presenter.claimButtonClicked(v);
 				}
 			});
-
-
 		}
 
 		/**
