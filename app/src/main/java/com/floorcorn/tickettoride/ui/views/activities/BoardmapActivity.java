@@ -25,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.UIFacade;
@@ -76,6 +77,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	//elements related to Claiming Route
 	private RecyclerView routeRecyclerView;
+	private RouteRecyclerViewAdapter routeAdapter;
 
 
 
@@ -272,6 +274,18 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		return false;
 	}
 
+	private boolean routeDrawerIsOpen() {
+		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
+		if(DRAWER.isDrawerOpen(GravityCompat.START)) {
+			LinearLayout tempFrame = (LinearLayout) findViewById(R.id.drawer_place_routes);
+			if(tempFrame != null){
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+
 	@Override
 	public void onStop(){
 		presenter.unregister();
@@ -368,11 +382,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	}
 
 	@Override
-	public void setBoard(Board board) {
-
-	}
-
-	@Override
 	public void setPlayerTrainCardList(Map<TrainCardColor, Integer> cards) {
 		redCount.setText(String.valueOf(cards.containsKey(TrainCardColor.RED)? cards.get(TrainCardColor.RED) : 0));
 		orangeCount.setText(String.valueOf(cards.containsKey(TrainCardColor.ORANGE)? cards.get(TrainCardColor.ORANGE) : 0));
@@ -404,6 +413,12 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	}
 
 	@Override
+	public void setClaimRoutesList(List<Route> routes) {
+		if(routeDrawerIsOpen())
+			routeAdapter.swapList(routes);
+	}
+
+	@Override
 	public void setFaceUpTrainCards() {
 		if(drawDrawerIsOpen())
 			setFaceupImages();
@@ -413,31 +428,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	public void setDestinationCardChoices() {
 		if(destinationDrawerIsOpen())
 			buildDestinationDrawer();
-	}
-
-	@Override
-	public void setPlayerTurn(Player player) {
-
-	}
-
-	@Override
-	public void setScoreboard(Set<Player> playerSet) {
-
-	}
-
-	@Override
-	public void setDestinationCardCompleted(DestinationCard destinationCard) {
-
-	}
-
-	@Override
-	public void setPlayerPossibleRouteList(Set<Route> routeList) {
-
-	}
-
-	@Override
-	public void markRouteClaimed(Route claimed) {
-
 	}
 
 	private void setFaceupImages() {
@@ -602,6 +592,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Route> routes) {
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		recyclerView.setAdapter(new RouteRecyclerViewAdapter(routes));
+		assert recyclerView.getAdapter() != null;
+		routeAdapter = (RouteRecyclerViewAdapter) recyclerView.getAdapter();
 	}
 
 	@Override
@@ -677,7 +669,11 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
     @Override
     public void animate_clickClaimRoute(){
-        //TODO: implement this once there is a list of routes available in UI.
+	    if(routeAdapter == null) {
+		    Toast.makeText(this, "Could not find list of routes! Reopen the game!", Toast.LENGTH_SHORT).show();
+		    return;
+	    }
+	    presenter.fakeClaimButtonClicked();
     }
 
 	public class RouteRecyclerViewAdapter
@@ -686,7 +682,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		public List<Route> routes;
 
 		RouteRecyclerViewAdapter(List<Route> routes) {
-			this.routes = routes;
+			this.routes = new ArrayList<>(routes);
 		}
 
 		@Override
@@ -704,7 +700,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			notifyDataSetChanged();
 		}
 
-		public class ViewHolder extends RecyclerView.ViewHolder {
+		class ViewHolder extends RecyclerView.ViewHolder {
 
 			public LinearLayout itemLayout;
 			public TextView city1;
@@ -726,17 +722,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, int position) {
-			Route r = routes.get(position);
+			final Route r = routes.get(position);
 			holder.city1.setText(r.getFirstCity().getName());
 			holder.city2.setText(r.getSecondCity().getName());
 			holder.routeColor.setText(r.getColor().toString());
 			holder.routeLength.setText(String.valueOf(r.getLength()));
-			//TODO: canClaim? When is the button enabled or disabled?
-
+			if(presenter.canClaim(r))
+				holder.claimButton.setEnabled(true);
+			else
+				holder.claimButton.setEnabled(false);
 			holder.claimButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					presenter.claimButtonClicked(v);
+					presenter.claimButtonClicked(r);
 				}
 			});
 		}

@@ -191,6 +191,7 @@ public class Player {
 
 	public void claimRoute(Route route){
 		routesClaimed.add(route);
+		score += route.getValue();
 	}
 
 	public int calcualteLongestRoute(){
@@ -250,11 +251,9 @@ public class Player {
 	}
 
 	public void removeTrainCard(TrainCard card){
-		//param should be a list?
-		//TODO the cards never get discarded...
 		if(!trainCards.containsKey(card.getColor()))
 			return;
-		if(trainCards.get(card.getColor()) <= 0) {
+		if(trainCards.get(card.getColor()) > 0) {
 			trainCards.put(card.getColor(), trainCards.get(card.getColor()) - 1);
 			totalTrainCards--;
 		} else {
