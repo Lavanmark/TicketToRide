@@ -399,7 +399,7 @@ public class UIFacade {
             Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
             TrainCard t = new TrainCard(TrainCardColor.GREEN);
             p2.addTrainCard(t,1);
-            System.out.println(t.getColor().name());
+            //System.out.println(t.getColor().name());
             clientModelRoot.notifyGameChanged();
         }
     }
