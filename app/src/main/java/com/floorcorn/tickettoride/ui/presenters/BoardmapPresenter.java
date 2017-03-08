@@ -75,6 +75,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		        view.setFaceUpTrainCards();
 		        view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
 				view.setPlayerDestinationCardList(game.getPlayer(user).getDestinationCards());
+		        view.setClaimRoutesList(game.getRoutes());
 		        if(!discarding)
 		            view.setDestinationCardChoices();
 	        }
@@ -316,10 +317,20 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	}
 
 	public void routeClicked(View v) {
+
 	}
 
-	public void claimButtonClicked(View v) {
+	public void claimButtonClicked(Route route) {
+		UIFacade.getInstance().claimRoute(route, UIFacade.getInstance().getUser());
 	}
+
+	public boolean canClaim(Route route) {
+		return UIFacade.getInstance().canClaimRoute(route);
+	}
+
+
+
+
     /********************* BEGIN ANIMATION METHODS **********************************/
 
     /** Basic idea here is that this animate() method starts the chain,

@@ -242,7 +242,15 @@ public class Game {
 	public void claimRoute(Route route, Player p) {
 		if(!route.canClaim(p))
 			return;
-		route.claim(p);
+		System.out.println("claiming route");
+		List<TrainCard> discard = route.claim(p);
+		for(TrainCard card : discard) {
+			try {
+				board.discard(card);
+			} catch(GameActionException e) {
+				e.printStackTrace();
+			}
+		}
 		board.updateRoute(route);
 	}
 
