@@ -16,8 +16,21 @@ public class User {
 
 	public static final int AUTH_TOKEN_SIZE = 16;
 
+	/**
+	 * Default constructor for serialization
+	 *
+	 * @post a new User has been created.
+	 */
 	private User(){}
 
+	/**
+	 * Constructor that creates a User with a name and password.
+	 * @param username username of the new user
+	 * @param password the password of the new user
+	 *
+	 * @pre username and password are not null;
+	 * @post a new User is created with the given
+     */
 	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
