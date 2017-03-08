@@ -708,6 +708,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			public TextView routeColor;
 			public TextView routeLength;
 			public Button claimButton;
+			public TextView owner;
 
 			ViewHolder(View itemView) {
 				super(itemView);
@@ -717,6 +718,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 				routeColor = (TextView)itemLayout.getRootView().findViewById(R.id.color);
 				routeLength = (TextView)itemLayout.getRootView().findViewById(R.id.length);
 				claimButton = (Button)itemLayout.getRootView().findViewById(R.id.claimButton);
+				owner = (TextView)itemLayout.getRootView().findViewById(R.id.routeOwner);
 			}
 		}
 
@@ -737,6 +739,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 					presenter.claimButtonClicked(r);
 				}
 			});
+			holder.owner.setText(presenter.getPlayerName(r.getOwner()));
 		}
 
 		/**

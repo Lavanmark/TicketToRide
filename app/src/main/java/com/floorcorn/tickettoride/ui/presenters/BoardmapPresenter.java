@@ -338,6 +338,12 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		claimButtonClicked(route);
 	}
 
+	public String getPlayerName(int playerID) {
+		for(Player p : game.getPlayerList())
+			if(p.getPlayerID() == playerID)
+				return p.getName();
+		return "NONE";
+	}
 
 
     /********************* BEGIN ANIMATION METHODS **********************************/
