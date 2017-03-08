@@ -75,6 +75,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		        view.setFaceUpTrainCards();
 		        view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
 				view.setPlayerDestinationCardList(game.getPlayer(user).getDestinationCards());
+		        view.setClaimRoutesList(game.getRoutes());
 		        if(!discarding)
 		            view.setDestinationCardChoices();
 	        }
@@ -135,7 +136,6 @@ public class BoardmapPresenter implements IPresenter, Observer {
     public void displayPlaceRouteDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER){
         view.displayClaimRouteDrawer(DRAWER, DRAWER_HOLDER);
     }
-
 
     public void sendMessage(String text) {
 		try {
@@ -309,17 +309,37 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	}
 
 	public List<Route> getRoutes(){
-		List<Route> lr = UIFacade.getInstance().getAvailableRoutes();
+		List<Route> lr = UIFacade.getInstance().getRoutes();
 		System.out.println(lr.toString());
 		return lr;
 
 	}
 
-	public void routeClicked(View v) {
+	public void claimButtonClicked(Route route) {
+		if(route != null) {
+			UIFacade.getInstance().claimRoute(route, UIFacade.getInstance().getUser());
+			Toast.makeText(view.getActivity(), "Claimed route: " + route.getFirstCity().getName() + " to " + route.getSecondCity().getName(), Toast.LENGTH_SHORT).show();
+		} else
+			Toast.makeText(view.getActivity(), "No routes can be claimed!", Toast.LENGTH_SHORT).show();
 	}
 
-	public void claimButtonClicked(View v) {
+
+	public boolean canClaim(Route route) {
+		return UIFacade.getInstance().canClaimRoute(route);
 	}
+	public void fakeClaimButtonClicked() {
+		Route route = null;
+		for(Route r : game.getRoutes()) {
+			if(r.canClaim(game.getPlayer(user))) {
+				route = r;
+				break;
+			}
+		}
+		claimButtonClicked(route);
+	}
+
+
+
     /********************* BEGIN ANIMATION METHODS **********************************/
 
     /** Basic idea here is that this animate() method starts the chain,

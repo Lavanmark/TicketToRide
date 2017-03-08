@@ -25,19 +25,14 @@ public interface IBoardmapView extends IView {
 
 	void checkStarted();
 
-	void setBoard(Board board);
 	void setPlayerTrainCardList(Map<TrainCardColor, Integer> cards);
 	void setPlayerDestinationCardList(List<DestinationCard> destinationCardList);
+	void setClaimRoutesList(List<Route> routes);
 	void setFaceUpTrainCards();
 	void setDestinationCardChoices();
-	void setPlayerTurn(Player player);
-	void setScoreboard(Set<Player> playerSet);
-	void setDestinationCardCompleted(DestinationCard destinationCard);
-	void setPlayerPossibleRouteList(Set<Route> routeList);
 
 	void setChatLog(GameChatLog log);
 
-	void markRouteClaimed(Route claimed);
 	void displayDrawingDeckDrawer();
 	void displayDrawingDeckDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER);
 	void hideDrawingDeckDrawer();

@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,23 +60,29 @@ public class Route {
         return owner;
     }
 
-    public void claim(Player p){
+    public List<TrainCard> claim(Player p){
 	    if(claimed)
-		    return;
+		    return new ArrayList<>();
 	    if(!canClaim(p))
-		    return;
-
+		    return new ArrayList<>();
+		List<TrainCard> toDiscard = new ArrayList<>();
 	    Map<TrainCardColor, Integer> pCards = p.getTrainCards();
 	    if(color != TrainCardColor.WILD) {
 			int colornum = pCards.get(color);
 		    if(colornum >= length) {
-			    for(int i = 0; i < length; i++)
+			    for(int i = 0; i < length; i++) {
 				    p.removeTrainCard(new TrainCard(color));
+				    toDiscard.add(new TrainCard(color));
+			    }
 		    } else {
-			    for(int i = 0; i < colornum; i++)
+			    for(int i = 0; i < colornum; i++) {
 				    p.removeTrainCard(new TrainCard(color));
-			    for(int i = 0; i < length - colornum; i++)
+				    toDiscard.add(new TrainCard(color));
+			    }
+			    for(int i = 0; i < length - colornum; i++) {
 				    p.removeTrainCard(new TrainCard(TrainCardColor.WILD));
+				    toDiscard.add(new TrainCard(TrainCardColor.WILD));
+			    }
 		    }
 		} else {
 		    //TODO optimize card removal
@@ -92,16 +100,21 @@ public class Route {
 				    mostColor = tcc;
 			    }
 			    if(num >= length) {
-				    for(int i = 0; i < length; i++)
+				    for(int i = 0; i < length; i++) {
 					    p.removeTrainCard(new TrainCard(tcc));
+					    toDiscard.add(new TrainCard(tcc));
+				    }
 				    most = 0;
 				    break;
 			    }
 		    }
 		    if(most > 0) {
-			    if(most + wild >= length)
-				    for(int i = 0; i < length; i++)
+			    if(most + wild >= length) {
+				    for(int i = 0; i < length; i++) {
 					    p.removeTrainCard(new TrainCard(mostColor));
+					    toDiscard.add(new TrainCard(mostColor));
+				    }
+			    }
 		    }
 	    }
 
@@ -109,6 +122,7 @@ public class Route {
         claimed = true;
 	    owner = p.getPlayerID();
 	    p.claimRoute(this);
+	    return toDiscard;
     }
 
     public Boolean canClaim(Player p){
@@ -195,4 +209,20 @@ public class Route {
         sb.append(city1 + " to " + city2);
         return sb.toString();
     }
+
+	public int getValue() {
+		if(length < 3)
+			return length;
+		if(length == 3)
+			return 4;
+		if(length == 4)
+			return 7;
+		if(length == 5)
+			return 10;
+		if(length == 6)
+			return 15;
+		if(length == 7)
+			return 18;
+		return 0;
+	}
 }

@@ -204,16 +204,6 @@
                     android:orientation="vertical"
                     android:padding="5dp">
 
-                    <TextView
-                        android:text="NAME: message"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        />
-                    <TextView
-                        android:text="NAME: message"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
                 </LinearLayout>
 
             </ScrollView>
