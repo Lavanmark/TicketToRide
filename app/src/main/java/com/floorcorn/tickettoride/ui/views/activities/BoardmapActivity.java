@@ -358,15 +358,15 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private int getPlayerColor(PlayerColor pc) {
 		switch(pc) {
 			case RED:
-				return Color.rgb(215,8,8); //red
+				return R.color.colorRedPlayer;
 			case GREEN:
-				return Color.rgb(22,215,8); //green
+				return R.color.colorGreenPlayer;
 			case BLACK:
-				return Color.rgb(64,64,64); //black
+				return R.color.colorBlackPlayer;
 			case BLUE:
-				return Color.rgb(8,105,215); //blue
+				return R.color.colorBluePlayer;
 			case YELLOW:
-				return Color.rgb(213,228,9); //yellow
+				return R.color.colorYellowPlayer;
 		}
 		return 0;
 	}
