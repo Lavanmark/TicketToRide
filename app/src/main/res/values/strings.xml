@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Ticket To Ride</string>
+    <string name="app_name">Ticket To Mars</string>
 
     <!-- Strings related to login -->
     <string name="prompt_username">Username</string>

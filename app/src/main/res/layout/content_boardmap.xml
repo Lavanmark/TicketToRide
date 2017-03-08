@@ -41,30 +41,40 @@
             android:text="Draw Card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorMarsDark"
+            android:backgroundTint="@color/colorMarsComplementary"
             android:id="@+id/open_card_button" />
 
         <Button
             android:text="Place Route"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorMarsDark"
+            android:backgroundTint="@color/colorMarsComplementary"
             android:id="@+id/open_route_button" />
 
         <Button
             android:text="Destination Drawer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorMarsDark"
+            android:backgroundTint="@color/colorMarsComplementary"
             android:id="@+id/open_dest_button" />
 
         <Button
             android:text="Open Hand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorMarsDark"
+            android:backgroundTint="@color/colorMarsComplementary"
             android:id="@+id/open_hand_button" />
 
         <Button
             android:text="Animate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorMarsDark"
+            android:backgroundTint="@color/colorMarsComplementary"
             android:id="@+id/animateButton" />
         
     </LinearLayout>
