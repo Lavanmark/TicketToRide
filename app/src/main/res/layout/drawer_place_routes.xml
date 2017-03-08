@@ -25,8 +25,51 @@
 
 
     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="CITY 1"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="16dp"
+            android:layout_width="140dp"/>
+
+        <TextView
+            android:text="CITY 2"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="120dp"/>
+
+        <TextView
+            android:text="ROUTE COLOR"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="110dp"/>
+
+        <TextView
+            android:text="LENGTH"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="60dp"/>
+
+        <TextView
+            android:text="CLAIM"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="50dp"/>
+
+        <TextView
+            android:text="OWNER"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="60dp"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="16dp"
         android:paddingTop="16dp"
@@ -36,13 +79,7 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/route_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TextView
-            android:text="Todo"
-            android:textSize="14dp"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
 
