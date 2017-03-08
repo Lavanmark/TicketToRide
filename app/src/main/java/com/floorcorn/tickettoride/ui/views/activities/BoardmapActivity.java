@@ -109,19 +109,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private Button sendMessageBut;
 	private EditText chatTextField;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_boardmap);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_boardmap);
 
 
-        presenter = new BoardmapPresenter();
-	    presenter.setView(this);
+		presenter = new BoardmapPresenter();
+		presenter.setView(this);
 
-	    Toolbar mToolbar = (Toolbar) findViewById(R.id.bmap_toolbar);
-	    setSupportActionBar(mToolbar);
-	    if(getSupportActionBar() != null)
-	        getSupportActionBar().setTitle(presenter.getGameName());
+		Toolbar mToolbar = (Toolbar) findViewById(R.id.bmap_toolbar);
+		setSupportActionBar(mToolbar);
+		if(getSupportActionBar() != null)
+			getSupportActionBar().setTitle(presenter.getGameName());
 
 		//initialize UI elements
 
@@ -131,92 +131,92 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		drawCardsButton = (Button)findViewById(R.id.open_card_button);
 		animateButton = (Button)findViewById(R.id.animateButton);
 
-	    redCount = (TextView)findViewById(R.id.red_card_count);
-	    orangeCount = (TextView)findViewById(R.id.orange_card_count);
-	    yellowCount = (TextView)findViewById(R.id.yellow_card_count);
-	    greenCount = (TextView)findViewById(R.id.green_card_count);
-	    blueCount = (TextView)findViewById(R.id.blue_card_count);
-	    purpleCount = (TextView)findViewById(R.id.purple_card_count);
-	    blackCount = (TextView)findViewById(R.id.black_card_count);
-	    whiteCount = (TextView)findViewById(R.id.white_card_count);
-	    wildCount = (TextView)findViewById(R.id.wild_card_count);
+		redCount = (TextView)findViewById(R.id.red_card_count);
+		orangeCount = (TextView)findViewById(R.id.orange_card_count);
+		yellowCount = (TextView)findViewById(R.id.yellow_card_count);
+		greenCount = (TextView)findViewById(R.id.green_card_count);
+		blueCount = (TextView)findViewById(R.id.blue_card_count);
+		purpleCount = (TextView)findViewById(R.id.purple_card_count);
+		blackCount = (TextView)findViewById(R.id.black_card_count);
+		whiteCount = (TextView)findViewById(R.id.white_card_count);
+		wildCount = (TextView)findViewById(R.id.wild_card_count);
 
-	    trainCount = (TextView)findViewById(R.id.train_count);
+		trainCount = (TextView)findViewById(R.id.train_count);
 
 		destinationTicketHolder = (LinearLayout)findViewById(R.id.destinationHolder);
 
-	    //CHAT
-	    final ScrollView scrollView = (ScrollView)findViewById(R.id.chatScroll);
-	    scrollView.post(new Runnable() {
-		    @Override
-		    public void run() {
-			    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-		    }
-	    });
-	    chatLayout = (LinearLayout)findViewById(R.id.chatHolder);
-	    chatTextField = (EditText)findViewById(R.id.chatMessageField);
-	    sendMessageBut = (Button)findViewById(R.id.sendMessageButton);
-	    sendMessageBut.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View v) {
+		//CHAT
+		final ScrollView scrollView = (ScrollView)findViewById(R.id.chatScroll);
+		scrollView.post(new Runnable() {
+			@Override
+			public void run() {
+				scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+			}
+		});
+		chatLayout = (LinearLayout)findViewById(R.id.chatHolder);
+		chatTextField = (EditText)findViewById(R.id.chatMessageField);
+		sendMessageBut = (Button)findViewById(R.id.sendMessageButton);
+		sendMessageBut.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
 				if(chatTextField.getText().toString().isEmpty())
 					return;
-			    if(!presenter.gameInProgress())
-				    return;
-			    presenter.sendMessage(chatTextField.getText().toString());
-			    chatTextField.setText("");
-		    }
-	    });
+				if(!presenter.gameInProgress())
+					return;
+				presenter.sendMessage(chatTextField.getText().toString());
+				chatTextField.setText("");
+			}
+		});
 
 
-	    final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
-	    final FrameLayout DRAWER_HOLDER = (FrameLayout) findViewById(R.id.left_drawer_holder);
-	    drawDestinationTicketsButton.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View view) {
-			    Corn.log("Opening Destination Drawer");
-                presenter.displayDestinationCardDrawer(DRAWER, DRAWER_HOLDER);
-		    }
-	    });
-	    drawCardsButton.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View view) {
-                presenter.displayDrawDrawer(DRAWER, DRAWER_HOLDER);
-		    }
-	    });
-	    claimRouteButton.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View view) {
-                presenter.displayPlaceRouteDrawer(DRAWER, DRAWER_HOLDER);
-		    }
-	    });
-	    displayHandButton.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View view) {
-			    DRAWER.openDrawer(GravityCompat.END); //Gravity End is on the right side
-			    //TODO maybe this needs its own function to get all this information set up.
-		    }
-	    });
-	    animateButton.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View v) {
-			    presenter.animate();
-		    }
-	    });
+		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
+		final FrameLayout DRAWER_HOLDER = (FrameLayout) findViewById(R.id.left_drawer_holder);
+		drawDestinationTicketsButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Corn.log("Opening Destination Drawer");
+				presenter.displayDestinationCardDrawer(DRAWER, DRAWER_HOLDER);
+			}
+		});
+		drawCardsButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				presenter.displayDrawDrawer(DRAWER, DRAWER_HOLDER);
+			}
+		});
+		claimRouteButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				presenter.displayPlaceRouteDrawer(DRAWER, DRAWER_HOLDER);
+			}
+		});
+		displayHandButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				DRAWER.openDrawer(GravityCompat.END); //Gravity End is on the right side
+				//TODO maybe this needs its own function to get all this information set up.
+			}
+		});
+		animateButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				presenter.animate();
+			}
+		});
 
 		playerIcons = (LinearLayout)findViewById(R.id.playerTokenHolder);
-	    for(int i = 0; i < presenter.getGameSize(); i++) {
-		    Button but = new Button(playerIcons.getContext());
-		    but.setText("PLAYER " + i);
-		    but.setTextColor(Color.WHITE);
-		    but.setBackgroundColor(Color.GRAY);
-		    playerIcons.addView(but);
-	    }
+		for(int i = 0; i < presenter.getGameSize(); i++) {
+			Button but = new Button(playerIcons.getContext());
+			but.setText("PLAYER " + i);
+			but.setTextColor(Color.WHITE);
+			but.setBackgroundColor(Color.GRAY);
+			playerIcons.addView(but);
+		}
 
-	    checkStarted();
-	    if(!presenter.gameInProgress())
-		    launchPreGame();
-    }
+		checkStarted();
+		if(!presenter.gameInProgress())
+			launchPreGame();
+	}
 
 	/** These next few methods serve the purposes of the animation and are not needed after that.**/
 
@@ -252,14 +252,14 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	private boolean drawDrawerIsOpen(){
 		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
-        if(DRAWER.isDrawerOpen(GravityCompat.START)) {
-            LinearLayout tempFrame = (LinearLayout) findViewById(R.id.drawer_draw_cards);
-            if(tempFrame != null){
-                return true;
-            }
-            return false;
-        }
-        return false;
+		if(DRAWER.isDrawerOpen(GravityCompat.START)) {
+			LinearLayout tempFrame = (LinearLayout) findViewById(R.id.drawer_draw_cards);
+			if(tempFrame != null){
+				return true;
+			}
+			return false;
+		}
+		return false;
 	}
 
 	private boolean destinationDrawerIsOpen(){
@@ -293,23 +293,23 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		super.onStop();
 	}
 
-    @Override
-    protected void onResume(){
-        super.onResume();
-	    checkStarted();
-    }
+	@Override
+	protected void onResume(){
+		super.onResume();
+		checkStarted();
+	}
 
-    public void launchPreGame() {
-        startActivity(new Intent(BoardmapActivity.this, PregameActivity.class));
-    }
+	public void launchPreGame() {
+		startActivity(new Intent(BoardmapActivity.this, PregameActivity.class));
+	}
 
-    @Override
-    public void setPresenter(IPresenter presenter) {
-	    if(presenter instanceof BoardmapPresenter)
-            this.presenter = (BoardmapPresenter)presenter;
-	    else
-		    throw new IllegalArgumentException();
-    }
+	@Override
+	public void setPresenter(IPresenter presenter) {
+		if(presenter instanceof BoardmapPresenter)
+			this.presenter = (BoardmapPresenter)presenter;
+		else
+			throw new IllegalArgumentException();
+	}
 
 	@Override
 	public void checkStarted() {
@@ -400,7 +400,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	/**
 	 * This is in the player hand
 	 * @param destinationCardList
-     */
+	 */
 	@Override
 	public void setPlayerDestinationCardList(List<DestinationCard> destinationCardList) {
 		destinationTicketHolder.removeAllViews();
@@ -509,7 +509,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	 *
 	 * @param DRAWER The layout of the Boardmap Activity
 	 * @param DRAWER_HOLDER The layout of the frame that opens the drawer
-     */
+	 */
 	@Override
 	public void displayDestinationCardDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER) {
 		displayLeftDrawer(R.layout.drawer_destinations, DRAWER, DRAWER_HOLDER);
@@ -616,9 +616,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	}
 
 	@Override
-    public void backToLogin() {
-	    startActivity(new Intent(BoardmapActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-    }
+	public void backToLogin() {
+		startActivity(new Intent(BoardmapActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+	}
 
 	@Override
 	public Activity getActivity() {
@@ -636,45 +636,45 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		return false;
 	}
 
-    @Override
-    public void animate_ClickOnDestinationCards(){
-        this.destinationTickets[0].performClick();
-        this.destinationTickets[1].performClick();
-    }
+	@Override
+	public void animate_ClickOnDestinationCards(){
+		this.destinationTickets[0].performClick();
+		this.destinationTickets[1].performClick();
+	}
 
-    @Override
-    public void animate_takeDestinationCards(){
-        this.keepDestinations.performClick();
-    }
+	@Override
+	public void animate_takeDestinationCards(){
+		this.keepDestinations.performClick();
+	}
 
-    @Override
-    public void animate_showOtherPlayerInfo(){
-        this.playerIcons.getChildAt(presenter.getPlayers().get(1).getPlayerID()).performClick();
-    }
+	@Override
+	public void animate_showOtherPlayerInfo(){
+		this.playerIcons.getChildAt(presenter.getPlayers().get(1).getPlayerID()).performClick();
+	}
 
-    @Override
-    public void animate_clickDrawDestination(){
-        this.drawDestinationTicketsButton.performClick();
-    }
+	@Override
+	public void animate_clickDrawDestination(){
+		this.drawDestinationTicketsButton.performClick();
+	}
 
-    @Override
-    public void animate_clickDrawDestinationDeck(){
-        this.drawFromDestinationDeck.performClick();
-    }
+	@Override
+	public void animate_clickDrawDestinationDeck(){
+		this.drawFromDestinationDeck.performClick();
+	}
 
-    @Override
-    public void animate_clickOpenRouteDrawer(){
-        this.claimRouteButton.performClick();
-    }
+	@Override
+	public void animate_clickOpenRouteDrawer(){
+		this.claimRouteButton.performClick();
+	}
 
-    @Override
-    public void animate_clickClaimRoute(){
-	    if(routeAdapter == null) {
-		    Toast.makeText(this, "Could not find list of routes! Reopen the game!", Toast.LENGTH_SHORT).show();
-		    return;
-	    }
-	    presenter.fakeClaimButtonClicked();
-    }
+	@Override
+	public void animate_clickClaimRoute(){
+		if(routeAdapter == null) {
+			Toast.makeText(this, "Could not find list of routes! Reopen the game!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		presenter.fakeClaimButtonClicked();
+	}
 
 	public class RouteRecyclerViewAdapter
 			extends RecyclerView.Adapter<RouteRecyclerViewAdapter.ViewHolder> {
