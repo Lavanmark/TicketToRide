@@ -17,4 +17,12 @@
 
     <color name="color_text_default">@color/colorMarsDark</color>
     <color name="colorMarsPink">#fa83e8</color>
+
+    <!-- Specifically for the buttons designating which player goes with which color
+        but probably works elsewhere -->
+    <color name="colorBlackPlayer">#6b6a67</color>
+    <color name="colorRedPlayer">#ff4f4f</color>
+    <color name="colorGreenPlayer">#46d650</color>
+    <color name="colorYellowPlayer">#ccc10a</color>
+    <color name="colorBluePlayer">#4f8bea</color>
 </resources>

@@ -16,6 +16,7 @@ import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
+import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
@@ -324,6 +325,19 @@ public class BoardmapPresenter implements IPresenter, Observer {
 				return p.getName();
 		return "NONE";
 	}
+
+    /**
+     * Returns the player color corresponding to the player ID. Returns null if playerID does
+     * not correspond to a player.
+     * @param playerID int player's ID
+     * @return PlayerColor object or null
+     */
+	public PlayerColor getPlayerColor(int playerID) {
+        for (Player p : game.getPlayerList())
+            if (p.getPlayerID() == playerID)
+                return p.getColor();
+        return null;
+    }
 
 
     /********************* BEGIN ANIMATION METHODS **********************************/
