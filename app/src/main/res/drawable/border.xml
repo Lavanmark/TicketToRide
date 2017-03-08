@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <stroke
-        android:width="5dip"
-        android:color="#000000" />
+        android:width="8dip"
+        android:color="@color/colorMarsComplementary" />
 </shape>

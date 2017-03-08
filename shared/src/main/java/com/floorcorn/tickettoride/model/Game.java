@@ -26,6 +26,8 @@ public class Game {
 	private boolean finished = false;
 	private int longestRoute = 0;
 
+	private TrainCard lastDrawn = null;
+
 	@JsonIgnore
 	private ArrayList<ICommand> commands = new ArrayList<>();
 
@@ -203,20 +205,30 @@ public class Game {
 		return null;
 	}
 
-	public void drawTrainCardFromDeck(User user) throws GameActionException {
+	public TrainCardColor drawTrainCardFromDeck(User user) throws GameActionException {
 		Player player = getPlayer(user);
 		if(player == null)
-			return;
-		if(player.isTurn())
-			player.addTrainCard(board.drawFromTrainCardDeck(), 1);
+			return null;
+		if(player.isTurn()) {
+			TrainCard lastDrawn = board.drawFromTrainCardDeck();
+			player.addTrainCard(lastDrawn, 1);
+			return lastDrawn.getColor();
+		}
+		return null;
 	}
 
-	public void drawFaceUpCard(User user, int postition) throws GameActionException {
+
+
+	public TrainCardColor drawFaceUpCard(User user, int position) throws GameActionException {
 		Player player = getPlayer(user);
 		if(player == null)
-			return;
-		if(player.isTurn())
-			player.addTrainCard(board.drawFromFaceUp(postition), 1);
+			return null;
+		if(player.isTurn()) {
+			TrainCard card = board.drawFromFaceUp(position);
+			player.addTrainCard(card, 1);
+			return card.getColor();
+		}
+		return null;
 	}
 
 	public List<Route> getRoutes() {

@@ -7,6 +7,7 @@ import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.model.Board;
+import com.floorcorn.tickettoride.model.City;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
@@ -48,7 +49,7 @@ public class UIFacade {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
         serverProxy.setPort("8080");
-        serverProxy.setHost("192.168.0.100");
+        serverProxy.setHost("192.168.29.129");
 
         poller = new Poller(serverProxy, clientModelRoot);
     }
@@ -384,18 +385,81 @@ public class UIFacade {
         return clientModelRoot.getCurrentGame().getBoard().getFaceUpCards();
     }
 
-    public void drawTrainCardFromDeck() throws GameActionException {
-	    clientModelRoot.getCurrentGame().drawTrainCardFromDeck(clientModelRoot.getCurrentUser());
+    public TrainCardColor drawTrainCardFromDeck() throws GameActionException {
+	    TrainCardColor color = clientModelRoot.getCurrentGame().drawTrainCardFromDeck(clientModelRoot.getCurrentUser());
 	    clientModelRoot.notifyGameChanged();
+        return color;
     }
+
+
+    /** This method adds one train card to another player's hand. Just for animation. **/
+    public void animate_AddTrainCardForOtherPlayer(){
+        Player p = clientModelRoot.getCurrentGame().getPlayerList().get(0);
+        if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
+            Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
+            TrainCard t = new TrainCard(TrainCardColor.GREEN);
+            p2.addTrainCard(t,1);
+            System.out.println(t.getColor().name());
+            clientModelRoot.notifyGameChanged();
+        }
+    }
+
+    /** This method also is solely for animation purposes **/
+    public void animate_AddDestinationCardForOtherPlayer(){
+        Player p = clientModelRoot.getCurrentGame().getPlayerList().get(0);
+        if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
+            Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
+            City c = new City("city");
+            DestinationCard d = new DestinationCard(c,c,1,"h");
+            p2.addDestinationCard(d);
+        }
+    }
+
+    /** This method also is solely for animation purposes **/
+    public void animate_UpdatePointsForOtherPlayer(){
+        Player p = clientModelRoot.getCurrentGame().getPlayerList().get(0);
+        if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
+            Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
+            p2.setScore(p2.getScore() + 4);
+        }
+    }
+
+    public void animate_ClaimRoute(){
+        Player p = clientModelRoot.getCurrentGame().getPlayerList().get(0);
+        Route r = clientModelRoot.getCurrentGame().getAvailableRoutes().get(0);
+        p.claimRoute(r);
+    }
+
+    public void animate_ClaimRouteOtherPlayer(){
+        if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
+            Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
+            Route r = clientModelRoot.getCurrentGame().getAvailableRoutes().get(7);
+            p2.claimRoute(r);
+        }
+
+    }
+
+    /** This method also is solely for animation purposes **/
+    public void animate_sendChatMessage(Message m) throws BadUserException{
+        if(clientModelRoot.getChatLog() == null)
+        {
+            clientModelRoot.setChatLog(new GameChatLog());
+        }
+        GameChatLog log = clientModelRoot.getChatLog();
+        log.addMessage(m);
+        clientModelRoot.setChatLog(log);
+        clientModelRoot.notifyGameChanged();
+    }
+
 
     /*
         TYLER, you were questioning if you wanted to implement this or not, but here it is
      */
-    public void drawTrainCard(int position) throws GameActionException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
+    public TrainCardColor drawTrainCard(int position) throws GameActionException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
 	    //TODO without a deck manager this is always going to throw exceptions
-        clientModelRoot.getCurrentGame().drawFaceUpCard(clientModelRoot.getCurrentUser(), position);
+        TrainCardColor color = clientModelRoot.getCurrentGame().drawFaceUpCard(clientModelRoot.getCurrentUser(), position);
 	    clientModelRoot.notifyGameChanged();
+        return color;
     }
 
     /*
