@@ -688,6 +688,42 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		return false;
 	}
 
+    @Override
+    public void animate_ClickOnDestinationCards(){
+        this.destinationTickets[0].performClick();
+        this.destinationTickets[1].performClick();
+    }
+
+    @Override
+    public void animate_takeDestinationCards(){
+        this.keepDestinations.performClick();
+    }
+
+    @Override
+    public void animate_showOtherPlayerInfo(){
+        this.playerIcons.getChildAt(presenter.getPlayers().get(1).getPlayerID()).performClick();
+    }
+
+    @Override
+    public void animate_clickDrawDestination(){
+        this.drawDestinationTicketsButton.performClick();
+    }
+
+    @Override
+    public void animate_clickDrawDestinationDeck(){
+        this.drawFromDestinationDeck.performClick();
+    }
+
+    @Override
+    public void animate_clickOpenRouteDrawer(){
+        this.claimRouteButton.performClick();
+    }
+
+    @Override
+    public void animate_clickClaimRoute(){
+        //TODO: implement this once there is a list of routes available in UI.
+    }
+
 	public class RouteRecyclerViewAdapter
 			extends RecyclerView.Adapter<RouteRecyclerViewAdapter.ViewHolder> {
 
@@ -764,29 +800,4 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		}
 	}
 
-	@Override
-	public void animate_ClickOnDestinationCards(){
-		this.destinationTickets[0].performClick();
-		this.destinationTickets[1].performClick();
-	}
-
-	@Override
-	public void animate_takeDestinationCards(){
-		this.keepDestinations.performClick();
-	}
-
-    @Override
-    public void animate_showOtherPlayerInfo(){
-        this.playerIcons.getChildAt(presenter.getPlayers().get(1).getPlayerID()).performClick();
-    }
-
-	@Override
-	public void animate_clickDrawDestination(){
-		this.drawDestinationTicketsButton.performClick();
-	}
-
-    @Override
-    public void animate_clickDrawDestinationDeck(){
-        this.drawFromDestinationDeck.performClick();
-    }
 }

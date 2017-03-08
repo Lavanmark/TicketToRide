@@ -513,9 +513,48 @@ public class BoardmapPresenter implements IPresenter, Observer {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                animationEnd();
+                animationPlaceRoute_Player();
             }
         }, 8500);
+    }
+
+    private void animationPlaceRoute_Player(){
+        view.animate_clickOpenRouteDrawer();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //UIFacade.getInstance().animate_ClaimRoute();
+                view.animate_clickClaimRoute();
+            }
+        }, 1000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                animationPlaceRoute_OtherPlayer();
+            }
+        }, 4500);
+
+    }
+
+    private void animationPlaceRoute_OtherPlayer(){
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //UIFacade.getInstance().animate_ClaimRouteOtherPlayer();
+                view.animate_clickClaimRoute();
+            }
+        }, 1000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.hideRouteDrawer();
+                animationEnd();
+            }
+        }, 5000);
     }
 
 

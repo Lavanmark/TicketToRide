@@ -413,7 +413,6 @@ public class UIFacade {
             DestinationCard d = new DestinationCard(c,c,1,"h");
             p2.addDestinationCard(d);
         }
-
     }
 
     /** This method also is solely for animation purposes **/
@@ -422,6 +421,20 @@ public class UIFacade {
         if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
             Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
             p2.setScore(p2.getScore() + 4);
+        }
+    }
+
+    public void animate_ClaimRoute(){
+        Player p = clientModelRoot.getCurrentGame().getPlayerList().get(0);
+        Route r = clientModelRoot.getCurrentGame().getAvailableRoutes().get(0);
+        p.claimRoute(r);
+    }
+
+    public void animate_ClaimRouteOtherPlayer(){
+        if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
+            Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
+            Route r = clientModelRoot.getCurrentGame().getAvailableRoutes().get(7);
+            p2.claimRoute(r);
         }
 
     }
