@@ -205,38 +205,30 @@ public class Game {
 		return null;
 	}
 
-	public void drawTrainCardFromDeck(User user) throws GameActionException {
+	public TrainCardColor drawTrainCardFromDeck(User user) throws GameActionException {
 		Player player = getPlayer(user);
 		if(player == null)
-			return;
+			return null;
 		if(player.isTurn()) {
-			//player.addTrainCard(board.drawFromTrainCardDeck(), 1);
-			//NOTE: The above line works fine, below implemented for animation purposes.
-			this.lastDrawn = board.drawFromTrainCardDeck();
+			TrainCard lastDrawn = board.drawFromTrainCardDeck();
 			player.addTrainCard(lastDrawn, 1);
+			return lastDrawn.getColor();
 		}
+		return null;
 	}
 
-	/** This method accesses data used solely for animation. Can be removed later. **/
-	public TrainCard getLastDrawn(){
-		return this.lastDrawn;
-	}
 
-	/** This method is also just for animation **/
-	public void setLastDrawn(TrainCard card){
-		this.lastDrawn = card;
-	}
 
-	public void drawFaceUpCard(User user, int position) throws GameActionException {
+	public TrainCardColor drawFaceUpCard(User user, int position) throws GameActionException {
 		Player player = getPlayer(user);
 		if(player == null)
-			return;
+			return null;
 		if(player.isTurn()) {
-			//player.addTrainCard(board.drawFromFaceUp(position), 1);
-			//NOTE: above line works, below added just for animation purposes.
-			this.lastDrawn = board.drawFromFaceUp(position);
-			player.addTrainCard(this.lastDrawn, position);
+			TrainCard card = board.drawFromFaceUp(position);
+			player.addTrainCard(card, 1);
+			return card.getColor();
 		}
+		return null;
 	}
 
 	public int getGameID() {

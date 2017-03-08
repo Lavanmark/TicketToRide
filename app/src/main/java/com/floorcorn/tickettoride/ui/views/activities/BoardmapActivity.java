@@ -679,4 +679,14 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     public void animate_showOtherPlayerInfo(){
         this.playerIcons.getChildAt(presenter.getPlayers().get(1).getPlayerID()).performClick();
     }
+
+	@Override
+	public void animate_clickDrawDestination(){
+		this.drawDestinationTicketsButton.performClick();
+	}
+
+    @Override
+    public void animate_clickDrawDestinationDeck(){
+        this.drawFromDestinationDeck.performClick();
+    }
 }

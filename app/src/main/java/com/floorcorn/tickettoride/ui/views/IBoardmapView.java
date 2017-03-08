@@ -52,4 +52,6 @@ public interface IBoardmapView extends IView {
 	void animate_ClickOnDestinationCards();
 	void animate_takeDestinationCards();
 	void animate_showOtherPlayerInfo();
+	void animate_clickDrawDestination();
+    void animate_clickDrawDestinationDeck();
 }

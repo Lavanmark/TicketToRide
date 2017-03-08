@@ -15,9 +15,13 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by mgard on 2/14/2017.
+ * Created by Michael on 2/14/2017.
+ * @author Tyler
  */
 
+/** TODO: ALL METHODS HAVE BEEN PREPENDED WITH A MANDATORY RETURN STATEMENT
+ *  FOR ANIMATION PURPOSES. REMOVE THESE WHEN THAT IS OVER!!!!
+ */
 public class Poller {
 
 	private ServerProxy serverProxy = null;
@@ -102,7 +106,10 @@ public class Poller {
 		}, 0, 1, TimeUnit.SECONDS);
 	}
 
+	/** TODO: REMOVE THE FIRST IF STATEMENT AFTER ANIMATION IS NO LONGER NEEDED!! **/
 	public void startPollingChat(final IView view) {
+		if(true)
+			return;
 		if(chatPollSES != null)
 			chatPollSES.shutdown();
 		chatPollSES = Executors.newScheduledThreadPool(1);
