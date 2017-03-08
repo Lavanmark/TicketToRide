@@ -109,14 +109,14 @@ public class BoardmapPresenter implements IPresenter, Observer {
 
     //This method compares the old game object to the new one to see what changes have been made.
     public void getChanges(Game newGame){
-		System.out.println("Changes being checked");
+		//System.out.println("Changes being checked");
         //TrainCardColor newCard = getNewCardDrawn(newGame);
-		TrainCard card = game.getLastDrawn();
-		game.setLastDrawn(null);
-        if(card != null) {
-            String toDisplay = "You drew a " + card.getColor().name() + " card";
-            Toast.makeText(view.getActivity(), toDisplay, Toast.LENGTH_LONG).show();
-        }
+		//TrainCard card = game.getLastDrawn();
+		//game.setLastDrawn(null);
+        //if(card != null) {
+          //  String toDisplay = "You drew a " + card.getColor().name() + " card";
+            //Toast.makeText(view.getActivity(), toDisplay, Toast.LENGTH_LONG).show();
+       // }
 
     }
 
@@ -269,80 +269,119 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		return game.getGameSize();
 	}
 
-	/********************* BEGIN ANIMATION METHODS **********************************/
-
-	public void animate(){
-		Corn.log(Level.FINE, "Begining animation");
-		animateDrawTopDeck();
+	public TrainCardColor drawTrainCardFromDeck(){
+        TrainCardColor color = null;
+		try {
+			color = UIFacade.getInstance().drawTrainCardFromDeck();
+		} catch(GameActionException e) {
+			e.printStackTrace();
+		}
+        if(!(color == null)) {
+            String toDisplay = "You drew 1 " + color.name() + " card";
+            Toast.makeText(view.getActivity(), toDisplay, Toast.LENGTH_SHORT).show();
+        }
+        return color;
 	}
 
-	private void animateDrawTopDeck() {
-		view.displayHandDrawer();
-		view.displayDrawingDeckDrawer();
-		final Handler handler = new Handler();
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				drawTrainCardFromDeck();
-			}
-		}, 1000);
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				animateDraw1();
-			}
-		}, 2000);
+	public TrainCardColor drawFromFaceUp(int position) {
+        TrainCardColor color = null;
+		try {
+			color = UIFacade.getInstance().drawTrainCard(position);
+		} catch(GameActionException e) {
+			e.printStackTrace();
+		}
+        if(!(color == null)) {
+            String toDisplay = "You drew 1 " + color.name() + " card";
+            Toast.makeText(view.getActivity(), toDisplay, Toast.LENGTH_SHORT).show();
+        }
+        return color;
 	}
 
-	private void animateDraw1(){
-		final Handler handler = new Handler();
-		//Wait 2 seconds (1 from previous method) then draw from slot 1;
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				drawFromFaceUp(1);
-			}
-		}, 1000);
-		//Wait 5 seconds, then animate route selection
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				animateDrawRoutes();
-			}
-		}, 7500);
+	public void drawNewDestinationCards() {
+		try {
+			UIFacade.getInstance().drawDestinationCards();
+		} catch(GameActionException e) {
+			e.printStackTrace();
+		}
 	}
+    /********************* BEGIN ANIMATION METHODS **********************************/
 
-	private void animateDrawRoutes(){
-		view.hideDrawingDeckDrawer();
-		final Handler handler = new Handler();
-		//Wait 2 seconds then open route drawer;
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				view.displayDestinationCardDrawer();
-			}
-		}, 2000);
+    /** Basic idea here is that this animate() method starts the chain,
+     * then each animate method calls the next, which calls the next, and
+     * so on. That was the only way to get it to work with the Handlers.
+     */
+    public void animate(){
+        Corn.log(Level.FINE, "Beginning animation");
+        animateDraw1();
+    }
 
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				view.animate_ClickOnDestinationCards();
-			}
-		}, 4000);
+    private void animateDraw1(){
+        view.displayHandDrawer();
+        view.displayDrawingDeckDrawer();
+        final Handler handler = new Handler();
+        //Wait 2 seconds (1 from previous method) then draw from slot 1;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                drawFromFaceUp(1);
+            }
+        }, 3000);
+        //Wait 5 seconds, then animate route selection
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                animateDrawTopDeck();
+            }
+        }, 6000);
+    }
 
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				view.animate_takeDestinationCards();
-			}
-		}, 6000);
+    private void animateDrawTopDeck() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                TrainCardColor color = drawTrainCardFromDeck();
+            }
+        }, 1000);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                animateDrawRoutes();
+            }
+        }, 4000);
+    }
 
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				view.hideDestinationDrawer();
-			}
-		}, 7000);
+    private void animateDrawRoutes(){
+        view.hideDrawingDeckDrawer();
+        final Handler handler = new Handler();
+        //Wait 2 seconds then open route drawer;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.animate_clickDrawDestination();
+            }
+        }, 2000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.animate_ClickOnDestinationCards();
+            }
+        }, 4000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.animate_takeDestinationCards();
+            }
+        }, 6000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.hideDestinationDrawer();
+            }
+        }, 7000);
 
         handler.postDelayed(new Runnable() {
             @Override
@@ -351,10 +390,9 @@ public class BoardmapPresenter implements IPresenter, Observer {
             }
         }, 9000);
 
-	}
+    }
 
     private void animateChatMessages(){
-        //if(UIFacade.getInstance().getCurrentGame().getPlayerList().size() > 1) {
         UIFacade.getInstance().stopPollingAll();
         final Handler handler = new Handler();
         int i = 1;
@@ -364,7 +402,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
                 @Override
                 public void run() {
                     try {
-                        UIFacade.getInstance().animate_sendChatMessage(new Message("Hey, my name is " + p.getName()));
+                        UIFacade.getInstance().animate_sendChatMessage(new Message(p.getName() + ": Hey, i'm a chat message"));
                     } catch (BadUserException e){
                         e.printStackTrace();
                     }
@@ -378,7 +416,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
             public void run() {
                 view.hideHandDrawer();
             }
-        }, 7000);
+        }, (1500 * i) + 1500);
 
         handler.postDelayed(new Runnable() {
             @Override
@@ -386,45 +424,89 @@ public class BoardmapPresenter implements IPresenter, Observer {
                 UIFacade.getInstance().pollCurrentGameParts(view);
                 animateUpdateOtherPlayersTrainCards();
             }
-        }, 9000);
+        }, (1500 * i) + 3000);
     }
 
-	private void animateUpdateOtherPlayersTrainCards(){
+    private void animateUpdateOtherPlayersTrainCards(){
 
-        view.animate_showOtherPlayerInfo();
+        Toast.makeText(view.getActivity(), "Updating other player score, destination cards, and train cards", Toast.LENGTH_LONG).show();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                UIFacade.getInstance().animate_AddTrainCardForOtherPlayer();
                 view.animate_showOtherPlayerInfo();
             }
+        }, 5000);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                UIFacade.getInstance().animate_AddTrainCardForOtherPlayer();
+                UIFacade.getInstance().animate_AddDestinationCardForOtherPlayer();
+                UIFacade.getInstance().animate_UpdatePointsForOtherPlayer();
+                view.animate_showOtherPlayerInfo();
+            }
+        }, 10000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                animateDrawNewDestinationCards();
+            }
+        }, 11000);
+    }
+
+    private void animateDrawNewDestinationCards(){
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.animate_clickDrawDestination();
+                view.displayHandDrawer();
+            }
         }, 3000);
-	}
 
-	/*********************** END ANIMATION METHODS *********************************/
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.animate_clickDrawDestinationDeck();
+            }
+        }, 4500);
 
-	public void drawTrainCardFromDeck(){
-		try {
-			UIFacade.getInstance().drawTrainCardFromDeck();
-		} catch(GameActionException e) {
-			e.printStackTrace();
-		}
-	}
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.animate_ClickOnDestinationCards();
+            }
+        }, 6000);
 
-	public void drawFromFaceUp(int position) {
-		try {
-			UIFacade.getInstance().drawTrainCard(position);
-		} catch(GameActionException e) {
-			e.printStackTrace();
-		}
-	}
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.animate_takeDestinationCards();
+            }
+        }, 7200);
 
-	public void drawNewDestinationCards() {
-		try {
-			UIFacade.getInstance().drawDestinationCards();
-		} catch(GameActionException e) {
-			e.printStackTrace();
-		}
-	}
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.hideDestinationDrawer();
+                view.hideHandDrawer();
+            }
+        }, 8200);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                animationEnd();
+            }
+        }, 8500);
+    }
+
+
+    private void animationEnd(){
+        Toast.makeText(view.getActivity(), "Animation Complete", Toast.LENGTH_LONG).show();
+        Corn.log(Level.FINE, "Animation finished");
+
+    }
+    /*********************** END ANIMATION METHODS *********************************/
 }
