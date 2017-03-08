@@ -50,10 +50,10 @@ public class Game {
 		if(size < 2) size = 2;
 		if(size > 5) size = 5;
 		this.gameSize = size;
-		this.playerList = new ArrayList<Player>();
+		this.playerList = new ArrayList<>();
 		this.gameID = gameID;
 		this.commands = new ArrayList<>();
-		this.board = new Board(new MapFactory().getMarsRoutes());
+		this.board = new Board(new MapFactory().getMarsRoutes(), (gameSize > 3));
 		this.board.setDeckManager(new DeckManager(true));
 	}
 
@@ -217,6 +217,21 @@ public class Game {
 			return;
 		if(player.isTurn())
 			player.addTrainCard(board.drawFromFaceUp(postition), 1);
+	}
+
+	public List<Route> getRoutes() {
+		return board.getRoutes();
+	}
+
+	public List<Route> getAvailableRoutes() {
+		return board.getRoutes();
+	}
+
+	public void claimRoute(Route route, Player p) {
+		if(!route.canClaim(p))
+			return;
+		route.claim(p);
+		board.updateRoute(route);
 	}
 
 	public int getGameID() {

@@ -48,7 +48,7 @@ public class UIFacade {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
         serverProxy.setPort("8080");
-        serverProxy.setHost("10.10.16.98");
+        serverProxy.setHost("192.168.0.100");
 
         poller = new Poller(serverProxy, clientModelRoot);
     }
@@ -441,12 +441,12 @@ public class UIFacade {
     // Routes.
 
     public void claimRoute(Route route, User user) {
-        route.claim(clientModelRoot.getCurrentGame().getPlayer(user));
+        clientModelRoot.getCurrentGame().claimRoute(route, clientModelRoot.getCurrentGame().getPlayer(user));
 	    clientModelRoot.notifyGameChanged();
     }
 
     public List<Route> getAvailableRoutes() {
-        return clientModelRoot.getCurrentGame().getBoard().getAvailableRoutes();
+        return clientModelRoot.getCurrentGame().getAvailableRoutes();
     }
 
     public Boolean canClaimRoute(Route route) {
@@ -455,7 +455,7 @@ public class UIFacade {
     }
 
     public List<Route> getRoutes() {
-        return clientModelRoot.getCurrentGame().getBoard().getRoutes();
+        return clientModelRoot.getCurrentGame().getRoutes();
     }
 
     // Chat functions.

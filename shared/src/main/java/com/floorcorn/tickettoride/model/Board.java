@@ -19,24 +19,26 @@ public class Board {
     private DeckManager deckManager;
 
 	private int longestRoute;
+	private boolean allowDoubles = false;
     //private int longestRoutePlayer; this does not need to be a private data member. never gets used
 
 	private Board(){}
 	/**
 	 * Create a new board with the specified routes in route list
-	 * @param routeList list of routes on the boardmap. Remove double routes prior to call.
+	 * @param routeList list of routes on the boardmap.
 	 */
-    public Board(List<Route> routeList) {
+    public Board(List<Route> routeList, boolean allowDoubles) {
         this.routeList = routeList;
         this.faceUpCards = new TrainCard[FACEUP_DECK_SIZE];
         this.longestRoute = 0;
         //this.longestRoutePlayer = -1;
 	    this.deckManager = null;
+	    this.allowDoubles = allowDoubles;
         System.out.println("Board built from routeList");
     }
 
     public Board(Board board) {
-        this.routeList = board.getRoutes();
+        this.routeList = new ArrayList<>(board.getRoutes());
 	    this.faceUpCards = new TrainCard[FACEUP_DECK_SIZE];
 	    try {
 		    setFaceUpCards(board.getFaceUpCards());
@@ -45,12 +47,17 @@ public class Board {
 	    }
 	    this.longestRoute = board.getLongestRoute();
 	    //this.longestRoutePlayer = board.getLongestRoutePlayer(player);
+	    this.allowDoubles = board.areDoublesAllowed();
 	    this.deckManager = board.deckManager;
         System.out.println("Board built from Board");
     }
 
 	public void setDeckManager(DeckManager dm) {
 		deckManager = dm;
+	}
+
+	public boolean areDoublesAllowed() {
+		return allowDoubles;
 	}
 
     public List<Route> getRoutes(){
@@ -121,8 +128,11 @@ public class Board {
     public void updateRoute(Route r){
 	    for(Route route : routeList) {
 		    if(route.getRouteID() == r.getRouteID()) {
-			    //TODO probably shouldn't do this
-			    //This should be here if the player updates a route it holds. but they should be the same pointers.
+			    if(!r.equals(route)) {
+				    //copy each var
+			    }
+		    } else if(!allowDoubles && r.isDoubleRoute(route)) {
+				route.markDoubleRoute(r);
 		    }
 	    }
     }
