@@ -150,9 +150,9 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		return game.getPlayer(user).getTrainCarsLeft();
 	}
 
-	public int[] getFaceupCardColors() throws Exception {
+	public int[] getFaceupCardColors() throws GameActionException {
 		if (!gameInProgress()){
-			throw new Exception("Game not Started");
+			throw new GameActionException("Game not Started");
 		}
 		TrainCard[] faceUp = UIFacade.getInstance().getFaceUpCards();
 		int[] imageId = new int[5];

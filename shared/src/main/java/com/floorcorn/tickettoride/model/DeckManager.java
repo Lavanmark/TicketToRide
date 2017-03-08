@@ -33,6 +33,12 @@ public class DeckManager {
 	        shuffleAllCards();
     }
 
+	public DeckManager(DeckManager dm) {
+		this.trainCardDeck = new ArrayList<>(dm.trainCardDeck);
+		this.trainCardDiscard = new ArrayList<>(dm.trainCardDiscard);
+		this.destinationCardDeck = new ArrayList<>(dm.destinationCardDeck);
+	}
+
     public void shuffleAllCards(){
 	    shuffleList(trainCardDeck);
 	    shuffleList(trainCardDiscard);

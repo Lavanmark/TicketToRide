@@ -112,6 +112,10 @@ public class Route {
     }
 
     public Boolean canClaim(Player p){
+	    if(claimed)
+		    return false;
+	    if(owner != Player.NO_PLAYER_ID)
+		    return false;
 	    if(p.getTotalTrainCards() < length) //Route longer than the amount of cards player has
 		    return false;
 
@@ -135,6 +139,27 @@ public class Route {
 		    colornum = pCards.get(color);
 	    return colornum + wildnum >= length;
     }
+
+	boolean isDoubleRoute(Route r) {
+		if(r.getRouteID() == this.routeID)
+			return false;
+		if(r.getLength() != this.length)
+			return false;
+		if(!r.getFirstCity().equals(this.getFirstCity()))
+			return false;
+		if(!r.getSecondCity().equals(this.getSecondCity()))
+			return false;
+		return true;
+	}
+
+	void markDoubleRoute(Route r) {
+		if(!isDoubleRoute(r))
+			return;
+		if(this.claimed)
+			r.claimed = true;
+		else if(r.isClaimed())
+			this.claimed = true;
+	}
 
     @Override
     public boolean equals(Object o) {
