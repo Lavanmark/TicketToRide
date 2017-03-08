@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.ui.presenters;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
+import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
@@ -25,6 +27,7 @@ import com.floorcorn.tickettoride.ui.views.IView;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -303,6 +306,19 @@ public class BoardmapPresenter implements IPresenter, Observer {
 		} catch(GameActionException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public List<Route> getRoutes(){
+		List<Route> lr = UIFacade.getInstance().getAvailableRoutes();
+		System.out.println(lr.toString());
+		return lr;
+
+	}
+
+	public void routeClicked(View v) {
+	}
+
+	public void claimButtonClicked(View v) {
 	}
     /********************* BEGIN ANIMATION METHODS **********************************/
 
