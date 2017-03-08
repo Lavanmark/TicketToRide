@@ -355,14 +355,14 @@ public class BoardmapPresenter implements IPresenter, Observer {
         view.displayHandDrawer();
         view.displayDrawingDeckDrawer();
         final Handler handler = new Handler();
-        //Wait 2 seconds (1 from previous method) then draw from slot 1;
+        //Wait 3 seconds (1 from previous method) then draw from slot 1;
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 drawFromFaceUp(1);
             }
         }, 3000);
-        //Wait 5 seconds, then animate route selection
+        //Wait 3 seconds, then animate draw from top of deck
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
