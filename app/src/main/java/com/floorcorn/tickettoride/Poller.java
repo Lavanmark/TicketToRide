@@ -15,9 +15,13 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by mgard on 2/14/2017.
+ * Created by Michael on 2/14/2017.
+ * @author Tyler
  */
 
+/** TODO: ALL METHODS HAVE BEEN PREPENDED WITH A MANDATORY RETURN STATEMENT
+ *  FOR ANIMATION PURPOSES. REMOVE THESE WHEN THAT IS OVER!!!!
+ */
 public class Poller {
 
 	private ServerProxy serverProxy = null;
@@ -80,6 +84,11 @@ public class Poller {
 							try {
 								System.out.println("getting commands");
 								ArrayList<ICommand> commands = serverProxy.getCommandsSince(commandManager.getUser(), commandManager.currentGameID(), commandManager.getLastCommandExecuted());
+								if(commands == null) {
+									stopPollingAll();
+									view.backToLogin();
+									return;
+								}
 								commandManager.addCommands(commands);
 							} catch(BadUserException e) {
 								e.printStackTrace();
@@ -97,7 +106,10 @@ public class Poller {
 		}, 0, 1, TimeUnit.SECONDS);
 	}
 
+	/** TODO: REMOVE THE FIRST IF STATEMENT AFTER ANIMATION IS NO LONGER NEEDED!! **/
 	public void startPollingChat(final IView view) {
+		if(true)
+			return;
 		if(chatPollSES != null)
 			chatPollSES.shutdown();
 		chatPollSES = Executors.newScheduledThreadPool(1);
@@ -113,6 +125,11 @@ public class Poller {
 							try {
 								System.out.println("getting chat log");
 								GameChatLog gameChatLog = serverProxy.getChatLog(commandManager.getUser(), commandManager.getGame().getGameInfo());
+								if(gameChatLog == null) {
+									stopPollingAll();
+									view.backToLogin();
+									return;
+								}
 								commandManager.getClientFacade().setChatLog(gameChatLog);
 								//TODO this is an awful way to do this.
 							} catch(BadUserException e) {

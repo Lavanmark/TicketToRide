@@ -26,8 +26,11 @@ public class Game {
 	private boolean finished = false;
 	private int longestRoute = 0;
 
+	private TrainCard lastDrawn = null;
+
 	@JsonIgnore
 	private ArrayList<ICommand> commands = new ArrayList<>();
+
 	private Board board = null;
 
 
@@ -49,11 +52,11 @@ public class Game {
 		if(size < 2) size = 2;
 		if(size > 5) size = 5;
 		this.gameSize = size;
-		this.playerList = new ArrayList<Player>();
+		this.playerList = new ArrayList<>();
 		this.gameID = gameID;
 		this.commands = new ArrayList<>();
-		this.board = new Board(new MapFactory().getMarsRoutes());
-		this.board.setDeckManager(new DeckManager());
+		this.board = new Board(new MapFactory().getMarsRoutes(), (gameSize > 3));
+		this.board.setDeckManager(new DeckManager(true));
 	}
 
 	
@@ -68,7 +71,6 @@ public class Game {
 		for(Player p : playerList)
 			censoredPlayers.add(p.getCensoredPlayer(user));
 		game.setPlayerList(censoredPlayers);
-		game.board.setDeckManager(null);
 		game.commands = new ArrayList<>();
 		return game;
 	}
@@ -201,6 +203,55 @@ public class Game {
 				return p;
 		}
 		return null;
+	}
+
+	public TrainCardColor drawTrainCardFromDeck(User user) throws GameActionException {
+		Player player = getPlayer(user);
+		if(player == null)
+			return null;
+		if(player.isTurn()) {
+			TrainCard lastDrawn = board.drawFromTrainCardDeck();
+			player.addTrainCard(lastDrawn, 1);
+			return lastDrawn.getColor();
+		}
+		return null;
+	}
+
+
+
+	public TrainCardColor drawFaceUpCard(User user, int position) throws GameActionException {
+		Player player = getPlayer(user);
+		if(player == null)
+			return null;
+		if(player.isTurn()) {
+			TrainCard card = board.drawFromFaceUp(position);
+			player.addTrainCard(card, 1);
+			return card.getColor();
+		}
+		return null;
+	}
+
+	public List<Route> getRoutes() {
+		return board.getRoutes();
+	}
+
+	public List<Route> getAvailableRoutes() {
+		return board.getRoutes();
+	}
+
+	public void claimRoute(Route route, Player p) {
+		if(!route.canClaim(p))
+			return;
+		System.out.println("claiming route");
+		List<TrainCard> discard = route.claim(p);
+		for(TrainCard card : discard) {
+			try {
+				board.discard(card);
+			} catch(GameActionException e) {
+				e.printStackTrace();
+			}
+		}
+		board.updateRoute(route);
 	}
 
 	public int getGameID() {

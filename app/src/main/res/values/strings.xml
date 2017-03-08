@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Ticket To Ride</string>
+    <string name="app_name">Ticket To Mars</string>
 
     <!-- Strings related to login -->
     <string name="prompt_username">Username</string>
@@ -7,7 +7,7 @@
     <string name="prompt_lastname">Last name</string>
     <string name="prompt_confirm">Confirm password</string>
     <string name="action_register">Register</string>
-    <string name="title_login_header">Ticket To Ride</string>
+    <string name="title_login_header">Ticket To Mars</string>
     <string name="title_not_a_user">Not a user?</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>

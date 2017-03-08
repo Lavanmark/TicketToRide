@@ -18,18 +18,6 @@
         android:orientation="horizontal"
         android:layout_centerHorizontal="true">
 
-        <include
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            layout="@layout/player_info_icon"
-            android:layout_weight="1"/>
-
-        <include
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            layout="@layout/player_info_icon"
-            android:layout_weight="1"/>
-
     </LinearLayout>
 
 
@@ -40,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="530dp"
         android:layout_below="@id/playerTokenHolder"
-        android:background="@drawable/map"
+        android:background="@drawable/map_crop"
         android:layout_centerHorizontal="true">
     </FrameLayout>
     
@@ -53,30 +41,40 @@
             android:text="Draw Card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorMarsDark"
+            android:backgroundTint="@color/colorMarsComplementary"
             android:id="@+id/open_card_button" />
 
         <Button
             android:text="Place Route"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorMarsDark"
+            android:backgroundTint="@color/colorMarsComplementary"
             android:id="@+id/open_route_button" />
 
         <Button
             android:text="Destination Drawer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorMarsDark"
+            android:backgroundTint="@color/colorMarsComplementary"
             android:id="@+id/open_dest_button" />
 
         <Button
             android:text="Open Hand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorMarsDark"
+            android:backgroundTint="@color/colorMarsComplementary"
             android:id="@+id/open_hand_button" />
 
         <Button
             android:text="Animate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorMarsDark"
+            android:backgroundTint="@color/colorMarsComplementary"
             android:id="@+id/animateButton" />
         
     </LinearLayout>

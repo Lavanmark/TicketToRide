@@ -6,7 +6,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -78,6 +80,7 @@ public class MapFactory {
 				if(!line.isEmpty())
 					cities.add(new City(line));
 			}
+			br.close();
 			return cities;
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -103,6 +106,7 @@ public class MapFactory {
 						routes.add(new Route(routeID++, city1, city2, length, color));
 				}
 			}
+			br.close();
 			return routes;
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -117,14 +121,16 @@ public class MapFactory {
 			List<DestinationCard> dest = new ArrayList<>();
 			while((line = br.readLine()) != null) {
 				String[] parts = line.split(",");
-				if(parts.length == 3) {
+				if(parts.length == 4) {
 					City city1 = new City(parts[0]);
 					City city2 = new City(parts[1]);
 					int value = Integer.valueOf(parts[2]);
+					String resource = parts[3];
 					if(cities.contains(city1) && cities.contains(city2))
-						dest.add(new DestinationCard(city1, city2, value));
+						dest.add(new DestinationCard(city1, city2, value, resource));
 				}
 			}
+			br.close();
 			return dest;
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -135,4 +141,8 @@ public class MapFactory {
     public void setFilePath(String path){
         FILE_STRING = path;
     }
+
+
+
+
 }

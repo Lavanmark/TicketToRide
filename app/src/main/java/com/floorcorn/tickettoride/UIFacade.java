@@ -6,6 +6,8 @@ import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
+import com.floorcorn.tickettoride.model.Board;
+import com.floorcorn.tickettoride.model.City;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
@@ -46,8 +48,8 @@ public class UIFacade {
     private UIFacade() {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
-	      serverProxy.setPort("8080");
-        serverProxy.setHost("192.168.0.100");
+        serverProxy.setPort("8080");
+        serverProxy.setHost("10.24.215.82");
 
         poller = new Poller(serverProxy, clientModelRoot);
     }
@@ -189,6 +191,7 @@ public class UIFacade {
      */
 	public void requestGame(GameInfo game) throws BadUserException {
 		Game cgame = serverProxy.getGame(clientModelRoot.getCurrentUser(), game.getGameID());
+		//System.out.println("still gonna do it");
         clientModelRoot.setCurrentGame(cgame);
 	}
 
@@ -198,8 +201,8 @@ public class UIFacade {
      */
     public void requestGames() throws BadUserException {
         clientModelRoot.setGames(serverProxy.getGames(getUser()));
-	    for(GameInfo gi : clientModelRoot.getGames())
-		    System.out.println(gi.getGameID() + " " + gi.getName());
+	    //for(GameInfo gi : clientModelRoot.getGames())
+		//    System.out.println(gi.getGameID() + " " + gi.getName());
     }
 
     /**
@@ -286,7 +289,7 @@ public class UIFacade {
     /**
      * If poller is null, creates a new Poller. Tells poller to stop polling.
      */
-	private void resetPollerState() {
+	public void stopPollingAll() {
 		if (poller == null) {
 			poller = new Poller(serverProxy, clientModelRoot);
 			return;
@@ -311,7 +314,8 @@ public class UIFacade {
      * @param obs Observer object
      */
     public void registerObserver(Observer obs) {
-        clientModelRoot.addObserver(obs);
+        //System.out.println("register " + obs.getClass().getSimpleName());
+	    clientModelRoot.addObserver(obs);
     }
 
     /**
@@ -319,11 +323,13 @@ public class UIFacade {
      * @param obs Observer object
      */
     public void unregisterObserver(Observer obs) {
-        clientModelRoot.deleteObserver(obs);
+        //System.out.println("unregister " + obs.getClass().getSimpleName());
+	    clientModelRoot.deleteObserver(obs);
     }
 
     public void clearObservers() {
-        clientModelRoot.deleteObservers();
+	    //System.out.println("clear observers");
+	    clientModelRoot.deleteObservers();
     }
 
     // Phase 2 stuff.
@@ -355,46 +361,6 @@ public class UIFacade {
         return getCurrentGame().getLongestRoute();
     }
 
-    /**
-     * Sets the boolean in the Board object to whatever the param is. This is whether we should
-     * reset the face up cards.
-     * @param reset boolean -- to reset or not to reset face up, that is the question
-     */
-    public void shouldResetFaceUp(Boolean reset) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Calls the function on the Board to replace face up card.
-     *
-     * potentially going to be handled by the commands, so dont need this fxn
-     */
-//    public void replaceFaceUpCard() {
-//        //go through the game class for these?
-//        throw new UnsupportedOperationException();
-//    }
-
-    /**
-     * Returns the player's score.
-     * @param player Player object
-     * @return int player's score
-     */
-    public int getPlayerScore(Player player) {
-        return player.getScore();
-    }
-
-    /**
-     * Returns the number of cards the player has.
-     * @param player PLayer object
-     * @return int number of cards
-     */
-    public int getNumTrainCards(Player player) {
-        return player.getTotalTrainCards();
-    }
-
-    public int getNumDestinationCards(Player player){
-        return player.getTotalDestinationCards();
-    }
 
     /**
      *
@@ -403,27 +369,6 @@ public class UIFacade {
     public Map<TrainCardColor, Integer> getCardMap(User user) {
 
         return clientModelRoot.getCurrentGame().getPlayer(user).getTrainCards();
-    }
-
-    /**
-     * Returns the number of train cars left.
-     * @param player Player object
-     * @return int number of cars
-     */
-    public int getTrainCarsLeft(Player player) {
-        return player.getTrainCarsLeft();
-    }
-
-    /**
-     * Returns a List of player names.
-     * @return List of String player names
-     */
-    public List<String> getPlayerNames() {
-        List<String> names = new ArrayList<String>();
-        for(Player player: clientModelRoot.getCurrentGame().getPlayerList()){
-            names.add(player.getName());
-        }
-        return names;
     }
 
     /**
@@ -440,43 +385,114 @@ public class UIFacade {
         return clientModelRoot.getCurrentGame().getBoard().getFaceUpCards();
     }
 
-    public void drawTrainCardFromDeck() {
-        //no implementation for phase 2
-        throw new UnsupportedOperationException();
+    public TrainCardColor drawTrainCardFromDeck() throws GameActionException {
+	    TrainCardColor color = clientModelRoot.getCurrentGame().drawTrainCardFromDeck(clientModelRoot.getCurrentUser());
+	    clientModelRoot.notifyGameChanged();
+        return color;
     }
+
+
+    /** This method adds one train card to another player's hand. Just for animation. **/
+    public void animate_AddTrainCardForOtherPlayer(){
+        if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
+            Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
+            TrainCard t = new TrainCard(TrainCardColor.GREEN);
+            p2.addTrainCard(t,1);
+            //System.out.println(t.getColor().name());
+            clientModelRoot.notifyGameChanged();
+        }
+    }
+
+    /** This method also is solely for animation purposes **/
+    public void animate_AddDestinationCardForOtherPlayer(){
+        if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
+            Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
+            City c = new City("city");
+            DestinationCard d = new DestinationCard(c,c,1,"h");
+            p2.addDestinationCard(d);
+        }
+    }
+
+    /** This method also is solely for animation purposes **/
+    public void animate_UpdatePointsForOtherPlayer(){
+        if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
+            Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
+            p2.setScore(p2.getScore() + 4);
+        }
+    }
+
+    /** This method also is solely for animation purposes **/
+    public void animate_sendChatMessage(Message m) throws BadUserException{
+        if(clientModelRoot.getChatLog() == null)
+        {
+            clientModelRoot.setChatLog(new GameChatLog());
+        }
+        GameChatLog log = clientModelRoot.getChatLog();
+        log.addMessage(m);
+        clientModelRoot.setChatLog(log);
+        clientModelRoot.notifyGameChanged();
+    }
+
 
     /*
         TYLER, you were questioning if you wanted to implement this or not, but here it is
      */
-    public void drawTrainCard(int position) throws GameActionException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
+    public TrainCardColor drawTrainCard(int position) throws GameActionException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
 	    //TODO without a deck manager this is always going to throw exceptions
-        clientModelRoot.getCurrentGame().getBoard().drawFromFaceUp(position);
+        TrainCardColor color = clientModelRoot.getCurrentGame().drawFaceUpCard(clientModelRoot.getCurrentUser(), position);
+	    clientModelRoot.notifyGameChanged();
+        return color;
     }
 
     /*
         TYLER, you were questioning if you wanted to implement this or not, but here it is
+
+
      */
-    public void drawDestinationCard() throws GameActionException {
-	    //TODO without a deck manager this is always going to throw exceptions
-        clientModelRoot.getCurrentGame().getBoard().drawFromDestinationCardDeck();
+
+    /**
+     *
+     * @return Array of 3 Destination Cards
+     * @throws GameActionException
+     */
+    public void drawDestinationCards() throws GameActionException {
+	    Player player = clientModelRoot.getCurrentGame().getPlayer(getUser());
+	    Board board = clientModelRoot.getCurrentGame().getBoard();
+		for (int i = 0; i < 3; i++){
+			DestinationCard card = board.drawFromDestinationCardDeck();
+			if(card != null)
+				player.addDestinationCard(card);
+			else
+				break;
+		}
+	    clientModelRoot.notifyGameChanged();
     }
 
     /*
         TYLER, you were questioning if you wanted to implement this or not, but here it is
      */
     public void discardDestinationCard(DestinationCard destinationCard) throws GameActionException {
-	    //TODO without a deck manager this is always going to throw exceptions
+	    clientModelRoot.getCurrentGame().getPlayer(clientModelRoot.getCurrentUser()).removeDestinationCard(destinationCard);
         clientModelRoot.getCurrentGame().getBoard().discard(destinationCard);
+	    clientModelRoot.notifyGameChanged();
     }
+
+	public void stopDiscarding() {
+		clientModelRoot.getCurrentGame().getPlayer(clientModelRoot.getCurrentUser()).markAllNotDiscardable();
+		clientModelRoot.notifyGameChanged();
+	}
+
+
 
     // Routes.
 
     public void claimRoute(Route route, User user) {
-        route.claim(clientModelRoot.getCurrentGame().getPlayer(user));
+        clientModelRoot.getCurrentGame().claimRoute(route, clientModelRoot.getCurrentGame().getPlayer(user));
+	    clientModelRoot.notifyGameChanged();
     }
 
     public List<Route> getAvailableRoutes() {
-        return clientModelRoot.getCurrentGame().getBoard().getAvailableRoutes();
+        return clientModelRoot.getCurrentGame().getAvailableRoutes();
     }
 
     public Boolean canClaimRoute(Route route) {
@@ -485,7 +501,7 @@ public class UIFacade {
     }
 
     public List<Route> getRoutes() {
-        return clientModelRoot.getCurrentGame().getBoard().getRoutes();
+        return clientModelRoot.getCurrentGame().getRoutes();
     }
 
     // Chat functions.

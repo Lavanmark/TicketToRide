@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride;
 import android.os.AsyncTask;
 
 import com.floorcorn.tickettoride.communication.Results;
+import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.User;
 
@@ -32,7 +33,7 @@ public class ClientCommunicator {
 	private String host;
 	private String port;
 
-	private static final long REQUEST_TIMEOUT = 30; // in TimeUnit.SECONDS
+	private static final int REQUEST_TIMEOUT = 5; // in TimeUnit.SECONDS
 
 	/**
 	 * @param urlPath the url to which the object is to be sent.
@@ -55,7 +56,7 @@ public class ClientCommunicator {
 		Corn.log("ClientCommunicator receiving");
 
 		try {
-			Results res = myTask.get(5, TimeUnit.SECONDS);
+			Results res = myTask.get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
 			Corn.log("ClientCommunicator res.isSuccess(): " + res.isSuccess());
 			myTask.cancel(true);
 			return res;
@@ -88,7 +89,8 @@ public class ClientCommunicator {
 
 		@Override
 		protected Results doInBackground(Object... objects) {
-
+			if(isCancelled())
+				return new Results(false, new BadUserException("Timeout"));
 			String urlString = (String) objects[0];
 			Object request = (Object) objects[1];
 			User authUser = (User) objects[2];
@@ -103,6 +105,7 @@ public class ClientCommunicator {
 				Corn.log("ClientCommunicator stringToSend: " + stringToSend);
 				URL url = new URL(urlString);
 
+
 				HttpURLConnection http = (HttpURLConnection) url.openConnection();
 
 				http.setRequestMethod("POST");
@@ -114,6 +117,8 @@ public class ClientCommunicator {
 				else
 					http.setDoOutput(false);
 
+				// Set connection timeout
+				http.setConnectTimeout(REQUEST_TIMEOUT * 100);
 				http.connect();
 
 				if(stringToSend != null) {

@@ -11,12 +11,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/playerListNameText"
         android:layout_weight="1"
+        android:textColor="@color/colorMarsDark"
         android:paddingTop="5dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/playerListColorText"
+        android:textColor="@color/colorMarsDark"
         android:layout_weight="1"/>
 
 </LinearLayout>

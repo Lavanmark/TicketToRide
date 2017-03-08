@@ -16,27 +16,29 @@ public class Board {
     private List<Route> routeList;
     private TrainCard[] faceUpCards;
 
-	@JsonIgnore
     private DeckManager deckManager;
 
 	private int longestRoute;
+	private boolean allowDoubles = false;
     //private int longestRoutePlayer; this does not need to be a private data member. never gets used
 
 	private Board(){}
 	/**
 	 * Create a new board with the specified routes in route list
-	 * @param routeList list of routes on the boardmap. Remove double routes prior to call.
+	 * @param routeList list of routes on the boardmap.
 	 */
-    public Board(List<Route> routeList) {
+    public Board(List<Route> routeList, boolean allowDoubles) {
         this.routeList = routeList;
         this.faceUpCards = new TrainCard[FACEUP_DECK_SIZE];
         this.longestRoute = 0;
         //this.longestRoutePlayer = -1;
 	    this.deckManager = null;
+	    this.allowDoubles = allowDoubles;
+        System.out.println("Board built from routeList");
     }
 
     public Board(Board board) {
-        this.routeList = board.getRoutes();
+        this.routeList = new ArrayList<>(board.getRoutes());
 	    this.faceUpCards = new TrainCard[FACEUP_DECK_SIZE];
 	    try {
 		    setFaceUpCards(board.getFaceUpCards());
@@ -45,11 +47,17 @@ public class Board {
 	    }
 	    this.longestRoute = board.getLongestRoute();
 	    //this.longestRoutePlayer = board.getLongestRoutePlayer(player);
+	    this.allowDoubles = board.areDoublesAllowed();
 	    this.deckManager = board.deckManager;
+        System.out.println("Board built from Board");
     }
 
 	public void setDeckManager(DeckManager dm) {
 		deckManager = dm;
+	}
+
+	public boolean areDoublesAllowed() {
+		return allowDoubles;
 	}
 
     public List<Route> getRoutes(){
@@ -83,9 +91,12 @@ public class Board {
     }
 
     public TrainCard drawFromFaceUp(int position) throws GameActionException {
-	    if(faceUpCards.length >= position || position < 0)
+	    if(faceUpCards.length <= position || position < 0)
 		    throw new GameActionException("Position not accessible in Face Up Cards.");
-        return faceUpCards[position];
+	    TrainCard toReturn = faceUpCards[position];
+	    faceUpCards[position] = null;
+	    replaceFaceUpCard();
+	    return toReturn;
     }
 
     public TrainCard drawFromTrainCardDeck() throws GameActionException {
@@ -97,13 +108,15 @@ public class Board {
     public void discard(TrainCard card) throws GameActionException {
         if(deckManager != null)
 	        deckManager.discard(card);
-	    throw new GameActionException("No Deck Manager!");
+	    else
+	        throw new GameActionException("No Deck Manager!");
     }
 
     public void discard(DestinationCard card) throws GameActionException {
         if(deckManager != null)
 	        deckManager.discard(card);
-	    throw new GameActionException("No Deck Manager!");
+	    else
+	        throw new GameActionException("No Deck Manager!");
     }
 
     public DestinationCard drawFromDestinationCardDeck() throws GameActionException {
@@ -115,7 +128,11 @@ public class Board {
     public void updateRoute(Route r){
 	    for(Route route : routeList) {
 		    if(route.getRouteID() == r.getRouteID()) {
-			    //TODO what happens here?
+			    if(!r.equals(route)) {
+				    //copy each var
+			    }
+		    } else if(!allowDoubles && r.isDoubleRoute(route)) {
+				route.markDoubleRoute(r);
 		    }
 	    }
     }
@@ -133,17 +150,40 @@ public class Board {
     }
 
     private void replaceFaceUpCard(){
-
-        //this replaces a card that was drawn from the face up pile
+	    for(int i = 0; i < FACEUP_DECK_SIZE; i++) {
+		    if(faceUpCards[i] == null) {
+			    try {
+				    faceUpCards[i] = drawFromTrainCardDeck();
+			    } catch(GameActionException e) {
+				    e.printStackTrace();
+				    System.out.println("Out of Cards!");
+				    break;
+			    }
+		    }
+	    }
+	    while(shouldResetFaceUp())
+		    resetFaceUp();
     }
 
     private Boolean shouldResetFaceUp(){
-        return false;
-        // if there is a card missing, set the bool to true
+	    int wildcount = 0;
+	    for(int i = 0; i < FACEUP_DECK_SIZE; i++)
+		    if(faceUpCards[i] != null && faceUpCards[i].getColor() == TrainCardColor.WILD)
+			    wildcount++;
+	    return wildcount >= 3;
     }
 
     private void resetFaceUp(){
-        //if there are >3 wild cards then trash all the face up and replace them with new ones.repeat if necessary
+	    for(int i = 0; i < FACEUP_DECK_SIZE; i++) {
+		    try {
+			    discard(faceUpCards[i]);
+			    faceUpCards[i] = drawFromTrainCardDeck();
+		    } catch(GameActionException e) {
+			    e.printStackTrace();
+			    System.out.println("Out of Cards!");
+			    break;
+		    }
+	    }
     }
 
     public TrainCard[] getFaceUpCards() {
@@ -157,5 +197,7 @@ public class Board {
 		        faceUpCards[i] = new TrainCard((cards[i] != null ? cards[i].getColor() : null));
 	    else
 	        throw new GameActionException("List of cards was not correct");
+	    if(shouldResetFaceUp())
+		    resetFaceUp(); //TODO idk if I should put this here...
     }
  }

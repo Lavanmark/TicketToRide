@@ -33,9 +33,9 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 
 	@Override
 	public void execute(IClient client) {
-		Board board = new Board(new MapFactory().getMarsRoutes());
-		board.setDeckManager(new DeckManager());
-
+		//Board board = new Board(new MapFactory().getMarsRoutes(), client.getGame().getGameSize() > 3);
+		//board.setDeckManager(new DeckManager(true));
+		Board board = client.getGame().getBoard();
 		// Deal initial train cards
 		for(int i = 0; i < Game.INITIAL_TRAIN_CARDS; i++) {
 			for(Player p : players) {
@@ -57,10 +57,14 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 				}
 			}
 		}
-		for(Player p : players)
-			Corn.log(p.getTotalTrainCards());
+		for(Player p : players) {
+			if(p.isConductor())
+				p.setTurn(true);
+			else
+				p.setTurn(false);
+		}
 		//TODO make setboard a method on client?
-		client.getGame().setBoard(board);
+		//client.getGame().setBoard(board);
 		client.setPlayerList(players);
 	}
 }
