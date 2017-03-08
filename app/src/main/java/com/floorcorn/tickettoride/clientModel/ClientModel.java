@@ -2,9 +2,6 @@ package com.floorcorn.tickettoride.clientModel;
 
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.UIFacade;
-import com.floorcorn.tickettoride.communication.Message;
-import com.floorcorn.tickettoride.exceptions.GameActionException;
-import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.Player;
@@ -30,7 +27,7 @@ public class ClientModel extends Observable {
 	public ClientModel() {
 		currentGame = null;
 		currentUser = null;
-		gameList = new HashSet<GameInfo>();
+		gameList = new HashSet<>();
 	}
 
     public User getCurrentUser() {
@@ -44,7 +41,7 @@ public class ClientModel extends Observable {
     public Set<GameInfo> getGames(User user) {
         if(user == null)
 	        return null;
-        Set<GameInfo> gameSet = new HashSet<GameInfo>();
+        Set<GameInfo> gameSet = new HashSet<>();
         for(GameInfo gi : gameList) {
             if(gi.isPlayer(user.getUserID())) // found the player inside of the list
                 gameSet.add(gi);

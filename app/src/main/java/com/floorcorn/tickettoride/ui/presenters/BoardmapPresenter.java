@@ -3,7 +3,6 @@ package com.floorcorn.tickettoride.ui.presenters;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -24,11 +23,7 @@ import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -66,7 +61,6 @@ public class BoardmapPresenter implements IPresenter, Observer {
     @Override
     public void update(Observable o, Object arg) {
         if(arg instanceof Game) {
-			getChanges((Game)arg);
 	        game = (Game)arg;
 	        if(!game.hasStarted()) {
 		        view.checkStarted();
@@ -109,20 +103,6 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	public void register() {
 		UIFacade.getInstance().registerObserver(this);
 	}
-
-
-    //This method compares the old game object to the new one to see what changes have been made.
-    public void getChanges(Game newGame){
-		//System.out.println("Changes being checked");
-        //TrainCardColor newCard = getNewCardDrawn(newGame);
-		//TrainCard card = game.getLastDrawn();
-		//game.setLastDrawn(null);
-        //if(card != null) {
-          //  String toDisplay = "You drew a " + card.getColor().name() + " card";
-            //Toast.makeText(view.getActivity(), toDisplay, Toast.LENGTH_LONG).show();
-       // }
-
-    }
 
     public void displayDrawDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER){
         view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
@@ -361,14 +341,14 @@ public class BoardmapPresenter implements IPresenter, Observer {
         view.displayHandDrawer();
         view.displayDrawingDeckDrawer();
         final Handler handler = new Handler();
-        //Wait 2 seconds (1 from previous method) then draw from slot 1;
+        //Wait 3 seconds (1 from previous method) then draw from slot 1;
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 drawFromFaceUp(1);
             }
         }, 3000);
-        //Wait 5 seconds, then animate route selection
+        //Wait 3 seconds, then animate draw from top of deck
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -382,7 +362,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                TrainCardColor color = drawTrainCardFromDeck();
+                drawTrainCardFromDeck();
             }
         }, 1000);
         handler.postDelayed(new Runnable() {
