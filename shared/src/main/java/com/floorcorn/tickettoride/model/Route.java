@@ -209,4 +209,20 @@ public class Route {
         sb.append(city1 + " to " + city2);
         return sb.toString();
     }
+
+	public int getValue() {
+		if(length < 3)
+			return length;
+		if(length == 3)
+			return 4;
+		if(length == 4)
+			return 7;
+		if(length == 5)
+			return 10;
+		if(length == 6)
+			return 15;
+		if(length == 7)
+			return 18;
+		return 0;
+	}
 }

@@ -191,6 +191,7 @@ public class Player {
 
 	public void claimRoute(Route route){
 		routesClaimed.add(route);
+		score += route.getValue();
 	}
 
 	public int calcualteLongestRoute(){

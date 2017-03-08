@@ -25,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.UIFacade;
@@ -76,6 +77,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	//elements related to Claiming Route
 	private RecyclerView routeRecyclerView;
+	private RouteRecyclerViewAdapter routeAdapter;
 
 
 
@@ -413,7 +415,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	@Override
 	public void setClaimRoutesList(List<Route> routes) {
 		if(routeDrawerIsOpen())
-			setupRecyclerView(routeRecyclerView, routes);
+			routeAdapter.swapList(routes);
 	}
 
 	@Override
@@ -590,6 +592,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Route> routes) {
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		recyclerView.setAdapter(new RouteRecyclerViewAdapter(routes));
+		assert recyclerView.getAdapter() != null;
+		routeAdapter = (RouteRecyclerViewAdapter) recyclerView.getAdapter();
 	}
 
 	@Override
@@ -665,8 +669,11 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
     @Override
     public void animate_clickClaimRoute(){
-        //TODO: implement this once there is a list of routes available in UI.
-	    //presenter.claimButtonClicked();
+	    if(routeAdapter == null) {
+		    Toast.makeText(this, "Could not find list of routes! Reopen the game!", Toast.LENGTH_SHORT).show();
+		    return;
+	    }
+	    presenter.fakeClaimButtonClicked();
     }
 
 	public class RouteRecyclerViewAdapter
@@ -675,7 +682,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		public List<Route> routes;
 
 		RouteRecyclerViewAdapter(List<Route> routes) {
-			this.routes = routes;
+			this.routes = new ArrayList<>(routes);
 		}
 
 		@Override
@@ -693,7 +700,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			notifyDataSetChanged();
 		}
 
-		public class ViewHolder extends RecyclerView.ViewHolder {
+		class ViewHolder extends RecyclerView.ViewHolder {
 
 			public LinearLayout itemLayout;
 			public TextView city1;
