@@ -462,7 +462,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
                 @Override
                 public void run() {
                     try {
-                        UIFacade.getInstance().animate_sendChatMessage(new Message(p.getName() + ": Hey, i'm a chat message"));
+                        UIFacade.getInstance().animate_sendChatMessage(new Message("Hey, I'm a chat message", game.getGameID(), p.getName()));
                     } catch (BadUserException e){
                         e.printStackTrace();
                     }

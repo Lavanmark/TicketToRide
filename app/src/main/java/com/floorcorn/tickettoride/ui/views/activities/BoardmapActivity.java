@@ -59,6 +59,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	// Button used to show animation; only used for Phase 2 pass off.
 	private Button animateButton;
+	private boolean canAnimate = true;
 
 	// Buttons used to open the drawers.
 	private Button drawCardsButton;
@@ -201,6 +202,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		animateButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				animateButton.setEnabled(false);
+				canAnimate = false;
 				presenter.animate();
 			}
 		});
@@ -350,7 +353,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			claimRouteButton.setEnabled(true);
 			displayHandButton.setEnabled(true);
 			sendMessageBut.setEnabled(true);
-			animateButton.setEnabled(true);
+			animateButton.setEnabled(canAnimate);
 			setupPlayerIcons();
 		}
 	}
@@ -389,15 +392,15 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private int getPlayerColor(PlayerColor pc) {
 		switch(pc) {
 			case RED:
-				return R.color.colorRedPlayer;
+				return Color.rgb(215,8,8);
 			case GREEN:
-				return R.color.colorGreenPlayer;
+				return Color.rgb(22,215,8);
 			case BLACK:
-				return R.color.colorBlackPlayer;
+				return Color.rgb(64,64,64);
 			case BLUE:
-				return R.color.colorBluePlayer;
+				return Color.rgb(8,105,215);
 			case YELLOW:
-				return R.color.colorYellowPlayer;
+				return Color.rgb(213,228,9);
 		}
 		return 0;
 	}
@@ -777,9 +780,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			final Route r = routes.get(position);
 
 			// Set background color of row to match color of the player who owns the route.
-			if (r.getOwner() >= 0)
-				holder.itemView.setBackgroundColor(
-						getPlayerColor(presenter.getPlayerColor(r.getOwner())));
+			//if (r.getOwner() >= 0)
+			//	holder.itemView.setBackgroundColor(
+			//			getPlayerColor(presenter.getPlayerColor(r.getOwner())));
 
 			holder.city1.setText(r.getFirstCity().getName());
 			holder.city2.setText(r.getSecondCity().getName());
