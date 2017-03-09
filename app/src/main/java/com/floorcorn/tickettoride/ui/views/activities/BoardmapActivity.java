@@ -740,7 +740,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			holder.claimButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					presenter.claimButtonClicked(r);
+					presenter.claimButtonClicked(r, presenter.getPlayers().get(0));
 				}
 			});
 			holder.owner.setText(presenter.getPlayerName(r.getOwner()));

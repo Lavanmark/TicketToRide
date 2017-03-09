@@ -296,9 +296,9 @@ public class BoardmapPresenter implements IPresenter, Observer {
 
 	}
 
-	public void claimButtonClicked(Route route) {
+	public void claimButtonClicked(Route route, Player player) {
 		if(route != null) {
-			UIFacade.getInstance().claimRoute(route, UIFacade.getInstance().getUser());
+			UIFacade.getInstance().claimRoute(route, player);
 			Toast.makeText(view.getActivity(), "Claimed route: " + route.getFirstCity().getName() + " to " + route.getSecondCity().getName(), Toast.LENGTH_SHORT).show();
 		} else
 			Toast.makeText(view.getActivity(), "No routes can be claimed!", Toast.LENGTH_SHORT).show();
@@ -310,14 +310,30 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	}
 	public void fakeClaimButtonClicked() {
 		Route route = null;
+        int i = 0;
 		for(Route r : game.getRoutes()) {
-			if(r.canClaim(game.getPlayer(user))) {
+            if(i >= game.getPlayerList().size())
+                break;
+			if(r.canClaim(game.getPlayerList().get(i))) {
 				route = r;
-				break;
+                claimButtonClicked(route, game.getPlayerList().get(i));
+                i++;
 			}
 		}
-		claimButtonClicked(route);
+		claimButtonClicked(route, game.getPlayer(user));
 	}
+
+    public void fakeOtherUserClaimButtonClicked() {
+        Route route = null;
+        for(Route r : game.getRoutes()) {
+            if(r.canClaim(game.getPlayerList().get(1))) {
+                route = r;
+                //claimButtonClicked(route);
+                return;
+            }
+        }
+        //claimButtonClicked(route);
+    }
 
 	public String getPlayerName(int playerID) {
 		for(Player p : game.getPlayerList())
@@ -575,7 +591,8 @@ public class BoardmapPresenter implements IPresenter, Observer {
             @Override
             public void run() {
                 //UIFacade.getInstance().animate_ClaimRouteOtherPlayer();
-                view.animate_clickClaimRoute();
+                //view.animate_clickClaimRoute();
+                //fakeOtherUserClaimButtonClicked();
             }
         }, 1000);
 
