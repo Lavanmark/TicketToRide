@@ -24,13 +24,17 @@
                 android:text="Create Game"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/createGameButton" />
+                android:id="@+id/createGameButton"
+                android:textColor="@color/colorMarsDark"
+                android:backgroundTint="@color/colorMarsComplementary"/>
 
             <Button
                 android:text="Refresh List"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/refreshListButton" />
+                android:id="@+id/refreshListButton"
+                android:textColor="@color/colorMarsDark"
+                android:backgroundTint="@color/colorMarsComplementary"/>
 
     </LinearLayout>
 
