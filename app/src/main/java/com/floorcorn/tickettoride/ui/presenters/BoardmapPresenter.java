@@ -352,23 +352,29 @@ public class BoardmapPresenter implements IPresenter, Observer {
     }
 
     private void animateDraw1(){
-        view.displayHandDrawer();
-        view.displayDrawingDeckDrawer();
+        Toast.makeText(view.getActivity(), "TEST: draw faceup card, then from deck", Toast.LENGTH_LONG).show();
         final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.displayDrawingDeckDrawer();
+                view.displayHandDrawer();
+            }
+        }, 3000);
         //Wait 3 seconds (1 from previous method) then draw from slot 1;
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 drawFromFaceUp(1);
             }
-        }, 3000);
+        }, 6000);
         //Wait 3 seconds, then animate draw from top of deck
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 animateDrawTopDeck();
             }
-        }, 6000);
+        }, 9000);
     }
 
     private void animateDrawTopDeck() {
@@ -382,49 +388,51 @@ public class BoardmapPresenter implements IPresenter, Observer {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                view.hideDrawingDeckDrawer();
                 animateDrawRoutes();
             }
         }, 4000);
     }
 
     private void animateDrawRoutes(){
-        view.hideDrawingDeckDrawer();
         final Handler handler = new Handler();
+        Toast.makeText(view.getActivity(), "TEST: pick from initial destination cards.", Toast.LENGTH_LONG).show();
         //Wait 2 seconds then open route drawer;
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 view.animate_clickDrawDestination();
             }
-        }, 2000);
+        }, 5000);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 view.animate_ClickOnDestinationCards();
             }
-        }, 4000);
+        }, 7000);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 view.animate_takeDestinationCards();
             }
-        }, 6000);
+        }, 9000);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 view.hideDestinationDrawer();
+                Toast.makeText(view.getActivity(), "TEST: chat message from all players.", Toast.LENGTH_LONG).show();
             }
-        }, 7000);
+        }, 11000);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 animateChatMessages();
             }
-        }, 9000);
+        }, 14000);
 
     }
 
@@ -465,7 +473,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 
     private void animateUpdateOtherPlayersTrainCards(){
 
-        Toast.makeText(view.getActivity(), "Updating other player score, destination cards, and train cards", Toast.LENGTH_LONG).show();
+        Toast.makeText(view.getActivity(), "TEST: Update other player score, destination cards, and train cards", Toast.LENGTH_LONG).show();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -488,10 +496,11 @@ public class BoardmapPresenter implements IPresenter, Observer {
             public void run() {
                 animateDrawNewDestinationCards();
             }
-        }, 11000);
+        }, 12500);
     }
 
     private void animateDrawNewDestinationCards(){
+        Toast.makeText(view.getActivity(), "TEST: Drawing additional destination cards", Toast.LENGTH_LONG).show();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -499,28 +508,28 @@ public class BoardmapPresenter implements IPresenter, Observer {
                 view.animate_clickDrawDestination();
                 view.displayHandDrawer();
             }
-        }, 3000);
+        }, 6000);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 view.animate_clickDrawDestinationDeck();
             }
-        }, 4500);
+        }, 7500);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 view.animate_ClickOnDestinationCards();
             }
-        }, 6000);
+        }, 9000);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 view.animate_takeDestinationCards();
             }
-        }, 7200);
+        }, 12000);
 
         handler.postDelayed(new Runnable() {
             @Override
@@ -528,17 +537,19 @@ public class BoardmapPresenter implements IPresenter, Observer {
                 view.hideDestinationDrawer();
                 view.hideHandDrawer();
             }
-        }, 8200);
+        }, 15000);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                Toast.makeText(view.getActivity(), "TEST: claiming routes", Toast.LENGTH_LONG).show();
                 animationPlaceRoute_Player();
             }
-        }, 8500);
+        }, 18000);
     }
 
     private void animationPlaceRoute_Player(){
+        Toast.makeText(view.getActivity(), "TEST: claiming routes", Toast.LENGTH_LONG).show();
         view.animate_clickOpenRouteDrawer();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -547,14 +558,14 @@ public class BoardmapPresenter implements IPresenter, Observer {
                 //UIFacade.getInstance().animate_ClaimRoute();
                 view.animate_clickClaimRoute();
             }
-        }, 1000);
+        }, 7000);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 animationPlaceRoute_OtherPlayer();
             }
-        }, 4500);
+        }, 10500);
 
     }
 
