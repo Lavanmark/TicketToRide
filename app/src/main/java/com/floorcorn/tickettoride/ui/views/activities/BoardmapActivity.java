@@ -342,6 +342,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			claimRouteButton.setEnabled(false);
 			drawCardsButton.setEnabled(false);
 			sendMessageBut.setEnabled(false);
+			animateButton.setEnabled(false);
 		} else {
 			presenter.startPollingCommands();
 			drawDestinationTicketsButton.setEnabled(true);
@@ -349,6 +350,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			claimRouteButton.setEnabled(true);
 			displayHandButton.setEnabled(true);
 			sendMessageBut.setEnabled(true);
+			animateButton.setEnabled(true);
 			setupPlayerIcons();
 		}
 	}
@@ -790,7 +792,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			holder.claimButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					presenter.claimButtonClicked(r);
+					presenter.claimButtonClicked(r, presenter.getPlayers().get(0));
 				}
 			});
 			holder.owner.setText(presenter.getPlayerName(r.getOwner()));

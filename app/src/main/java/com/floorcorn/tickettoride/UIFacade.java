@@ -49,7 +49,7 @@ public class UIFacade {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
         serverProxy.setPort("8080");
-        serverProxy.setHost("10.24.215.82");
+        serverProxy.setHost("192.168.29.234");
 
         poller = new Poller(serverProxy, clientModelRoot);
     }
@@ -489,6 +489,11 @@ public class UIFacade {
     public void claimRoute(Route route, User user) {
         clientModelRoot.getCurrentGame().claimRoute(route, clientModelRoot.getCurrentGame().getPlayer(user));
 	    clientModelRoot.notifyGameChanged();
+    }
+
+    public void claimRoute(Route route, Player player) {
+        clientModelRoot.getCurrentGame().claimRoute(route, player);
+        clientModelRoot.notifyGameChanged();
     }
 
     public List<Route> getAvailableRoutes() {
