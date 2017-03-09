@@ -57,31 +57,29 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private final int MAXFACEUP = 5;
 	private Board boardmap;
 
-	//button used to show animation
+	// Button used to show animation; only used for Phase 2 pass off.
 	private Button animateButton;
 
-	// buttons used to open the drawers
+	// Buttons used to open the drawers.
 	private Button drawCardsButton;
 	private Button drawDestinationTicketsButton;
 	private Button claimRouteButton;
 	private Button displayHandButton;
 
-	//elements related to Draw Destination Tickets Drawer
+	// Elements related to Draw Destination Tickets Drawer.
 	private Button drawFromDestinationDeck;
 	private Button keepDestinations;
 	private ImageButton destinationTickets[] = new ImageButton[MAXDESTINATIONS];
 
-	//elements related to Draw Cards Drawer
+	// Elements related to Draw Cards Drawer.
 	private Button drawFromCardDeck;
 	private ImageButton faceupCards[] = new ImageButton[MAXFACEUP];
 
-	//elements related to Claiming Route
+	// Elements related to Claiming Route.
 	private RecyclerView routeRecyclerView;
 	private RouteRecyclerViewAdapter routeAdapter;
 
-
-
-	//elements related to Player's Hand
+	// Elements related to Player's Hand.
 	private TextView redCount;
 	private TextView orangeCount;
 	private TextView yellowCount;
@@ -96,24 +94,25 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	private LinearLayout destinationTicketHolder;
 
-	//elements related to the PlayerStatus/Turn Icons
+	// Elements related to the PlayerStatus/Turn Icons.
 	private LinearLayout playerIcons;
 
-
-	//elements related to the map
-
+	// Elements related to the map.
 
 
-	//elements related to chat
+	// Elements related to chat.
 	private LinearLayout chatLayout;
 	private Button sendMessageBut;
 	private EditText chatTextField;
 
+	/**
+	 * Initial set up for all of the activity's UI elements.
+	 * @param savedInstanceState
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_boardmap);
-
 
 		presenter = new BoardmapPresenter();
 		presenter.setView(this);
@@ -123,7 +122,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		if(getSupportActionBar() != null)
 			getSupportActionBar().setTitle(presenter.getGameName());
 
-		//initialize UI elements
+		// Initialize UI element variables.
 
 		drawDestinationTicketsButton = (Button)findViewById(R.id.open_dest_button);
 		displayHandButton = (Button)findViewById(R.id.open_hand_button);
@@ -145,7 +144,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 		destinationTicketHolder = (LinearLayout)findViewById(R.id.destinationHolder);
 
-		//CHAT
+		// Set up chat stuff.
+
 		final ScrollView scrollView = (ScrollView)findViewById(R.id.chatScroll);
 		scrollView.post(new Runnable() {
 			@Override
@@ -168,6 +168,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			}
 		});
 
+		// More UI set up (drawers and drawer-open button click listeners).
 
 		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
 		final FrameLayout DRAWER_HOLDER = (FrameLayout) findViewById(R.id.left_drawer_holder);
@@ -193,7 +194,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		displayHandButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				DRAWER.openDrawer(GravityCompat.END); //Gravity End is on the right side
+				DRAWER.openDrawer(GravityCompat.END); // Gravity...End is on the right side
 				//TODO maybe this needs its own function to get all this information set up.
 			}
 		});
@@ -203,6 +204,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 				presenter.animate();
 			}
 		});
+
+		// Set player icons to default "blank."
 
 		playerIcons = (LinearLayout)findViewById(R.id.playerTokenHolder);
 		for(int i = 0; i < presenter.getGameSize(); i++) {
@@ -215,10 +218,10 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 		checkStarted();
 		if(!presenter.gameInProgress())
-			launchPreGame();
+			launchPregame();
 	}
 
-	/** These next few methods serve the purposes of the animation and are not needed after that.**/
+	/** These next few methods serve the purposes of the animation and are not needed after that. **/
 
 	@Override
 	public void displayDrawingDeckDrawer(){
@@ -286,6 +289,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		return false;
 	}
 
+	/**
+	 * Unregisters the presenter (Observer pattern) and stops the poller.
+	 */
 	@Override
 	public void onStop(){
 		presenter.unregister();
@@ -293,29 +299,44 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		super.onStop();
 	}
 
+	/**
+	 * Does super.onResume and checks if the game is started.
+	 */
 	@Override
 	protected void onResume(){
 		super.onResume();
 		checkStarted();
 	}
 
-	public void launchPreGame() {
+	/**
+	 * Starts the PregameActivity, meaning the waiting screen that is shown until enough players
+	 * join.
+	 */
+	public void launchPregame() {
 		startActivity(new Intent(BoardmapActivity.this, PregameActivity.class));
 	}
 
+	/**
+	 * Sets the presenter. Throws an IllegalArgumentException if the object (implementing
+	 * IPresenter) is not of type BoardmapPresenter.
+	 * @param presenter the presenter to interact with, implements IPresenter
+	 */
 	@Override
 	public void setPresenter(IPresenter presenter) {
-		if(presenter instanceof BoardmapPresenter)
+		if (presenter instanceof BoardmapPresenter)
 			this.presenter = (BoardmapPresenter)presenter;
 		else
 			throw new IllegalArgumentException();
 	}
 
+	/**
+	 * Enables/disables certain buttons depending on if the game is going or waiting to start.
+	 */
 	@Override
 	public void checkStarted() {
 		if(!presenter.gameInProgress()) {
-			//  TODO: you can click out of the PreGame Activity. Why?
-			//Tyler - IDK how to prevent it and still go back to game list...
+			// Note: User can click out of the Pregame Activity. It's ok because we have disabled
+			// buttons, but maybe in a later version we won't want that to be possible.
 			drawDestinationTicketsButton.setEnabled(false);
 			displayHandButton.setEnabled(false);
 			claimRouteButton.setEnabled(false);
@@ -334,6 +355,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		}
 	}
 
+	/**
+	 * Set up player icons once there are enough players to start game / fill all spots.
+	 */
 	private void setupPlayerIcons() {
 		ArrayList<Player> players = presenter.getPlayers();
 		for(final Player p : players) {
@@ -344,11 +368,11 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 				button.setTextColor(Color.WHITE);
 			button.setText(p.getName());
 			button.setBackgroundColor(getPlayerColor(p.getColor()));
-			//TODO check if the player is self. If so it should open the drawer.
+			// TODO (future phases) check if the player is self. If so it should open the drawer.
 			button.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					//TODO might need to update on every player list because p is final
+					// TODO (future phases) might need to update on every player list because p is final
 					Snackbar snackbar = Snackbar.make(playerIcons, p.getCriticalPlayerInfo(), Snackbar.LENGTH_LONG);
 					((TextView)snackbar.getView().findViewById(android.support.design.R.id.snackbar_text)).setMaxLines(6);
 					snackbar.show();
@@ -357,6 +381,11 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		}
 	}
 
+	/**
+	 * Matches and returns the color we're using in the Activity to the player's color.
+	 * @param pc PlayerColor value (their "game piece")
+	 * @return the color saved in Android resource (R.color. ...)
+	 */
 	private int getPlayerColor(PlayerColor pc) {
 		switch(pc) {
 			case RED:
@@ -373,6 +402,10 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		return 0;
 	}
 
+	/**
+	 * Sets the visible chat log.
+	 * @param log GameChatLog object
+	 */
 	@Override
 	public void setChatLog(GameChatLog log) {
 		chatLayout.removeAllViews();
@@ -395,12 +428,12 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		whiteCount.setText(String.valueOf(cards.containsKey(TrainCardColor.WHITE)? cards.get(TrainCardColor.WHITE) : 0));
 		wildCount.setText(String.valueOf(cards.containsKey(TrainCardColor.WILD)? cards.get(TrainCardColor.WILD) : 0));
 
-		//TODO this should probably get its own function
+		// TODO (future phases) this line could be separated, put in a diff function?
 		trainCount.setText(String.valueOf(presenter.getTrainCars()));
 	}
 
 	/**
-	 * This is in the player hand
+	 * This is in the player hand.
 	 * @param destinationCardList
 	 */
 	@Override
@@ -432,6 +465,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			buildDestinationDrawer();
 	}
 
+	/**
+	 * Sets the visible, drawable cards.
+	 */
 	private void setFaceupImages() {
 		faceupCards[0] = (ImageButton)findViewById(R.id.card1);
 		faceupCards[1] = (ImageButton)findViewById(R.id.card2);
@@ -508,7 +544,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		}
 	}
 	/**
-	 *
+	 * Displays the destination card drawer.
 	 * @param DRAWER The layout of the Boardmap Activity
 	 * @param DRAWER_HOLDER The layout of the frame that opens the drawer
 	 */
@@ -519,15 +555,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		buildDestinationDrawer();
 	}
 
+	/**
+	 * Sets up the destination cards drawer. (High level functionality needs: there are a few
+	 * destination cards and user has to choose which to keep. These UI elements help with that.)
+	 */
 	private void buildDestinationDrawer() {
-		drawFromDestinationDeck = (Button)findViewById(R.id.draw_from_dest_deck);
+		drawFromDestinationDeck = (Button) findViewById(R.id.draw_from_dest_deck);
 		drawFromDestinationDeck.setEnabled(false);
 		keepDestinations = (Button) findViewById(R.id.keepCards);
 		keepDestinations.setEnabled(false);
 
 		setDestinationImages();
 
-		if(presenter.getDiscardableCount() == 0) {
+		if (presenter.getDiscardableCount() == 0) {
 			presenter.setDiscarding(false);
 			drawFromDestinationDeck.setEnabled(true);
 			drawFromDestinationDeck.setOnClickListener(new View.OnClickListener() {
@@ -539,7 +579,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			});
 		} else {
 			presenter.setDiscarding(true);
-			//Set images
+
+			// Set images.
 			for(int i = 0; i < MAXDESTINATIONS; i++) {
 				destinationTickets[i].setOnClickListener(new View.OnClickListener() {
 					@Override
@@ -557,7 +598,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 				});
 			}
 
-			//Setup keep button
+			// Setup "keep button."
 			keepDestinations.setEnabled(false);
 			keepDestinations.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -583,11 +624,11 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		routeRecyclerView = (RecyclerView) findViewById(R.id.route_recycler);
 		assert routeRecyclerView != null;
 		List<Route> routes = presenter.getRoutes();
-		setupRecyclerView((RecyclerView)routeRecyclerView, routes);
+		setupRecyclerView((RecyclerView) routeRecyclerView, routes);
 	}
 
 	/**
-	 * This sets up the Recycler view with an adapter
+	 * This sets up the Recycler view with an adapter.
 	 *
 	 * @param recyclerView
 	 */
@@ -617,6 +658,10 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		Corn.log("Left drawer opened");
 	}
 
+	/**
+	 * Sends user back to login activity. Uses FLAG_ACTIVITY_CLEAR_TOP to clear the activities above
+	 * it in the stack.
+	 */
 	@Override
 	public void backToLogin() {
 		startActivity(new Intent(BoardmapActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -678,6 +723,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		presenter.fakeClaimButtonClicked();
 	}
 
+	/**
+	 * This is for showing all the routes. It shows a grid, each row corresponding to a route.
+	 */
 	public class RouteRecyclerViewAdapter
 			extends RecyclerView.Adapter<RouteRecyclerViewAdapter.ViewHolder> {
 
@@ -727,8 +775,12 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, int position) {
 			final Route r = routes.get(position);
+
+			// Set background color of row to match color of the player who owns the route.
 			if (r.getOwner() >= 0)
-				holder.itemView.setBackgroundColor(getPlayerColor(presenter.getPlayerColor(r.getOwner())));
+				holder.itemView.setBackgroundColor(
+						getPlayerColor(presenter.getPlayerColor(r.getOwner())));
+
 			holder.city1.setText(r.getFirstCity().getName());
 			holder.city2.setText(r.getSecondCity().getName());
 			holder.routeColor.setText(r.getColor().toString());
