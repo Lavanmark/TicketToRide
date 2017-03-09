@@ -369,10 +369,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			else
 				button.setTextColor(Color.WHITE);
 			button.setText(p.getName());
-//			button.setBackgroundColor(ContextCompat.getColor(
-//					getBaseContext(),
-//					getPlayerColor(p.getColor()))
-//			);
 			button.setBackgroundColor(getPlayerColor(p.getColor()));
 			// TODO (future phases) check if the player is self. If so it should open the drawer.
 			button.setOnClickListener(new View.OnClickListener() {
@@ -388,11 +384,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	}
 
 	/**
-	 * Matches and returns the color we're using in the Activity to the player's color.
+	 * Matches and returns the color we're using in the Activity to the player's color. If the
+	 * value passed in is not one of the PlayerColors (RED, GREEN, BLUE, YELLOW, BLACK) this
+	 * will return the color white.
+	 * @pre pc param is a valid PlayerColor
+	 * @post returns a valid color for use in Android UI stuff
 	 * @param pc PlayerColor value (their "game piece")
 	 * @return the color saved in Android resource (R.color. ...)
 	 */
 	private int getPlayerColor(PlayerColor pc) {
+
+		if (pc == null)
+			return ContextCompat.getColor(getBaseContext(), R.color.colorNotAPlayer);
+
 		int val;
 		switch(pc) {
 			case RED:
@@ -409,8 +413,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 				break;
 			case BLACK:
 				val = R.color.colorBlackPlayer;
+				break;
 			default:
-				val = 0;
+				val = R.color.colorNotAPlayer;
 		}
 		return ContextCompat.getColor(getBaseContext(), val);
 	}
@@ -802,17 +807,15 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 					presenter.claimButtonClicked(r, presenter.getPlayers().get(0));
 				}
 			});
+
+			// Set some information (name and color) for the person who owns the route.
+			holder.owner.setTextColor(0xff000000);
 			holder.owner.setText(presenter.getPlayerName(r.getOwner()));
-
-
-			// Set background color of row to match color of the player who owns the route.
-			// TODO: some routes are getting background colors that shouldn't. Probably
-			//		has to do with the "final."
-//			if (r.isClaimed()) {
-//				PlayerColor pc = presenter.getPlayerColor(r.getOwner());
-//				if (pc != null)
-//					holder.itemView.setBackgroundColor(getPlayerColor(pc));
-//			}
+			// This will reset the background color to white (important because a RecyclerView
+			// recycles its elements) if the route is unclaimed, or it will set the background color
+			// to match the player that owns it.
+			PlayerColor pc = presenter.getPlayerColor(r.getOwner());
+			holder.itemView.setBackgroundColor(getPlayerColor(pc));
 		}
 
 		/**
