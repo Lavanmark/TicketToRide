@@ -49,7 +49,7 @@ public class UIFacade {
         clientModelRoot = new ClientModel();
         serverProxy = new ServerProxy();
         serverProxy.setPort("8080");
-        serverProxy.setHost("192.168.0.100");
+        serverProxy.setHost("192.168.29.234");
 
         poller = new Poller(serverProxy, clientModelRoot);
     }
@@ -394,7 +394,6 @@ public class UIFacade {
 
     /** This method adds one train card to another player's hand. Just for animation. **/
     public void animate_AddTrainCardForOtherPlayer(){
-        Player p = clientModelRoot.getCurrentGame().getPlayerList().get(0);
         if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
             Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
             TrainCard t = new TrainCard(TrainCardColor.GREEN);
@@ -406,7 +405,6 @@ public class UIFacade {
 
     /** This method also is solely for animation purposes **/
     public void animate_AddDestinationCardForOtherPlayer(){
-        Player p = clientModelRoot.getCurrentGame().getPlayerList().get(0);
         if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
             Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
             City c = new City("city");
@@ -417,26 +415,10 @@ public class UIFacade {
 
     /** This method also is solely for animation purposes **/
     public void animate_UpdatePointsForOtherPlayer(){
-        Player p = clientModelRoot.getCurrentGame().getPlayerList().get(0);
         if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
             Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
             p2.setScore(p2.getScore() + 4);
         }
-    }
-
-    public void animate_ClaimRoute(){
-        Player p = clientModelRoot.getCurrentGame().getPlayerList().get(0);
-        Route r = clientModelRoot.getCurrentGame().getAvailableRoutes().get(0);
-        p.claimRoute(r);
-    }
-
-    public void animate_ClaimRouteOtherPlayer(){
-        if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
-            Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
-            Route r = clientModelRoot.getCurrentGame().getAvailableRoutes().get(7);
-            p2.claimRoute(r);
-        }
-
     }
 
     /** This method also is solely for animation purposes **/
@@ -507,6 +489,11 @@ public class UIFacade {
     public void claimRoute(Route route, User user) {
         clientModelRoot.getCurrentGame().claimRoute(route, clientModelRoot.getCurrentGame().getPlayer(user));
 	    clientModelRoot.notifyGameChanged();
+    }
+
+    public void claimRoute(Route route, Player player) {
+        clientModelRoot.getCurrentGame().claimRoute(route, player);
+        clientModelRoot.notifyGameChanged();
     }
 
     public List<Route> getAvailableRoutes() {

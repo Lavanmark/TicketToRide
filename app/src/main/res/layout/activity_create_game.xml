@@ -14,12 +14,14 @@
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
+        android:textColor="@color/colorMarsDark"
         android:layout_height="wrap_content"
         android:id="@+id/createGameNamePrompt">
 
 
         <EditText
             android:id="@+id/gameNameField"
+            android:textColor="@color/colorMarsDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/prompt_gamename" />
@@ -31,6 +33,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/chooseColorText"
         android:text="@string/prompt_color"
+        android:textColor="@color/colorMarsDark"
         android:layout_below="@id/createGameNamePrompt"/>
 
     <Spinner
@@ -38,6 +41,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/colorSpinner"
         android:layout_weight="1"
+        android:textColor="@color/colorMarsDark"
         android:layout_below="@id/chooseColorText"/>
 
     <TextView
@@ -45,6 +49,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/choosePlayersText"
         android:text="@string/prompt_player_allowance"
+        android:textColor="@color/colorMarsDark"
         android:layout_below="@id/colorSpinner"/>
 
     <Spinner
@@ -52,6 +57,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/playerSpinner"
         android:layout_weight="1"
+        android:textColor="@color/colorMarsDark"
         android:layout_below="@id/choosePlayersText"/>
 
 
@@ -62,6 +68,8 @@
         android:id="@+id/createGameButton"
         android:layout_below="@+id/playerSpinner"
         android:layout_alignParentLeft="true"
+        android:textColor="@color/colorMarsDark"
+        android:backgroundTint="@color/colorMarsComplementary"
         android:layout_alignParentStart="true"/>
 
 </RelativeLayout>

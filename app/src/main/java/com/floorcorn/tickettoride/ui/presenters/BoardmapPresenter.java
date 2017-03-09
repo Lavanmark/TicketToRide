@@ -3,7 +3,6 @@ package com.floorcorn.tickettoride.ui.presenters;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -17,6 +16,7 @@ import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
+import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
@@ -24,11 +24,7 @@ import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -66,7 +62,6 @@ public class BoardmapPresenter implements IPresenter, Observer {
     @Override
     public void update(Observable o, Object arg) {
         if(arg instanceof Game) {
-			getChanges((Game)arg);
 	        game = (Game)arg;
 	        if(!game.hasStarted()) {
 		        view.checkStarted();
@@ -109,20 +104,6 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	public void register() {
 		UIFacade.getInstance().registerObserver(this);
 	}
-
-
-    //This method compares the old game object to the new one to see what changes have been made.
-    public void getChanges(Game newGame){
-		//System.out.println("Changes being checked");
-        //TrainCardColor newCard = getNewCardDrawn(newGame);
-		//TrainCard card = game.getLastDrawn();
-		//game.setLastDrawn(null);
-        //if(card != null) {
-          //  String toDisplay = "You drew a " + card.getColor().name() + " card";
-            //Toast.makeText(view.getActivity(), toDisplay, Toast.LENGTH_LONG).show();
-       // }
-
-    }
 
     public void displayDrawDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER){
         view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
@@ -315,9 +296,9 @@ public class BoardmapPresenter implements IPresenter, Observer {
 
 	}
 
-	public void claimButtonClicked(Route route) {
+	public void claimButtonClicked(Route route, Player player) {
 		if(route != null) {
-			UIFacade.getInstance().claimRoute(route, UIFacade.getInstance().getUser());
+			UIFacade.getInstance().claimRoute(route, player);
 			Toast.makeText(view.getActivity(), "Claimed route: " + route.getFirstCity().getName() + " to " + route.getSecondCity().getName(), Toast.LENGTH_SHORT).show();
 		} else
 			Toast.makeText(view.getActivity(), "No routes can be claimed!", Toast.LENGTH_SHORT).show();
@@ -329,14 +310,30 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	}
 	public void fakeClaimButtonClicked() {
 		Route route = null;
+        int i = 0;
 		for(Route r : game.getRoutes()) {
-			if(r.canClaim(game.getPlayer(user))) {
+            if(i >= game.getPlayerList().size())
+                break;
+			if(r.canClaim(game.getPlayerList().get(i))) {
 				route = r;
-				break;
+                claimButtonClicked(route, game.getPlayerList().get(i));
+                i++;
 			}
 		}
-		claimButtonClicked(route);
+		claimButtonClicked(route, game.getPlayer(user));
 	}
+
+    public void fakeOtherUserClaimButtonClicked() {
+        Route route = null;
+        for(Route r : game.getRoutes()) {
+            if(r.canClaim(game.getPlayerList().get(1))) {
+                route = r;
+                //claimButtonClicked(route);
+                return;
+            }
+        }
+        //claimButtonClicked(route);
+    }
 
 	public String getPlayerName(int playerID) {
 		for(Player p : game.getPlayerList())
@@ -344,6 +341,19 @@ public class BoardmapPresenter implements IPresenter, Observer {
 				return p.getName();
 		return "NONE";
 	}
+
+    /**
+     * Returns the player color corresponding to the player ID. Returns null if playerID does
+     * not correspond to a player.
+     * @param playerID int player's ID
+     * @return PlayerColor object or null
+     */
+	public PlayerColor getPlayerColor(int playerID) {
+        for (Player p : game.getPlayerList())
+            if (p.getPlayerID() == playerID)
+                return p.getColor();
+        return null;
+    }
 
 
     /********************* BEGIN ANIMATION METHODS **********************************/
@@ -358,23 +368,29 @@ public class BoardmapPresenter implements IPresenter, Observer {
     }
 
     private void animateDraw1(){
-        view.displayHandDrawer();
-        view.displayDrawingDeckDrawer();
+        Toast.makeText(view.getActivity(), "TEST: draw faceup card, then from deck", Toast.LENGTH_LONG).show();
         final Handler handler = new Handler();
-        //Wait 2 seconds (1 from previous method) then draw from slot 1;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.displayDrawingDeckDrawer();
+                view.displayHandDrawer();
+            }
+        }, 3000);
+        //Wait 3 seconds (1 from previous method) then draw from slot 1;
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 drawFromFaceUp(1);
             }
-        }, 3000);
-        //Wait 5 seconds, then animate route selection
+        }, 6000);
+        //Wait 3 seconds, then animate draw from top of deck
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 animateDrawTopDeck();
             }
-        }, 6000);
+        }, 9000);
     }
 
     private void animateDrawTopDeck() {
@@ -382,55 +398,57 @@ public class BoardmapPresenter implements IPresenter, Observer {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                TrainCardColor color = drawTrainCardFromDeck();
+                drawTrainCardFromDeck();
             }
         }, 1000);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                view.hideDrawingDeckDrawer();
                 animateDrawRoutes();
             }
         }, 4000);
     }
 
     private void animateDrawRoutes(){
-        view.hideDrawingDeckDrawer();
         final Handler handler = new Handler();
+        Toast.makeText(view.getActivity(), "TEST: pick from initial destination cards.", Toast.LENGTH_LONG).show();
         //Wait 2 seconds then open route drawer;
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 view.animate_clickDrawDestination();
             }
-        }, 2000);
+        }, 5000);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 view.animate_ClickOnDestinationCards();
             }
-        }, 4000);
+        }, 7000);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 view.animate_takeDestinationCards();
             }
-        }, 6000);
+        }, 9000);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 view.hideDestinationDrawer();
+                Toast.makeText(view.getActivity(), "TEST: chat message from all players.", Toast.LENGTH_LONG).show();
             }
-        }, 7000);
+        }, 11000);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 animateChatMessages();
             }
-        }, 9000);
+        }, 14000);
 
     }
 
@@ -471,7 +489,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 
     private void animateUpdateOtherPlayersTrainCards(){
 
-        Toast.makeText(view.getActivity(), "Updating other player score, destination cards, and train cards", Toast.LENGTH_LONG).show();
+        Toast.makeText(view.getActivity(), "TEST: Update other player score, destination cards, and train cards", Toast.LENGTH_LONG).show();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -494,10 +512,11 @@ public class BoardmapPresenter implements IPresenter, Observer {
             public void run() {
                 animateDrawNewDestinationCards();
             }
-        }, 11000);
+        }, 12500);
     }
 
     private void animateDrawNewDestinationCards(){
+        Toast.makeText(view.getActivity(), "TEST: Drawing additional destination cards", Toast.LENGTH_LONG).show();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -505,28 +524,28 @@ public class BoardmapPresenter implements IPresenter, Observer {
                 view.animate_clickDrawDestination();
                 view.displayHandDrawer();
             }
-        }, 3000);
+        }, 6000);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 view.animate_clickDrawDestinationDeck();
             }
-        }, 4500);
+        }, 7500);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 view.animate_ClickOnDestinationCards();
             }
-        }, 6000);
+        }, 9000);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 view.animate_takeDestinationCards();
             }
-        }, 7200);
+        }, 12000);
 
         handler.postDelayed(new Runnable() {
             @Override
@@ -534,17 +553,19 @@ public class BoardmapPresenter implements IPresenter, Observer {
                 view.hideDestinationDrawer();
                 view.hideHandDrawer();
             }
-        }, 8200);
+        }, 15000);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                Toast.makeText(view.getActivity(), "TEST: claiming routes", Toast.LENGTH_LONG).show();
                 animationPlaceRoute_Player();
             }
-        }, 8500);
+        }, 18000);
     }
 
     private void animationPlaceRoute_Player(){
+        Toast.makeText(view.getActivity(), "TEST: claiming routes", Toast.LENGTH_LONG).show();
         view.animate_clickOpenRouteDrawer();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -553,14 +574,14 @@ public class BoardmapPresenter implements IPresenter, Observer {
                 //UIFacade.getInstance().animate_ClaimRoute();
                 view.animate_clickClaimRoute();
             }
-        }, 1000);
+        }, 7000);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 animationPlaceRoute_OtherPlayer();
             }
-        }, 4500);
+        }, 10500);
 
     }
 
@@ -570,7 +591,8 @@ public class BoardmapPresenter implements IPresenter, Observer {
             @Override
             public void run() {
                 //UIFacade.getInstance().animate_ClaimRouteOtherPlayer();
-                view.animate_clickClaimRoute();
+                //view.animate_clickClaimRoute();
+                //fakeOtherUserClaimButtonClicked();
             }
         }, 1000);
 

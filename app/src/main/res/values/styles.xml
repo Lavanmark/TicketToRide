@@ -10,7 +10,7 @@
 
     <style name="LoginTheme">
         <item name="android:typeface">serif</item>
-        <item name="android:textColor">@color/color_text_default</item>
+        <item name="android:textColor">@color/colorMarsComplementaryDark</item>
         <item name="android:textSize">@dimen/heading_login</item>
     </style>
 

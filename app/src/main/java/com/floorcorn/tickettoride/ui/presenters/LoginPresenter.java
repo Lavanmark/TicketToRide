@@ -9,7 +9,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- * Created by mgard on 2/4/2017.
+ * Created by Michael on 2/4/2017.
  */
 
 public class LoginPresenter implements IPresenter, Observer {
@@ -18,7 +18,7 @@ public class LoginPresenter implements IPresenter, Observer {
     private User user;
 
     /**
-     * Default constructor for LoginPresenter class. Registers itself with UI facade as observer
+     * Default constructor for LoginPresenter class.
      *
      * @post a new instance of LoginPresenter is created.
      */
