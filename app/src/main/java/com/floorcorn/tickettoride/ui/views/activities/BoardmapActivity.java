@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -216,6 +217,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			but.setText("PLAYER " + i);
 			but.setTextColor(Color.WHITE);
 			but.setBackgroundColor(Color.GRAY);
+			but.setPadding(20, 0, 20, 0);
 			playerIcons.addView(but);
 		}
 
@@ -385,24 +387,40 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	}
 
 	/**
-	 * Matches and returns the color we're using in the Activity to the player's color.
+	 * Matches and returns the color we're using in the Activity to the player's color. If the
+	 * value passed in is not one of the PlayerColors (RED, GREEN, BLUE, YELLOW, BLACK) this
+	 * will return the color white.
+	 * @pre pc param is a valid PlayerColor
+	 * @post returns a valid color for use in Android UI stuff
 	 * @param pc PlayerColor value (their "game piece")
 	 * @return the color saved in Android resource (R.color. ...)
 	 */
 	private int getPlayerColor(PlayerColor pc) {
+
+		if (pc == null)
+			return ContextCompat.getColor(getBaseContext(), R.color.colorNotAPlayer);
+
+		int val;
 		switch(pc) {
 			case RED:
-				return Color.rgb(215,8,8);
+				val = R.color.colorRedPlayer;
+				break;
 			case GREEN:
-				return Color.rgb(22,215,8);
-			case BLACK:
-				return Color.rgb(64,64,64);
+				val = R.color.colorGreenPlayer;
+				break;
 			case BLUE:
-				return Color.rgb(8,105,215);
+				val = R.color.colorBluePlayer;
+				break;
 			case YELLOW:
-				return Color.rgb(213,228,9);
+				val = R.color.colorYellowPlayer;
+				break;
+			case BLACK:
+				val = R.color.colorBlackPlayer;
+				break;
+			default:
+				val = R.color.colorNotAPlayer;
 		}
-		return 0;
+		return ContextCompat.getColor(getBaseContext(), val);
 	}
 
 	/**
@@ -778,12 +796,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, int position) {
 			final Route r = routes.get(position);
-
-			// Set background color of row to match color of the player who owns the route.
-			//if (r.getOwner() >= 0)
-			//	holder.itemView.setBackgroundColor(
-			//			getPlayerColor(presenter.getPlayerColor(r.getOwner())));
-
 			holder.city1.setText(r.getFirstCity().getName());
 			holder.city2.setText(r.getSecondCity().getName());
 			holder.routeColor.setText(r.getColor().toString());
@@ -798,7 +810,15 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 					presenter.claimButtonClicked(r, presenter.getPlayers().get(0));
 				}
 			});
+
+			// Set some information (name and color) for the person who owns the route.
+			holder.owner.setTextColor(0xff000000);
 			holder.owner.setText(presenter.getPlayerName(r.getOwner()));
+			// This will reset the background color to white (important because a RecyclerView
+			// recycles its elements) if the route is unclaimed, or it will set the background color
+			// to match the player that owns it.
+			PlayerColor pc = presenter.getPlayerColor(r.getOwner());
+			holder.itemView.setBackgroundColor(getPlayerColor(pc));
 		}
 
 		/**

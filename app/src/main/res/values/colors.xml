@@ -25,4 +25,5 @@
     <color name="colorGreenPlayer">#46d650</color>
     <color name="colorYellowPlayer">#ccc10a</color>
     <color name="colorBluePlayer">#4f8bea</color>
+    <color name="colorNotAPlayer">#ffffff</color>
 </resources>
