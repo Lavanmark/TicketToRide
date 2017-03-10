@@ -130,26 +130,58 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	 */
 	private RouteRecyclerViewAdapter routeAdapter;
 
-	// Elements related to Player's Hand.
+	/**
+	 * TextView showing number of red cards in the player's hand.
+	 */
 	private TextView redCount;
+	/**
+	 * TextView showing number of orange cards in the player's hand.
+	 */
 	private TextView orangeCount;
+	/**
+	 * TextView showing number of yellow cards in the player's hand.
+	 */
 	private TextView yellowCount;
+	/**
+	 * TextView showing number of green cards in the player's hand.
+	 */
 	private TextView greenCount;
+	/**
+	 * TextView showing number of blue cards in the player's hand.
+	 */
 	private TextView blueCount;
+	/**
+	 * TextView showing number of purple cards in the player's hand.
+	 */
 	private TextView purpleCount;
+	/**
+	 * TextView showing number of black cards in the player's hand.
+	 */
 	private TextView blackCount;
+	/**
+	 * TextView showing number of white cards in the player's hand.
+	 */
 	private TextView whiteCount;
+	/**
+	 * TextView showing number of wild cards in the player's hand.
+	 */
 	private TextView wildCount;
 
+	/**
+	 * TextView showing the train count for the player.
+	 */
 	private TextView trainCount;
 
+	/**
+	 * LinearLayout showing the destination tickets.
+	 */
 	private LinearLayout destinationTicketHolder;
 
-	// Elements related to the PlayerStatus/Turn Icons.
+	/**
+	 * LinearLayout that shows the players. The players are distinguishable by name and color
+	 * and are clickable to see public information such as their score.
+	 */
 	private LinearLayout playerIcons;
-
-	// Elements related to the map.
-
 
 	// Elements related to chat.
 	private LinearLayout chatLayout;
