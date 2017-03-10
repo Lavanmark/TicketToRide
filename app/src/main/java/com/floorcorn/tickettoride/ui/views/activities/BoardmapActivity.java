@@ -52,14 +52,33 @@ import java.util.Set;
 
 public class BoardmapActivity extends AppCompatActivity implements IBoardmapView, NavigationView.OnNavigationItemSelectedListener   {
 
+	/**
+	 * The presenter that controls this view.
+	 */
 	BoardmapPresenter presenter = null;
 
+	/**
+	 * The constant value for max number of destinations.
+	 */
 	private final int MAXDESTINATIONS = 3;
+	/**
+	 * The constant value for max number of face up cards.
+	 */
 	private final int MAXFACEUP = 5;
+	/**
+	 * The Board is the model representation of the entire board, including the list of routes and
+	 * the decks of cards (implemented through a DeckManager).
+	 */
 	private Board boardmap;
 
-	// Button used to show animation; only used for Phase 2 pass off.
+	/**
+	 * Button used to show animation; only used for Phase 2 pass off.
+ 	 */
 	private Button animateButton;
+	/**
+	 * Boolean used to prevent animation when it shouldn't be available.
+	 * TODO: replace this with State pattern in Phase 3
+	 */
 	private boolean canAnimate = true;
 
 	// Buttons used to open the drawers.
