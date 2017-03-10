@@ -60,6 +60,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	// Button used to show animation; only used for Phase 2 pass off.
 	private Button animateButton;
+	private boolean canAnimate = true;
 
 	// Buttons used to open the drawers.
 	private Button drawCardsButton;
@@ -202,6 +203,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		animateButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				animateButton.setEnabled(false);
+				canAnimate = false;
 				presenter.animate();
 			}
 		});
@@ -352,7 +355,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			claimRouteButton.setEnabled(true);
 			displayHandButton.setEnabled(true);
 			sendMessageBut.setEnabled(true);
-			animateButton.setEnabled(true);
+			animateButton.setEnabled(canAnimate);
 			setupPlayerIcons();
 		}
 	}
