@@ -81,23 +81,53 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	 */
 	private boolean canAnimate = true;
 
-	// Buttons used to open the drawers.
+	/**
+	 * Button used to open the drawer that shows cards to draw.
+	 */
 	private Button drawCardsButton;
+	/**
+	 * Button used to open the drawer that shows destination tickets to draw.
+	 */
 	private Button drawDestinationTicketsButton;
+	/**
+	 * Button used to open the drawer that shows routes to claim.
+	 */
 	private Button claimRouteButton;
+	/**
+	 * Button used to open the drawer that shows the player's hand.
+	 */
 	private Button displayHandButton;
 
-	// Elements related to Draw Destination Tickets Drawer.
+	/**
+	 * Button used to draw from the deck of destination tickets.
+	 */
 	private Button drawFromDestinationDeck;
+	/**
+	 * Button used to keep selected destination tickets.
+	 */
 	private Button keepDestinations;
+	/**
+	 * Button(s) used to signify destination tickets.
+	 */
 	private ImageButton destinationTickets[] = new ImageButton[MAXDESTINATIONS];
 
-	// Elements related to Draw Cards Drawer.
+	/**
+	 * Button used to draw train car card from deck.
+	 */
 	private Button drawFromCardDeck;
+	/**
+	 * Button(s) used to signify face up train car cards.
+	 */
 	private ImageButton faceupCards[] = new ImageButton[MAXFACEUP];
 
-	// Elements related to Claiming Route.
+	/**
+	 * RecyclerView that shows all of the routes (which can easily be loaded from different CSVs
+	 * for different maps... nice since we're doing Ticket to Mars instead of Ticket to Ride).
+	 */
 	private RecyclerView routeRecyclerView;
+	/**
+	 * Adapter for the route RecyclerView.
+	 */
 	private RouteRecyclerViewAdapter routeAdapter;
 
 	// Elements related to Player's Hand.
