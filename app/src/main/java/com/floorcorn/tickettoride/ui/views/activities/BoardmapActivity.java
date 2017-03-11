@@ -203,9 +203,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	 * @pre 0 < numPlayersIn(game) < size(game) || numPlayersIn(game) == size(game)
 	 * @post This Android Activity is created with all of its UI elements.
 	 * @post Mouse click listeners are added to all of the buttons.
-	 * @post Players' info is loaded from server and ready to display.
-	 * @post Chat messages are loaded from server (if there are any) and displayed.
-	 * @post Game status is displayed via the game commands loaded from the server.
+	 * @post if numPlayersin(game) != size(game): start PregameActivity
 	 * @param savedInstanceState
 	 */
 	@Override
@@ -393,6 +391,12 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	/**
 	 * Unregisters the presenter (Observer pattern) and stops the poller.
+	 * @pre Activity has been created
+	 * @pre presenter != null
+	 * @pre the user's screen focus is changing (he left the activity or Android going to sleep,
+	 * 		etc)
+	 * @post presenter unregistered from observing client model
+	 * @post presenter is told to stop polling
 	 */
 	@Override
 	public void onStop(){
@@ -403,6 +407,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	/**
 	 * Does super.onResume and checks if the game is started.
+	 * @pre he user's screen focus is coming back (not creating the Activity but resuming)
+	 * @post call checkStarted() to check if game has started, which may start polling or change
+	 * 		other state things
 	 */
 	@Override
 	protected void onResume(){
@@ -413,6 +420,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	/**
 	 * Starts the PregameActivity, meaning the waiting screen that is shown until enough players
 	 * join.
+	 * @pre 0 < numPlayersIn(game) < size(game)
+	 * @post PregameActivity launched with a new Android Intent (basically a waiting screen)
 	 */
 	public void launchPregame() {
 		startActivity(new Intent(BoardmapActivity.this, PregameActivity.class));
