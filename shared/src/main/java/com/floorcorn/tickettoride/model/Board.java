@@ -413,15 +413,29 @@ public class Board {
 	public TrainCard[] getFaceUpCards() {
         return faceUpCards;
     }
+
+	/**
+	 * Sets the face up cards.
+	 *
+	 * @pre face up cards != null
+	 * @pre param cards != null
+	 * @pre size(param cards) == faceup deck size (constant)
+	 * @pre param cards isn't violating a game rule (probably the only applicable rule is that
+	 * 		there cannot be more than 2 wild cards in the face up cards)
+	 * @post for i = 0 through face up deck size - 1: faceUpCards[i] == new card using
+	 * 		param cards[i]
+	 * @param cards array of TrainCard to set as face up cards
+	 * @throws GameActionException
+	 */
     public void setFaceUpCards(TrainCard[] cards) throws GameActionException {
-	    if(faceUpCards == null)
+	    if (faceUpCards == null)
 		    faceUpCards = new TrainCard[FACEUP_DECK_SIZE];
-        if(cards != null && cards.length == FACEUP_DECK_SIZE)
+        if (cards != null && cards.length == FACEUP_DECK_SIZE)
 	        for(int i = 0; i < FACEUP_DECK_SIZE; i++)
 		        faceUpCards[i] = new TrainCard((cards[i] != null ? cards[i].getColor() : null));
 	    else
 	        throw new GameActionException("List of cards was not correct");
-	    if(shouldResetFaceUp())
+	    if (shouldResetFaceUp())
 		    resetFaceUp(); //TODO idk if I should put this here...
     }
  }
