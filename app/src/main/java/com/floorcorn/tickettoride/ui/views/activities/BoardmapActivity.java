@@ -50,6 +50,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * This BoardmapActivity is an Android Activity that displays all the game board stuff. It has
+ * representations of the train car cards and the destination tickets, the players, the routes,
+ * the map, etc. In addition to typical Android stuff, it implements IBoardmapView.
+ *
+ * @invariant to start one of these, the user is logged in
+ * @invariant 0 < numPlayersIn(game) <= size(game)
+ */
 public class BoardmapActivity extends AppCompatActivity implements IBoardmapView, NavigationView.OnNavigationItemSelectedListener   {
 
 	/**
@@ -198,6 +206,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	/**
 	 * Initial set up for all of the activity's UI elements.
+	 *
 	 * @pre User is logged in
 	 * @pre User has selected from the game list view one of the game's he has joined
 	 * @pre 0 < numPlayersIn(game) < size(game) || numPlayersIn(game) == size(game)
@@ -391,6 +400,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	/**
 	 * Unregisters the presenter (Observer pattern) and stops the poller.
+	 *
 	 * @pre Activity has been created
 	 * @pre presenter != null
 	 * @pre the user's screen focus is changing (he left the activity or Android going to sleep,
@@ -407,6 +417,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	/**
 	 * Does super.onResume and checks if the game is started.
+	 *
 	 * @pre he user's screen focus is coming back (not creating the Activity but resuming)
 	 * @post call checkStarted() to check if game has started, which may start polling or change
 	 * 		other state things
@@ -420,6 +431,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	/**
 	 * Starts the PregameActivity, meaning the waiting screen that is shown until enough players
 	 * join.
+	 *
 	 * @pre 0 < numPlayersIn(game) < size(game)
 	 * @post PregameActivity launched with a new Android Intent (basically a waiting screen)
 	 */
@@ -430,7 +442,11 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	/**
 	 * Sets the presenter. Throws an IllegalArgumentException if the object (implementing
 	 * IPresenter) is not of type BoardmapPresenter.
+	 *
 	 * @param presenter the presenter to interact with, implements IPresenter
+	 * @pre presenter implements IPresenter
+	 * @pre presenter instanceof BoardmapPresenter
+	 * @post presenter field for this BoardmapActivity object is set as presenter
 	 */
 	@Override
 	public void setPresenter(IPresenter presenter) {
@@ -442,6 +458,15 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	/**
 	 * Enables/disables certain buttons depending on if the game is going or waiting to start.
+	 *
+	 * @pre 0 < numPlayersIn(game) <= size(game)
+	 * @post if numPlayersIn(game) < size(game): buttons for animation and showing drawers are
+	 * 		disabled
+	 * @post if numPlayersIn(game) == size(game): poller started
+	 * @post if numPlayersIn(game) == size(game): buttons for animation and showing drawers are
+	 * 		enabled
+	 * @post if numPlayersIn(game) == size(game): call setupPlayerIcons() to display players' info
+	 * 		(implementation is to show buttons at top of screen that show popup data when clicked)
 	 */
 	@Override
 	public void checkStarted() {
@@ -468,6 +493,17 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	/**
 	 * Set up player icons once there are enough players to start game / fill all spots.
+	 *
+	 * @pre numPlayersIn(game) == size(game)
+	 * @post player icons at top of screen are not default, empty, gray boxes
+	 * @post each player icon corresponds to the player in that position of the player list (first
+	 * 		to have a turn is listed first, second is second, etc)
+	 * @post each player icon has the background color of the player's chosen color
+	 * @post each player icon's text is that player's name
+	 * @post click listeners are added to each player icon to display player info on click via
+	 * 		Android Snackbar (calls player.getCriticalPlayerInfo() to retrieve info)
+	 * @post if isTurn(playerOf(aPlayerIcon)): player icon's text color == black
+	 * @post if !isTurn(playerOf(aPlayerIcon)): player icon's text color == white
 	 */
 	private void setupPlayerIcons() {
 		ArrayList<Player> players = presenter.getPlayers();
