@@ -183,13 +183,29 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	 */
 	private LinearLayout playerIcons;
 
-	// Elements related to chat.
+	/**
+	 * LinearLayout that holds chat stuff.
+	 */
 	private LinearLayout chatLayout;
+	/**
+	 * Button for sending chat messages.
+	 */
 	private Button sendMessageBut;
+	/**
+	 * EditText text field for composing chat messages.
+	 */
 	private EditText chatTextField;
 
 	/**
 	 * Initial set up for all of the activity's UI elements.
+	 * @pre User is logged in
+	 * @pre User has selected from the game list view one of the game's he has joined
+	 * @pre 0 < numPlayersIn(game) < size(game) || numPlayersIn(game) == size(game)
+	 * @post This Android Activity is created with all of its UI elements.
+	 * @post Mouse click listeners are added to all of the buttons.
+	 * @post Players' info is loaded from server and ready to display.
+	 * @post Chat messages are loaded from server (if there are any) and displayed.
+	 * @post Game status is displayed via the game commands loaded from the server.
 	 * @param savedInstanceState
 	 */
 	@Override
