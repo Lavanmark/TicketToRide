@@ -62,6 +62,7 @@ public class CommandManager {
 		}
 		//TODO add chain reaction commands.
 		clientProxy.setGameToModify(game);
+		// TODO switch statement that makes new commands if the command results in chain reaction
 		int lastCommandClient = command.getCmdID();
 		command.setCmdID(clientProxy.getLastExecutedCommand());
 		command.execute(clientProxy);
