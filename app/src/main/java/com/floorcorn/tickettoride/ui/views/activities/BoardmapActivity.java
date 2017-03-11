@@ -878,7 +878,13 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	/**
 	 * This sets up the Recycler view with an adapter.
 	 *
-	 * @param recyclerView
+	 * @pre recyclerView != null
+	 * @pre game board initialized so recycler view can be displayed
+	 * @post displays as many lines as fit on screen or until end of list from routes
+	 * @post recycler view is scrollable (showing other items from routes list)
+	 * @post recycler view reuses UI elements (might have persisting style effects, etc)
+	 * @param recyclerView RecyclerView object
+	 * @param routes List of Route objects
 	 */
 	private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Route> routes) {
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -887,16 +893,42 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		routeAdapter = (RouteRecyclerViewAdapter) recyclerView.getAdapter();
 	}
 
+	/**
+	 * Hides route drawer.
+	 *
+	 * @pre game board is initialized so drawer UI elements exist
+	 * @pre route drawer (left side) is visible
+	 * @post route drawer (left side) is hidden
+	 */
 	@Override
 	public void hideRouteDrawer() {
 		closeLeftDrawer();
 	}
 
-	private void closeLeftDrawer(){
+	/**
+	 * Closes left drawer.
+	 *
+	 * @pre game board is initialized so left side drawer exists
+	 * @pre left side drawer is visible
+	 * @post left side drawer is hidden
+	 */
+	private void closeLeftDrawer() {
 		final DrawerLayout DRAWER = (DrawerLayout) findViewById(R.id.boardmapActivity);
 		DRAWER.closeDrawer(GravityCompat.START);
 	}
 
+	/**
+	 * Displayers the left drawer. Might be used for various reasons (drawing cards, showing
+	 * routes list).
+	 *
+	 * @pre game board initialized so drawer UI element(s) exist(s)
+	 * @post delete(old(drawerHolder.views))
+	 * @post adds inflated layout matching drawer ID to the drawer holder
+	 * @post log message says that left drawer was opened
+	 * @param drawerID int ID of the drawer to show
+	 * @param DRAWER DrawerLayout object
+	 * @param DRAWER_HOLDER FrameLayout holder for the drawer
+	 */
 	private void displayLeftDrawer(int drawerID, DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER){
 		LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View layout = inflater.inflate(drawerID, null);
@@ -909,12 +941,25 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	/**
 	 * Sends user back to login activity. Uses FLAG_ACTIVITY_CLEAR_TOP to clear the activities above
 	 * it in the stack.
+	 *
+	 * @pre BoardmapActivity is active
+	 * @pre user either needs to re-login or be kicked out of app (possibly unauthorized user obj)
+	 * @post Android sent back to login Activity
+	 * @post stack of Activities is cleared (cannot go to other Activities from app without going
+	 * 		forward, including log in or registration)
 	 */
 	@Override
 	public void backToLogin() {
 		startActivity(new Intent(BoardmapActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 	}
 
+	/**
+	 * Returns this activity.
+	 *
+	 * @pre game board has been initialized
+	 * @post returns this BoardmapActivity
+	 * @return BoardmapActivity this object
+	 */
 	@Override
 	public Activity getActivity() {
 		return BoardmapActivity.this;
@@ -923,6 +968,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	/**
 	 * Called when an item in the navigation menu is selected.
 	 *
+	 * @pre game board is initialized
+	 * @pre menu item != null
+	 * @post returns signal whether item is selected
 	 * @param item The selected item
 	 * @return true to display the item as the selected item
 	 */
@@ -931,8 +979,11 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		return false;
 	}
 
+//	All functions with prefix "animate_" are used only to show that the drawers are real and that
+//	they work during pass off for Phase 2. They will be deleted after Phase 2, are very
+//	straightforward and self-explanatory.
 	@Override
-	public void animate_ClickOnDestinationCards(){
+	public void animate_ClickOnDestinationCards() {
 		this.destinationTickets[0].performClick();
 		this.destinationTickets[1].performClick();
 	}
