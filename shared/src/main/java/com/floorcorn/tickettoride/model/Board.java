@@ -2,78 +2,96 @@ package com.floorcorn.tickettoride.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.log.Corn;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Created by Kaylee on 2/24/2017.
+ * @author Kaylee Jones
+ * @author Joseph Hansen
  */
 
 /**
- *  This class creates the Board object for Ticket to Ride.
- *  This class stores information that is related to the Board,such as route information,
- *  traincards, the different decks of cards, etc.
+ * This class represents the game board for Ticket to Ride, especially the visible elements of
+ * the game such as the routes and the cards.
+ *
+ * @invariant user is logged in
+ * @invariant each board belongs to a game; to initialize a board, the game must exist
+ * @invariant game rules are honored (such as 0 < numPlayers <= 5)
  */
-
 public class Board {
 	/**
-	 * the max size of the faceup cards
+	 * Constant value number of face up cards.
 	 */
 	public static final int FACEUP_DECK_SIZE = 5;
 
 	/**
-	 *  List of all the routes in the game
+	 * List of Route objects containing all of the routes for this game's board.
 	 */
     private List<Route> routeList;
-
 	/**
-	 * An Array of the cards that lay face up on the side of the board
+	 * Array of TrainCard objects representing the face up cards.
 	 */
     private TrainCard[] faceUpCards;
 
 	/**
-	 * manages the various deck types that are on the board
+	 * DeckManager object that manages the cards and drawing card stuff.
 	 */
     private DeckManager deckManager;
 
 	/**
-	 * stores the length of the longest route currently on the board
+	 * The length of the current longest route in this game.
 	 */
 	private int longestRoute;
-
 	/**
-	 * boolean enables double routes 3-5 players, disables double routes 2 players
+	 * The boolean for whether to allow double routes (allow only for games with more than 3
+	 * players).
 	 */
 	private boolean allowDoubles = false;
 
 	/**
-	 * Constructor - Create a new board with the specified routes in route list
-	 * @param routeList list of routes on the boardmap.
-	 * @param allowDoubles boolean en/disable double routes
+	 * Empty constructor. Constructor with no parameters present for Jackson to work.
 	 *
-	 * @pre the routeList is not null
-	 * @pre the routeList contains routes and is not empty of routes
+	 * @pre (none)
+	 * @post Board object initialized
+	 */
+	private Board() {}
+
+	/**
+	 * Create a new board with the specified routes in route list.
 	 *
-	 * @post a new Board is created with the given information
+	 * @pre routeList != null
+	 * @post this routeList set to param routeList
+	 * @post this allowDoubles set to param allowDoubles
+	 * @post this faceUpCards initialized
+	 * @post longestRoute == 0
+	 * @post deckManager == null
+	 * @param routeList List of Route objects on the Boardmap.
 	 */
     public Board(List<Route> routeList, boolean allowDoubles) {
         this.routeList = routeList;
         this.faceUpCards = new TrainCard[FACEUP_DECK_SIZE];
         this.longestRoute = 0;
+        //this.longestRoutePlayer = -1;
 	    this.deckManager = null;
 	    this.allowDoubles = allowDoubles;
-        System.out.println("Board built from routeList");
+		Corn.log("Board built from routeList");
     }
 
 	/**
-	 * Constructor - Create a new board with a pre-created board object
-	 * @param board object that has been created in another class
+	 * Create a new board with a Board parameter.
 	 *
-	 * @pre board is not null
-	 * @pre board's data members are not null and set with correct information
-	 *
-	 * @post a new Board object is created with the given board object
+	 * @pre param board != null
+	 * @pre param board.getFaceUpCards() != null
+	 * @post routeList == new ArrayList<>(param board.getRoutes())
+	 * @post faceUpCards initialized anew
+	 * @post longestRoute == param board.getLongestroute()
+	 * @post allowDoubles == param board.areDoublesAllowed()
+	 * @post deckManager == param board.deckManager
+	 * @param board Board object to "copy"
 	 */
 	public Board(Board board) {
         this.routeList = new ArrayList<>(board.getRoutes());
@@ -84,110 +102,115 @@ public class Board {
 		    System.err.println(e.getMessage());
 	    }
 	    this.longestRoute = board.getLongestRoute();
+	    //this.longestRoutePlayer = board.getLongestRoutePlayer(player);
 	    this.allowDoubles = board.areDoublesAllowed();
 	    this.deckManager = board.deckManager;
-        System.out.println("Board built from Board");
+        Corn.log("Board built from Board");
     }
 
 	/**
-	 * Setter - sets this.deckManager
-	 * @param dm the incoming deck manager
+	 * Sets the deck manager.
 	 *
-	 * @pre dm is not null
-	 * @post deckManager is set to dm
+	 * @pre param DeckManager dm != null
+	 * @post deckManager == param dm
+	 * @param dm DeckManager object
 	 */
 	public void setDeckManager(DeckManager dm) {
 		deckManager = dm;
 	}
 
 	/**
-	 * Getter - sees if double routes is enabled or not for the board
-	 * @return allowDoubles boolean
+	 * Tells whether this game allows double routes.
 	 *
-	 * @post retval = this.allowDoubles
+	 * @pre (none)
+	 * @post returned allowDoubles
+	 * @return
 	 */
 	public boolean areDoublesAllowed() {
 		return allowDoubles;
 	}
 
 	/**
-	 * Getter - acceses the this.routeList
-	 * @return routeList - the list of routes that a board has
+	 * Returns the route list from this board.
 	 *
-	 * @post retval = this.routeList
+	 * @pre (none)
+	 * @post returned routeList
+	 * @return List of Route objects
 	 */
     public List<Route> getRoutes(){
         return routeList;
     }
 
 	/**
-	 * Setter - sets this.routeList
-	 * @param routes the list of routes a board has
+	 * Sets the route list for this board.
 	 *
-	 * @post routeList is set to routes
+	 * @pre routes != null
+	 * @post routeList == param routes
+	 * @param routes
 	 */
 	private void setRoutes(List<Route> routes) {
 		routeList = routes;
 	}
 
 	/**
-	 * Getter (kinda) - calculates the list of routes that have not been claimed
-	 * @return the list of routes that have not been claimed
+	 * Returns the list of available routes from this board.
 	 *
-	 * @post routes will return the routes available
+	 * @pre routeList is initialized
+	 * @post returned list of routes that are not claimed from routeList
+	 * @post routeList unchanged
+	 * @return List of Route objects available routes
 	 */
-    public List<Route> getAvailableRoutes(){
+    public List<Route> getAvailableRoutes() {
 	    List<Route> routes = new ArrayList<>();
-	    for(Route route : routeList)
-	        if(!route.isClaimed())
+	    for (Route route : routeList)
+	        if (!route.isClaimed())
 		        routes.add(route);
         return routes;
     }
 
 	/**
-	 * Getter (kinda) calculates the routes that are attached to a city
-	 * @param city - a city object that is connected to routes
-	 * @return the list of routes that are attached to the given city
+	 * Returns the list of routes that have the city "city" as an endpoint.
 	 *
-	 * @pre city is not null
-	 * @pre city has at least two routes that it is attached to
-	 * @post cityRoutes >= 2 routes in its list
+	 * @pre city != null
+	 * @post returned sublist of routeList where each route r has one endpoint == param city
+	 * @post routeList unchanged
+	 * @param city City object
+	 * @return List of Route objects routes with city as an endpoint
 	 */
 	public List<Route> getRoutes(City city){
 	    List<Route> cityRoutes = new ArrayList<>();
-	    for(Route route : routeList)
-	        if(route.hasCity(city))
+	    for (Route route : routeList)
+	        if (route.hasCity(city))
 		        cityRoutes.add(route);
         return cityRoutes;
     }
 
 	/**
-	 * Getter (kinda) - calculates the route with the given ID and returns it
-	 * @param routeID the ID of the route in question
-	 * @return the route that has the same routeID
+	 * Gets route with ID that matches routeID.
 	 *
-	 * @pre routeID is an ID in the board
-	 * @post retvalue = route with the ID || retvalue = null
+	 * @pre routeID is a valid integer
+	 * @post if routeID does not match any route in routeList: returned null
+	 * @post if routeID matches a route r in routeList: returned route r
+	 * @param routeID int ID of the route to find
+	 * @return Route object who has route ID or null
 	 */
-	public Route getRoute(int routeID){
-	    for(Route route : routeList)
-	        if(route.getRouteID() == routeID)
+	public Route getRoute(int routeID) {
+	    for (Route route : routeList)
+	        if (route.getRouteID() == routeID)
 		        return route;
         return null;
     }
 
 	/**
-	 * Draws a card from the face up cards using the deckManager
-	 * @param position - an int that tells which card from the pile to pick up
-	 * @return the train card that was drawn from the face up pile
-	 * @throws GameActionException if the deck manager is null
+	 * Draws the card at position "position" (probably because the player selected that position).
 	 *
-	 * @pre position > 5
-	 * @pre position <= 0
-	 * @pre there are face up cards to pick from
-	 * @pre the deckManager != null
-	 * @post train card is drawn from the card pile and added to users hand
-	 * @post train card is replaced from card pile with a new train card from train card deck
+	 * @pre 0 <= position < faceUpCards.length
+	 * @post returned TrainCard at position "position"
+	 * @post face up card spot at position "position" has a new card from deck
+	 * @post deck has one less card in it
+	 * @param position
+	 * @return TrainCard object card drawn
+	 * @throws GameActionException
 	 */
     public TrainCard drawFromFaceUp(int position) throws GameActionException {
 	    if(faceUpCards.length <= position || position < 0)
@@ -199,13 +222,13 @@ public class Board {
     }
 
 	/**
-	 * Draws a card from the train card deck using the deckManager
-	 * @return the train card that was drawn from the train card deck
-	 * @throws GameActionException if the deck manager is null
+	 * Draws the card from the top of the deck.
 	 *
-	 * @pre deck manager is not null
-	 * @post exception thrown if deckManager = null
-	 * @post retval = trainCard from the train card deck
+	 * @pre deckManager != null
+	 * @post returned the train card from the top of the deck
+	 * @post size(train card deck) == size(old(train card deck)) - 1
+	 * @return TrainCard object card drawn
+	 * @throws GameActionException
 	 */
 	public TrainCard drawFromTrainCardDeck() throws GameActionException {
 	    if(deckManager != null)
@@ -214,14 +237,15 @@ public class Board {
     }
 
 	/**
-	 * Discards a card into the TrainCard discard pile using the deckManager class
-	 * @param card from a player's hand that is to be discarded
-	 * @throws GameActionException deckManager is null
+	 * Discards the TrainCard "card."
 	 *
 	 * @pre deckManager != null
-	 * @post exception if deckManager =null
-	 * @post the card is taken from the player's hand and placed into the traincard
-	 * 		discard pile
+	 * @pre card != null)
+	 * @post no one owns TrainCard "card"
+	 * @post deck does not own TrainCard "card"
+	 * @post game has one less train car card
+	 * @param card TrainCard object to discard
+	 * @throws GameActionException
 	 */
 	public void discard(TrainCard card) throws GameActionException {
         if(deckManager != null)
@@ -231,14 +255,15 @@ public class Board {
     }
 
 	/**
-	 * Discards a card into the DestinationCard discard pile using the deckManager class
-	 * @param card from a player's hand that is to be discarded
-	 * @throws GameActionException deckManager is null
+	 * Discards the DestinationCard "card."
 	 *
 	 * @pre deckManager != null
-	 * @post exception if deckManager =null
-	 * @post the card is taken from the player's hand and placed into the destination
-	 * 		card discard pile
+	 * @pre card != null
+	 * @post no one owns DestinationCard "card"
+	 * @post deck does not own DestinationCard "card"
+	 * @game has one less destination ticket
+	 * @param card DestinationCard object to discard
+	 * @throws GameActionException
 	 */
 	public void discard(DestinationCard card) throws GameActionException {
         if(deckManager != null)
@@ -248,169 +273,169 @@ public class Board {
     }
 
 	/**
-	 * Draws a card from the destination card deck using the deckManager
-	 * @return the destination card that was drawn from the destination card deck
-	 * @throws GameActionException if the deck manager is null
+	 * Draw top card from destination card deck.
 	 *
-	 * @pre deck manager is not null
-	 * @post exception thrown if deckManager = null
-	 * @post retval = destinationCard from the destination card deck
+	 * @pre deckManager != null
+	 * @post returned top card on the deck of destination tickets
+	 * @post size(deck of destination tickets) == size(old(deck of destination tickets)) - 1
+	 * @return DestinationCard object card drawn
+	 * @throws GameActionException
 	 */
-    public DestinationCard drawFromDestinationCardDeck() throws GameActionException {
+	public DestinationCard drawFromDestinationCardDeck() throws GameActionException {
 	    if(deckManager != null)
             return deckManager.drawFromDestinationCardDeck();
 	    throw new GameActionException("No Deck Manager!");
     }
 
 	/**
-	 * Updates an existing Route in the board
-	 * @param r - route object containing information to update a Route with
+	 * Updates route "r."
 	 *
-	 * @pre r is not null
-	 * @pre r contains informaiton that differs from the existing Route it's updating
-	 * @pre r has an ID that exists in the Board
-	 * @post the Route is updated with information contained in r
+	 * @pre r != null
+	 * @pre r matches a route in the routeList
+	 * @post the route in the routeList that matches r is updated so routeList[position] == r
+	 * @param r Route to update
 	 */
-	public void updateRoute(Route r){
-	    for(Route route : routeList) {
-		    if(route.getRouteID() == r.getRouteID()) {
-			    if(!r.equals(route)) {
+	public void updateRoute(Route r) {
+	    for (Route route : routeList) {
+		    if (route.getRouteID() == r.getRouteID()) {
+			    if (!r.equals(route)) {
+					// TODO Is this a Phase 3 todo?
 				    //copy each var
 			    }
-		    } else if(!allowDoubles && r.isDoubleRoute(route)) {
+		    } else if (!allowDoubles && r.isDoubleRoute(route)) {
 				route.markDoubleRoute(r);
 		    }
 	    }
     }
 
 	/**
-	 * Setter - sets this.longestRoute
-	 * @param longest the new int that is the longest path
+	 * Sets longest route score.
 	 *
-	 * @post longestRoute = longest
+	 * @pre longest is a valid int
+	 * @post longestRoute == param longest
+	 * @param longest int length of the longest route
 	 */
-	protected void setLongestRoute(int longest){
+	protected void setLongestRoute(int longest) {
         longestRoute = longest;
     }
 
 	/**
-	 * Getter - access to longestRoute variable
-	 * @return the length of the longest route
+	 * Returns length of the longest route.
 	 *
-	 * @post retval = this.longestRoute
+	 * @pre longestRoute is initialized
+	 * @post returned length of longest route
+	 * @return int length of longest route
 	 */
-	public int getLongestRoute(){ // simple getter
+    public int getLongestRoute() {
         return longestRoute;
     }
 
 	/**
-	 * Getter (kinda) - calculates the longest route that a player has
-	 * @param player the player that you want to know their longest route
-	 * @return the length of the longest route that player has
+	 * Returns length of longest route for player "player."
 	 *
-	 * @pre player is not null
-	 * @pre player exists in the game
-	 * @post retval = the players longest route length
+	 * @pre player != null
+	 * @post returned length of longest route of this player
+	 * @param player Player object
+	 * @return int length of longest route for this player
 	 */
-    public int getLongestRoutePlayer(Player player) { //simple getter
+	public int getLongestRoutePlayer(Player player) {
 	    return player.getLongestRoute();
     }
 
 	/**
-	 * replaces the face up card with a card from the train card deck
-	 * 		when a face up card is taken from the pile
+	 * Replaces the face up card spot that was vacated.
 	 *
-	 * @pre there is a card to be replaced
-	 * @pre there is a card in the train card deck to replace it with
-	 * @post the card is replaced with a card from the train card deck
-	 * @post exception if there is no more cards in the train card deck
+	 * @pre num cards in train card deck > 0
+	 * @pre one or more of the face up card spots was just vacated (card drawn)
+	 * @post vacated face up spot(s) filled by drawing top card from train card deck
 	 */
-	private void replaceFaceUpCard(){
-	    for(int i = 0; i < FACEUP_DECK_SIZE; i++) {
-		    if(faceUpCards[i] == null) {
+	private void replaceFaceUpCard() {
+	    for (int i = 0; i < FACEUP_DECK_SIZE; i++) {
+		    if (faceUpCards[i] == null) {
 			    try {
 				    faceUpCards[i] = drawFromTrainCardDeck();
-			    } catch(GameActionException e) {
+			    } catch (GameActionException e) {
 				    e.printStackTrace();
-				    System.out.println("Out of Cards!");
+				    Corn.log(Level.SEVERE, "Out of Cards!");
 				    break;
 			    }
 		    }
 	    }
-	    while(shouldResetFaceUp())
+	    while (shouldResetFaceUp())
 		    resetFaceUp();
     }
 
 	/**
-	 * Lets the game know when it is time to replace all the cards in the face up
-	 * 		pile because there are too many wilds
-	 * @return true if there are 3+ wilds, false otherwise
+	 * Tells whether there is a need to reset face up cards.
 	 *
-	 * @pre there are more than 3 cards in the face up pile
-	 * @pre a card has just been replaced in the face up pile, so now we have to
-	 * 		check if the new card throws over the balance of >3 or <3
-	 * @post retval = false if <3 wilds, true if >3 wild cards
+	 * @pre face up cards initialized
+	 * @post if number of face up wild cards > 2: returned true, else: returned false
+	 * @return
 	 */
-	private Boolean shouldResetFaceUp(){
+	private Boolean shouldResetFaceUp() {
 	    int wildcount = 0;
-	    for(int i = 0; i < FACEUP_DECK_SIZE; i++)
-		    if(faceUpCards[i] != null && faceUpCards[i].getColor() == TrainCardColor.WILD)
+	    for (int i = 0; i < FACEUP_DECK_SIZE; i++)
+		    if (faceUpCards[i] != null && faceUpCards[i].getColor() == TrainCardColor.WILD)
 			    wildcount++;
 	    return wildcount >= 3;
     }
 
 	/**
-	 * resets all the face up cards because there were too many wilds
-	 * 		discards the previous face up cards and draws 5 brand new cards from the
-	 * 		train card deck and places them in the face up card spots
+	 * Resets up the face up cards.
 	 *
-	 * @pre there are enough cards in the train card deck to replace the face up cards
-	 * @pre shouldResetFaceUp() function returns true
-	 * @post exception if there is not enough train card deck cards to replace
-	 * @post the previous face up cards were discarded
-	 * @post there are 5 brand new face up cards that were drawn from the train card deck
+	 * @pre face up cards initialized
+	 * @pre one of the game rules regarding face up cards is violated (probably there are too many
+	 * 		face up wild cards (greater than 2))
+	 * @post old(face up cards) are discarded
+	 * @post face up cards are replaced by drawing top card from train card deck until face up
+	 * 		card spots are filled
 	 */
-	private void resetFaceUp(){
-	    for(int i = 0; i < FACEUP_DECK_SIZE; i++) {
+	private void resetFaceUp() {
+	    for (int i = 0; i < FACEUP_DECK_SIZE; i++) {
 		    try {
 			    discard(faceUpCards[i]);
 			    faceUpCards[i] = drawFromTrainCardDeck();
 		    } catch(GameActionException e) {
 			    e.printStackTrace();
-			    System.out.println("Out of Cards!");
+			    Corn.log(Level.SEVERE, "Out of Cards!");
 			    break;
 		    }
 	    }
     }
 
 	/**
-	 * Getter - access to this.faceUpCards
-	 * @return the array of face up cards
+	 * Returns the face up cards.
 	 *
-	 * @post retval = this.faceUpCards
+	 * @pre face up cards are initialized
+	 * @post returned face up cards
+	 * @return TrainCard[] array of TrainCard objects that are the face up cards
 	 */
 	public TrainCard[] getFaceUpCards() {
         return faceUpCards;
     }
 
 	/**
-	 * Setter (kinda) - sets the face up cards with an array of pre-chosen train cards
-	 * @param cards - an array of pre-chosen train cards
-	 * @throws GameActionException if list of cards had misinformation
+	 * Sets the face up cards.
 	 *
-	 * @pre cards is not null
-	 * @pre cards are valid
-	 * @post this.faceUpCards = cards
+	 * @pre face up cards != null
+	 * @pre param cards != null
+	 * @pre size(param cards) == faceup deck size (constant)
+	 * @pre param cards isn't violating a game rule (probably the only applicable rule is that
+	 * 		there cannot be more than 2 wild cards in the face up cards)
+	 * @post for i = 0 through face up deck size - 1: faceUpCards[i] == new card using
+	 * 		param cards[i]
+	 * @param cards array of TrainCard to set as face up cards
+	 * @throws GameActionException
 	 */
-	public void setFaceUpCards(TrainCard[] cards) throws GameActionException {
-	    if(faceUpCards == null)
+    public void setFaceUpCards(TrainCard[] cards) throws GameActionException {
+	    if (faceUpCards == null)
 		    faceUpCards = new TrainCard[FACEUP_DECK_SIZE];
-        if(cards != null && cards.length == FACEUP_DECK_SIZE)
+        if (cards != null && cards.length == FACEUP_DECK_SIZE)
 	        for(int i = 0; i < FACEUP_DECK_SIZE; i++)
 		        faceUpCards[i] = new TrainCard((cards[i] != null ? cards[i].getColor() : null));
 	    else
 	        throw new GameActionException("List of cards was not correct");
-	    if(shouldResetFaceUp())
+	    if (shouldResetFaceUp())
 		    resetFaceUp(); //TODO idk if I should put this here...
     }
  }
