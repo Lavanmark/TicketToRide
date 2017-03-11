@@ -2,29 +2,71 @@ package com.floorcorn.tickettoride.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.log.Corn;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Kaylee on 2/24/2017.
+ * @author Kaylee Jones
+ * @author Joseph Hansen
  */
 
+/**
+ * This class represents the game board for Ticket to Ride, especially the visible elements of
+ * the game such as the routes and the cards.
+ *
+ * @invariant user is logged in
+ * @invariant each board belongs to a game; to initialize a board, the game must exist
+ */
 public class Board {
+	/**
+	 * Constant value number of face up cards.
+	 */
 	public static final int FACEUP_DECK_SIZE = 5;
 
+	/**
+	 * List of Route objects containing all of the routes for this game's board.
+	 */
     private List<Route> routeList;
+	/**
+	 * Array of TrainCard objects representing the face up cards.
+	 */
     private TrainCard[] faceUpCards;
 
+	/**
+	 * DeckManager object that manages the cards and drawing card stuff.
+	 */
     private DeckManager deckManager;
 
-	private int longestRoute;
-	private boolean allowDoubles = false;
-    //private int longestRoutePlayer; this does not need to be a private data member. never gets used
-
-	private Board(){}
 	/**
-	 * Create a new board with the specified routes in route list
+	 * The length of the current longest route in this game.
+	 */
+	private int longestRoute;
+	/**
+	 * The boolean for whether to allow double routes (allow only for games with more than 3
+	 * players).
+	 */
+	private boolean allowDoubles = false;
+
+	/**
+	 * Empty constructor. Constructor with no parameters present for Jackson to work.
+	 *
+	 * @pre (none)
+	 * @post Board object initialized
+	 */
+	private Board() {}
+
+	/**
+	 * Create a new board with the specified routes in route list.
+	 *
+	 * @pre routeList != null
+	 * @post this routeList set to param routeList
+	 * @post this allowDoubles set to param allowDoubles
+	 * @post this faceUpCards initialized
+	 * @post longestRoute == 0
+	 * @post deckManager == null
 	 * @param routeList list of routes on the boardmap.
 	 */
     public Board(List<Route> routeList, boolean allowDoubles) {
@@ -34,7 +76,7 @@ public class Board {
         //this.longestRoutePlayer = -1;
 	    this.deckManager = null;
 	    this.allowDoubles = allowDoubles;
-        System.out.println("Board built from routeList");
+		Corn.log("Board built from routeList");
     }
 
     public Board(Board board) {
@@ -49,7 +91,7 @@ public class Board {
 	    //this.longestRoutePlayer = board.getLongestRoutePlayer(player);
 	    this.allowDoubles = board.areDoublesAllowed();
 	    this.deckManager = board.deckManager;
-        System.out.println("Board built from Board");
+        Corn.log("Board built from Board");
     }
 
 	public void setDeckManager(DeckManager dm) {
