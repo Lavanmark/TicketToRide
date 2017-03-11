@@ -1023,17 +1023,43 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	}
 
 	/**
-	 * This is for showing all the routes. It shows a grid, each row corresponding to a route.
+	 * This is the Adapter for showing all the routes. It shows a grid, each row corresponding to a
+	 * route.
+	 *
+	 * @pre game board is initialized so that route recycler view can exist and be displayed
+	 * @post after creating this object, list of routes will be displayed (as many as fit on
+	 * 		screen in the recycler view)
 	 */
 	public class RouteRecyclerViewAdapter
 			extends RecyclerView.Adapter<RouteRecyclerViewAdapter.ViewHolder> {
 
+		/**
+		 * List of Route objects corresponding the the routes on the board map for this game.
+		 */
 		public List<Route> routes;
 
+		/**
+		 * Constructor for this RecyclerViewAdapter.
+		 *
+		 * @pre game board initialized
+		 * @pre RecyclerView exists
+		 * @pre routes != null
+		 * @post this.routes set to new ArrayList<>(routes param)
+		 * @param routes
+		 */
 		RouteRecyclerViewAdapter(List<Route> routes) {
 			this.routes = new ArrayList<>(routes);
 		}
 
+		/**
+		 * Creates the Android view holder.
+		 *
+		 * @pre game board initialized so Android UI elements work here
+		 * @post returns this view holder
+		 * @param parent ViewGroup object who will be parent of this ViewHolder
+		 * @param viewType int type of view
+		 * @return ViewHolder object
+		 */
 		@Override
 		public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 			//View view = new TextView(parent.getContext());
@@ -1043,22 +1069,65 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			return viewHolder;
 		}
 
+		/**
+		 * Swaps list of routes in this object, replacing it with parameter.
+		 *
+		 * @pre (none)
+		 * @post delete(old(this.routes))
+		 * @post addAll(new(routes) to this.routes)
+		 * @post adapter notifies observers that data set changed
+		 * @param list List of Route objects
+		 */
 		void swapList(List<Route> list) {
 			this.routes.clear();
 			this.routes.addAll(list);
 			notifyDataSetChanged();
 		}
 
+		/**
+		 * Inner class that extends RecyclerView ViewHolder for instances of this Recycler View.
+		 */
 		class ViewHolder extends RecyclerView.ViewHolder {
 
+			/**
+			 * LinearLayout holding individual route's information.
+			 */
 			public LinearLayout itemLayout;
+			/**
+			 * TextView holding city 1 information for this route.
+			 */
 			public TextView city1;
+			/**
+			 * TextView holding city 2 information for this route.
+			 */
 			public TextView city2;
+			/**
+			 * TextView holding color information for this route.
+			 */
 			public TextView routeColor;
+			/**
+			 * TextView holding length information for this route.
+			 */
 			public TextView routeLength;
+			/**
+			 * Button for claiming this route.
+			 */
 			public Button claimButton;
+			/**
+			 * TextView holding owner information for this route.
+			 */
 			public TextView owner;
 
+			/**
+			 * Constructor for this ViewHolder class.
+			 *
+			 * @pre itemView != null
+			 * @pre game board is initialized
+			 * @post route information displayed in an holder entry within the recycler view. Info
+			 * 		includes city 1, city 2, color, length, and owner information, as well as a
+			 * 		button for claiming the route.
+			 * @param itemView
+			 */
 			ViewHolder(View itemView) {
 				super(itemView);
 				itemLayout = (LinearLayout) itemView;
@@ -1071,6 +1140,23 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			}
 		}
 
+		/**
+		 * This happens when the view holder is bound to the RecyclerView. It sets the text and
+		 * properties for the data being displayed.
+		 *
+		 * @pre holder != null
+		 * @pre position > -1
+		 * @post view holder "holder" bound to position "position" in recycler view
+		 * @post city 1 text set to city1 value of this route
+		 * @post city 2 text set to city2 value of this route
+		 * @post route color text set to color value of this route
+		 * @post route length text set to length value of this route
+		 * @post backgroundColor(owner text field) in view holder == playerColor(owner)
+		 * @post if player can claim route (has sufficient train car cards and route is not
+		 * 		claimed): enabled(claim route button) else: disabled(claim route button)
+		 * @param holder
+		 * @param position
+		 */
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, int position) {
 			final Route r = routes.get(position);
@@ -1102,6 +1188,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		/**
 		 * Returns the total number of items in the data set held by the adapter.
 		 *
+		 * @pre game board is initialized so this adapter can exist
+		 * @pre this adapter is initialized
+		 * @post returned size of this.routes (i.e. number of routes in this adapter)
 		 * @return The total number of items in this adapter.
 		 */
 		@Override
