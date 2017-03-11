@@ -6,6 +6,7 @@ import com.floorcorn.tickettoride.log.Corn;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Created by Kaylee on 2/24/2017.
@@ -341,14 +342,21 @@ public class Board {
 	    return player.getLongestRoute();
     }
 
-    private void replaceFaceUpCard(){
+	/**
+	 * Replaces the face up card spot that was vacated.
+	 *
+	 * @pre num cards in train card deck > 0
+	 * @pre one or more of the face up card spots was just vacated (card drawn)
+	 * @post vacated face up spot(s) filled by drawing top card from train card deck
+	 */
+	private void replaceFaceUpCard() {
 	    for (int i = 0; i < FACEUP_DECK_SIZE; i++) {
 		    if (faceUpCards[i] == null) {
 			    try {
 				    faceUpCards[i] = drawFromTrainCardDeck();
 			    } catch (GameActionException e) {
 				    e.printStackTrace();
-				    System.out.println("Out of Cards!");
+				    Corn.log(Level.SEVERE, "Out of Cards!");
 				    break;
 			    }
 		    }
@@ -357,28 +365,52 @@ public class Board {
 		    resetFaceUp();
     }
 
-    private Boolean shouldResetFaceUp(){
+	/**
+	 * Tells whether there is a need to reset face up cards.
+	 *
+	 * @pre face up cards initialized
+	 * @post if number of face up wild cards > 2: returned true, else: returned false
+	 * @return
+	 */
+	private Boolean shouldResetFaceUp() {
 	    int wildcount = 0;
-	    for(int i = 0; i < FACEUP_DECK_SIZE; i++)
-		    if(faceUpCards[i] != null && faceUpCards[i].getColor() == TrainCardColor.WILD)
+	    for (int i = 0; i < FACEUP_DECK_SIZE; i++)
+		    if (faceUpCards[i] != null && faceUpCards[i].getColor() == TrainCardColor.WILD)
 			    wildcount++;
 	    return wildcount >= 3;
     }
 
-    private void resetFaceUp(){
-	    for(int i = 0; i < FACEUP_DECK_SIZE; i++) {
+	/**
+	 * Resets up the face up cards.
+	 *
+	 * @pre face up cards initialized
+	 * @pre one of the game rules regarding face up cards is violated (probably there are too many
+	 * 		face up wild cards (greater than 2))
+	 * @post old(face up cards) are discarded
+	 * @post face up cards are replaced by drawing top card from train card deck until face up
+	 * 		card spots are filled
+	 */
+	private void resetFaceUp() {
+	    for (int i = 0; i < FACEUP_DECK_SIZE; i++) {
 		    try {
 			    discard(faceUpCards[i]);
 			    faceUpCards[i] = drawFromTrainCardDeck();
 		    } catch(GameActionException e) {
 			    e.printStackTrace();
-			    System.out.println("Out of Cards!");
+			    Corn.log(Level.SEVERE, "Out of Cards!");
 			    break;
 		    }
 	    }
     }
 
-    public TrainCard[] getFaceUpCards() {
+	/**
+	 * Returns the face up cards.
+	 *
+	 * @pre face up cards are initialized
+	 * @post returned face up cards
+	 * @return TrainCard[] array of TrainCard objects that are the face up cards
+	 */
+	public TrainCard[] getFaceUpCards() {
         return faceUpCards;
     }
     public void setFaceUpCards(TrainCard[] cards) throws GameActionException {
