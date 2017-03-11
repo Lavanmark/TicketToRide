@@ -532,6 +532,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	 * Matches and returns the color we're using in the Activity to the player's color. If the
 	 * value passed in is not one of the PlayerColors (RED, GREEN, BLUE, YELLOW, BLACK) this
 	 * will return the color white.
+	 *
 	 * @pre pc param is a valid PlayerColor
 	 * @post returns a valid color for use in Android UI stuff
 	 * @param pc PlayerColor value (their "game piece")
@@ -567,6 +568,11 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	/**
 	 * Sets the visible chat log.
+	 * 
+	 * @pre log is a valid GameChatLog
+	 * @pre BoardmapActivity.onCreate() has been called so as to create the chat layout UI element
+	 * @post deleteAll(old(messagesInChatLayout))
+	 * @post add new TextView containing message.toString() for each in log.getRecentMessages()
 	 * @param log GameChatLog object
 	 */
 	@Override
