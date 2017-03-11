@@ -568,7 +568,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	/**
 	 * Sets the visible chat log.
-	 * 
+	 *
 	 * @pre log is a valid GameChatLog
 	 * @pre BoardmapActivity.onCreate() has been called so as to create the chat layout UI element
 	 * @post deleteAll(old(messagesInChatLayout))
@@ -585,6 +585,14 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		}
 	}
 
+	/**
+	 * Sets the number of train car cards of each color in the text views for current player.
+	 *
+	 * @pre game board is initialized
+	 * @post card count for each type of card is displayed in corresponding color's text field
+	 * 		in the player's hand drawer
+	 * @param cards
+	 */
 	@Override
 	public void setPlayerTrainCardList(Map<TrainCardColor, Integer> cards) {
 		redCount.setText(String.valueOf(cards.containsKey(TrainCardColor.RED)? cards.get(TrainCardColor.RED) : 0));
@@ -603,6 +611,11 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	/**
 	 * This is in the player hand.
+	 *
+	 * @pre game board is initialized so destinationTicketHolder exists
+	 * @post delete(old(destinationTicketHolder.views)
+	 * @post for each destination card d, add new text view t containing d.toString() to
+	 * 		destinationTicketHolder
 	 * @param destinationCardList
 	 */
 	@Override
@@ -616,18 +629,40 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		}
 	}
 
+	/**
+	 * Sets the routes list in the routes drawer.
+	 *
+	 * @pre game board is initialized so routeAdapter exists
+	 * @post calls swapList() on the routeAdapter with the routes parameter, which removes
+	 * 		everything in the routeAdapter and adds each route to the routeAdapter list
+	 * @param routes
+	 */
 	@Override
 	public void setClaimRoutesList(List<Route> routes) {
 		if(routeDrawerIsOpen())
 			routeAdapter.swapList(routes);
 	}
 
+	/**
+	 * Displays the face up train cards if drawer open.
+	 *
+	 * @pre game board is initialized so draw drawer exists
+	 * @post if open(drawDrawer): 5 (per the game rules) cards' front sides are displayed in
+	 * 		drawDrawer on the ImageButtons designated for the job
+	 */
 	@Override
 	public void setFaceUpTrainCards() {
 		if(drawDrawerIsOpen())
 			setFaceupImages();
 	}
 
+	/**
+	 * Displays destination card options if drawer open.
+	 *
+	 * @pre game board is initialized so destination card drawer exists
+	 * @post if open(destinationDrawer): call buildDestinationDrawer() which will display
+	 * 		destination ticket deck and selection choices
+	 */
 	@Override
 	public void setDestinationCardChoices() {
 		if(destinationDrawerIsOpen())
@@ -636,6 +671,10 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	/**
 	 * Sets the visible, drawable cards.
+	 *
+	 * @pre game board is initialized so card holder elements exist
+	 * @post for each face up card f: display image for colored card that corresponds to f on the
+	 * 		image button in the draw drawer
 	 */
 	private void setFaceupImages() {
 		faceupCards[0] = (ImageButton)findViewById(R.id.card1);
@@ -655,6 +694,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		}
 	}
 
+	/**
+	 * Displays the drawing deck drawer.
+	 *
+	 * @pre game board is initialized so UI elements exist
+	 * @pre DRAWER != null
+	 * @pre DRAWER_HOLDER != null
+	 * @post drawing deck drawer (left side) is visible
+	 * @post sets face up train car card images
+	 * @post sets on click listeners for drawFromCardDeck
+	 * @post for each face up card c: sets on click listener for c
+	 * @param DRAWER
+	 * @param DRAWER_HOLDER
+	 */
 	@Override
 	public void displayDrawingDeckDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER) {
 		displayLeftDrawer(R.layout.drawer_draw_cards, DRAWER, DRAWER_HOLDER);
@@ -680,6 +732,12 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 	}
 
+	/**
+	 * Hides drawing deck drawer.
+	 *
+	 * @pre drawing deck drawer is visible
+	 * @post drawing deck drawer is hidden
+	 */
 	@Override
 	public void hideDrawingDeckDrawer() {
 		closeLeftDrawer();
@@ -712,8 +770,17 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * Displays the destination card drawer.
+	 *
+	 * @pre destination ticket drawer is hidden
+	 * @pre DRAWER != null
+	 * @pre DRAWER_HOLDER != null
+	 * @post destination ticket drawer (left side) is visible
+	 * @post displays appropriate destination ticket cards
+	 * @post sets on click listeners for destination ticket card deck
+	 * @post for each face up card c: sets on click listener for c
 	 * @param DRAWER The layout of the Boardmap Activity
 	 * @param DRAWER_HOLDER The layout of the frame that opens the drawer
 	 */
@@ -727,6 +794,12 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	/**
 	 * Sets up the destination cards drawer. (High level functionality needs: there are a few
 	 * destination cards and user has to choose which to keep. These UI elements help with that.)
+	 *
+	 * @pre game board is initialized so these UI elements exist
+	 * @post destination ticket card drawer has keep destinations button, with on click listener
+	 * @post if !(selected destination ticket cards to keep): keep destination tickets button is
+	 * 		disabled
+	 * @post for each visible destination ticket card c: set on click listener for c
 	 */
 	private void buildDestinationDrawer() {
 		drawFromDestinationDeck = (Button) findViewById(R.id.draw_from_dest_deck);
@@ -782,6 +855,12 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		}
 	}
 
+	/**
+	 * Hides the destination ticket card drawer.
+	 *
+	 * @pre destination ticket card drawer (left side) is visible
+	 * @post destination ticket card drawer (left side) is hidden
+	 */
 	@Override
 	public void hideDestinationDrawer() {
 		closeLeftDrawer();
