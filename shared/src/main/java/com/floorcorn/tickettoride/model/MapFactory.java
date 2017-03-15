@@ -234,7 +234,4 @@ public class MapFactory {
         FILE_STRING = path;
     }
 
-
-
-
 }
