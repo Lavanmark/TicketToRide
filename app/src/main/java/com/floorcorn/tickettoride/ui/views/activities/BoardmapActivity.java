@@ -480,6 +480,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			sendMessageBut.setEnabled(false);
 			animateButton.setEnabled(false);
 		} else {
+			showGameOver();
 			presenter.startPollingCommands();
 			drawDestinationTicketsButton.setEnabled(true);
 			drawCardsButton.setEnabled(true);
@@ -489,6 +490,10 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			animateButton.setEnabled(canAnimate);
 			setupPlayerIcons();
 		}
+	}
+
+	private void showGameOver() {
+		startActivity(new Intent(BoardmapActivity.this, GameOverActivity.class));
 	}
 
 	/**
