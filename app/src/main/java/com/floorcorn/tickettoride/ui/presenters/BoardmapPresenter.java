@@ -270,6 +270,10 @@ public class BoardmapPresenter implements IPresenter, Observer {
         return null;
     }
 
+	public boolean gameFinished() {
+		return game.isFinished();
+	}
+
 
     /*********************** END GAME REFERENCE METHODS *********************************/
 
