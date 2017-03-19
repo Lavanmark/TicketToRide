@@ -80,16 +80,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private Board boardmap;
 
 	/**
-	 * Button used to show animation; only used for Phase 2 pass off.
- 	 */
-	private Button animateButton;
-	/**
-	 * Boolean used to prevent animation when it shouldn't be available.
-	 * TODO: replace this with State pattern in Phase 3
-	 */
-	private boolean canAnimate = true;
-
-	/**
 	 * Button used to open the drawer that shows cards to draw.
 	 */
 	private Button drawCardsButton;
@@ -204,6 +194,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	 */
 	private EditText chatTextField;
 
+	private ScrollView chatScroll;
+
 	/**
 	 * Initial set up for all of the activity's UI elements.
 	 *
@@ -234,7 +226,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		displayHandButton = (Button)findViewById(R.id.open_hand_button);
 		claimRouteButton = (Button)findViewById(R.id.open_route_button);
 		drawCardsButton = (Button)findViewById(R.id.open_card_button);
-		animateButton = (Button)findViewById(R.id.animateButton);
 
 		redCount = (TextView)findViewById(R.id.red_card_count);
 		orangeCount = (TextView)findViewById(R.id.orange_card_count);
@@ -252,13 +243,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
 		// Set up chat stuff.
 
-		final ScrollView scrollView = (ScrollView)findViewById(R.id.chatScroll);
-		scrollView.post(new Runnable() {
-			@Override
-			public void run() {
-				scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-			}
-		});
+		chatScroll = (ScrollView)findViewById(R.id.chatScroll);
+		scrollToBottom();
 		chatLayout = (LinearLayout)findViewById(R.id.chatHolder);
 		chatTextField = (EditText)findViewById(R.id.chatMessageField);
 		sendMessageBut = (Button)findViewById(R.id.sendMessageButton);
@@ -302,14 +288,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			public void onClick(View view) {
 				DRAWER.openDrawer(GravityCompat.END); // Gravity...End is on the right side
 				//TODO maybe this needs its own function to get all this information set up.
-			}
-		});
-		animateButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				animateButton.setEnabled(false);
-				canAnimate = false;
-				presenter.animate();
 			}
 		});
 
@@ -431,6 +409,15 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		checkStarted();
 	}
 
+	private void scrollToBottom() {
+		chatScroll.post(new Runnable() {
+			@Override
+			public void run() {
+				chatScroll.fullScroll(ScrollView.FOCUS_DOWN);
+			}
+		});
+	}
+
 	/**
 	 * Starts the PregameActivity, meaning the waiting screen that is shown until enough players
 	 * join.
@@ -481,7 +468,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			claimRouteButton.setEnabled(false);
 			drawCardsButton.setEnabled(false);
 			sendMessageBut.setEnabled(false);
-			animateButton.setEnabled(false);
 		} else {
 			presenter.startPollingCommands();
 			drawDestinationTicketsButton.setEnabled(true);
@@ -489,7 +475,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			claimRouteButton.setEnabled(true);
 			displayHandButton.setEnabled(true);
 			sendMessageBut.setEnabled(true);
-			animateButton.setEnabled(canAnimate);
 			setupPlayerIcons();
 		}
 	}
@@ -590,6 +575,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			tv.setText(message.toString());
 			chatLayout.addView(tv);
 		}
+		scrollToBottom();
 	}
 
 	/**
@@ -986,49 +972,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		return false;
 	}
 
-//	All functions with prefix "animate_" are used only to show that the drawers are real and that
-//	they work during pass off for Phase 2. They will be deleted after Phase 2, are very
-//	straightforward and self-explanatory.
-	@Override
-	public void animate_ClickOnDestinationCards() {
-		this.destinationTickets[0].performClick();
-		this.destinationTickets[1].performClick();
-	}
-
-	@Override
-	public void animate_takeDestinationCards(){
-		this.keepDestinations.performClick();
-	}
-
-	@Override
-	public void animate_showOtherPlayerInfo(){
-		this.playerIcons.getChildAt(presenter.getPlayers().get(1).getPlayerID()).performClick();
-	}
-
-	@Override
-	public void animate_clickDrawDestination(){
-		this.drawDestinationTicketsButton.performClick();
-	}
-
-	@Override
-	public void animate_clickDrawDestinationDeck(){
-		this.drawFromDestinationDeck.performClick();
-	}
-
-	@Override
-	public void animate_clickOpenRouteDrawer(){
-		this.claimRouteButton.performClick();
-	}
-
-	@Override
-	public void animate_clickClaimRoute(){
-		if(routeAdapter == null) {
-			Toast.makeText(this, "Could not find list of routes! Reopen the game!", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		presenter.fakeClaimButtonClicked();
-	}
-
 	/**
 	 * This is the Adapter for showing all the routes. It shows a grid, each row corresponding to a
 	 * route.
@@ -1178,7 +1121,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			holder.claimButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					presenter.claimButtonClicked(r, presenter.getPlayers().get(0));
+					presenter.claimButtonClicked(r);
 				}
 			});
 
