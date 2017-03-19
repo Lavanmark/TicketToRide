@@ -11,6 +11,6 @@ import java.util.List;
 
 public interface IGameOverPresenter extends IPresenter {
 	List<Player> getPlayerList();
-	Player getWinner();
-	Player getLongestRoutePlayer();
+	String getWinnerName();
+	String getLongestRouteNames();
 }

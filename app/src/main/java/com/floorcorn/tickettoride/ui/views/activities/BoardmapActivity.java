@@ -328,6 +328,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		checkStarted();
 		if(!presenter.gameInProgress())
 			launchPregame();
+		if(presenter.gameFinished())
+			showGameOver();
+		//TODO we will want something to launch the game over when it happens in the game.
 	}
 
 	/** These next few methods serve the purposes of the animation and are not needed after that. **/
@@ -480,7 +483,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			sendMessageBut.setEnabled(false);
 			animateButton.setEnabled(false);
 		} else {
-			showGameOver();
 			presenter.startPollingCommands();
 			drawDestinationTicketsButton.setEnabled(true);
 			drawCardsButton.setEnabled(true);

@@ -32,7 +32,12 @@ public class GameOverPresenter implements IGameOverPresenter, Observer{
 
 	@Override
 	public void update(Observable o, Object arg) {
-
+		if(arg instanceof Game) {
+			this.game = (Game) arg;
+			view.setPlayerList(game.getPlayerList());
+			view.setWinnerText(getWinnerName());
+			view.setLongestWinners(getLongestRouteNames());
+		}
 	}
 
 	@Override
@@ -41,7 +46,7 @@ public class GameOverPresenter implements IGameOverPresenter, Observer{
 	}
 
 	@Override
-	public Player getWinner() {
+	public String getWinnerName() {
 		Player winner = null;
 		for(Player p : game.getPlayerList()) {
 			if(winner == null)
@@ -49,11 +54,17 @@ public class GameOverPresenter implements IGameOverPresenter, Observer{
 			else if(winner.getScore() < p.getScore())
 				winner = p;
 		}
-		return winner;
+		return winner.getName();
 	}
 
 	@Override
-	public Player getLongestRoutePlayer() {
-		return null;
+	public String getLongestRouteNames() {
+		StringBuilder sb = new StringBuilder();
+		for(Player p : game.getPlayerLongestRoute()) {
+			sb.append(p.getName());
+			if(game.getPlayerLongestRoute().size() > 1)
+				sb.append(", ");
+		}
+		return sb.toString();
 	}
 }

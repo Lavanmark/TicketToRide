@@ -31,7 +31,8 @@ public class GameOverActivity extends AppCompatActivity implements IGameOverView
 		presenter.setView(this);
 
 		setPlayerList(presenter.getPlayerList());
-		setWinnerText(presenter.getWinner().getName());
+		setWinnerText(presenter.getWinnerName());
+		setLongestWinners(presenter.getLongestRouteNames());
 	}
 
 	@Override
@@ -57,21 +58,33 @@ public class GameOverActivity extends AppCompatActivity implements IGameOverView
 		LinearLayout ll = (LinearLayout) findViewById(R.id.gameOverPlayerList);
 		ll.removeAllViews();
 		for(Player p : players) {
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 			LinearLayout horlay = new LinearLayout(ll.getContext());
+			horlay.setLayoutParams(lp);
 			horlay.setOrientation(LinearLayout.HORIZONTAL);
-			TextView nameView = new TextView(ll.getContext());
-			nameView.setText(p.getName());
+			lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
 			TextView scoreView = new TextView(ll.getContext());
 			scoreView.setText(String.valueOf(p.getScore()));
+			scoreView.setLayoutParams(lp);
+			TextView nameView = new TextView(ll.getContext());
+			nameView.setText(p.getName());
+			nameView.setLayoutParams(lp);
 			horlay.addView(nameView);
 			horlay.addView(scoreView);
 			ll.addView(horlay);
 		}
-	}//beginnings 
+	}
 
-	private void setWinnerText(String playerName) {
+	@Override
+	public void setWinnerText(String playerName) {
 		TextView view = (TextView)findViewById(R.id.winnerTextField);
 		view.setText(playerName + " has Won!");
+	}
+
+	@Override
+	public void setLongestWinners(String playerNames) {
+		TextView view = (TextView)findViewById(R.id.longestPathWinner);
+		view.setText(playerNames + " had the longest route!");
 	}
 
 	@Override
