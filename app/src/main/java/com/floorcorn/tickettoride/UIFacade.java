@@ -40,9 +40,6 @@ public class UIFacade {
     private ServerProxy serverProxy;
     private Poller poller;
 
-    // TODO: add all the types of sorting we may want
-    public enum GameSortStyle { ASC_GAMEID, DESC_GAMEID };
-
     // Things relating to private constructor and singleton pattern.
 
     private UIFacade() {
@@ -123,41 +120,6 @@ public class UIFacade {
     public Set<GameInfo> getGames(User user) {
 	    user = new User(user);
         return clientModelRoot.getGames(user);
-    }
-
-    /**
-     * Sorts some games according to the sort style.
-     * @param games Set of Game objects to sort
-     * @param sortStyle GameSortStyle enum variable designates how to sort
-     * @return Same Game objects, but sorted
-     */
-    private List<GameInfo> sortGames(Set<GameInfo> games, GameSortStyle sortStyle) {
-        // TODO:
-        // Not implemented yet.
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Gets the games from ClientModel and sorts them before returning. See GameSortStyle enum.
-     * @param sortStyle GameSortStyle enum designates what order of sort to do
-     * @return List of Game objects from the ClientModel, sorted
-     */
-    public List<GameInfo> getGames(GameSortStyle sortStyle) {
-        Set<GameInfo> gamesSet = getGames();
-        return sortGames(gamesSet, sortStyle);
-    }
-
-    /**
-     * Gets the games from the ClientModel that the user has joined. Sorts them before
-     * returning. See GameSortStyle enum.
-     * @param user User object
-     * @param sortStyle GameSortStyle enum designates what order of sort to do
-     * @return List of Game objects from the ClientModel, sorted
-     */
-    public List<GameInfo> getGames(User user, GameSortStyle sortStyle) {
-	    user = new User(user);
-        Set<GameInfo> gamesSet = getGames(user);
-        return sortGames(gamesSet, sortStyle);
     }
 
     /**
@@ -393,64 +355,12 @@ public class UIFacade {
         return color;
     }
 
-
-    /** This method adds one train card to another player's hand. Just for animation. **/
-    public void animate_AddTrainCardForOtherPlayer(){
-        if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
-            Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
-            TrainCard t = new TrainCard(TrainCardColor.GREEN);
-            p2.addTrainCard(t,1);
-            //System.out.println(t.getColor().name());
-            clientModelRoot.notifyGameChanged();
-        }
-    }
-
-    /** This method also is solely for animation purposes **/
-    public void animate_AddDestinationCardForOtherPlayer(){
-        if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
-            Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
-            City c = new City("city");
-            DestinationCard d = new DestinationCard(c,c,1,"h");
-            p2.addDestinationCard(d);
-        }
-    }
-
-    /** This method also is solely for animation purposes **/
-    public void animate_UpdatePointsForOtherPlayer(){
-        if(clientModelRoot.getCurrentGame().getPlayerList().size() > 1){
-            Player p2 = clientModelRoot.getCurrentGame().getPlayerList().get(1);
-            p2.setScore(p2.getScore() + 4);
-        }
-    }
-
-    /** This method also is solely for animation purposes **/
-    public void animate_sendChatMessage(Message m) throws BadUserException{
-        if(clientModelRoot.getChatLog() == null)
-        {
-            clientModelRoot.setChatLog(new GameChatLog());
-        }
-        GameChatLog log = clientModelRoot.getChatLog();
-        log.addMessage(m);
-        clientModelRoot.setChatLog(log);
-        clientModelRoot.notifyGameChanged();
-    }
-
-
-    /*
-        TYLER, you were questioning if you wanted to implement this or not, but here it is
-     */
     public TrainCardColor drawTrainCard(int position) throws GameActionException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
 	    //TODO without a deck manager this is always going to throw exceptions
         TrainCardColor color = clientModelRoot.getCurrentGame().drawFaceUpCard(clientModelRoot.getCurrentUser(), position);
 	    clientModelRoot.notifyGameChanged();
         return color;
     }
-
-    /*
-        TYLER, you were questioning if you wanted to implement this or not, but here it is
-
-
-     */
 
     /**
      *
@@ -470,9 +380,6 @@ public class UIFacade {
 	    clientModelRoot.notifyGameChanged();
     }
 
-    /*
-        TYLER, you were questioning if you wanted to implement this or not, but here it is
-     */
     public void discardDestinationCard(DestinationCard destinationCard) throws GameActionException {
 	    clientModelRoot.getCurrentGame().getPlayer(clientModelRoot.getCurrentUser()).removeDestinationCard(destinationCard);
         clientModelRoot.getCurrentGame().getBoard().discard(destinationCard);
@@ -484,22 +391,11 @@ public class UIFacade {
 		clientModelRoot.notifyGameChanged();
 	}
 
-
-
     // Routes.
 
-    public void claimRoute(Route route, User user) {
-        clientModelRoot.getCurrentGame().claimRoute(route, clientModelRoot.getCurrentGame().getPlayer(user));
+    public void claimRoute(Route route) {
+        clientModelRoot.getCurrentGame().claimRoute(route, clientModelRoot.getCurrentGame().getPlayer(clientModelRoot.getCurrentUser()));
 	    clientModelRoot.notifyGameChanged();
-    }
-
-    public void claimRoute(Route route, Player player) {
-        clientModelRoot.getCurrentGame().claimRoute(route, player);
-        clientModelRoot.notifyGameChanged();
-    }
-
-    public List<Route> getAvailableRoutes() {
-        return clientModelRoot.getCurrentGame().getAvailableRoutes();
     }
 
     public Boolean canClaimRoute(Route route) {
