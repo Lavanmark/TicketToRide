@@ -25,4 +25,19 @@ public class GameChatLog {
         }
         return recentMessages;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        GameChatLog that = (GameChatLog) o;
+	    if(messageList.size() != that.messageList.size())
+		    return false;
+        return messageList != null ? messageList.equals(that.messageList) : that.messageList == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return messageList != null ? messageList.hashCode() : 0;
+    }
 }

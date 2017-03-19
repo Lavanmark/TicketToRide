@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
@@ -89,7 +90,7 @@ public class GameOverActivity extends AppCompatActivity implements IGameOverView
 
 	@Override
 	public void backToLogin() {
-		//TODO
+		startActivity(new Intent(GameOverActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 	}
 
 	@Override

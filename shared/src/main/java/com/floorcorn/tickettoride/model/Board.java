@@ -300,6 +300,7 @@ public class Board {
 		    if (route.getRouteID() == r.getRouteID()) {
 			    if (!r.equals(route)) {
 					// TODO Is this a Phase 3 todo?
+				    // TODO might not be needed?
 				    //copy each var
 			    }
 		    } else if (!allowDoubles && r.isDoubleRoute(route)) {

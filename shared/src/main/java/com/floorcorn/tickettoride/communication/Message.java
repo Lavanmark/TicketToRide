@@ -39,4 +39,26 @@ public class Message {
     public String toString() {
         return playerName + ": " + content;
     }
+
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) return true;
+		if(o == null || getClass() != o.getClass()) return false;
+
+		Message message = (Message) o;
+
+		if(gameID != message.gameID) return false;
+		if(content != null ? !content.equals(message.content) : message.content != null)
+			return false;
+		return playerName != null ? playerName.equals(message.playerName) : message.playerName == null;
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = content != null ? content.hashCode() : 0;
+		result = 31 * result + gameID;
+		result = 31 * result + (playerName != null ? playerName.hashCode() : 0);
+		return result;
+	}
 }
