@@ -1,6 +1,8 @@
 package com.floorcorn.tickettoride.commands;
 
 import com.floorcorn.tickettoride.interfaces.IClient;
+import com.floorcorn.tickettoride.model.DestinationCard;
+import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 
 /**
@@ -8,6 +10,13 @@ import com.floorcorn.tickettoride.model.User;
  */
 
 public class DiscardDestinationCmd extends DiscardDestinationCmdData {
+    private DiscardDestinationCmd(){}
+
+    public DiscardDestinationCmd(Player player, DestinationCard[] cards){
+        this.discardingPlayer = player;
+        this.cards = cards;
+    }
+
     @Override
     public ICommand getCmdFor(User user) {
         return this;
@@ -15,6 +24,6 @@ public class DiscardDestinationCmd extends DiscardDestinationCmdData {
 
     @Override
     public void execute(IClient client) {
-
+        //TODO
     }
 }

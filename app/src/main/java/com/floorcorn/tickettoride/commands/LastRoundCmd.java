@@ -15,6 +15,6 @@ public class LastRoundCmd extends LastRoundCmdData{
 
     @Override
     public void execute(IClient client) {
-
+        client.setLastPlayer(this.lastPlayer);
     }
 }

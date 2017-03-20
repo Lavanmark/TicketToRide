@@ -5,4 +5,5 @@ package com.floorcorn.tickettoride.states;
  */
 
 public class TurnState extends IState {
+
 }

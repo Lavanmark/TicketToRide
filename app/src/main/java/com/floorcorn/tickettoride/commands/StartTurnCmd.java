@@ -15,6 +15,6 @@ public class StartTurnCmd extends StartTurnCmdData {
 
     @Override
     public void execute(IClient client) {
-
+        client.startTurn(this.player);
     }
 }
