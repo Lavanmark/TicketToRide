@@ -350,14 +350,14 @@ public class UIFacade {
     }
 
     public TrainCardColor drawTrainCardFromDeck() throws GameActionException {
-	    TrainCardColor color = clientModelRoot.getCurrentGame().drawTrainCardFromDeck(clientModelRoot.getCurrentUser());
+	    TrainCardColor color = null;//clientModelRoot.getCurrentGame().drawTrainCardFromDeck(clientModelRoot.getCurrentUser());
 	    clientModelRoot.notifyGameChanged();
         return color;
     }
 
     public TrainCardColor drawTrainCard(int position) throws GameActionException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
 	    //TODO without a deck manager this is always going to throw exceptions
-        TrainCardColor color = clientModelRoot.getCurrentGame().drawFaceUpCard(clientModelRoot.getCurrentUser(), position);
+        TrainCardColor color = null;//clientModelRoot.getCurrentGame().drawFaceUpCard(clientModelRoot.getCurrentUser(), position);
 	    clientModelRoot.notifyGameChanged();
         return color;
     }

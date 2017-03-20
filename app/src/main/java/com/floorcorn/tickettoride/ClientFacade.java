@@ -4,6 +4,7 @@ import com.floorcorn.tickettoride.clientModel.ClientModel;
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.interfaces.IClient;
+import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.TrainCard;
@@ -94,7 +95,17 @@ public class ClientFacade implements IClient {
 	}
 
 	@Override
+	public List<DestinationCard> drawDestinationCards() {
+		return null;
+	}
+
+	@Override
 	public void addCardToPlayer(Player player, TrainCard card) {
+
+	}
+
+	@Override
+	public void addDestinationCardsToPlayer(Player player, List<DestinationCard> cards) {
 
 	}
 }
