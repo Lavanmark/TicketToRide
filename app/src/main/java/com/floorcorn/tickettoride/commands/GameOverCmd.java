@@ -15,6 +15,6 @@ public class GameOverCmd extends GameOverCmdData {
 
     @Override
     public void execute(IClient client) {
-
+        client.setGameOver();
     }
 }
