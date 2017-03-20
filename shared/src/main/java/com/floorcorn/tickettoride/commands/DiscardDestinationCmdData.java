@@ -3,23 +3,19 @@ package com.floorcorn.tickettoride.commands;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import sun.security.krb5.internal.crypto.Des;
 
 /**
  * Created by pokemaughan on 3/15/17.
  */
 
-public class DiscardDestinationCmdData {
-    private Player discardingPlayer;
-    private DestinationCard[] cards;
+public abstract class DiscardDestinationCmdData extends ICommand {
+    protected Player discardingPlayer = null;
+    protected DestinationCard[] cards = null;
 
-    public Boolean forPlayer(User user){
+    @Override
+    public boolean forPlayer(User user){
         if(user.getUserID()!=discardingPlayer.getUserID())
             return false;
         return true;
