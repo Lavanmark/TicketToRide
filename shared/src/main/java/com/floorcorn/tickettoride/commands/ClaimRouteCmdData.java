@@ -8,11 +8,12 @@ import com.floorcorn.tickettoride.model.User;
  * Created by pokemaughan on 3/18/17.
  */
 
-public class ClaimRouteCmdData {
-    private Player claimingPlayer;
-    private Route routeToClaim;
+public abstract class ClaimRouteCmdData extends ICommand{
+    protected Player claimingPlayer = null;
+    protected Route routeToClaim = null;
 
-    public Boolean forPlayer(User user){
+    @Override
+    public boolean forPlayer(User user){
         if(user.getUserID()!=claimingPlayer.getUserID())
             return false;
         return true;
