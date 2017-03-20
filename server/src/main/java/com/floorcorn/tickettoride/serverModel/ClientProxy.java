@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.serverModel;
 import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.interfaces.IClient;
+import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.TrainCard;
@@ -58,7 +59,12 @@ public class ClientProxy implements IClient {
 
 	@Override
 	public TrainCard drawTrainCard() {
-		return null;
+		try {
+			return gameToModify.getBoard().drawFromTrainCardDeck();
+		} catch(GameActionException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
@@ -67,7 +73,17 @@ public class ClientProxy implements IClient {
 	}
 
 	@Override
+	public List<DestinationCard> drawDestinationCards() {
+		return null;
+	}
+
+	@Override
 	public void addCardToPlayer(Player player, TrainCard card) {
+
+	}
+
+	@Override
+	public void addDestinationCardsToPlayer(Player player, List<DestinationCard> cards) {
 
 	}
 

@@ -10,16 +10,21 @@ import com.floorcorn.tickettoride.model.User;
  */
 
 public class DrawTrainCardCmd extends DrawTrainCardCmdData {
-    public DrawTrainCardCmd(Player player, boolean bool, int cardPosition, TrainCard trainCard){
+
+    private DrawTrainCardCmd(){}
+
+    public DrawTrainCardCmd(Player player, boolean first, int cardPosition, TrainCard trainCard){
         this.drawingPlayer = player;
-        this.firstDraw = bool;
+        this.firstDraw = first;
         this.cardDrawn = trainCard;
         this.cardPosition = cardPosition;
     }
 
     @Override
     public ICommand getCmdFor(User user) {
-        return null;
+        if(drawingPlayer.getUserID() == user.getUserID())
+            return this;
+        return new DrawTrainCardCmd(drawingPlayer.getCensoredPlayer(user), firstDraw, cardPosition, null);
     }
 
     @Override

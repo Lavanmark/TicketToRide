@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.interfaces;
 
 
+import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.TrainCard;
@@ -32,11 +33,15 @@ public interface IClient {
 
     void setGameOver();
 
-    TrainCard drawTrainCard();
+	TrainCard drawTrainCard();
 
-    TrainCard drawTrainCard(int position);
+	TrainCard drawTrainCard(int position);
+
+	List<DestinationCard> drawDestinationCards();
 
     void addCardToPlayer(Player player, TrainCard card);
+
+	void addDestinationCardsToPlayer(Player player, List<DestinationCard> cards);
 
     Game getGame();
 }

@@ -204,37 +204,14 @@ public class Game {
 		return null;
 	}
 
-	public TrainCardColor drawTrainCardFromDeck(User user) throws GameActionException {
-		Player player = getPlayer(user);
-		if(player == null)
-			return null;
-		if(player.isTurn()) {
-			TrainCard lastDrawn = board.drawFromTrainCardDeck();
-			player.addTrainCard(lastDrawn, 1);
-			return lastDrawn.getColor();
+	public void addCard(Player player, TrainCard card) {
+		for(Player p : playerList) {
+			if(p.getUserID() == player.getUserID())
+				p.addTrainCard(card, 1);
 		}
-		return null;
-	}
-
-
-
-	public TrainCardColor drawFaceUpCard(User user, int position) throws GameActionException {
-		Player player = getPlayer(user);
-		if(player == null)
-			return null;
-		if(player.isTurn()) {
-			TrainCard card = board.drawFromFaceUp(position);
-			player.addTrainCard(card, 1);
-			return card.getColor();
-		}
-		return null;
 	}
 
 	public List<Route> getRoutes() {
-		return board.getRoutes();
-	}
-
-	public List<Route> getAvailableRoutes() {
 		return board.getRoutes();
 	}
 

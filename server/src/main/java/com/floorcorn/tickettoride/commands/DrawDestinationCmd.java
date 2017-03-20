@@ -12,6 +12,8 @@ import java.util.List;
  */
 
 public class DrawDestinationCmd extends DrawDestinationCmdData{
+    private DrawDestinationCmd(){}
+
     public DrawDestinationCmd(Player player, List<DestinationCard> destCardList){
         this.drawingPlayer = player;
         this.cardsDrawn = destCardList;
@@ -19,11 +21,14 @@ public class DrawDestinationCmd extends DrawDestinationCmdData{
 
     @Override
     public ICommand getCmdFor(User user) {
-        return null;
+        if(user.getUserID() == drawingPlayer.getUserID())
+            return this;
+        return new DrawDestinationCmd(drawingPlayer.getCensoredPlayer(user), null);
     }
 
     @Override
     public void execute(IClient client) {
-
+        cardsDrawn = client.drawDestinationCards();
+        client.addDestinationCardsToPlayer(drawingPlayer, cardsDrawn);
     }
 }
