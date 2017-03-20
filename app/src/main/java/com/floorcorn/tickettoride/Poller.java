@@ -19,9 +19,6 @@ import java.util.concurrent.TimeUnit;
  * @author Tyler
  */
 
-/** TODO: ALL METHODS HAVE BEEN PREPENDED WITH A MANDATORY RETURN STATEMENT
- *  FOR ANIMATION PURPOSES. REMOVE THESE WHEN THAT IS OVER!!!!
- */
 public class Poller {
 
 	private ServerProxy serverProxy = null;
@@ -53,7 +50,6 @@ public class Poller {
 			                    System.out.println("requesting player list");
 			                    Game game = serverProxy.getGame(commandManager.getUser(), commandManager.currentGameID());
 			                    commandManager.setPlayerList(game.getPlayerList());
-			                    //TODO probably make this set the game so on start we have all the basics.
 		                    } catch(BadUserException e) {
 			                    e.printStackTrace();
 			                    view.backToLogin();
@@ -106,10 +102,7 @@ public class Poller {
 		}, 0, 1, TimeUnit.SECONDS);
 	}
 
-	/** TODO: REMOVE THE FIRST IF STATEMENT AFTER ANIMATION IS NO LONGER NEEDED!! **/
 	public void startPollingChat(final IView view) {
-		if(true)
-			return;
 		if(chatPollSES != null)
 			chatPollSES.shutdown();
 		chatPollSES = Executors.newScheduledThreadPool(1);
