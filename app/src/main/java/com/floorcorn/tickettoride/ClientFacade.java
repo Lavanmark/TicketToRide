@@ -9,7 +9,6 @@ import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,7 +48,7 @@ public class ClientFacade implements IClient {
 	}
 
 	@Override
-	public void setPlayerList(ArrayList<Player> players) {
+	public void setPlayerList(List<Player> players) {
 		Game game = clientModel.getCurrentGame();
 		if(game == null)
 			return;
@@ -67,5 +66,35 @@ public class ClientFacade implements IClient {
 		} catch(GameActionException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void startTurn(Player player) {
+
+	}
+
+	@Override
+	public void setLastPlayer(Player player) {
+
+	}
+
+	@Override
+	public void setGameOver() {
+
+	}
+
+	@Override
+	public TrainCard drawTrainCard() {
+		return null;
+	}
+
+	@Override
+	public TrainCard drawTrainCard(int position) {
+		return null;
+	}
+
+	@Override
+	public void addCardToPlayer(Player player, TrainCard card) {
+
 	}
 }

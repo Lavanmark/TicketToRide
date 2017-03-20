@@ -40,6 +40,7 @@ public class Board {
 	/**
 	 * DeckManager object that manages the cards and drawing card stuff.
 	 */
+	@JsonIgnore
     private DeckManager deckManager;
 
 	/**

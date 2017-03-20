@@ -18,13 +18,25 @@ public interface IClient {
      *  Assigns a new list of players to be stored in the model
      * @param players a list of players to be stored.
      */
-    void setPlayerList(ArrayList<Player> players);
+    void setPlayerList(List<Player> players);
 
     /**
      * Assigns a new deck of TrainCards to be stored as the face up deck
      * @param faceUpDeck the new list of TrainCards to be stored as the face up deck
      */
     void setFaceUpDeck(TrainCard[] faceUpDeck);
+
+    void startTurn(Player player);
+
+    void setLastPlayer(Player player);
+
+    void setGameOver();
+
+    TrainCard drawTrainCard();
+
+    TrainCard drawTrainCard(int position);
+
+    void addCardToPlayer(Player player, TrainCard card);
 
     Game getGame();
 }
