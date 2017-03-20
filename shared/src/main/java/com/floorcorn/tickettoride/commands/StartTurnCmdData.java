@@ -7,10 +7,11 @@ import com.floorcorn.tickettoride.model.User;
  * Created by pokemaughan on 3/19/17.
  */
 
-public class StartTurnCmdData {
-    private Player player;
+public abstract class StartTurnCmdData extends ICommand{
+    protected Player player = null;
 
-    public Boolean forPlayer(User user){
+    @Override
+    public boolean forPlayer(User user){
         if(user.getUserID()!=player.getUserID())
             return false;
         return true;

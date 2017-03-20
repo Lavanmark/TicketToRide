@@ -9,10 +9,11 @@ import java.util.List;
  * Created by pokemaughan on 3/19/17.
  */
 
-public class GameOverCmdData {
-    private List<Player> playerList;
+public abstract class GameOverCmdData extends ICommand {
+    protected List<Player> playerList = null;
 
-    public Boolean forPlayer(User user){
+    @Override
+    public boolean forPlayer(User user){
         return true; // nobody is limited to this command sooooo yeah
     }
 }

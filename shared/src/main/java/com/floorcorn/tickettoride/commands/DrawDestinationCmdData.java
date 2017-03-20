@@ -10,11 +10,12 @@ import java.util.List;
  * Created by pokemaughan on 3/18/17.
  */
 
-public class DrawDestinationCmdData {
-    private Player drawingPlayer;
-    private List<DestinationCard> cardsDrawn;
+public abstract class DrawDestinationCmdData extends ICommand{
+    protected Player drawingPlayer = null;
+    protected List<DestinationCard> cardsDrawn = null;
 
-    public Boolean forPlayer(User user){
+    @Override
+    public boolean forPlayer(User user){
         if(user.getUserID()!=drawingPlayer.getUserID())
             return false;
         return true;
