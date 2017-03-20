@@ -10,7 +10,7 @@ import com.floorcorn.tickettoride.model.User;
 public class StartTurnCmd extends StartTurnCmdData {
     @Override
     public ICommand getCmdFor(User user) {
-        return null;
+        return this;
     }
 
     @Override
