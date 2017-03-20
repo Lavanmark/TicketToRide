@@ -1,0 +1,87 @@
+<resources>
+    <string name="app_name">Ticket To Mars</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_username">Username</string>
+    <string name="prompt_firstname">First name</string>
+    <string name="prompt_lastname">Last name</string>
+    <string name="prompt_confirm">Confirm password</string>
+    <string name="action_register">Register</string>
+    <string name="title_login_header">Ticket To Mars</string>
+    <string name="title_not_a_user">Not a user?</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_game_lobby">GameLobbyActivity</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+
+
+    <!--Strings related to create game -->
+    <string name="prompt_gamename">Game Name</string>
+    <string name="prompt_color">Choose your color</string>
+    <string name="prompt_player_allowance">Choose number of players</string>
+    <string name="create_game_button">Create Game</string>
+    <string name="join_game_button">Join Game</string>
+    <string name="cancel">Cancel</string>
+    <string-array name="num_players_array">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="player_colors_array">
+        <item>Blue</item>
+        <item>Red</item>
+        <item>Green</item>
+        <item>Yellow</item>
+        <item>Black</item>
+    </string-array>
+    <string-array name="empty_colors_array">
+
+    </string-array>
+
+
+    <string name="action_settings">Settings</string>
+    <string name="title_game_list">Games</string>
+    <string name="title_game_detail">Game Detail</string>
+    <string name="title_activity_pregame">Pregame Lobby</string>
+    <string name="title_activity_boardmap">Boardmap Activity</string>
+    <string name="title_activity_gameover">Game Over</string>
+
+    <string name="title_item_list">Items</string>
+    <string name="title_item_detail">Item Detail</string>
+    <string name="leave_game">Leave Game</string>
+
+    <string name="game_started">Game Started</string>
+    <string name="waiting_on_player">Waiting on player...</string>
+
+    <string name="tab">\u0009</string>
+    <string name="refresh_pre_game">Refresh Player List</string>
+
+    <!-- Strings related to boardmap -->
+
+    <string name="green">Green</string>
+    <string name="yellow">Yellow</string>
+    <string name="orange">Orange</string>
+    <string name="red">Red</string>
+    <string name="black">Black</string>
+    <string name="blue">Blue</string>
+    <string name="white">White</string>
+    <string name="purple">Purple</string>
+    <string name="wild">Wild</string>
+    <string name="default_card_count">0</string>
+    <string name="default_train_count">45</string>
+    <string name="train_count_label">My Trains</string>
+    <string name="card_count_label">My Cards</string>
+    <string name="destination_count_label">My Destinations</string>
+
+
+</resources>

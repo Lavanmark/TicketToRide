@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3797AF</color>
+    <color name="colorPrimaryDark">#225E6D</color>
+    <color name="colorAccent">#AF4F37</color>
+
+    <color name="colorMarsGrey">#8C8C8C</color>
+    <color name="colorMars">#AF4F37</color>
+    <color name="colorMarsDark">#6D3122</color>
+    <color name="colorMarsLight">#C37B69</color>
+    <color name="colorMarsBright">#f46242</color>
+
+    <color name="colorMarsComplementary">#3797AF</color>
+    <color name="colorMarsComplementaryDark">#225E6D</color>
+    <color name="colorMarsComplementaryLight">#82BECD</color>
+    <color name="colorMarsComplementarySuperLight">#B4D8E1</color>
+
+    <color name="color_text_default">@color/colorMarsDark</color>
+    <color name="colorMarsPink">#fa83e8</color>
+
+    <!-- Specifically for the buttons designating which player goes with which color
+        but probably works elsewhere -->
+    <color name="colorBlackPlayer">#6b6a67</color>
+    <color name="colorRedPlayer">#ff4f4f</color>
+    <color name="colorGreenPlayer">#46d650</color>
+    <color name="colorYellowPlayer">#ccc10a</color>
+    <color name="colorBluePlayer">#4f8bea</color>
+    <color name="colorNotAPlayer">#ffffff</color>
+</resources>

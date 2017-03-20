@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="200dp"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:layout_gravity="bottom"
+
+    android:id="@+id/drawer_place_routes">
+
+
+
+    <TextView
+        android:text="Choose a Route"
+        android:textSize="16dp"
+        android:textColor="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/side_nav_bar"
+        android:paddingBottom="40dp"
+        android:paddingTop="40dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"/>
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="CITY 1"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="16dp"
+            android:layout_width="140dp"/>
+
+        <TextView
+            android:text="CITY 2"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="120dp"/>
+
+        <TextView
+            android:text="ROUTE COLOR"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="110dp"/>
+
+        <TextView
+            android:text="LENGTH"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="60dp"/>
+
+        <TextView
+            android:text="CLAIM"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="50dp"/>
+
+        <TextView
+            android:text="OWNER"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="60dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:dividerPadding="16dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/route_recycler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <Button
+            android:text="End Turn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_selector"
+            />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="15dp">
+
+    <TextView
+        android:text="@string/waiting_on_player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/playerListNameText"
+        android:layout_weight="1"
+        android:textColor="@color/colorMarsDark"
+        android:paddingTop="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/playerListColorText"
+        android:textColor="@color/colorMarsDark"
+        android:layout_weight="1"/>
+
+</LinearLayout>

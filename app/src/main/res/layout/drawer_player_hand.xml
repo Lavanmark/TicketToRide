@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:layout_gravity="bottom"
+
+    android:id="@+id/drawer_player_hand">
+
+
+
+    <TextView
+        android:text="Your Cards"
+        android:textSize="24sp"
+        android:textColor="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:background="@drawable/side_nav_bar"/>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:dividerPadding="16dp">
+
+        <TextView
+            android:text="@string/card_count_label"
+            android:textSize="14dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:rowCount="10">
+                <TextView
+                    android:text="@string/red"
+                    android:id="@+id/red_card_label"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="4dp"
+                    android:textColor="@android:color/holo_red_dark"/>
+                <TextView
+                    android:text="@string/default_card_count"
+                    android:id="@+id/red_card_count"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="@string/yellow"
+                    android:id="@+id/yellow_card_label"
+                    android:paddingBottom="2dp"
+                    android:textColor="@android:color/holo_orange_light"/>
+                <TextView
+                    android:text="@string/default_card_count"
+                    android:id="@+id/yellow_card_count"
+                    android:paddingBottom="2dp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="@string/orange"
+                    android:id="@+id/orange_card_label"
+                    android:paddingBottom="2dp"
+                    android:textColor="@android:color/holo_orange_dark"/>
+                <TextView
+                    android:text="@string/default_card_count"
+                    android:id="@+id/orange_card_count"
+                    android:paddingBottom="2dp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="Green"
+                    android:id="@+id/green_card_label"
+                    android:paddingBottom="2dp"
+                    android:textColor="@android:color/holo_green_dark"/>
+                <TextView
+                    android:text="@string/default_card_count"
+                    android:id="@+id/green_card_count"
+                    android:paddingBottom="2dp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="@string/blue"
+                    android:id="@+id/blue_card_label"
+                    android:paddingBottom="2dp"
+                    android:textColor="@android:color/holo_blue_dark"/>
+                <TextView
+                    android:text="@string/default_card_count"
+                    android:id="@+id/blue_card_count"
+                    android:paddingBottom="2dp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="@string/purple"
+                    android:id="@+id/purple_card_label"
+                    android:paddingBottom="2dp"
+                    android:textColor="@android:color/holo_purple"/>
+                <TextView
+                    android:text="@string/default_card_count"
+                    android:id="@+id/purple_card_count"
+                    android:paddingBottom="2dp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="@string/black"
+                    android:id="@+id/black_card_label"
+                    android:paddingBottom="2dp"
+                    />
+                <TextView
+                    android:text="@string/default_card_count"
+                    android:id="@+id/black_card_count"
+                    android:paddingBottom="2dp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="@string/white"
+                    android:id="@+id/white_card_label"
+                    android:paddingBottom="2dp"
+                    android:textColor="@color/colorMarsGrey"/>
+                <TextView
+                    android:text="@string/default_card_count"
+                    android:id="@+id/white_card_count"
+                    android:paddingBottom="2dp"
+                    android:layout_gravity="center"/>
+
+            <TextView
+                android:text="@string/wild"
+                android:id="@+id/wild_card_label"
+                android:paddingBottom="2dp"
+                android:textColor="@color/colorMarsPink"/>
+            <TextView
+                android:text="@string/default_card_count"
+                android:id="@+id/wild_card_count"
+                android:paddingBottom="2dp"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:text="@string/train_count_label"
+                android:id="@+id/train_label"
+                android:paddingBottom="2dp"
+                android:paddingTop="4dp"
+                android:layout_row="9"
+                android:layout_column="0"/>
+
+            <TextView
+                android:text="@string/default_train_count"
+                android:id="@+id/train_count"
+                android:paddingBottom="2dp"
+                android:paddingTop="4dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_row="9"
+                android:layout_column="1"/>
+        </GridLayout>
+
+        <TextView
+            android:text="@string/destination_count_label"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+
+            <LinearLayout
+                android:id="@+id/destinationHolder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:paddingLeft="25dp"
+                android:orientation="vertical">
+                <TextView
+                    android:text="DESTINATION"
+                    android:textSize="14sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/colorMarsComplementarySuperLight"
+            android:padding="10dp">
+            <TextView
+                android:text="Chat Room"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"/>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@android:color/white"
+                android:layout_marginBottom="100sp"
+                android:id="@+id/chatScroll">
+                <LinearLayout
+                    android:id="@+id/chatHolder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                </LinearLayout>
+
+            </ScrollView>
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-100sp"
+                android:maxLines ="1"
+                android:id="@+id/chatMessageField"/>
+            <Button
+                android:text="Send Message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-75sp"
+                android:background="@drawable/button_selector_blue"
+                android:id="@+id/sendMessageButton"/>
+
+
+        </LinearLayout>
+
+
+
+
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

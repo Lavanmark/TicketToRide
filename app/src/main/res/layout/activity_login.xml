@@ -1,0 +1,239 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.floorcorn.tickettoride.ui.views.activities.LoginActivity">
+
+    <!-- Login progress -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/themartian"
+            android:scaleType="centerCrop"/>
+
+        <ProgressBar
+            android:id="@+id/login_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
+
+        <ScrollView
+            android:id="@+id/login_form"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:text="@string/title_login_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/header_text"
+                    android:textAlignment="center"
+                    android:layout_marginBottom="50dp"
+                    android:textColor="@color/colorMarsDark"
+                    style="@style/LoginTheme"/>
+
+                <LinearLayout
+                    android:id="@+id/username_login_form"
+                    android:layout_width="400dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/border"
+                    android:padding="12dp">
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/username"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/prompt_username"
+                            android:textColorHint="@color/colorMarsDark"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:textColor="@color/colorMarsDark"
+                            android:singleLine="true"
+                            />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/prompt_password"
+                            android:textColorHint="@color/colorMarsDark"
+                            android:imeActionId="@+id/login"
+                            android:imeOptions="actionUnspecified"
+                            android:inputType="textPassword"
+                            android:textColor="@color/colorMarsDark"/>
+                            android:maxLines="1"/>
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/sign_in_button"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/action_sign_in"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorMarsDark"
+                        android:backgroundTint="@color/colorMarsComplementary"
+                        android:layout_gravity="center"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="20dp">
+
+                        <View
+                            android:layout_width="50dp"
+                            android:layout_height="7dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/colorMarsComplementary"/>
+
+                        <TextView
+                            android:text="@string/title_not_a_user"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
+                            android:id="@+id/register_title_text"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorMarsDark"
+                            android:textSize="@dimen/heading_register"/>
+
+                        <View
+                            android:layout_width="200dp"
+                            android:layout_height="7dip"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/colorMarsComplementary" />
+
+                    </LinearLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <EditText
+                            android:id="@+id/register_name_first"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/prompt_firstname"
+                            android:imeActionId="@+id/login"
+                            android:imeOptions="actionUnspecified"
+                            android:inputType="text"
+                            android:textColor="@color/colorMarsDark"/>
+                            android:maxLines="1"/>
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/register_name_last"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/prompt_lastname"
+                            android:imeActionId="@+id/login"
+                            android:imeOptions="actionUnspecified"
+                            android:inputType="text"
+                            android:textColor="@color/colorMarsDark"/>
+                            android:maxLines="1"/>
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/register_username"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/prompt_username"
+                            android:imeActionId="@+id/login"
+                            android:imeOptions="actionUnspecified"
+                            android:inputType="text"
+                            android:textColor="@color/colorMarsDark"/>
+                            android:maxLines="1"/>
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/register_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/prompt_password"
+                            android:imeActionId="@+id/login"
+                            android:imeOptions="actionUnspecified"
+                            android:inputType="textPassword"
+                            android:textColor="@color/colorMarsDark"/>
+                            android:maxLines="1" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/register_password_confirm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/prompt_confirm"
+                            android:textColorHint="@color/colorMarsBright"
+                            android:imeActionId="@+id/login"
+                            android:imeOptions="actionUnspecified"
+                            android:inputType="textPassword"
+                            android:textColor="@color/colorMarsDark"/>
+                            android:maxLines="1" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/register_button"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/action_register"
+                        android:textColor="@color/colorMarsDark"
+                        android:backgroundTint="@color/colorMarsComplementary"
+                        android:textStyle="bold"
+                        android:layout_gravity="center" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+</LinearLayout>
