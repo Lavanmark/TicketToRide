@@ -26,7 +26,7 @@ public class Game {
 	private boolean finished = false;
 	private int longestRoute = 0;
 
-	private TrainCard lastDrawn = null;
+	private int lastPlayerID = Player.NO_PLAYER_ID;
 
 	@JsonIgnore
 	private ArrayList<ICommand> commands = new ArrayList<>();
@@ -34,8 +34,7 @@ public class Game {
 	private Board board = null;
 
 
-	private Game(){} //<--- what is this doing here? doesnt look right (Joseph: who wrote this original comment?)
-	//Tyler says: it is here for deserializing.
+	private Game(){}
 
 	public Game(Game game) {
 		this.gameID = game.getGameID();
@@ -75,7 +74,7 @@ public class Game {
 		return game;
 	}
 
-	public void setPlayerList(ArrayList<Player> newPlayers) {
+	public void setPlayerList(List<Player> newPlayers) {
 		if(playerList == null)
 			playerList = new ArrayList<>();
 		this.playerList.clear();
@@ -278,6 +277,10 @@ public class Game {
 		return finished;
 	}
 
+	public void endGame() {
+		this.finished = true;
+	}
+
 	public Board getBoard() {
 		return board;
 	}
@@ -323,5 +326,16 @@ public class Game {
 	@Override
 	public int hashCode() {
 		return gameID;
+	}
+
+	public Player getLastPlayer() {
+		for(Player p : playerList)
+			if(p.getPlayerID() == lastPlayerID)
+				return p;
+		return null;
+	}
+
+	public void setLastPlayerID(int lastPlayerID) {
+		this.lastPlayerID = lastPlayerID;
 	}
 }

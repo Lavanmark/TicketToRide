@@ -15,11 +15,11 @@ public class LastRoundCmd extends LastRoundCmdData {
 
     @Override
     public ICommand getCmdFor(User user) {
-        return null;
+        return new LastRoundCmd(this.lastPlayer.getCensoredPlayer(user));
     }
 
     @Override
     public void execute(IClient client) {
-
+        client.setLastPlayer(this.lastPlayer);
     }
 }

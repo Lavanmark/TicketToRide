@@ -15,11 +15,11 @@ public class StartTurnCmd extends StartTurnCmdData {
 
     @Override
     public ICommand getCmdFor(User user) {
-        return null;
+        return new StartTurnCmd(this.player.getCensoredPlayer(user));
     }
 
     @Override
     public void execute(IClient client) {
-
+        client.startTurn(this.player);
     }
 }

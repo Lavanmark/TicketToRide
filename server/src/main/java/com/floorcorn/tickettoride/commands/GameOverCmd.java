@@ -17,11 +17,12 @@ public class GameOverCmd extends GameOverCmdData {
 
     @Override
     public ICommand getCmdFor(User user) {
-        return null;
+        return this;
     }
 
     @Override
     public void execute(IClient client) {
-
+        client.setGameOver();
+        client.setPlayerList(this.playerList);
     }
 }
