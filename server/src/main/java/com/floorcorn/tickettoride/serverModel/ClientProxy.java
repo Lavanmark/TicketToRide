@@ -3,11 +3,11 @@ package com.floorcorn.tickettoride.serverModel;
 import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.interfaces.IClient;
+import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.TrainCard;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +25,7 @@ public class ClientProxy implements IClient {
 
 
 	@Override
-	public void setPlayerList(ArrayList<Player> players) {
+	public void setPlayerList(List<Player> players) {
 		gameToModify.setPlayerList(players);
 	}
 
@@ -37,6 +37,56 @@ public class ClientProxy implements IClient {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public void startTurn(Player player) {
+		for(Player p : gameToModify.getPlayerList()) {
+			p.setTurn(false);
+			if(p.equals(player))
+				p.setTurn(true);
+		}
+	}
+
+	@Override
+	public void setLastPlayer(Player player) {
+		gameToModify.setLastPlayerID(player.getPlayerID());
+	}
+
+	@Override
+	public void setGameOver() {
+		gameToModify.endGame();
+	}
+
+	@Override
+	public TrainCard drawTrainCard() {
+		try {
+			return gameToModify.getBoard().drawFromTrainCardDeck();
+		} catch(GameActionException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public TrainCard drawTrainCard(int position) {
+		return null;
+	}
+
+	@Override
+	public List<DestinationCard> drawDestinationCards() {
+		return null;
+	}
+
+	@Override
+	public void addCardToPlayer(Player player, TrainCard card) {
+
+	}
+
+	@Override
+	public void addDestinationCardsToPlayer(Player player, List<DestinationCard> cards) {
+
+	}
+
 
 	@Override
 	public Game getGame() {

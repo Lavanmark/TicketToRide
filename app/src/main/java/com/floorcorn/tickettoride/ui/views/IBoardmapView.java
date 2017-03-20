@@ -44,12 +44,5 @@ public interface IBoardmapView extends IView {
 
 	void displayHandDrawer();
 	void hideHandDrawer();
-	void animate_ClickOnDestinationCards();
-	void animate_takeDestinationCards();
-	void animate_showOtherPlayerInfo();
-	void animate_clickDrawDestination();
-    void animate_clickDrawDestinationDeck();
-    void animate_clickOpenRouteDrawer();
-    void animate_clickClaimRoute();
 
 }

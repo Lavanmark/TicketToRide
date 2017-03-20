@@ -53,6 +53,11 @@
             android:label="@string/title_activity_boardmap"
             android:configChanges="orientation"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ui.views.activities.GameOverActivity"
+            android:label="@string/title_activity_gameover"
+            android:configChanges="orientation"
+            android:theme="@style/MyDialogTheme" />
     </application>
 
 </manifest>

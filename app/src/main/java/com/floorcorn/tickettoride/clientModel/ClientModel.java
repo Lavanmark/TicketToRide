@@ -49,12 +49,6 @@ public class ClientModel extends Observable {
         return gameSet;
     }
 
-    public List<Game> getGames(UIFacade.GameSortStyle sortStyle) {
-        // Probably don't need this because UIFacade can return sorted games lists after getting
-        // the games from this ClientModel
-        throw new UnsupportedOperationException();
-    }
-
     public Game getCurrentGame() {
         return currentGame;
     }
@@ -98,10 +92,11 @@ public class ClientModel extends Observable {
     }
 
     public void setChatLog(GameChatLog chatLog){
-        this.chatLog = chatLog;
-
-        setChanged();
-        notifyObservers(this.chatLog);
+        if(!chatLog.equals(this.chatLog)) {
+            this.chatLog = chatLog;
+            setChanged();
+            notifyObservers(this.chatLog);
+        }
     }
 
     /**

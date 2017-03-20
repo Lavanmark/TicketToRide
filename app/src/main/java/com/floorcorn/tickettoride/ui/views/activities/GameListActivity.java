@@ -123,7 +123,7 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 	@Override
 	public void onResume() {
 		presenter.register();
-		presenter.setCurrentGame(null); //TODO pointless call...
+		presenter.setCurrentGame(null);
 		presenter.requestGames();
 		super.onResume();
 	}

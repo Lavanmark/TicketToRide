@@ -26,7 +26,7 @@ public class Game {
 	private boolean finished = false;
 	private int longestRoute = 0;
 
-	private TrainCard lastDrawn = null;
+	private int lastPlayerID = Player.NO_PLAYER_ID;
 
 	@JsonIgnore
 	private ArrayList<ICommand> commands = new ArrayList<>();
@@ -34,8 +34,7 @@ public class Game {
 	private Board board = null;
 
 
-	private Game(){} //<--- what is this doing here? doesnt look right (Joseph: who wrote this original comment?)
-	//Tyler says: it is here for deserializing.
+	private Game(){}
 
 	public Game(Game game) {
 		this.gameID = game.getGameID();
@@ -75,7 +74,7 @@ public class Game {
 		return game;
 	}
 
-	public void setPlayerList(ArrayList<Player> newPlayers) {
+	public void setPlayerList(List<Player> newPlayers) {
 		if(playerList == null)
 			playerList = new ArrayList<>();
 		this.playerList.clear();
@@ -205,37 +204,14 @@ public class Game {
 		return null;
 	}
 
-	public TrainCardColor drawTrainCardFromDeck(User user) throws GameActionException {
-		Player player = getPlayer(user);
-		if(player == null)
-			return null;
-		if(player.isTurn()) {
-			TrainCard lastDrawn = board.drawFromTrainCardDeck();
-			player.addTrainCard(lastDrawn, 1);
-			return lastDrawn.getColor();
+	public void addCard(Player player, TrainCard card) {
+		for(Player p : playerList) {
+			if(p.getUserID() == player.getUserID())
+				p.addTrainCard(card, 1);
 		}
-		return null;
-	}
-
-
-
-	public TrainCardColor drawFaceUpCard(User user, int position) throws GameActionException {
-		Player player = getPlayer(user);
-		if(player == null)
-			return null;
-		if(player.isTurn()) {
-			TrainCard card = board.drawFromFaceUp(position);
-			player.addTrainCard(card, 1);
-			return card.getColor();
-		}
-		return null;
 	}
 
 	public List<Route> getRoutes() {
-		return board.getRoutes();
-	}
-
-	public List<Route> getAvailableRoutes() {
 		return board.getRoutes();
 	}
 
@@ -276,6 +252,10 @@ public class Game {
 
 	public boolean isFinished() {
 		return finished;
+	}
+
+	public void endGame() {
+		this.finished = true;
 	}
 
 	public Board getBoard() {
@@ -323,5 +303,16 @@ public class Game {
 	@Override
 	public int hashCode() {
 		return gameID;
+	}
+
+	public Player getLastPlayer() {
+		for(Player p : playerList)
+			if(p.getPlayerID() == lastPlayerID)
+				return p;
+		return null;
+	}
+
+	public void setLastPlayerID(int lastPlayerID) {
+		this.lastPlayerID = lastPlayerID;
 	}
 }
