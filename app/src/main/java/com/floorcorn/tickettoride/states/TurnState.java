@@ -10,72 +10,72 @@ import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 public class TurnState extends IState {
 
     @Override
-    void enter(IBoardMapPresenter presenter) {
+    public void enter(IBoardMapPresenter presenter) {
         super.enter(presenter);
     }
 
     @Override
-    void exit(IBoardMapPresenter presenter) {
+    public void exit(IBoardMapPresenter presenter) {
         super.exit(presenter);
     }
 
     @Override
-    void setTurn(IBoardmapView presenter) {
+    public void setTurn(IBoardmapView presenter) {
         super.setTurn(presenter);
     }
 
     @Override
-    void drawFaceUpCard(IBoardMapPresenter presenter, int position) {
+    public void drawFaceUpCard(IBoardMapPresenter presenter, int position) {
         super.drawFaceUpCard(presenter, position);
     }
 
     @Override
-    void drawTrainCardFromDeck(IBoardMapPresenter presenter) {
+    public void drawTrainCardFromDeck(IBoardMapPresenter presenter) {
         super.drawTrainCardFromDeck(presenter);
     }
 
     @Override
-    void claimRoute(IBoardMapPresenter presenter) {
+    public void claimRoute(IBoardMapPresenter presenter) {
         super.claimRoute(presenter);
     }
 
     @Override
-    void drawDestinationTickets(IBoardMapPresenter presenter) {
+    public void drawDestinationTickets(IBoardMapPresenter presenter) {
         super.drawDestinationTickets(presenter);
     }
 
     @Override
-    void discardDestinationTickets(IBoardMapPresenter presenter) {
+    public void discardDestinationTickets(IBoardMapPresenter presenter) {
         super.discardDestinationTickets(presenter);
     }
 
     @Override
-    void openTrainDraw(IBoardMapPresenter presenter) {
+    public void openTrainDraw(IBoardMapPresenter presenter) {
         super.openTrainDraw(presenter);
     }
 
     @Override
-    void closeTrainDraw(IBoardMapPresenter presenter) {
+    public void closeTrainDraw(IBoardMapPresenter presenter) {
         super.closeTrainDraw(presenter);
     }
 
     @Override
-    void openDestinationDraw(IBoardMapPresenter presenter) {
+    public void openDestinationDraw(IBoardMapPresenter presenter) {
         super.openDestinationDraw(presenter);
     }
 
     @Override
-    void closeDestinationDraw(IBoardMapPresenter presenter) {
+    public void closeDestinationDraw(IBoardMapPresenter presenter) {
         super.closeDestinationDraw(presenter);
     }
 
     @Override
-    void openClaimRoute(IBoardMapPresenter presenter) {
+    public void openClaimRoute(IBoardMapPresenter presenter) {
         super.openClaimRoute(presenter);
     }
 
     @Override
-    void closeClaimRoute(IBoardMapPresenter presenter) {
+    public void closeClaimRoute(IBoardMapPresenter presenter) {
         super.closeClaimRoute(presenter);
     }
 }

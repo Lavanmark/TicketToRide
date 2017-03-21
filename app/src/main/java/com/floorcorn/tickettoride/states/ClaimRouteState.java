@@ -9,17 +9,17 @@ import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 public class ClaimRouteState extends TurnState {
 
     @Override
-    void claimRoute(IBoardMapPresenter presenter) {
+    public void claimRoute(IBoardMapPresenter presenter) {
         super.claimRoute(presenter);
     }
 
     @Override
-    void openClaimRoute(IBoardMapPresenter presenter) {
+    public void openClaimRoute(IBoardMapPresenter presenter) {
         super.openClaimRoute(presenter);
     }
 
     @Override
-    void closeClaimRoute(IBoardMapPresenter presenter) {
+    public void closeClaimRoute(IBoardMapPresenter presenter) {
         super.closeClaimRoute(presenter);
     }
 }
