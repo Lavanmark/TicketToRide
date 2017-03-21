@@ -1,6 +1,6 @@
 package com.floorcorn.tickettoride.commands;
 
-import com.floorcorn.tickettoride.interfaces.IClient;
+import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 
@@ -21,8 +21,8 @@ public class GameOverCmd extends GameOverCmdData {
     }
 
     @Override
-    public void execute(IClient client) {
-        client.setGameOver();
-        client.setPlayerList(this.playerList);
+    public void execute(Game game) {
+        game.endGame();
+        game.setPlayerList(this.playerList); //TODO might not be necessary...
     }
 }

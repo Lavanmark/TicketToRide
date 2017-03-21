@@ -1,10 +1,12 @@
 package com.floorcorn.tickettoride.commands;
 
-import com.floorcorn.tickettoride.interfaces.IClient;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.DestinationCard;
+import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,8 +29,16 @@ public class DrawDestinationCmd extends DrawDestinationCmdData{
     }
 
     @Override
-    public void execute(IClient client) {
-        cardsDrawn = client.drawDestinationCards();
-        client.addDestinationCardsToPlayer(drawingPlayer, cardsDrawn);
+    public void execute(Game game) {
+        if(cardsDrawn != null && cardsDrawn.size() > 0)
+	        return;
+	    cardsDrawn = new ArrayList<>();
+	    try {
+		    for(int i = 0; i < 3; i++)
+			    cardsDrawn.add(game.getBoard().drawFromDestinationCardDeck());
+	    } catch(GameActionException e) {
+		    e.printStackTrace();
+	    }
+	    game.addDestinationCardsToPlayer(drawingPlayer, cardsDrawn);
     }
 }

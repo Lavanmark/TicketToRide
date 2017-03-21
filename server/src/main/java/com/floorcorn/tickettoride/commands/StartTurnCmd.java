@@ -1,6 +1,6 @@
 package com.floorcorn.tickettoride.commands;
 
-import com.floorcorn.tickettoride.interfaces.IClient;
+import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 
@@ -19,7 +19,8 @@ public class StartTurnCmd extends StartTurnCmdData {
     }
 
     @Override
-    public void execute(IClient client) {
-        client.startTurn(this.player);
+    public void execute(Game game) {
+        //TODO might need to check stuff here...
+        game.setTurn(this.player);
     }
 }

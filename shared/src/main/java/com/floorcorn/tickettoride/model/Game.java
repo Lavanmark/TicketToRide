@@ -203,11 +203,34 @@ public class Game {
 		}
 		return null;
 	}
-
-	public void addCard(Player player, TrainCard card) {
+	public Player getPlayer(Player player) {
+		if(player == null) return null; // Don't throw BadUserException here.
 		for(Player p : playerList) {
 			if(p.getUserID() == player.getUserID())
-				p.addTrainCard(card, 1);
+				return p;
+		}
+		return null;
+	}
+
+	public void addCard(Player player, TrainCard card) {
+		if((player = getPlayer(player)) != null) {
+			player.addTrainCard(card, 1);
+		}
+	}
+
+	public void addDestinationCardsToPlayer(Player player, List<DestinationCard> cards) {
+		if((player = getPlayer(player)) != null) {
+			for(DestinationCard card : cards)
+				player.addDestinationCard(card);
+		}
+	}
+
+	public void discardDestinationCards(Player player, List<DestinationCard> cards) {
+		if((player = getPlayer(player)) != null) {
+			for(DestinationCard card : cards) {
+				if(player.removeDestinationCard(card))
+					board.discard(card);
+			}
 		}
 	}
 
@@ -215,17 +238,22 @@ public class Game {
 		return board.getRoutes();
 	}
 
-	public void claimRoute(Route route, Player p) {
-		if(!route.canClaim(p))
+	public void claimRoute(Route route, Player player) {
+		if((player = getPlayer(player)) == null)
 			return;
-		System.out.println("claiming route");
-		List<TrainCard> discard = route.claim(p);
-		for(TrainCard card : discard) {
-			try {
-				board.discard(card);
-			} catch(GameActionException e) {
-				e.printStackTrace();
+		for(Route r : getRoutes()) {
+			if(r.getRouteID() == route.getRouteID()) {
+				route = r;
+				break;
 			}
+		}
+		if(!route.canClaim(player))
+			return;
+
+		System.out.println("claiming route");
+		List<TrainCard> discard = route.claim(player);
+		for(TrainCard card : discard) {
+			board.discard(card);
 		}
 		board.updateRoute(route);
 	}
@@ -268,7 +296,7 @@ public class Game {
 
 	public List<Player> getPlayerLongestRoute(){ // returns 1..* players with the longest route. 10 points goes to all those who are tied for the longest route
 		List<Player> playerLongestRoute = new ArrayList<Player>();
-		for(Player player: playerList){
+		for(Player player : playerList){
 			if(player.getLongestRoute() == longestRoute)
 				playerLongestRoute.add(player);
 		}
@@ -276,7 +304,7 @@ public class Game {
 	}
 
 	public void calculateLongestRoute(){ // gets the longest route from each player to determine the longest route in the entire game.
-		for(Player player: playerList){
+		for(Player player : playerList){
 			if(player.getLongestRoute() > longestRoute)
 				longestRoute = player.getLongestRoute();
 				board.setLongestRoute(longestRoute); // sets the child
@@ -285,6 +313,18 @@ public class Game {
 
 	public int getLongestRoute(){ // just a simple getter
 		return longestRoute;
+	}
+
+	/**
+	 * All players turns are ended then makes it the given players turn.
+	 * @param player player to set turn on
+	 */
+	public void setTurn(Player player) {
+		for(Player p : playerList) {
+			p.setTurn(false);
+			if(p.equals(player))
+				p.setTurn(true);
+		}
 	}
 
 	@Override
@@ -310,6 +350,13 @@ public class Game {
 			if(p.getPlayerID() == lastPlayerID)
 				return p;
 		return null;
+	}
+
+	public void updatePlayer(Player player) {
+		Player listPlayer = getPlayer(player);
+		if(listPlayer == null)
+			return;
+		listPlayer.update(player);
 	}
 
 	public void setLastPlayerID(int lastPlayerID) {

@@ -1,7 +1,7 @@
 package com.floorcorn.tickettoride.commands;
 
-import com.floorcorn.tickettoride.interfaces.IClient;
 import com.floorcorn.tickettoride.model.DestinationCard;
+import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 
@@ -12,9 +12,11 @@ import java.util.List;
  */
 
 public class DrawDestinationCmd extends DrawDestinationCmdData {
-    public DrawDestinationCmd(Player player, List<DestinationCard> destCardList){
+
+    private DrawDestinationCmd() {}
+    public DrawDestinationCmd(Player player){
         this.drawingPlayer = player;
-        this.cardsDrawn = destCardList;
+        this.cardsDrawn = null; //This is because we won't know what cards were drawn initially
     }
 
     @Override
@@ -23,7 +25,10 @@ public class DrawDestinationCmd extends DrawDestinationCmdData {
     }
 
     @Override
-    public void execute(IClient client) {
-        //TODO
+    public void execute(Game game) {
+        if(drawingPlayer.isCensoredPlayer())
+            game.updatePlayer(drawingPlayer);
+        else
+            game.addDestinationCardsToPlayer(drawingPlayer, cardsDrawn);
     }
 }
