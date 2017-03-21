@@ -9,19 +9,19 @@ import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 
 public class IState {
 
-    void enter(IBoardMapPresenter presenter){}
-    void exit(IBoardMapPresenter presenter){}
-    void setTurn(IBoardmapView presenter){}
-    void drawFaceUpCard(IBoardMapPresenter presenter, int position){}
-    void drawTrainCardFromDeck(IBoardMapPresenter presenter){}
-    void claimRoute(IBoardMapPresenter presenter){}
-    void drawDestinationTickets(IBoardMapPresenter presenter){}
-    void discardDestinationTickets(IBoardMapPresenter presenter){}
-    void openTrainDraw(IBoardMapPresenter presenter){}
-    void closeTrainDraw(IBoardMapPresenter presenter){}
-    void openDestinationDraw(IBoardMapPresenter presenter){}
-    void closeDestinationDraw(IBoardMapPresenter presenter){}
-    void openClaimRoute(IBoardMapPresenter presenter){}
-    void closeClaimRoute(IBoardMapPresenter presenter){}
+    public void enter(IBoardMapPresenter presenter){}
+    public void exit(IBoardMapPresenter presenter){}
+    public void setTurn(IBoardmapView presenter){}
+    public void drawFaceUpCard(IBoardMapPresenter presenter, int position){}
+    public void drawTrainCardFromDeck(IBoardMapPresenter presenter){}
+    public void claimRoute(IBoardMapPresenter presenter){}
+    public void drawDestinationTickets(IBoardMapPresenter presenter){}
+    public void discardDestinationTickets(IBoardMapPresenter presenter){}
+    public void openTrainDraw(IBoardMapPresenter presenter){}
+    public void closeTrainDraw(IBoardMapPresenter presenter){}
+    public void openDestinationDraw(IBoardMapPresenter presenter){}
+    public void closeDestinationDraw(IBoardMapPresenter presenter){}
+    public void openClaimRoute(IBoardMapPresenter presenter){}
+    public void closeClaimRoute(IBoardMapPresenter presenter){}
 
 }
