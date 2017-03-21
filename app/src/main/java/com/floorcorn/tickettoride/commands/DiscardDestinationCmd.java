@@ -26,7 +26,9 @@ public class DiscardDestinationCmd extends DiscardDestinationCmdData {
 
     @Override
     public void execute(Game game) {
-        //TODO make this change the count if not this player.
-        game.discardDestinationCards(discardingPlayer, Arrays.asList(this.cards));
+        if(discardingPlayer.isCensoredPlayer())
+            game.updatePlayer(discardingPlayer);
+        else
+            game.discardDestinationCards(discardingPlayer, Arrays.asList(this.cards));
     }
 }

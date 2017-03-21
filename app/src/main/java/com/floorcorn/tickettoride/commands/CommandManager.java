@@ -30,13 +30,9 @@ public class CommandManager {
 		if(commands == null || commands.size() == 0)
 			return;
 
-		//if(commands.get(0).getCmdID() <= clientFacade.getLastExecutedCommand())
-		//	return;
-		// ^^^^^^ these lines cause the commands to never be executed.
-		//TODO no way to prevent repeat commands now...
-		// Joseph comin' in late here. Shouldn't that be commands.get(commands.size()-1)?
-
 		for(ICommand command : commands) {
+			if(game.getLatestCommandID() >= command.getCmdID())
+				continue;
 			System.out.println("doing command");
 			game.addCommand(command);
 			command.execute(game);

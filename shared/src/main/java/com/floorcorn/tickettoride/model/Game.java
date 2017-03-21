@@ -203,7 +203,7 @@ public class Game {
 		}
 		return null;
 	}
-	private Player getPlayer(Player player) {
+	public Player getPlayer(Player player) {
 		if(player == null) return null; // Don't throw BadUserException here.
 		for(Player p : playerList) {
 			if(p.getUserID() == player.getUserID())
@@ -350,6 +350,13 @@ public class Game {
 			if(p.getPlayerID() == lastPlayerID)
 				return p;
 		return null;
+	}
+
+	public void updatePlayer(Player player) {
+		Player listPlayer = getPlayer(player);
+		if(listPlayer == null)
+			return;
+		listPlayer.update(player);
 	}
 
 	public void setLastPlayerID(int lastPlayerID) {

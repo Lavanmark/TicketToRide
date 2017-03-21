@@ -26,7 +26,9 @@ public class DrawDestinationCmd extends DrawDestinationCmdData {
 
     @Override
     public void execute(Game game) {
-        //TODO make this change count if not the player.
-        game.addDestinationCardsToPlayer(drawingPlayer, cardsDrawn);
+        if(drawingPlayer.isCensoredPlayer())
+            game.updatePlayer(drawingPlayer);
+        else
+            game.addDestinationCardsToPlayer(drawingPlayer, cardsDrawn);
     }
 }

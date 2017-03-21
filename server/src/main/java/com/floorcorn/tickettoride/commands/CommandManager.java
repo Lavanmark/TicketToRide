@@ -25,7 +25,7 @@ public class CommandManager {
 		if(lastCommand < 0)
 			lastCommand = 0;
 		if(lastCommand >= game.getLatestCommandID())
-			return new ArrayList<>(); //TODO I don't know if this is the best solution...
+			return new ArrayList<>();
 
 
 		ListIterator<ICommand> li = commands.listIterator(lastCommand);
@@ -47,14 +47,25 @@ public class CommandManager {
 		if(!game.isPlayer(user.getUserID()))
 			throw new GameActionException("User is not a player!");
 		if(!game.getPlayer(user).isTurn()) {
-			//TODO if there are actions they can do not on their turn then allow them. such as discard destination cards
-			throw new GameActionException("Not your turn!");
+			if(!(command instanceof DiscardDestinationCmd))
+				throw new GameActionException("Not your turn!");
 		}
-		//TODO add chain reaction commands.
 
-		// TODO switch statement that makes new commands if the command results in chain reaction
+		//TODO something else was going to go here but I can't remember now...
+
+		//TODO add chain reaction commands.
+		if(command instanceof DrawTrainCardCmd){
+
+		}
+		if(command instanceof ClaimRouteCmd) {
+
+		}
+		if(command instanceof DrawDestinationCmd) {
+
+		}
+
 		int lastCommandClient = command.getCmdID();
-		command.setCmdID(game.getLatestCommandID());
+		command.setCmdID(game.getLatestCommandID() + 1);
 		command.execute(game);
 		game.addCommand(command);
 

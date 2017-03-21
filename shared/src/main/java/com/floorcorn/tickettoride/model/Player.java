@@ -82,6 +82,14 @@ public class Player {
 		return p;
 	}
 
+	public boolean isCensoredPlayer() {
+		if(totalDestinationCards != destinationCards.size())
+			return true;
+		if(totalTrainCards > 0 && trainCards.size() == 0)
+			return true;
+		return false;
+	}
+
 	public int getPlayerID() {
 		return playerID;
 	}
@@ -273,6 +281,17 @@ public class Player {
 		sb.append("Train Cars: ").append(trainCarsLeft);
 
 		return sb.toString();
+	}
+
+	protected void update(Player player) {
+		this.turn = player.isTurn();
+		this.score = player.getScore();
+		this.trainCarsLeft = player.getTrainCarsLeft();
+		this.totalTrainCards = player.getTotalTrainCards();
+		this.totalDestinationCards = player.getTotalDestinationCards();
+		this.destinationCards = new ArrayList<>(player.getDestinationCards());
+		this.trainCards = new HashMap<>(player.getTrainCards());
+		this.routesClaimed = new ArrayList<>(player.getRoutesClaimed());
 	}
 
 	@Override

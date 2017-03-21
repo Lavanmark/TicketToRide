@@ -26,7 +26,9 @@ public class DrawTrainCardCmd extends DrawTrainCardCmdData {
 
     @Override
     public void execute(Game game) {
-        //make this change count if not player.
-        game.addCard(drawingPlayer, cardDrawn);
+        if(drawingPlayer.isCensoredPlayer())
+            game.updatePlayer(drawingPlayer);
+        else
+            game.addCard(drawingPlayer, cardDrawn);
     }
 }

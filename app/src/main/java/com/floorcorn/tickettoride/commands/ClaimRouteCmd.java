@@ -22,7 +22,11 @@ public class ClaimRouteCmd extends ClaimRouteCmdData {
 
     @Override
     public void execute(Game game) {
-        //TODO I think this is fine but probably need to just change it to set the player and modify the route.
-        game.claimRoute(routeToClaim, claimingPlayer);
+        if(claimingPlayer.isCensoredPlayer()) {
+            game.updatePlayer(claimingPlayer);
+            game.getBoard().updateRoute(routeToClaim);
+        } else {
+            game.claimRoute(routeToClaim, claimingPlayer);
+        }
     }
 }
