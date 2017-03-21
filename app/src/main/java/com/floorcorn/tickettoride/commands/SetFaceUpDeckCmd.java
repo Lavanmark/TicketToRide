@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.commands;
 
-import com.floorcorn.tickettoride.interfaces.IClient;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.User;
 
 /**
@@ -14,7 +15,11 @@ public class SetFaceUpDeckCmd extends SetFaceUpDeckCmdData {
 	}
 
 	@Override
-	public void execute(IClient client) {
-		client.setFaceUpDeck(this.faceUpDeck);
+	public void execute(Game game) {
+		try {
+			game.getBoard().setFaceUpCards(this.faceUpDeck);
+		} catch(GameActionException e) {
+			e.printStackTrace();
+		}
 	}
 }

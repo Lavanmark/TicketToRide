@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.commands;
 
-import com.floorcorn.tickettoride.interfaces.IClient;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.User;
@@ -28,13 +29,15 @@ public class DrawTrainCardCmd extends DrawTrainCardCmdData {
     }
 
     @Override
-    public void execute(IClient client) {
-        if(cardPosition == -1) {
-            cardDrawn = client.drawTrainCard();
-            client.addCardToPlayer(drawingPlayer, cardDrawn);
-        } else {
-            cardDrawn = client.drawTrainCard(cardPosition);
-            client.addCardToPlayer(drawingPlayer, cardDrawn);
+    public void execute(Game game) {
+        try {
+            if(cardPosition == -1)
+                cardDrawn = game.getBoard().drawFromTrainCardDeck();
+            else
+                cardDrawn = game.getBoard().drawFromFaceUp(cardPosition);
+            game.addCard(drawingPlayer, cardDrawn);
+        } catch(GameActionException e) {
+            e.printStackTrace();
         }
     }
 }

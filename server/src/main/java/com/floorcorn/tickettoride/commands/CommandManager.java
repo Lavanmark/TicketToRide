@@ -1,16 +1,12 @@
 package com.floorcorn.tickettoride.commands;
 
 
-import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
-import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.User;
-import com.floorcorn.tickettoride.serverModel.ClientProxy;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
-import java.util.logging.Level;
 
 /**
  * Created by Tyler on 2/23/2017.
@@ -18,12 +14,6 @@ import java.util.logging.Level;
  */
 
 public class CommandManager {
-
-	private ClientProxy clientProxy = null;
-
-	public CommandManager() {
-		clientProxy = new ClientProxy();
-	}
 
 	public ArrayList<ICommand> getCommandsSince(User user, Game game, int lastCommand) throws GameActionException {
 		if(game == null)
@@ -61,12 +51,12 @@ public class CommandManager {
 			throw new GameActionException("Not your turn!");
 		}
 		//TODO add chain reaction commands.
-		clientProxy.setGameToModify(game);
+
 		// TODO switch statement that makes new commands if the command results in chain reaction
 		int lastCommandClient = command.getCmdID();
-		command.setCmdID(clientProxy.getLastExecutedCommand());
-		command.execute(clientProxy);
-		clientProxy.addCommandToGame(command);
+		command.setCmdID(game.getLatestCommandID());
+		command.execute(game);
+		game.addCommand(command);
 
 		return getCommandsSince(user, game, lastCommandClient);
 	}
@@ -77,16 +67,14 @@ public class CommandManager {
 		if(!game.hasStarted() || game.isFinished())
 			return;
 
-		clientProxy.setGameToModify(game);
-
 		ICommand init = new InitializeGameCmd(game.getPlayerList());
 		init.setCmdID(0);
-		init.execute(clientProxy);
-		clientProxy.addCommandToGame(init);
+		init.execute(game);
+		game.addCommand(init);
 
 		ICommand faceUp = new SetFaceUpDeckCmd(game.getBoard().getFaceUpCards());
 		faceUp.setCmdID(1);
-		faceUp.execute(clientProxy);
-		clientProxy.addCommandToGame(faceUp);
+		faceUp.execute(game);
+		game.addCommand(faceUp);
 	}
 }

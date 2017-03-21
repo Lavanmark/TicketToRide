@@ -1,6 +1,6 @@
 package com.floorcorn.tickettoride.commands;
 
-import com.floorcorn.tickettoride.interfaces.IClient;
+import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.User;
@@ -25,10 +25,8 @@ public class DrawTrainCardCmd extends DrawTrainCardCmdData {
     }
 
     @Override
-    public void execute(IClient client) {
-        if(cardPosition>-1 && cardPosition<5)
-            client.drawTrainCard(cardPosition);
-        else
-            client.drawTrainCard();
+    public void execute(Game game) {
+        //make this change count if not player.
+        game.addCard(drawingPlayer, cardDrawn);
     }
 }

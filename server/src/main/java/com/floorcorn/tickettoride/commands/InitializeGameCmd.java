@@ -1,15 +1,10 @@
 package com.floorcorn.tickettoride.commands;
 
 import com.floorcorn.tickettoride.exceptions.GameActionException;
-import com.floorcorn.tickettoride.interfaces.IClient;
-import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Board;
-import com.floorcorn.tickettoride.model.DeckManager;
 import com.floorcorn.tickettoride.model.Game;
-import com.floorcorn.tickettoride.model.MapFactory;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
-import com.floorcorn.tickettoride.serverModel.ClientProxy;
 
 import java.util.ArrayList;
 
@@ -32,13 +27,12 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 	}
 
 	@Override
-	public void execute(IClient client) {
-		Board board = client.getGame().getBoard();
+	public void execute(Game game) {
 		// Deal initial train cards
 		for(int i = 0; i < Game.INITIAL_TRAIN_CARDS; i++) {
 			for(Player p : players) {
 				try {
-					p.addTrainCard(board.drawFromTrainCardDeck(), 1);
+					p.addTrainCard(game.getBoard().drawFromTrainCardDeck(), 1);
 				} catch(GameActionException e) {
 					e.printStackTrace();
 				}
@@ -49,7 +43,7 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 		for(int i = 0; i < Game.INITIAL_DESTINATION_CARDS; i++) {
 			for(Player p : players) {
 				try {
-					p.addDestinationCard(board.drawFromDestinationCardDeck());
+					p.addDestinationCard(game.getBoard().drawFromDestinationCardDeck());
 				} catch(GameActionException e) {
 					e.printStackTrace();
 				}
@@ -61,6 +55,6 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 			else
 				p.setTurn(false);
 		}
-		client.setPlayerList(players);
+		game.setPlayerList(players);
 	}
 }

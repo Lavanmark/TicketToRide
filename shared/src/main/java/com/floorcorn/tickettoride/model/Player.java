@@ -241,8 +241,8 @@ public class Player {
 		totalTrainCards++;
 	}
 
-	public void removeDestinationCard(DestinationCard card){
-		destinationCards.remove(card);
+	public boolean removeDestinationCard(DestinationCard card){
+		return destinationCards.remove(card);
 	}
 
 	public void markAllNotDiscardable() {
@@ -250,14 +250,16 @@ public class Player {
 			dc.setCanDiscard(false);
 	}
 
-	public void removeTrainCard(TrainCard card){
+	public boolean removeTrainCard(TrainCard card){
 		if(!trainCards.containsKey(card.getColor()))
-			return;
+			return false;
 		if(trainCards.get(card.getColor()) > 0) {
 			trainCards.put(card.getColor(), trainCards.get(card.getColor()) - 1);
 			totalTrainCards--;
+			return true;
 		} else {
 			Corn.log("Player is out of cards!");
+			return false;
 		}
 	}
 
