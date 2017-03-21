@@ -297,12 +297,12 @@ public class Board {
 	 * @param r Route to update
 	 */
 	public void updateRoute(Route r) {
+		if(r == null)
+			return;
 	    for (Route route : routeList) {
 		    if (route.getRouteID() == r.getRouteID()) {
-			    if (!r.equals(route)) {
-					// TODO Is this a Phase 3 todo?
-				    // TODO might not be needed?
-				    //copy each var
+			    if (!route.equals(r)) {
+					route.update(r);
 			    }
 		    } else if (!allowDoubles && r.isDoubleRoute(route)) {
 				route.markDoubleRoute(r);
