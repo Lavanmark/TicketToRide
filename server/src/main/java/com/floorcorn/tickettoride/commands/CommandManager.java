@@ -47,12 +47,22 @@ public class CommandManager {
 		if(!game.isPlayer(user.getUserID()))
 			throw new GameActionException("User is not a player!");
 		if(!game.getPlayer(user).isTurn()) {
-			//TODO if there are actions they can do not on their turn then allow them. such as discard destination cards
-			throw new GameActionException("Not your turn!");
+			if(!(command instanceof DiscardDestinationCmd))
+				throw new GameActionException("Not your turn!");
 		}
 
+		//TODO something else was going to go here but I can't remember now...
+
 		//TODO add chain reaction commands.
-		// TODO switch statement that makes new commands if the command results in chain reaction
+		if(command instanceof DrawTrainCardCmd){
+
+		}
+		if(command instanceof ClaimRouteCmd) {
+
+		}
+		if(command instanceof DrawDestinationCmd) {
+
+		}
 
 		int lastCommandClient = command.getCmdID();
 		command.setCmdID(game.getLatestCommandID() + 1);
