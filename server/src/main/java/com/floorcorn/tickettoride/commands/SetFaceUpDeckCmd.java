@@ -1,8 +1,8 @@
 package com.floorcorn.tickettoride.commands;
 
 import com.floorcorn.tickettoride.exceptions.GameActionException;
-import com.floorcorn.tickettoride.interfaces.IClient;
 import com.floorcorn.tickettoride.model.Board;
+import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.User;
 
@@ -23,16 +23,15 @@ public class SetFaceUpDeckCmd extends SetFaceUpDeckCmdData {
 	}
 
 	@Override
-	public void execute(IClient client) {
-		TrainCard card = null;
+	public void execute(Game game) {
 		try {
+			//TODO I think this already happens in the board class.
 			for(int i = 0; i < Board.FACEUP_DECK_SIZE; i++)
 				if(faceUpDeck[i] == null)
-					faceUpDeck[i] = client.getGame().getBoard().drawFromTrainCardDeck();
+					faceUpDeck[i] = game.getBoard().drawFromTrainCardDeck();
+			game.getBoard().setFaceUpCards(faceUpDeck);
 		} catch(GameActionException e) {
 			e.printStackTrace();
 		}
-
-		client.setFaceUpDeck(faceUpDeck);
 	}
 }

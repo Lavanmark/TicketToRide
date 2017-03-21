@@ -61,6 +61,7 @@ public class Route {
     }
 
     public List<TrainCard> claim(Player p){
+	    //TODO UPDATE SO THIS CHECKS REMOVE TRAIN CARD BOOL
 	    if(claimed)
 		    return new ArrayList<>();
 	    if(!canClaim(p))

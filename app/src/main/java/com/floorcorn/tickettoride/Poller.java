@@ -123,7 +123,7 @@ public class Poller {
 									view.backToLogin();
 									return;
 								}
-								commandManager.getClientFacade().setChatLog(gameChatLog);
+								commandManager.setChatLog(gameChatLog);
 								//TODO this is an awful way to do this.
 							} catch(BadUserException e) {
 								e.printStackTrace();
@@ -157,9 +157,4 @@ public class Poller {
 		if(commandPollSES != null)
 			commandPollSES.shutdown();
 	}
-
-	public void setClientModel(ClientModel cm) {
-		commandManager.setClientModel(cm);
-	}
-
 }

@@ -1,9 +1,11 @@
 package com.floorcorn.tickettoride.commands;
 
-import com.floorcorn.tickettoride.interfaces.IClient;
 import com.floorcorn.tickettoride.model.DestinationCard;
+import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
+
+import java.util.Arrays;
 
 /**
  * Created by pokemaughan on 3/19/17.
@@ -23,7 +25,8 @@ public class DiscardDestinationCmd extends DiscardDestinationCmdData {
     }
 
     @Override
-    public void execute(IClient client) {
-        //TODO
+    public void execute(Game game) {
+        //TODO make this change the count if not this player.
+        game.discardDestinationCards(discardingPlayer, Arrays.asList(this.cards));
     }
 }
