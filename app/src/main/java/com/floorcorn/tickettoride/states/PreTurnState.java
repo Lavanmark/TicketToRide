@@ -10,32 +10,32 @@ import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 public class PreTurnState extends IState {
 
     @Override
-    void enter(IBoardMapPresenter presenter) {
+    public void enter(IBoardMapPresenter presenter) {
         super.enter(presenter);
     }
 
     @Override
-    void exit(IBoardMapPresenter presenter) {
+    public void exit(IBoardMapPresenter presenter) {
         super.exit(presenter);
     }
 
     @Override
-    void setTurn(IBoardmapView presenter) {
+    public void setTurn(IBoardmapView presenter) {
         super.setTurn(presenter);
     }
 
     @Override
-    void discardDestinationTickets(IBoardMapPresenter presenter) {
+    public void discardDestinationTickets(IBoardMapPresenter presenter) {
         super.discardDestinationTickets(presenter);
     }
 
     @Override
-    void openDestinationDraw(IBoardMapPresenter presenter) {
+    public void openDestinationDraw(IBoardMapPresenter presenter) {
         super.openDestinationDraw(presenter);
     }
 
     @Override
-    void closeDestinationDraw(IBoardMapPresenter presenter) {
+    public void closeDestinationDraw(IBoardMapPresenter presenter) {
         super.closeDestinationDraw(presenter);
     }
 }
