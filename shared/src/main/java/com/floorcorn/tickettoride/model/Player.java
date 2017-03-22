@@ -1,7 +1,5 @@
 package com.floorcorn.tickettoride.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.log.Corn;
 
 import java.util.ArrayList;

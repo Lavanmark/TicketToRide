@@ -11,13 +11,11 @@ import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.interfaces.IServer;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.PlayerInfo;
 import com.floorcorn.tickettoride.model.User;
-import com.floorcorn.tickettoride.model.Player;
-import com.floorcorn.tickettoride.model.PlayerColor;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 /**

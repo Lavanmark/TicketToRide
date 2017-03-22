@@ -43,6 +43,7 @@ public class CommandManager {
 
 	public void setPlayerList(ArrayList<Player> players) {
 		model.getCurrentGame().setPlayerList(players);
+		model.notifyGameChanged();
 	}
 
 	public int currentGameID() {

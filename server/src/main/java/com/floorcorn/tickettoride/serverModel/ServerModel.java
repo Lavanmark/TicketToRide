@@ -5,14 +5,10 @@ import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
-import com.floorcorn.tickettoride.model.Board;
-import com.floorcorn.tickettoride.model.DeckManager;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
-import com.floorcorn.tickettoride.model.MapFactory;
-import com.floorcorn.tickettoride.model.Player;
-import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.PlayerColor;
+import com.floorcorn.tickettoride.model.User;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;

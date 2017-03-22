@@ -14,8 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
-import com.floorcorn.tickettoride.UIFacade;
-import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.presenters.PregamePresenter;
@@ -23,9 +21,6 @@ import com.floorcorn.tickettoride.ui.views.IPregameView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Joseph Hansen
@@ -81,9 +76,15 @@ public class PregameActivity extends AppCompatActivity implements IPregameView {
 	public void onStop () {
 		presenter.unregister();
 		presenter.stopPolling();
+		if(!presenter.gameStarted())
+			backToGameList();
 		super.onStop();
 	}
 
+	private void backToGameList() {
+		startActivity(new Intent(PregameActivity.this, GameListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+	}
+	
 	private String getTitleString(int cur, int tot) {
 		return "Waiting on Players... (" + cur + "/" + tot + ")";
 	}
