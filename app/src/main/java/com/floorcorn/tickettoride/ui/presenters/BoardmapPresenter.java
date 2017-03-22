@@ -427,11 +427,12 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
      *
      */
 	public void drawNewDestinationCards() {
-		try {
+        this.state.drawDestinationTickets(this);
+		/*try {
 			UIFacade.getInstance().drawDestinationCards();
 		} catch(GameActionException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 
     /**
@@ -534,7 +535,12 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
     }
 
     public void setState(IState state) {
+        if(this.state != null)
+        {
+            this.state.exit(this);
+        }
         this.state = state;
+        this.state.enter(this);
     }
 
     @Override
