@@ -12,11 +12,15 @@ public class PreTurnState extends IState {
     @Override
     public void enter(IBoardMapPresenter presenter) {
         super.enter(presenter);
+        //TODO: Disable claim route and draw train cards
+
     }
 
     @Override
     public void exit(IBoardMapPresenter presenter) {
         super.exit(presenter);
+        //TODO: close Destination Drawer
+
     }
 
     @Override
@@ -32,10 +36,13 @@ public class PreTurnState extends IState {
     @Override
     public void openDestinationDraw(IBoardMapPresenter presenter) {
         super.openDestinationDraw(presenter);
+        //TODO: open the drawer
+        //TODO: disable the draw from deck
     }
 
     @Override
     public void closeDestinationDraw(IBoardMapPresenter presenter) {
         super.closeDestinationDraw(presenter);
+        //TODO: close the drawer
     }
 }
