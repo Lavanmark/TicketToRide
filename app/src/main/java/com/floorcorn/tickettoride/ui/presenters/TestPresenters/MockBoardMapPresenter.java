@@ -59,27 +59,22 @@ public class MockBoardMapPresenter implements IBoardMapPresenter {
 
     @Override
     public void openClaimRouteDrawer() {
-        //TODO
     }
 
     @Override
     public void openDrawTrainDrawer() {
-        //TODO
     }
 
     @Override
     public void closeDestinationDrawer() {
-        //TODO
     }
 
     @Override
     public void closeClaimRouteDrawer() {
-        //TODO
     }
 
     @Override
     public void closeDrawTrainDrawer() {
-        //TODO
     }
 
     @Override
