@@ -1,14 +1,13 @@
 package com.floorcorn.tickettoride.commands;
 
-import com.floorcorn.tickettoride.ClientFacade;
 import com.floorcorn.tickettoride.clientModel.ClientModel;
+import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Tyler on 2/27/2017.
@@ -16,14 +15,14 @@ import java.util.List;
 
 public class CommandManager {
 
-	private ClientFacade clientFacade = null;
+	private ClientModel model = null;
 
 	public CommandManager(ClientModel cm) {
-		clientFacade = new ClientFacade(cm);
+		model = cm;
 	}
 
 	public void addCommands(ArrayList<ICommand> commands) throws GameActionException {
-		Game game = clientFacade.getGame();
+		Game game = model.getCurrentGame();
 		if(game == null) {
 			throw new GameActionException("Not in this game anymore!");
 		}
@@ -31,48 +30,41 @@ public class CommandManager {
 		if(commands == null || commands.size() == 0)
 			return;
 
-		//if(commands.get(0).getCmdID() <= clientFacade.getLastExecutedCommand())
-		//	return;
-		// ^^^^^^ these lines cause the commands to never be executed.
-		//TODO no way to prevent repeat commands now...
-		// Joseph comin' in late here. Shouldn't that be commands.get(commands.size()-1)?
-
 		for(ICommand command : commands) {
+			if(game.getLatestCommandID() >= command.getCmdID())
+				continue;
 			System.out.println("doing command");
 			game.addCommand(command);
-			command.execute(clientFacade);
-			clientFacade.setLastExecutedCommand(command.getCmdID());
+			command.execute(game);
+			model.setLastCommandExecuted(command.getCmdID());
 		}
-		clientFacade.updateGame(game);
+		model.notifyGameChanged();
 	}
 
 	public void setPlayerList(ArrayList<Player> players) {
-		clientFacade.setPlayerList(players);
+		model.getCurrentGame().setPlayerList(players);
+		model.notifyGameChanged();
 	}
 
 	public int currentGameID() {
-		if(clientFacade.getGame() == null)
+		if(model.getCurrentGame() == null)
 			return Game.NO_GAME_ID;
-		return clientFacade.getGame().getGameID();
+		return model.getCurrentGame().getGameID();
 	}
 
 	public int getLastCommandExecuted() {
-		return clientFacade.getLastExecutedCommand();
+		return model.getLastCommandExecuted();
 	}
 
 	public User getUser() {
-		return clientFacade.getUser();
-	}
-
-	public void setClientModel(ClientModel cm) {
-		clientFacade.setClientModel(cm);
+		return model.getCurrentUser();
 	}
 
 	public Game getGame() {
-		return clientFacade.getGame();
+		return model.getCurrentGame();
 	}
 
-	public ClientFacade getClientFacade() {
-		return clientFacade;
+	public void setChatLog(GameChatLog log) {
+		model.setChatLog(log);
 	}
 }

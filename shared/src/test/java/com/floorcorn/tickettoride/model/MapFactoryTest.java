@@ -1,16 +1,15 @@
 package com.floorcorn.tickettoride.model;
 
-import junit.framework.TestCase;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.*;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 
 /**

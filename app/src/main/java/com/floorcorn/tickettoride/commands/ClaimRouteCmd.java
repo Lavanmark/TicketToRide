@@ -1,6 +1,6 @@
 package com.floorcorn.tickettoride.commands;
 
-import com.floorcorn.tickettoride.interfaces.IClient;
+import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.User;
@@ -21,7 +21,12 @@ public class ClaimRouteCmd extends ClaimRouteCmdData {
     }
 
     @Override
-    public void execute(IClient client) {
-        //TODO
+    public void execute(Game game) {
+        if(claimingPlayer.isCensoredPlayer()) {
+            game.updatePlayer(claimingPlayer);
+            game.getBoard().updateRoute(routeToClaim);
+        } else {
+            game.claimRoute(routeToClaim, claimingPlayer);
+        }
     }
 }

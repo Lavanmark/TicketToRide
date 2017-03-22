@@ -1,13 +1,8 @@
 package com.floorcorn.tickettoride.communication;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.floorcorn.tickettoride.exceptions.BadUserException;
-import com.floorcorn.tickettoride.exceptions.GameActionException;
-import com.floorcorn.tickettoride.exceptions.UserCreationException;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class Results {
 	private boolean success;

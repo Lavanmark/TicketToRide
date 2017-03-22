@@ -1,6 +1,5 @@
 package com.floorcorn.tickettoride.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 

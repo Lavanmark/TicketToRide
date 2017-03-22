@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.commands;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
+
 import java.util.Arrays;
 import java.util.List;
 

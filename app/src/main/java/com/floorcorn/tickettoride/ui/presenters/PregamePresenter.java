@@ -1,12 +1,11 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
-import com.floorcorn.tickettoride.Poller;
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.Game;
-import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.model.Player;
+import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.ui.views.IPregameView;
 import com.floorcorn.tickettoride.ui.views.IView;
 
@@ -76,6 +75,10 @@ public class PregamePresenter implements IPresenter, Observer {
      */
     public void startGame() {
         view.startGame();
+    }
+    
+    public boolean gameStarted() {
+	    return game.hasStarted();
     }
 
 	public boolean canCancel() {

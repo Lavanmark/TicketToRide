@@ -1,6 +1,6 @@
 package com.floorcorn.tickettoride.commands;
 
-import com.floorcorn.tickettoride.interfaces.IClient;
+import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.User;
 
 /**
@@ -15,7 +15,7 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 	}
 
 	@Override
-	public void execute(IClient client) {
-		client.setPlayerList(players);
+	public void execute(Game game) {
+		game.setPlayerList(players);
 	}
 }

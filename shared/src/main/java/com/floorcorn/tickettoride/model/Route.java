@@ -61,6 +61,7 @@ public class Route {
     }
 
     public List<TrainCard> claim(Player p){
+	    //TODO UPDATE SO THIS CHECKS REMOVE TRAIN CARD BOOL
 	    if(claimed)
 		    return new ArrayList<>();
 	    if(!canClaim(p))
@@ -175,6 +176,11 @@ public class Route {
 			this.claimed = true;
 	}
 
+	protected void update(Route route) {
+		claimed = route.claimed;
+		owner = route.owner;
+	}
+
     @Override
     public boolean equals(Object o) {
         if(this == o) return true;
@@ -204,6 +210,7 @@ public class Route {
         return result;
     }
 
+	@Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append(city1 + " to " + city2);

@@ -1,14 +1,12 @@
 package com.floorcorn.tickettoride.clientModel;
 
 import com.floorcorn.tickettoride.communication.GameChatLog;
-import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Observable;
 import java.util.Set;
 

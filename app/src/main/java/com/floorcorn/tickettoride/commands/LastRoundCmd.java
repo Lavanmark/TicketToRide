@@ -1,6 +1,6 @@
 package com.floorcorn.tickettoride.commands;
 
-import com.floorcorn.tickettoride.interfaces.IClient;
+import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.User;
 
 /**
@@ -14,7 +14,7 @@ public class LastRoundCmd extends LastRoundCmdData{
     }
 
     @Override
-    public void execute(IClient client) {
-        client.setLastPlayer(this.lastPlayer);
+    public void execute(Game game) {
+        game.setLastPlayerID(this.lastPlayerID);
     }
 }

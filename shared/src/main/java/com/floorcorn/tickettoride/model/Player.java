@@ -1,7 +1,5 @@
 package com.floorcorn.tickettoride.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.log.Corn;
 
 import java.util.ArrayList;
@@ -80,6 +78,14 @@ public class Player {
 		p.setDestinationCards(new ArrayList<DestinationCard>());
 		p.setTrainCards(new HashMap<TrainCardColor, Integer>());
 		return p;
+	}
+
+	public boolean isCensoredPlayer() {
+		if(totalDestinationCards != destinationCards.size())
+			return true;
+		if(totalTrainCards > 0 && trainCards.size() == 0)
+			return true;
+		return false;
 	}
 
 	public int getPlayerID() {
@@ -241,8 +247,8 @@ public class Player {
 		totalTrainCards++;
 	}
 
-	public void removeDestinationCard(DestinationCard card){
-		destinationCards.remove(card);
+	public boolean removeDestinationCard(DestinationCard card){
+		return destinationCards.remove(card);
 	}
 
 	public void markAllNotDiscardable() {
@@ -250,14 +256,16 @@ public class Player {
 			dc.setCanDiscard(false);
 	}
 
-	public void removeTrainCard(TrainCard card){
+	public boolean removeTrainCard(TrainCard card){
 		if(!trainCards.containsKey(card.getColor()))
-			return;
+			return false;
 		if(trainCards.get(card.getColor()) > 0) {
 			trainCards.put(card.getColor(), trainCards.get(card.getColor()) - 1);
 			totalTrainCards--;
+			return true;
 		} else {
 			Corn.log("Player is out of cards!");
+			return false;
 		}
 	}
 
@@ -271,6 +279,17 @@ public class Player {
 		sb.append("Train Cars: ").append(trainCarsLeft);
 
 		return sb.toString();
+	}
+
+	protected void update(Player player) {
+		this.turn = player.isTurn();
+		this.score = player.getScore();
+		this.trainCarsLeft = player.getTrainCarsLeft();
+		this.totalTrainCards = player.getTotalTrainCards();
+		this.totalDestinationCards = player.getTotalDestinationCards();
+		this.destinationCards = new ArrayList<>(player.getDestinationCards());
+		this.trainCards = new HashMap<>(player.getTrainCards());
+		this.routesClaimed = new ArrayList<>(player.getRoutesClaimed());
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package com.floorcorn.tickettoride.handlers;
 
-import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.Serializer;
+import com.floorcorn.tickettoride.communication.Results;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 

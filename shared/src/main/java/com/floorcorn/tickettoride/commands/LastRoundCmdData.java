@@ -8,12 +8,10 @@ import com.floorcorn.tickettoride.model.User;
  */
 
 public abstract class LastRoundCmdData extends ICommand{
-    protected Player lastPlayer = null;
+    protected int lastPlayerID = Player.NO_PLAYER_ID;
 
     @Override
     public boolean forPlayer(User user){
-        if(user.getUserID()!=lastPlayer.getUserID())
-            return false;
         return true;
     }
 }

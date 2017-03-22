@@ -246,13 +246,13 @@ public class Board {
 	 * @post deck does not own TrainCard "card"
 	 * @post game has one less train car card
 	 * @param card TrainCard object to discard
-	 * @throws GameActionException
 	 */
-	public void discard(TrainCard card) throws GameActionException {
+	public boolean discard(TrainCard card) {
         if(deckManager != null)
 	        deckManager.discard(card);
 	    else
-	        throw new GameActionException("No Deck Manager!");
+	        return false;
+		return true;
     }
 
 	/**
@@ -264,13 +264,13 @@ public class Board {
 	 * @post deck does not own DestinationCard "card"
 	 * @game has one less destination ticket
 	 * @param card DestinationCard object to discard
-	 * @throws GameActionException
 	 */
-	public void discard(DestinationCard card) throws GameActionException {
+	public boolean discard(DestinationCard card) {
         if(deckManager != null)
 	        deckManager.discard(card);
 	    else
-	        throw new GameActionException("No Deck Manager!");
+	        return false;
+		return true;
     }
 
 	/**
@@ -297,12 +297,12 @@ public class Board {
 	 * @param r Route to update
 	 */
 	public void updateRoute(Route r) {
+		if(r == null)
+			return;
 	    for (Route route : routeList) {
 		    if (route.getRouteID() == r.getRouteID()) {
-			    if (!r.equals(route)) {
-					// TODO Is this a Phase 3 todo?
-				    // TODO might not be needed?
-				    //copy each var
+			    if (!route.equals(r)) {
+					route.update(r);
 			    }
 		    } else if (!allowDoubles && r.isDoubleRoute(route)) {
 				route.markDoubleRoute(r);
