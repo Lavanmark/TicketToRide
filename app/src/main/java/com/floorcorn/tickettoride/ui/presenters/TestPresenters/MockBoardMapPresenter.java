@@ -46,4 +46,34 @@ public class MockBoardMapPresenter implements IBoardMapPresenter {
     public void disableClaimRoute() {
         this.claimRoutesEnabled = false;
     }
+
+    @Override
+    public void openDestinationDrawer() {
+
+    }
+
+    @Override
+    public void openClaimRouteDrawer() {
+        //TODO
+    }
+
+    @Override
+    public void openDrawTrainDrawer() {
+        //TODO
+    }
+
+    @Override
+    public void closeDestinationDrawer() {
+        //TODO
+    }
+
+    @Override
+    public void closeClaimRouteDrawer() {
+        //TODO
+    }
+
+    @Override
+    public void closeDrawTrainDrawer() {
+        //TODO
+    }
 }

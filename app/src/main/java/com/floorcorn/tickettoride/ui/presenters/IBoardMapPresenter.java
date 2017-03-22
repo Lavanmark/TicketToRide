@@ -12,4 +12,11 @@ public interface IBoardMapPresenter {
     public void disableDrawTrainCards();
     public void disableDrawDestinationCards();
     public void disableClaimRoute();
+
+    public void openDestinationDrawer();
+    public void openClaimRouteDrawer();
+    public void openDrawTrainDrawer();
+    public void closeDestinationDrawer();
+    public void closeClaimRouteDrawer();
+    public void closeDrawTrainDrawer();
 }

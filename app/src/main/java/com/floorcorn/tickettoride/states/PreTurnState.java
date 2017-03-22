@@ -11,14 +11,18 @@ public class PreTurnState extends IState {
     @Override
     public void enter(IBoardMapPresenter presenter) {
         super.enter(presenter);
-        //TODO: Disable claim route and draw train cards
         //Disable all turn buttons except draw destination cards drawer.
+        presenter.disableClaimRoute();
+        presenter.disableDrawTrainCards();
+        //TODO: should we open the destination drawer if the user has discardable cards?
     }
 
     @Override
     public void exit(IBoardMapPresenter presenter) {
         super.exit(presenter);
-        //TODO: close Destination Drawer
+        //TODO: close Destination Drawer if it was open
+        presenter.enableClaimRoute();
+        presenter.enableDrawTrainCards();
 
     }
 
@@ -30,6 +34,7 @@ public class PreTurnState extends IState {
     @Override
     public void discardDestinationTickets(IBoardMapPresenter presenter) {
         super.discardDestinationTickets(presenter);
+
     }
 
     @Override
