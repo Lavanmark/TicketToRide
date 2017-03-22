@@ -11,7 +11,6 @@ import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Created by Tyler on 1/31/2017.

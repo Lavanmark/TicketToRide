@@ -8,7 +8,6 @@ import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.interfaces.IServer;
-import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.PlayerColor;

@@ -1,11 +1,8 @@
 package com.floorcorn.tickettoride.ui.views;
 
 import com.floorcorn.tickettoride.model.GameInfo;
-import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.PlayerColor;
-import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 
-import java.util.List;
 import java.util.Set;
 
 /**

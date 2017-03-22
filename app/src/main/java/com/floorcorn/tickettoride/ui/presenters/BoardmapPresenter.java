@@ -1,9 +1,6 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
 import android.content.Context;
-import android.os.Handler;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
@@ -12,7 +9,6 @@ import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
-import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
@@ -24,11 +20,10 @@ import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.Level;
 
 /**
  * @author Joseph Hansen
@@ -277,36 +272,6 @@ public class BoardmapPresenter implements IPresenter, Observer {
 
     /*********************** END GAME REFERENCE METHODS *********************************/
 
-    /*********************** METHODS TO MANIPULATE THE VIEW *********************************/
-    /**
-     *
-     * @param DRAWER
-     * @param DRAWER_HOLDER
-     */
-    public void displayDrawDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER){
-        view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
-        view.displayDrawingDeckDrawer(DRAWER, DRAWER_HOLDER);
-    }
-
-    /**
-     *
-     * @param DRAWER
-     * @param DRAWER_HOLDER
-     */
-    public void displayDestinationCardDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER){
-        view.displayDestinationCardDrawer(DRAWER, DRAWER_HOLDER);
-    }
-
-    /**
-     *
-     * @param DRAWER
-     * @param DRAWER_HOLDER
-     */
-    public void displayPlaceRouteDrawer(DrawerLayout DRAWER, FrameLayout DRAWER_HOLDER){
-        view.displayClaimRouteDrawer(DRAWER, DRAWER_HOLDER);
-    }
-
-    /*********************** END METHODS TO MANIPULATE THE VIEW *********************************/
 
     /*********************** INTERACTIONS WITH UI FACADE *********************************/
 

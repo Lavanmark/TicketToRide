@@ -1,7 +1,6 @@
 package com.floorcorn.tickettoride.commands;
 
 import com.floorcorn.tickettoride.exceptions.GameActionException;
-import com.floorcorn.tickettoride.model.Board;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;

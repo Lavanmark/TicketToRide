@@ -1,7 +1,5 @@
 package com.floorcorn.tickettoride.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
  * Created by Tyler on 2/21/17.
  */

@@ -1,7 +1,6 @@
 package com.floorcorn.tickettoride.communication;
 
 import com.floorcorn.tickettoride.model.Game;
-import com.floorcorn.tickettoride.model.Player;
 
 /**
  * Created by Michael on 3/3/2017.

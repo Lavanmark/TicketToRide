@@ -1,18 +1,17 @@
 package com.floorcorn.tickettoride.ui.views.fragments;
 
 import android.app.Activity;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.floorcorn.tickettoride.model.GameInfo;
+import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.ui.views.activities.GameDetailActivity;
 import com.floorcorn.tickettoride.ui.views.activities.GameListActivity;
-import com.floorcorn.tickettoride.R;
 
 /**
  * A fragment representing a single Item detail screen.

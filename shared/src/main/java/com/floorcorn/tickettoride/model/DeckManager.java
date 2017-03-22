@@ -1,7 +1,5 @@
 package com.floorcorn.tickettoride.model;
 
-import com.floorcorn.tickettoride.log.Corn;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
