@@ -11,12 +11,8 @@ public class PreTurnState extends IState {
     @Override
     public void enter(IBoardMapPresenter presenter) {
         super.enter(presenter);
-<<<<<<< HEAD
         //TODO: Disable claim route and draw train cards
-
-=======
         //Disable all turn buttons except draw destination cards drawer.
->>>>>>> 2431933f21e3f26bfe0b20c1f4cdde5c2844f19e
     }
 
     @Override
