@@ -11,7 +11,7 @@ public class IState {
 
     public void enter(IBoardMapPresenter presenter){}
     public void exit(IBoardMapPresenter presenter){}
-    public void setTurn(IBoardmapView presenter){}
+    public void setTurn(IBoardMapPresenter presenter){}
     public void drawFaceUpCard(IBoardMapPresenter presenter, int position){}
     public void drawTrainCardFromDeck(IBoardMapPresenter presenter){}
     public void claimRoute(IBoardMapPresenter presenter){}

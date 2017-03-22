@@ -1,7 +1,6 @@
 package com.floorcorn.tickettoride.states;
 
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
-import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 
 /**
  * Created by Michael on 3/15/2017.
@@ -12,6 +11,7 @@ public class PreTurnState extends IState {
     @Override
     public void enter(IBoardMapPresenter presenter) {
         super.enter(presenter);
+        //Disable all turn buttons except draw destination cards drawer.
     }
 
     @Override
@@ -20,7 +20,7 @@ public class PreTurnState extends IState {
     }
 
     @Override
-    public void setTurn(IBoardmapView presenter) {
+    public void setTurn(IBoardMapPresenter presenter) {
         super.setTurn(presenter);
     }
 
