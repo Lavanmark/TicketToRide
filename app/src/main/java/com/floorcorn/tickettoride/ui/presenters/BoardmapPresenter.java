@@ -451,11 +451,13 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
      * @param route
      */
 	public void claimButtonClicked(Route route) {
-		if(route != null) {
+        this.state.claimRoute(this, route);
+		/*if(route != null) {
 			UIFacade.getInstance().claimRoute(route);
 			Toast.makeText(view.getActivity(), "Claimed route: " + route.getFirstCity().getName() + " to " + route.getSecondCity().getName(), Toast.LENGTH_SHORT).show();
 		} else
 			Toast.makeText(view.getActivity(), "No routes can be claimed!", Toast.LENGTH_SHORT).show();
+			*/
 	}
 
     /**

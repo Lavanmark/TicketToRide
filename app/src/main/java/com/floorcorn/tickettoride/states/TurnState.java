@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.states;
 
+import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 
@@ -42,8 +43,8 @@ public class TurnState extends IState {
     }
 
     @Override
-    public void claimRoute(IBoardMapPresenter presenter) {
-        super.claimRoute(presenter);
+    public void claimRoute(IBoardMapPresenter presenter, Route route) {
+        super.claimRoute(presenter, route);
     }
 
     @Override
@@ -59,7 +60,6 @@ public class TurnState extends IState {
     @Override
     public void openTrainDraw(IBoardMapPresenter presenter) {
         super.openTrainDraw(presenter);
-        exit(presenter);
         presenter.setState(new DrawTrainCardState());
     }
 
@@ -72,7 +72,6 @@ public class TurnState extends IState {
     public void openDestinationDraw(IBoardMapPresenter presenter) {
         super.openDestinationDraw(presenter);
         presenter.openDestinationDrawer();
-        exit(presenter);
         presenter.setState(new DrawDestinationCardState());
     }
 
@@ -86,7 +85,6 @@ public class TurnState extends IState {
     public void openClaimRoute(IBoardMapPresenter presenter) {
         super.openClaimRoute(presenter);
         presenter.openClaimRouteDrawer();
-        exit(presenter);
         presenter.setState(new ClaimRouteState());
     }
 
