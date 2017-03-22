@@ -17,6 +17,7 @@ import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
+import com.floorcorn.tickettoride.states.IState;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
 import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
@@ -38,13 +39,13 @@ import java.util.Observer;
  * The Boardmap Presenter class is responsible for interpreting user inputs from the view,
  * and updating the view when the model changes.
  *
- * THIS CLASS IS ORGANIZED INTO 5 GROUPS
+ * THIS CLASS IS ORGANIZED INTO 6 GROUPS
  * (1) OBSERVER METHODS
  * (2) GET AND SET METHODS
  * (3) GAME REFERENCE METHODS
  * (4) METHODS TO MANIPULATE THE VIEW
  * (5) METHODS TO INTERACT WITH UIFACADE
- * (6) ANIMATION METHODS
+ * (6) STATE ACCESS METHODS
  *
  *
  */
@@ -56,6 +57,9 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
 	private Game game = null;
     /** reference to the current user **/
 	private User user = null;
+
+    /** reference to the current state object **/
+    private IState state = null;
 
     /** boolean to show if discarding is allowed in the view **/
 	private boolean discarding = false;
@@ -333,7 +337,8 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
      * @return
      */
 	public TrainCardColor drawTrainCardFromDeck(){
-        TrainCardColor color = null;
+        return this.state.drawTrainCardFromDeck(this);
+        /*TrainCardColor color = null;
 		try {
 			color = UIFacade.getInstance().drawTrainCardFromDeck();
 		} catch(GameActionException e) {
@@ -344,6 +349,7 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
             Toast.makeText(view.getActivity(), toDisplay, Toast.LENGTH_SHORT).show();
         }
         return color;
+        */
 	}
 
     /**
@@ -352,7 +358,8 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
      * @return
      */
 	public TrainCardColor drawFromFaceUp(int position) {
-        TrainCardColor color = null;
+        return this.state.drawFaceUpCard(this, position);
+        /*TrainCardColor color = null;
 		try {
 			color = UIFacade.getInstance().drawTrainCard(position);
 		} catch(GameActionException e) {
@@ -363,6 +370,7 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
             Toast.makeText(view.getActivity(), toDisplay, Toast.LENGTH_SHORT).show();
         }
         return color;
+        */
 	}
 
     /**
@@ -523,6 +531,20 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
     @Override
     public void closeDrawTrainDrawer() {
         view.getTrainCardDrawer().hide();
+    }
+
+    public void setState(IState state) {
+        this.state = state;
+    }
+
+    @Override
+    public void displayMessage_short(String message) {
+        Toast.makeText(view.getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void displayMessage_long(String message) {
+        Toast.makeText(view.getActivity(), message, Toast.LENGTH_LONG).show();
     }
 
     /************************ END STATE ACCESS METHODS *************************************/

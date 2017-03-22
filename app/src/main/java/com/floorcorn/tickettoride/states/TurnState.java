@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.states;
 
+import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 
 /**
@@ -21,6 +22,8 @@ public class TurnState extends IState {
         super.exit(presenter);
         presenter.disableClaimRoute();
         presenter.disableDrawTrainCards();
+        //TODO: destinationCardState should override this method and not disable the Draw Destination button if new tickets drawn
+        presenter.disableDrawDestinationCards();
     }
 
     @Override
@@ -29,13 +32,13 @@ public class TurnState extends IState {
     }
 
     @Override
-    public void drawFaceUpCard(IBoardMapPresenter presenter, int position) {
-        super.drawFaceUpCard(presenter, position);
+    public TrainCardColor drawFaceUpCard(IBoardMapPresenter presenter, int position) {
+        return super.drawFaceUpCard(presenter, position);
     }
 
     @Override
-    public void drawTrainCardFromDeck(IBoardMapPresenter presenter) {
-        super.drawTrainCardFromDeck(presenter);
+    public TrainCardColor drawTrainCardFromDeck(IBoardMapPresenter presenter) {
+        return super.drawTrainCardFromDeck(presenter);
     }
 
     @Override
@@ -56,6 +59,8 @@ public class TurnState extends IState {
     @Override
     public void openTrainDraw(IBoardMapPresenter presenter) {
         super.openTrainDraw(presenter);
+        exit(presenter);
+        presenter.setState(new DrawTrainCardState());
     }
 
     @Override
@@ -66,16 +71,23 @@ public class TurnState extends IState {
     @Override
     public void openDestinationDraw(IBoardMapPresenter presenter) {
         super.openDestinationDraw(presenter);
+        presenter.openDestinationDrawer();
+        exit(presenter);
+        presenter.setState(new DrawDestinationCardState());
     }
 
     @Override
     public void closeDestinationDraw(IBoardMapPresenter presenter) {
         super.closeDestinationDraw(presenter);
+        presenter.closeDestinationDrawer();
     }
 
     @Override
     public void openClaimRoute(IBoardMapPresenter presenter) {
         super.openClaimRoute(presenter);
+        presenter.openClaimRouteDrawer();
+        exit(presenter);
+        presenter.setState(new ClaimRouteState());
     }
 
     @Override

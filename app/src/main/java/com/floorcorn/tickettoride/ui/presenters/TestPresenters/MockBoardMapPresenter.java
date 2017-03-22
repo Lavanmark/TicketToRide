@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.ui.presenters.TestPresenters;
 
+import com.floorcorn.tickettoride.states.IState;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 
 /**
@@ -11,6 +12,8 @@ public class MockBoardMapPresenter implements IBoardMapPresenter {
     public boolean drawTrainCardsEnabled;
     public boolean drawDestinationCardsEnabled;
     public boolean claimRoutesEnabled;
+
+    public IState state;
 
     public MockBoardMapPresenter(){
         drawDestinationCardsEnabled = false;
@@ -75,5 +78,20 @@ public class MockBoardMapPresenter implements IBoardMapPresenter {
     @Override
     public void closeDrawTrainDrawer() {
         //TODO
+    }
+
+    @Override
+    public void setState(IState state) {
+        this.state = state;
+    }
+
+    @Override
+    public void displayMessage_short(String message) {
+
+    }
+
+    @Override
+    public void displayMessage_long(String message) {
+
     }
 }
