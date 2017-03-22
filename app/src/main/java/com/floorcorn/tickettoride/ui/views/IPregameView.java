@@ -2,7 +2,6 @@ package com.floorcorn.tickettoride.ui.views;
 
 import com.floorcorn.tickettoride.model.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

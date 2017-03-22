@@ -2,7 +2,6 @@ package com.floorcorn.tickettoride.log;
 
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.ConsoleHandler;
@@ -11,7 +10,6 @@ import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 /**
  * Created by Tyler on 3/2/2017.

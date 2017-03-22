@@ -6,10 +6,8 @@ import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.log.Corn;
-import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.User;
-import com.sun.net.httpserver.Authenticator;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;

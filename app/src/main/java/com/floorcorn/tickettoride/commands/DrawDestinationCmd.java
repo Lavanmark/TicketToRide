@@ -1,11 +1,8 @@
 package com.floorcorn.tickettoride.commands;
 
-import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
-
-import java.util.List;
 
 /**
  * Created by pokemaughan on 3/19/17.
