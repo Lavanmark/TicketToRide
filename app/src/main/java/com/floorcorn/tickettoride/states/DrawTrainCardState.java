@@ -14,14 +14,15 @@ import java.util.logging.Level;
 
 public class DrawTrainCardState extends TurnState {
 
-    int cardsDrawn = 0;
+    boolean hasDrawn = false;
     @Override
     public TrainCardColor drawFaceUpCard(IBoardMapPresenter presenter, int position) {
         super.drawFaceUpCard(presenter, position);
         TrainCardColor color = null;
 
         TrainCardColor toDraw = UIFacade.getInstance().getFaceUpCards()[position].getColor();
-        if(toDraw.equals(TrainCardColor.WILD) && cardsDrawn > 0) {
+        //Attempt to draw wild as second card. Error.
+        if(toDraw.equals(TrainCardColor.WILD) && hasDrawn) {
             String message = "You cannot draw that card";
             presenter.displayMessage_long(message);
             return null;
@@ -35,12 +36,13 @@ public class DrawTrainCardState extends TurnState {
             String toDisplay = "You drew 1 " + color.name() + " card";
             presenter.displayMessage_short(toDisplay);
         }
-        //User drew a wild or their second card;
-        if(toDraw.equals(TrainCardColor.WILD) || cardsDrawn == 2){
-            super.exit(presenter);
+        //User drew a wild as first card or drew their second card;
+        if(toDraw.equals(TrainCardColor.WILD) || hasDrawn){
             presenter.setState(new PreTurnState());
             presenter.closeDrawTrainDrawer();
         }
+        else
+            hasDrawn = true;
         return color;
     }
 
@@ -57,13 +59,13 @@ public class DrawTrainCardState extends TurnState {
             String toDisplay = "You drew 1 " + color.name() + " card";
             presenter.displayMessage_short(toDisplay);
         }
-        cardsDrawn++;
-        if(cardsDrawn == 2)
+        if(hasDrawn)
         {
-            super.exit(presenter);
             presenter.setState(new PreTurnState());
             presenter.closeDrawTrainDrawer();
         }
+        else
+            hasDrawn = true;
         return color;
     }
 
@@ -76,6 +78,5 @@ public class DrawTrainCardState extends TurnState {
     public void closeTrainDraw(IBoardMapPresenter presenter) {
         super.closeTrainDraw(presenter);
         presenter.setState(new TurnState());
-        super.enter(presenter);
     }
 }
