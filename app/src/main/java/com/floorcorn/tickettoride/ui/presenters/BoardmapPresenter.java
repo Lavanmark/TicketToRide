@@ -47,7 +47,7 @@ import java.util.Observer;
  *
  *
  */
-public class BoardmapPresenter implements IPresenter, Observer {
+public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresenter {
 
     /** reference to the view **/
     private IBoardmapView view = null;
@@ -458,4 +458,38 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	}
 
     /*********************** END INTERACTIONS WITH UI FACADE *********************************/
+
+    /************************ BEGIN STATE ACCESS METHODS ************************************/
+
+    @Override
+    public void enableDrawTrainCards(){
+        //TODO
+    }
+
+    @Override
+    public void enableDrawDestinationCards(){
+        //TODO
+    }
+
+    @Override
+    public void enableClaimRoute(){
+        //TODO
+    }
+
+    @Override
+    public void disableDrawTrainCards() {
+        //TODO
+    }
+
+    @Override
+    public void disableDrawDestinationCards() {
+        //TODO
+    }
+
+    @Override
+    public void disableClaimRoute() {
+        //TODO
+    }
+
+    /************************ END STATE ACCESS METHODS *************************************/
 }
