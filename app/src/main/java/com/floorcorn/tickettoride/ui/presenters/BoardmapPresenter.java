@@ -19,6 +19,7 @@ import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
+import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -463,32 +464,65 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
 
     @Override
     public void enableDrawTrainCards(){
-        //TODO
+        view.enableTrainCardButton(true);
     }
 
     @Override
     public void enableDrawDestinationCards(){
-        //TODO
+        view.enableDestinationCardButton(true);
     }
 
     @Override
     public void enableClaimRoute(){
-        //TODO
+        view.enableClaimRouteButton(true);
     }
 
     @Override
     public void disableDrawTrainCards() {
-        //TODO
+       view.enableTrainCardButton(false);
     }
 
     @Override
     public void disableDrawDestinationCards() {
-        //TODO
+        view.enableDestinationCardButton(false);
     }
 
     @Override
     public void disableClaimRoute() {
-        //TODO
+        view.enableClaimRouteButton(true);
+    }
+
+    @Override
+    public void openDestinationDrawer() {
+        view.getDestinationDrawer().open();
+    }
+
+    @Override
+    public void openClaimRouteDrawer() {
+        view.getClaimRouteDrawer().open();
+
+    }
+
+    @Override
+    public void openDrawTrainDrawer() {
+       view.getTrainCardDrawer().open();
+
+    }
+
+    @Override
+    public void closeDestinationDrawer() {
+        view.getDestinationDrawer().hide();
+
+    }
+
+    @Override
+    public void closeClaimRouteDrawer() {
+        view.getClaimRouteDrawer().hide();
+    }
+
+    @Override
+    public void closeDrawTrainDrawer() {
+        view.getTrainCardDrawer().hide();
     }
 
     /************************ END STATE ACCESS METHODS *************************************/
