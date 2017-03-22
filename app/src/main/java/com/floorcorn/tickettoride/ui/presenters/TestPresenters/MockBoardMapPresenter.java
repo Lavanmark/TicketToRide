@@ -13,6 +13,8 @@ public class MockBoardMapPresenter implements IBoardMapPresenter {
     public boolean drawDestinationCardsEnabled;
     public boolean claimRoutesEnabled;
 
+    public int numCardsDrawn = 0;
+
     public IState state;
 
     public MockBoardMapPresenter(){
