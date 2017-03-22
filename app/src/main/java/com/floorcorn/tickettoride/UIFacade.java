@@ -413,4 +413,11 @@ public class UIFacade {
     public void sendChatMessage(Message message) throws BadUserException {
         serverProxy.sendChatMessage(clientModelRoot.getCurrentUser(), message);
     }
+
+    public void test_setFaceUpCard(TrainCard[] MockCards) throws GameActionException{
+        Game tstGame = new Game("tst", 2, 2);
+        tstGame.setBoard(new Board(null, false));
+        clientModelRoot.setCurrentGame(tstGame);
+        clientModelRoot.getCurrentGame().getBoard().setFaceUpCards(MockCards);
+    }
 }
