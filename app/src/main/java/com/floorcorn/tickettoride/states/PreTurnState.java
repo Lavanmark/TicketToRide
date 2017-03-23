@@ -1,5 +1,8 @@
 package com.floorcorn.tickettoride.states;
 
+import com.floorcorn.tickettoride.UIFacade;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 
 /**
@@ -14,15 +17,23 @@ public class PreTurnState extends IState {
         //Disable all turn buttons except draw destination cards drawer.
         presenter.disableClaimRoute();
         presenter.disableDrawTrainCards();
-        //TODO: should we open the destination drawer if the user has discardable cards?
+        // if there are discardable cards, open the destination drawer
+        try {
+            if(presenter.getDiscardableDestinationCards().length > 0){
+                //opens drawer
+                presenter.openDestinationDrawer();
+                presenter.updateDestinationDrawer();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void exit(IBoardMapPresenter presenter) {
         super.exit(presenter);
-        //TODO: close Destination Drawer if it was open
-        presenter.enableClaimRoute();
-        presenter.enableDrawTrainCards();
+        //close destination drawer
+        presenter.closeDestinationDrawer();
 
     }
 
@@ -32,21 +43,26 @@ public class PreTurnState extends IState {
     }
 
     @Override
-    public void discardDestinationTickets(IBoardMapPresenter presenter) {
-        super.discardDestinationTickets(presenter);
+    public void discardDestinationTickets(IBoardMapPresenter presenter, DestinationCard toDiscard) {
+        super.discardDestinationTickets(presenter, toDiscard);
+        try {
+            UIFacade.getInstance().discardDestinationCard(toDiscard);
+        } catch (GameActionException e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public void openDestinationDraw(IBoardMapPresenter presenter) {
         super.openDestinationDraw(presenter);
-        //TODO: open the drawer
-        //TODO: disable the draw from deck
+        presenter.openDestinationDrawer();
+        presenter.updateDestinationDrawer();
     }
 
     @Override
     public void closeDestinationDraw(IBoardMapPresenter presenter) {
         super.closeDestinationDraw(presenter);
-        //TODO: close the drawer
+        presenter.closeDestinationDrawer();
     }
 }

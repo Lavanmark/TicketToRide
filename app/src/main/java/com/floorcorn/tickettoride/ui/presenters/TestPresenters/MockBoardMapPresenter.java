@@ -91,4 +91,14 @@ public class MockBoardMapPresenter implements IBoardMapPresenter {
     public void displayMessage_long(String message) {
 
     }
+
+    @Override
+    public int[] getDiscardableDestinationCards() throws Exception {
+        return new int[0];
+    }
+
+    @Override
+    public void updateDestinationDrawer() {
+
+    }
 }

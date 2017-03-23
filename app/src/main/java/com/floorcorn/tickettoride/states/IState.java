@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.states;
 
+import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
@@ -17,7 +18,7 @@ public class IState {
     public TrainCardColor drawTrainCardFromDeck(IBoardMapPresenter presenter){return null;}
     public void claimRoute(IBoardMapPresenter presenter){}
     public void drawDestinationTickets(IBoardMapPresenter presenter){}
-    public void discardDestinationTickets(IBoardMapPresenter presenter){}
+    public void discardDestinationTickets(IBoardMapPresenter presenter, DestinationCard index){}
     public void openTrainDraw(IBoardMapPresenter presenter){}
     public void closeTrainDraw(IBoardMapPresenter presenter){}
     public void openDestinationDraw(IBoardMapPresenter presenter){}

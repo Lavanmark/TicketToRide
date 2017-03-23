@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.states;
 
+import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 
@@ -52,8 +53,8 @@ public class TurnState extends IState {
     }
 
     @Override
-    public void discardDestinationTickets(IBoardMapPresenter presenter) {
-        super.discardDestinationTickets(presenter);
+    public void discardDestinationTickets(IBoardMapPresenter presenter, DestinationCard index) {
+        super.discardDestinationTickets(presenter, index);
     }
 
     @Override

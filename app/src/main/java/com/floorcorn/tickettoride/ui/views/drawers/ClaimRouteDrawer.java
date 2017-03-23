@@ -61,7 +61,9 @@ public class ClaimRouteDrawer extends BMDrawer {
 	
 	@Override
 	public void hide() {
-		BM_DRAWER_LAYOUT.closeDrawer(Gravity.START);
+		if (isOpen()) {
+			BM_DRAWER_LAYOUT.closeDrawer(Gravity.START);
+		}
 	}
 	
 	@Override

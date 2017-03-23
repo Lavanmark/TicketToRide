@@ -125,7 +125,9 @@ public class DestinationDrawer extends BMDrawer {
 	
 	@Override
 	public void hide() {
-		BM_DRAWER_LAYOUT.closeDrawer(GravityCompat.START);
+		if (isOpen()){
+			BM_DRAWER_LAYOUT.closeDrawer(GravityCompat.START);
+		}
 	}
 	
 	@Override

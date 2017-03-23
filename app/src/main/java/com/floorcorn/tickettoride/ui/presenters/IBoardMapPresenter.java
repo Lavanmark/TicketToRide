@@ -15,6 +15,7 @@ public interface IBoardMapPresenter {
     public void disableDrawDestinationCards();
     public void disableClaimRoute();
 
+    //TODO: should we pass the whole drawer to the state instead of having all these??
     public void openDestinationDrawer();
     public void openClaimRouteDrawer();
     public void openDrawTrainDrawer();
@@ -24,4 +25,7 @@ public interface IBoardMapPresenter {
     public void setState(IState state);
     public void displayMessage_short(String message);
     public void displayMessage_long(String message);
+
+    public int[] getDiscardableDestinationCards() throws Exception;
+    public void updateDestinationDrawer();
 }
