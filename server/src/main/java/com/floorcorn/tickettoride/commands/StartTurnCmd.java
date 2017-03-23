@@ -15,7 +15,10 @@ public class StartTurnCmd extends StartTurnCmdData {
 
     @Override
     public ICommand getCmdFor(User user) {
-        return new StartTurnCmd(this.player.getCensoredPlayer(user));
+        ICommand cmd = new StartTurnCmd(this.player.getCensoredPlayer(user));
+        cmd.setCmdID(this.commandID);
+        cmd.setGameID(this.gameID);
+        return cmd;
     }
 
     @Override

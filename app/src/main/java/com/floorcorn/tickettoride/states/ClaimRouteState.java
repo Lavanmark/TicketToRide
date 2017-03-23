@@ -1,6 +1,8 @@
 package com.floorcorn.tickettoride.states;
 
 import com.floorcorn.tickettoride.UIFacade;
+import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 
@@ -11,7 +13,7 @@ import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 public class ClaimRouteState extends TurnState {
 
     @Override
-    public void claimRoute(IBoardMapPresenter presenter, Route route) {
+    public void claimRoute(IBoardMapPresenter presenter, Route route) throws BadUserException, GameActionException {
         super.claimRoute(presenter, route);
         if(route != null) {
             UIFacade.getInstance().claimRoute(route);

@@ -10,6 +10,8 @@ import com.floorcorn.tickettoride.model.User;
  */
 
 public class ClaimRouteCmd extends ClaimRouteCmdData {
+    
+    private ClaimRouteCmd() {}
     public ClaimRouteCmd(Player player, Route route){
         claimingPlayer = player;
         routeToClaim = route;

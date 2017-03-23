@@ -61,8 +61,6 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
     /** reference to the current state object **/
     private IState state = null;
 
-    /** boolean to show if discarding is allowed in the view **/
-	private boolean discarding = false;
     /** array of destination cards that are discarded **/
 	private DestinationCard[] destCardsToDiscard;
 
@@ -77,6 +75,7 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
 	public BoardmapPresenter() {
 		this.game = UIFacade.getInstance().getCurrentGame();
 		this.user = UIFacade.getInstance().getUser();
+		destCardsToDiscard = new DestinationCard[3];
 		register();
 	}
 
@@ -122,7 +121,7 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
 		        view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
 				view.setPlayerDestinationCardList(game.getPlayer(user).getDestinationCards());
 		        view.setClaimRoutesList(game.getRoutes());
-		        if(!discarding)
+		        if(destCardsToDiscard == null || destCardsToDiscard[0] == null)
 		            view.setDestinationCardChoices();
 	        }
         }
@@ -162,9 +161,6 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
     }
     public String getGameName(){
         return this.game.getName();
-    }
-    public void setDiscarding(boolean areu) {
-        discarding = areu;
     }
 
 
@@ -240,9 +236,7 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
      * @return int of the resource
      */
     public static int getResId(String resName, Context context) {
-
         try {
-            //System.out.println(resName);
             return context.getResources().getIdentifier(resName, "drawable", context.getPackageName());
         } catch (Exception e) {
             e.printStackTrace();
@@ -288,6 +282,7 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
      *
      */
 	public void startPollingCommands() {
+		stopPolling();
 		UIFacade.getInstance().pollCurrentGameParts(view);
 	}
 
@@ -310,46 +305,43 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
             view.backToLogin();
         }
     }
+    
     /**
      *
-     * @param index
      */
-	public void discardDestination(int index) {
+	public void discardDestinations(boolean[] shouldDiscard) {
 		if(destCardsToDiscard == null)
 			return;
+		
+		List<DestinationCard> toDiscard = new ArrayList<>();
+		for(int i = 0; i < shouldDiscard.length; i++)
+			if(shouldDiscard[i])
+				toDiscard.add(destCardsToDiscard[i]);
+		destCardsToDiscard = new DestinationCard[3];
 		try {
-			UIFacade.getInstance().discardDestinationCard(destCardsToDiscard[index]);
+			UIFacade.getInstance().discardDestinationCards(toDiscard);
 		} catch (GameActionException e) {
 			e.printStackTrace();
+		} catch(BadUserException e) {
+			e.printStackTrace();
+			view.backToLogin();
 		}
-	}
-    /**
-     *
-     */
-	public void doneDiscarding() {
-		destCardsToDiscard = null;
-		discarding = false;
-		UIFacade.getInstance().stopDiscarding();
-
 	}
     /**
      *
      * @return
      */
-	public TrainCardColor drawTrainCardFromDeck(){
-        return this.state.drawTrainCardFromDeck(this);
-        /*TrainCardColor color = null;
-		try {
-			color = UIFacade.getInstance().drawTrainCardFromDeck();
-		} catch(GameActionException e) {
-			e.printStackTrace();
-		}
-        if(!(color == null)) {
-            String toDisplay = "You drew 1 " + color.name() + " card";
-            Toast.makeText(view.getActivity(), toDisplay, Toast.LENGTH_SHORT).show();
-        }
-        return color;
-        */
+	public boolean drawTrainCardFromDeck(){
+//        try {
+            this.state.drawTrainCardFromDeck(this);
+			return true;
+//		} catch(GameActionException e) {
+//			e.printStackTrace();
+//		} catch(BadUserException e) {
+//			e.printStackTrace();
+//			view.backToLogin();
+//		}
+//		return false;
 	}
 
     /**
@@ -357,20 +349,9 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
      * @param position
      * @return
      */
-	public TrainCardColor drawFromFaceUp(int position) {
-        return this.state.drawFaceUpCard(this, position);
-        /*TrainCardColor color = null;
-		try {
-			color = UIFacade.getInstance().drawTrainCard(position);
-		} catch(GameActionException e) {
-			e.printStackTrace();
-		}
-        if(!(color == null)) {
-            String toDisplay = "You drew 1 " + color.name() + " card";
-            Toast.makeText(view.getActivity(), toDisplay, Toast.LENGTH_SHORT).show();
-        }
-        return color;
-        */
+	public boolean drawFromFaceUp(int position) {
+		this.state.drawFaceUpCard(this, position);
+		return true; //TODO this should be like the function above
 	}
 
     /**
@@ -428,11 +409,6 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
      */
 	public void drawNewDestinationCards() {
         this.state.drawDestinationTickets(this);
-		/*try {
-			UIFacade.getInstance().drawDestinationCards();
-		} catch(GameActionException e) {
-			e.printStackTrace();
-		}*/
 	}
 
     /**
@@ -451,13 +427,20 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
      * @param route
      */
 	public void claimButtonClicked(Route route) {
-        this.state.claimRoute(this, route);
-		/*if(route != null) {
-			UIFacade.getInstance().claimRoute(route);
-			Toast.makeText(view.getActivity(), "Claimed route: " + route.getFirstCity().getName() + " to " + route.getSecondCity().getName(), Toast.LENGTH_SHORT).show();
-		} else
-			Toast.makeText(view.getActivity(), "No routes can be claimed!", Toast.LENGTH_SHORT).show();
-			*/
+		if(route != null) {
+			try {
+				this.state.claimRoute(this, route);
+				Toast.makeText(view.getActivity(), "Claimed route: " + route.getFirstCity().getName() + " to " + route.getSecondCity().getName(), Toast.LENGTH_SHORT).show();
+				return;
+			} catch(BadUserException e) {
+				e.printStackTrace();
+				view.backToLogin();
+			} catch(GameActionException e) {
+				e.printStackTrace();
+			}
+		}
+		Toast.makeText(view.getActivity(), "No routes can be claimed!", Toast.LENGTH_SHORT).show();
+//        this.state.claimRoute(this, route);
 	}
 
     /**

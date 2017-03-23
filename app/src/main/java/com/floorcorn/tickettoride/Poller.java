@@ -28,9 +28,9 @@ public class Poller {
 	private ScheduledExecutorService chatPollSES = null;
 
 
-	public Poller(ServerProxy sp, ClientModel cm) {
+	public Poller(ServerProxy sp,CommandManager cm) {
 		serverProxy = sp;
-		commandManager = new CommandManager(cm);
+		commandManager = cm;
 	}
 
 	public void startPollingPlayerList(final IView view) {
@@ -67,6 +67,7 @@ public class Poller {
 	public void startPollingCommands(final IView view) {
 		if(commandPollSES != null)
 			commandPollSES.shutdown();
+		System.out.println("starting commands");
 		commandPollSES = Executors.newScheduledThreadPool(1);
 		commandPollSES.scheduleAtFixedRate(new Runnable() {
 
@@ -78,7 +79,7 @@ public class Poller {
 					public void run() {
 						if(commandManager.currentGameID() > -1) {
 							try {
-								System.out.println("getting commands");
+								//System.out.println("getting commands");
 								ArrayList<ICommand> commands = serverProxy.getCommandsSince(commandManager.getUser(), commandManager.currentGameID(), commandManager.getLastCommandExecuted());
 								if(commands == null) {
 									stopPollingAll();
@@ -116,7 +117,7 @@ public class Poller {
 					public void run() {
 						if(commandManager.currentGameID() > -1) {
 							try {
-								System.out.println("getting chat log");
+								//System.out.println("getting chat log");
 								GameChatLog gameChatLog = serverProxy.getChatLog(commandManager.getUser(), commandManager.getGame().getGameInfo());
 								if(gameChatLog == null) {
 									stopPollingAll();
