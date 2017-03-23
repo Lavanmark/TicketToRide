@@ -248,7 +248,11 @@ public class Player {
 	}
 
 	public boolean removeDestinationCard(DestinationCard card){
-		return destinationCards.remove(card);
+		if(destinationCards.remove(card)) {
+			totalDestinationCards--;
+			return true;
+		}
+		return false;
 	}
 
 	public void markAllNotDiscardable() {

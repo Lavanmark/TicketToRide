@@ -12,10 +12,7 @@ import com.floorcorn.tickettoride.model.User;
 
 public class SetFaceUpDeckCmd extends SetFaceUpDeckCmdData {
 
-	private SetFaceUpDeckCmd(){}
-	public SetFaceUpDeckCmd(TrainCard[] faceup) {
-		this.faceUpDeck = faceup;
-	}
+	public SetFaceUpDeckCmd(){}
 
 	@Override
 	public ICommand getCmdFor(User user) {
@@ -24,14 +21,7 @@ public class SetFaceUpDeckCmd extends SetFaceUpDeckCmdData {
 
 	@Override
 	public void execute(Game game) {
-		try {
-			//TODO I think this already happens in the board class.
-			for(int i = 0; i < Board.FACEUP_DECK_SIZE; i++)
-				if(faceUpDeck[i] == null)
-					faceUpDeck[i] = game.getBoard().drawFromTrainCardDeck();
-			game.getBoard().setFaceUpCards(faceUpDeck);
-		} catch(GameActionException e) {
-			e.printStackTrace();
-		}
+		game.getBoard().replaceFaceUpCard();
+		this.faceUpDeck = game.getBoard().getFaceUpCards();
 	}
 }

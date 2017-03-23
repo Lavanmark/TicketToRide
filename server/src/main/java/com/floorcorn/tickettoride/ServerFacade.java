@@ -53,7 +53,7 @@ public class ServerFacade implements IServer {
 
 	@Override
 	public Game getGame(User user, int gameID) throws BadUserException {
-		if(model.authenticate(user.getToken()) != null)
+		if((user = model.authenticate(user.getToken())) != null)
 			return model.getGame(gameID).getCensoredGame(user);
 		throw new BadUserException("Could not Authenticate User!");
 	}

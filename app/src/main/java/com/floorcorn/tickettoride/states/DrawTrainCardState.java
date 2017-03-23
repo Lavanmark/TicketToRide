@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.states;
 
 import com.floorcorn.tickettoride.UIFacade;
+import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.TrainCardColor;
@@ -28,9 +29,12 @@ public class DrawTrainCardState extends TurnState {
             return null;
         }
         try {
-            color = UIFacade.getInstance().drawTrainCard(position);
+            UIFacade.getInstance().drawTrainCard(position);
         } catch (GameActionException e){
             Corn.log(Level.SEVERE, e.getMessage());
+        } catch(BadUserException e) {
+            e.printStackTrace();
+            //TODO logout
         }
         if(!(color == null)) {
             String toDisplay = "You drew 1 " + color.name() + " card";
@@ -51,9 +55,12 @@ public class DrawTrainCardState extends TurnState {
         super.drawTrainCardFromDeck(presenter);
         TrainCardColor color = null;
         try {
-            color = UIFacade.getInstance().drawTrainCardFromDeck();
+            UIFacade.getInstance().drawTrainCardFromDeck();
         } catch (GameActionException e){
             Corn.log(Level.SEVERE, e.getMessage());
+        } catch(BadUserException e) {
+            e.printStackTrace();
+            //TODO logout
         }
         if(!(color == null)) {
             String toDisplay = "You drew 1 " + color.name() + " card";

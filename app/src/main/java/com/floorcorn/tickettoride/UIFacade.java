@@ -1,6 +1,12 @@
 package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.clientModel.ClientModel;
+import com.floorcorn.tickettoride.commands.ClaimRouteCmd;
+import com.floorcorn.tickettoride.commands.CommandManager;
+import com.floorcorn.tickettoride.commands.DiscardDestinationCmd;
+import com.floorcorn.tickettoride.commands.DrawDestinationCmd;
+import com.floorcorn.tickettoride.commands.DrawTrainCardCmd;
+import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
@@ -35,19 +41,21 @@ public class UIFacade {
 
     private ClientModel clientModelRoot;
     private ServerProxy serverProxy;
+	private CommandManager commandManager;
     private Poller poller;
 
     // Things relating to private constructor and singleton pattern.
 
     private UIFacade() {
         clientModelRoot = new ClientModel();
+	    commandManager = new CommandManager(clientModelRoot);
         serverProxy = new ServerProxy();
         serverProxy.setPort("8080");
         // Special alias to your host loopback interface (i.e., 127.0.0.1 on your development
         // machine). Don't need to change if hooking to server on your computer.
         serverProxy.setHost("10.0.2.2");
 
-        poller = new Poller(serverProxy, clientModelRoot);
+        poller = new Poller(serverProxy, commandManager);
     }
     private static UIFacade instance = null;
     public static UIFacade getInstance() {
@@ -107,16 +115,6 @@ public class UIFacade {
      */
     public Set<GameInfo> getGames() {
         return clientModelRoot.getGames();
-    }
-
-    /**
-     * Returns the games that the user has joined.
-     * @param user User object
-     * @return Set of Game objects from the ClientModel
-     */
-    public Set<GameInfo> getGames(User user) {
-	    user = new User(user);
-        return clientModelRoot.getGames(user);
     }
 
     /**
@@ -234,14 +232,14 @@ public class UIFacade {
      */
     public void stopPollingPlayers() {
 	    if (poller == null) {
-		    poller = new Poller(serverProxy, clientModelRoot);
+		    poller = new Poller(serverProxy, commandManager);
 		    return;
 	    }
 	    poller.stopPollingPlayers();
     }
 	public void stopPollingGameStuff() {
 		if (poller == null) {
-			poller = new Poller(serverProxy, clientModelRoot);
+			poller = new Poller(serverProxy, commandManager);
 			return;
 		}
 		poller.stopPollingCmdChat();
@@ -252,7 +250,7 @@ public class UIFacade {
      */
 	public void stopPollingAll() {
 		if (poller == null) {
-			poller = new Poller(serverProxy, clientModelRoot);
+			poller = new Poller(serverProxy, commandManager);
 			return;
 		}
 		poller.stopPollingAll();
@@ -298,41 +296,6 @@ public class UIFacade {
     // Score and player related.
 
     /**
-     * Gets the length of player's longest path.
-     * @param user User object
-     * @return int Length of player's longest path.
-     */
-    public int getLongestPathPlayer(User user) {
-        return getCurrentGame().getPlayer(user).getLongestRoute();
-    }
-
-    /**
-     * Returns a list of players whose longest paths are the longest path in the game.
-     * @return List of Player objects who have the longest path
-     */
-    public List<Player> getPlayerLongestPath() {
-        return getCurrentGame().getPlayerLongestRoute();
-    }
-
-    /**
-     * Returns the length of the longest route in the current game.
-     * @return int length of longest route
-     */
-    public int getLongestRoute() {
-        return getCurrentGame().getLongestRoute();
-    }
-
-
-    /**
-     *
-     * @return Map of TrainCardColor to Integer
-     */
-    public Map<TrainCardColor, Integer> getCardMap(User user) {
-
-        return clientModelRoot.getCurrentGame().getPlayer(user).getTrainCards();
-    }
-
-    /**
      * Returns the Player whose turn it is.
      * @return Player object
      */
@@ -343,20 +306,25 @@ public class UIFacade {
     // Cards.
 
     public TrainCard[] getFaceUpCards() {
-        return clientModelRoot.getCurrentGame().getBoard().getFaceUpCards();
+        return getCurrentGame().getBoard().getFaceUpCards();
     }
 
-    public TrainCardColor drawTrainCardFromDeck() throws GameActionException {
-	    TrainCardColor color = null;//clientModelRoot.getCurrentGame().drawTrainCardFromDeck(clientModelRoot.getCurrentUser());
-	    clientModelRoot.notifyGameChanged();
-        return color;
+    public void drawTrainCardFromDeck() throws GameActionException, BadUserException {
+	    //TODO change true to proper value. (first or second draw)
+	    ICommand cmd = new DrawTrainCardCmd(getCurrentGame().getPlayer(getUser()), true, -1);
+	    cmd.setCmdID(getCurrentGame().getLatestCommandID());
+	    cmd.setGameID(getCurrentGame().getGameID());
+	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);
+	    commandManager.addCommands(res);
     }
 
-    public TrainCardColor drawTrainCard(int position) throws GameActionException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
-	    //TODO without a deck manager this is always going to throw exceptions
-        TrainCardColor color = null;//clientModelRoot.getCurrentGame().drawFaceUpCard(clientModelRoot.getCurrentUser(), position);
-	    clientModelRoot.notifyGameChanged();
-        return color;
+    public void drawTrainCard(int position) throws GameActionException, BadUserException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
+	    //TODO change true to proper value. (first or second draw)
+        ICommand cmd = new DrawTrainCardCmd(getCurrentGame().getPlayer(getUser()), true, position);
+	    cmd.setCmdID(getCurrentGame().getLatestCommandID());
+	    cmd.setGameID(getCurrentGame().getGameID());
+	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);
+	    commandManager.addCommands(res);
     }
 
     /**
@@ -364,39 +332,35 @@ public class UIFacade {
      * @return Array of 3 Destination Cards
      * @throws GameActionException
      */
-    public void drawDestinationCards() throws GameActionException {
-	    Player player = clientModelRoot.getCurrentGame().getPlayer(getUser());
-	    Board board = clientModelRoot.getCurrentGame().getBoard();
-		for (int i = 0; i < 3; i++){
-			DestinationCard card = board.drawFromDestinationCardDeck();
-			if(card != null)
-				player.addDestinationCard(card);
-			else
-				break;
-		}
-	    clientModelRoot.notifyGameChanged();
+    public void drawDestinationCards() throws GameActionException, BadUserException {
+	    ICommand cmd = new DrawDestinationCmd(getCurrentGame().getPlayer(getUser()));
+	    cmd.setCmdID(getCurrentGame().getLatestCommandID());
+	    cmd.setGameID(getCurrentGame().getGameID());
+	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);
+	    commandManager.addCommands(res);
     }
 
-    public void discardDestinationCard(DestinationCard destinationCard) throws GameActionException {
-	    clientModelRoot.getCurrentGame().getPlayer(clientModelRoot.getCurrentUser()).removeDestinationCard(destinationCard);
-        clientModelRoot.getCurrentGame().getBoard().discard(destinationCard);
-	    clientModelRoot.notifyGameChanged();
+    public void discardDestinationCards(List<DestinationCard> destinationCards) throws GameActionException, BadUserException {
+	    DestinationCard[] cardz = new DestinationCard[2];
+	    ICommand cmd = new DiscardDestinationCmd(getCurrentGame().getPlayer(getUser()), destinationCards.toArray(cardz));
+	    cmd.setCmdID(getCurrentGame().getLatestCommandID());
+	    cmd.setGameID(getCurrentGame().getGameID());
+	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);
+	    commandManager.addCommands(res);
     }
-
-	public void stopDiscarding() {
-		clientModelRoot.getCurrentGame().getPlayer(clientModelRoot.getCurrentUser()).markAllNotDiscardable();
-		clientModelRoot.notifyGameChanged();
-	}
 
     // Routes.
 
-    public void claimRoute(Route route) {
-        clientModelRoot.getCurrentGame().claimRoute(route, clientModelRoot.getCurrentGame().getPlayer(clientModelRoot.getCurrentUser()));
-	    clientModelRoot.notifyGameChanged();
+    public void claimRoute(Route route) throws BadUserException, GameActionException {
+	    ICommand cmd = new ClaimRouteCmd(getCurrentGame().getPlayer(getUser()), route);
+	    cmd.setCmdID(getCurrentGame().getLatestCommandID());
+	    cmd.setGameID(getCurrentGame().getGameID());
+	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);
+	    commandManager.addCommands(res);
     }
 
     public Boolean canClaimRoute(Route route) {
-	    Player player = clientModelRoot.getCurrentGame().getPlayer(clientModelRoot.getCurrentUser());
+	    Player player = getCurrentGame().getPlayer(getUser());
 	    return route.canClaim(player);
     }
 

@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride.states;
 
+import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
@@ -43,7 +45,7 @@ public class TurnState extends IState {
     }
 
     @Override
-    public void claimRoute(IBoardMapPresenter presenter, Route route) {
+    public void claimRoute(IBoardMapPresenter presenter, Route route) throws BadUserException, GameActionException {
         super.claimRoute(presenter, route);
     }
 
