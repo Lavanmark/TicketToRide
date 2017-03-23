@@ -26,7 +26,7 @@ public interface IBoardmapView extends IView {
 	 * @post if numPlayersIn(game) == size(game): call setupPlayerIcons() to display players' info
 	 * 		(implementation is to show buttons at top of screen that show popup data when clicked)
 	 */
-	void checkStarted();
+	boolean checkStarted();
 	
 	/**
 	 * Sets the number of train car cards of each color in the text views for current player.

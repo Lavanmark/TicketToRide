@@ -218,7 +218,6 @@ public class Board {
 		    throw new GameActionException("Position not accessible in Face Up Cards.");
 	    TrainCard toReturn = faceUpCards[position];
 	    faceUpCards[position] = null;
-	    replaceFaceUpCard();
 	    return toReturn;
     }
 
@@ -301,9 +300,9 @@ public class Board {
 			return;
 	    for (Route route : routeList) {
 		    if (route.getRouteID() == r.getRouteID()) {
-			    if (!route.equals(r)) {
+			    //if (!route.equals(r)) {
 					route.update(r);
-			    }
+			    //}
 		    } else if (!allowDoubles && r.isDoubleRoute(route)) {
 				route.markDoubleRoute(r);
 		    }
@@ -351,7 +350,7 @@ public class Board {
 	 * @pre one or more of the face up card spots was just vacated (card drawn)
 	 * @post vacated face up spot(s) filled by drawing top card from train card deck
 	 */
-	private void replaceFaceUpCard() {
+	public void replaceFaceUpCard() {
 	    for (int i = 0; i < FACEUP_DECK_SIZE; i++) {
 		    if (faceUpCards[i] == null) {
 			    try {

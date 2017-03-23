@@ -22,7 +22,10 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 		ArrayList<Player> newPlayers = new ArrayList<>();
 		for(Player p : players)
 			newPlayers.add(p.getCensoredPlayer(user));
-		return new InitializeGameCmd(newPlayers);
+		ICommand cmd = new InitializeGameCmd(newPlayers);
+		cmd.setCmdID(this.commandID);
+		cmd.setGameID(this.gameID);
+		return cmd;
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.User;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
 
 /**
@@ -22,21 +23,16 @@ public class CommandManager {
 			throw new GameActionException("User is not a player!");
 		ArrayList<ICommand> commands = game.getCommands();
 
-		if(lastCommand < 0)
-			lastCommand = 0;
 		if(lastCommand >= game.getLatestCommandID())
 			return new ArrayList<>();
 
 
-		ListIterator<ICommand> li = commands.listIterator(lastCommand);
+		ListIterator<ICommand> li = commands.listIterator(lastCommand + 1);
 
 		ArrayList<ICommand> newList = new ArrayList<>();
 		while(li.hasNext()) {
 			ICommand cmd = li.next();
-			if(cmd.forPlayer(user))
-				newList.add(cmd);
-			else
-				newList.add(cmd.getCmdFor(user));
+			newList.add(cmd.getCmdFor(user));
 		}
 		return newList;
 	}
@@ -50,24 +46,38 @@ public class CommandManager {
 			if(!(command instanceof DiscardDestinationCmd))
 				throw new GameActionException("Not your turn!");
 		}
-
-		//TODO something else was going to go here but I can't remember now...
-
-		//TODO add chain reaction commands.
+		
+		List<ICommand> reactions = new ArrayList<>();
+		
 		if(command instanceof DrawTrainCardCmd){
-
+			if(((DrawTrainCardCmd)command).cardPosition != -1) {
+				reactions.add(new SetFaceUpDeckCmd());
+			}
+			if(!((DrawTrainCardCmd)command).firstDraw) {
+				reactions.add(new StartTurnCmd(game.getNextPlayer()));
+			}
 		}
+		
 		if(command instanceof ClaimRouteCmd) {
-
+			reactions.add(new StartTurnCmd(game.getNextPlayer()));
 		}
+		
 		if(command instanceof DrawDestinationCmd) {
-
+			reactions.add(new StartTurnCmd(game.getNextPlayer()));
 		}
 
 		int lastCommandClient = command.getCmdID();
 		command.setCmdID(game.getLatestCommandID() + 1);
+		command.setGameID(game.getGameID());
 		command.execute(game);
 		game.addCommand(command);
+		
+		for(ICommand reaction : reactions){
+			reaction.setCmdID(game.getLatestCommandID() + 1);
+			reaction.setGameID(game.getGameID());
+			reaction.execute(game);
+			game.addCommand(reaction);
+		}
 
 		return getCommandsSince(user, game, lastCommandClient);
 	}
@@ -80,12 +90,41 @@ public class CommandManager {
 
 		ICommand init = new InitializeGameCmd(game.getPlayerList());
 		init.setCmdID(0);
+		init.setGameID(game.getGameID());
 		init.execute(game);
 		game.addCommand(init);
 
-		ICommand faceUp = new SetFaceUpDeckCmd(game.getBoard().getFaceUpCards());
+		ICommand faceUp = new SetFaceUpDeckCmd();
 		faceUp.setCmdID(1);
+		faceUp.setGameID(game.getGameID());
 		faceUp.execute(game);
 		game.addCommand(faceUp);
+		
+		ICommand startTurn = new StartTurnCmd(game.getPlayerList().get(0));
+		startTurn.setCmdID(2);
+		startTurn.setGameID(game.getGameID());
+		startTurn.execute(game);
+		game.addCommand(startTurn);
+	}
+	
+	private void cando() {
+//		boolean cando = false;
+//		for(int i = game.getCommands().size() - 1; i >= 0; i--) {
+//			if(game.getCommands().get(i) instanceof StartTurnCmd) {
+//				cando = true;
+//				break;
+//			}
+//			if(game.getCommands().get(i) instanceof ClaimRouteCmd) {
+//				cando = false;
+//				break;
+//			}
+//			if(game.getCommands().get(i) instanceof DrawDestinationCmd) {
+//				cando = false;
+//				break;
+//			}
+//		}
+//
+//		if(!cando) //TODO maybe not?
+//			return new ArrayList<>();
 	}
 }
