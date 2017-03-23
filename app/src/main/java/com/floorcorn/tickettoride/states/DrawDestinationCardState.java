@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.states;
 
 import com.floorcorn.tickettoride.UIFacade;
+import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
@@ -20,6 +21,9 @@ public class DrawDestinationCardState extends TurnState {
             UIFacade.getInstance().drawDestinationCards();
         } catch (GameActionException e){
             Corn.log(Level.SEVERE, e.getMessage());
+        } catch(BadUserException e) {
+            e.printStackTrace();
+            //TODO logout
         }
         presenter.setState(new PreTurnState());
     }

@@ -25,7 +25,10 @@ public class DrawDestinationCmd extends DrawDestinationCmdData{
     public ICommand getCmdFor(User user) {
         if(user.getUserID() == drawingPlayer.getUserID())
             return this;
-        return new DrawDestinationCmd(drawingPlayer.getCensoredPlayer(user), null);
+	    ICommand cmd = new DrawDestinationCmd(drawingPlayer.getCensoredPlayer(user), null);
+	    cmd.setCmdID(this.commandID);
+	    cmd.setGameID(this.gameID);
+	    return cmd;
     }
 
     @Override
@@ -39,6 +42,7 @@ public class DrawDestinationCmd extends DrawDestinationCmdData{
 	    } catch(GameActionException e) {
 		    e.printStackTrace();
 	    }
+	    drawingPlayer = game.getPlayer(drawingPlayer);
 	    game.addDestinationCardsToPlayer(drawingPlayer, cardsDrawn);
     }
 }

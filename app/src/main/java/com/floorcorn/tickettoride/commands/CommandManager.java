@@ -8,6 +8,7 @@ import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Tyler on 2/27/2017.
@@ -21,7 +22,7 @@ public class CommandManager {
 		model = cm;
 	}
 
-	public void addCommands(ArrayList<ICommand> commands) throws GameActionException {
+	public void addCommands(List<ICommand> commands) throws GameActionException {
 		Game game = model.getCurrentGame();
 		if(game == null) {
 			throw new GameActionException("Not in this game anymore!");
@@ -31,12 +32,12 @@ public class CommandManager {
 			return;
 
 		for(ICommand command : commands) {
-			if(game.getLatestCommandID() >= command.getCmdID())
+			System.out.println(game.getLatestCommandID()  + " cmd " + command.getCmdID());
+			if(game.getLatestCommandID() > command.getCmdID())
 				continue;
 			System.out.println("doing command");
 			game.addCommand(command);
 			command.execute(game);
-			model.setLastCommandExecuted(command.getCmdID());
 		}
 		model.notifyGameChanged();
 	}

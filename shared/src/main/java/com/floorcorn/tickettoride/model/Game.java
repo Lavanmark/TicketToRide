@@ -231,6 +231,7 @@ public class Game {
 				if(player.removeDestinationCard(card))
 					board.discard(card);
 			}
+			player.markAllNotDiscardable();
 		}
 	}
 
@@ -256,6 +257,13 @@ public class Game {
 			board.discard(card);
 		}
 		board.updateRoute(route);
+	}
+	
+	public Player getNextPlayer() {
+		for(int i = 0; i < playerList.size(); i++)
+			if(playerList.get(i).isTurn())
+				return playerList.get(i + 1 >= playerList.size() ? 0 : i + 1);
+		return null;
 	}
 
 	public int getGameID() {

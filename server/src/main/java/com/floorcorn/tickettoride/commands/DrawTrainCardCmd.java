@@ -25,7 +25,10 @@ public class DrawTrainCardCmd extends DrawTrainCardCmdData {
     public ICommand getCmdFor(User user) {
         if(drawingPlayer.getUserID() == user.getUserID())
             return this;
-        return new DrawTrainCardCmd(drawingPlayer.getCensoredPlayer(user), firstDraw, cardPosition, null);
+        ICommand cmd = new DrawTrainCardCmd(drawingPlayer.getCensoredPlayer(user), firstDraw, cardPosition, null);
+        cmd.setCmdID(this.commandID);
+        cmd.setGameID(this.gameID);
+        return cmd;
     }
 
     @Override
@@ -35,6 +38,7 @@ public class DrawTrainCardCmd extends DrawTrainCardCmdData {
                 cardDrawn = game.getBoard().drawFromTrainCardDeck();
             else
                 cardDrawn = game.getBoard().drawFromFaceUp(cardPosition);
+            drawingPlayer = game.getPlayer(drawingPlayer);
             game.addCard(drawingPlayer, cardDrawn);
         } catch(GameActionException e) {
             e.printStackTrace();
