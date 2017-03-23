@@ -69,7 +69,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	private TrainCardDrawer trainCardDrawer;
 	private DestinationDrawer destinationDrawer;
 
-	
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -320,4 +321,35 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		else
 			throw new IllegalArgumentException();
 	}
+
+	@Override
+	public void enableClaimRouteButton(boolean enabled){
+		claimRouteButton.setEnabled(enabled);
+	}
+
+	@Override
+	public void enableTrainCardButton(boolean enabled){
+		drawCardsButton.setEnabled(enabled);
+	}
+
+	@Override
+	public void enableDestinationCardButton(boolean enabled){
+		drawDestinationTicketsButton.setEnabled(enabled);
+	}
+
+	@Override
+	public ClaimRouteDrawer getClaimRouteDrawer() {
+		return claimRouteDrawer;
+	}
+
+	@Override
+	public TrainCardDrawer getTrainCardDrawer() {
+		return trainCardDrawer;
+	}
+
+	@Override
+	public DestinationDrawer getDestinationDrawer() {
+		return destinationDrawer;
+	}
+
 }

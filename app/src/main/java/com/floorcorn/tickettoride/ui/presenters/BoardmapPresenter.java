@@ -17,8 +17,10 @@ import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
+import com.floorcorn.tickettoride.states.IState;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
+import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,17 +39,17 @@ import java.util.Observer;
  * The Boardmap Presenter class is responsible for interpreting user inputs from the view,
  * and updating the view when the model changes.
  *
- * THIS CLASS IS ORGANIZED INTO 5 GROUPS
+ * THIS CLASS IS ORGANIZED INTO 6 GROUPS
  * (1) OBSERVER METHODS
  * (2) GET AND SET METHODS
  * (3) GAME REFERENCE METHODS
  * (4) METHODS TO MANIPULATE THE VIEW
  * (5) METHODS TO INTERACT WITH UIFACADE
- * (6) ANIMATION METHODS
+ * (6) STATE ACCESS METHODS
  *
  *
  */
-public class BoardmapPresenter implements IPresenter, Observer {
+public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresenter {
 
     /** reference to the view **/
     private IBoardmapView view = null;
@@ -55,6 +57,9 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	private Game game = null;
     /** reference to the current user **/
 	private User user = null;
+
+    /** reference to the current state object **/
+    private IState state = null;
 
     /** array of destination cards that are discarded **/
 	private DestinationCard[] destCardsToDiscard;
@@ -327,16 +332,16 @@ public class BoardmapPresenter implements IPresenter, Observer {
      * @return
      */
 	public boolean drawTrainCardFromDeck(){
-        try {
-			UIFacade.getInstance().drawTrainCardFromDeck();
+//        try {
+            this.state.drawTrainCardFromDeck(this);
 			return true;
-		} catch(GameActionException e) {
-			e.printStackTrace();
-		} catch(BadUserException e) {
-			e.printStackTrace();
-			view.backToLogin();
-		}
-		return false;
+//		} catch(GameActionException e) {
+//			e.printStackTrace();
+//		} catch(BadUserException e) {
+//			e.printStackTrace();
+//			view.backToLogin();
+//		}
+//		return false;
 	}
 
     /**
@@ -345,16 +350,8 @@ public class BoardmapPresenter implements IPresenter, Observer {
      * @return
      */
 	public boolean drawFromFaceUp(int position) {
-		try {
-			UIFacade.getInstance().drawTrainCard(position);
-			return true;
-		} catch(GameActionException e) {
-			e.printStackTrace();
-		} catch(BadUserException e) {
-			e.printStackTrace();
-			view.backToLogin();
-		}
-		return false;
+		this.state.drawFaceUpCard(this, position);
+		return true; //TODO this should be like the function above
 	}
 
     /**
@@ -411,14 +408,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
      *
      */
 	public void drawNewDestinationCards() {
-		try {
-			UIFacade.getInstance().drawDestinationCards();
-		} catch(GameActionException e) {
-			e.printStackTrace();
-		} catch(BadUserException e) {
-			e.printStackTrace();
-			view.backToLogin();
-		}
+        this.state.drawDestinationTickets(this);
 	}
 
     /**
@@ -439,7 +429,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	public void claimButtonClicked(Route route) {
 		if(route != null) {
 			try {
-				UIFacade.getInstance().claimRoute(route);
+				this.state.claimRoute(this, route);
 				Toast.makeText(view.getActivity(), "Claimed route: " + route.getFirstCity().getName() + " to " + route.getSecondCity().getName(), Toast.LENGTH_SHORT).show();
 				return;
 			} catch(BadUserException e) {
@@ -450,6 +440,7 @@ public class BoardmapPresenter implements IPresenter, Observer {
 			}
 		}
 		Toast.makeText(view.getActivity(), "No routes can be claimed!", Toast.LENGTH_SHORT).show();
+//        this.state.claimRoute(this, route);
 	}
 
     /**
@@ -462,4 +453,90 @@ public class BoardmapPresenter implements IPresenter, Observer {
 	}
 
     /*********************** END INTERACTIONS WITH UI FACADE *********************************/
+
+    /************************ BEGIN STATE ACCESS METHODS ************************************/
+
+    @Override
+    public void enableDrawTrainCards(){
+        view.enableTrainCardButton(true);
+    }
+
+    @Override
+    public void enableDrawDestinationCards(){
+        view.enableDestinationCardButton(true);
+    }
+
+    @Override
+    public void enableClaimRoute(){
+        view.enableClaimRouteButton(true);
+    }
+
+    @Override
+    public void disableDrawTrainCards() {
+       view.enableTrainCardButton(false);
+    }
+
+    @Override
+    public void disableDrawDestinationCards() {
+        view.enableDestinationCardButton(false);
+    }
+
+    @Override
+    public void disableClaimRoute() {
+        view.enableClaimRouteButton(true);
+    }
+
+    @Override
+    public void openDestinationDrawer() {
+        view.getDestinationDrawer().open();
+    }
+
+    @Override
+    public void openClaimRouteDrawer() {
+        view.getClaimRouteDrawer().open();
+
+    }
+
+    @Override
+    public void openDrawTrainDrawer() {
+       view.getTrainCardDrawer().open();
+
+    }
+
+    @Override
+    public void closeDestinationDrawer() {
+        view.getDestinationDrawer().hide();
+
+    }
+
+    @Override
+    public void closeClaimRouteDrawer() {
+        view.getClaimRouteDrawer().hide();
+    }
+
+    @Override
+    public void closeDrawTrainDrawer() {
+        view.getTrainCardDrawer().hide();
+    }
+
+    public void setState(IState state) {
+        if(this.state != null)
+        {
+            this.state.exit(this);
+        }
+        this.state = state;
+        this.state.enter(this);
+    }
+
+    @Override
+    public void displayMessage_short(String message) {
+        Toast.makeText(view.getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void displayMessage_long(String message) {
+        Toast.makeText(view.getActivity(), message, Toast.LENGTH_LONG).show();
+    }
+
+    /************************ END STATE ACCESS METHODS *************************************/
 }
