@@ -10,7 +10,11 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Tyler on 3/22/2017.
@@ -41,7 +45,6 @@ public class DestinationDrawer extends BMDrawer {
 		setDestinationImages();
 		
 		if (parentPresenter.getDiscardableCount() == 0) {
-			parentPresenter.setDiscarding(false);
 			drawFromDestinationDeck.setEnabled(true);
 			drawFromDestinationDeck.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -51,8 +54,6 @@ public class DestinationDrawer extends BMDrawer {
 				}
 			});
 		} else {
-			parentPresenter.setDiscarding(true);
-			
 			// Set images.
 			for(int i = 0; i < MAXDESTINATIONS; i++) {
 				destinationTickets[i].setOnClickListener(new View.OnClickListener() {
@@ -76,11 +77,14 @@ public class DestinationDrawer extends BMDrawer {
 			keepDestinations.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					boolean[] discardem = new boolean[3];
 					for(int i = 0; i < MAXDESTINATIONS; i++) {
 						if(!destinationTickets[i].isSelected() && destinationTickets[i].isClickable())
-							parentPresenter.discardDestination(i);
+							discardem[i] = true;
+						else
+							discardem[i] = false;
 					}
-					parentPresenter.doneDiscarding();
+					parentPresenter.discardDestinations(discardem);
 				}
 			});
 		}
@@ -121,11 +125,15 @@ public class DestinationDrawer extends BMDrawer {
 		DRAWER_HOLDER.removeAllViews();
 		DRAWER_HOLDER.addView(layout);
 		BM_DRAWER_LAYOUT.openDrawer(GravityCompat.START);
+		
+		buildDestinationDrawer();
 	}
 	
 	@Override
 	public void hide() {
-		BM_DRAWER_LAYOUT.closeDrawer(GravityCompat.START);
+		if (isOpen()){
+			BM_DRAWER_LAYOUT.closeDrawer(GravityCompat.START);
+		}
 	}
 	
 	@Override

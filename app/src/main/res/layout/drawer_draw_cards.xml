@@ -104,14 +104,6 @@
             android:src="@drawable/card_black"
             android:background="@drawable/selector"/>
 
-        <Button
-            android:text="End Turn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_selector"
-            />
-
-
     </LinearLayout>
 
 

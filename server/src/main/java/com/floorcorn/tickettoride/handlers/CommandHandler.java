@@ -29,13 +29,15 @@ public class CommandHandler extends HandlerBase {
             String token = getAuthenticationToken(httpExchange);
             if(token == null || token.isEmpty()) {
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);
+	            Corn.log(Level.FINEST, "BADDDD");
                 return;
             }
 
             String reqBody = getRequestBody(httpExchange);
             if(reqBody == null || reqBody.isEmpty()) {
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);
-                return;
+	            Corn.log(Level.FINEST, "BADDDD 22222");
+	            return;
             }
 
             ICommand cmd = Serializer.getInstance().deserializeCommand(reqBody);
@@ -44,9 +46,10 @@ public class CommandHandler extends HandlerBase {
 	        try {
 		        ArrayList<ICommand> commands = ServerFacade.getInstance().doCommand(new User(token), cmd);
 		        results = new Results(true, commands);
-		        Corn.log("Command executed and " + commands.size() + "commands returned to client.");
+		        Corn.log("Command executed and " + commands.size() + " commands returned to client.");
 	        } catch(BadUserException | GameActionException e) {
 		        Corn.log(Level.SEVERE, e.getMessage());
+		        e.printStackTrace();
 		        results = new Results(false, e);
 	        }
 
@@ -54,6 +57,7 @@ public class CommandHandler extends HandlerBase {
 	        sendResponseBody(httpExchange, results);
         } catch(Exception e) {
 	        Corn.log(Level.SEVERE, e.getMessage());
+	        e.printStackTrace();
             httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
         }
     }

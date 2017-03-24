@@ -18,6 +18,7 @@ import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.states.IState;
+import com.floorcorn.tickettoride.states.PreTurnState;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
 import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
@@ -61,10 +62,8 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
     /** reference to the current state object **/
     private IState state = null;
 
-    /** boolean to show if discarding is allowed in the view **/
-	private boolean discarding = false;
     /** array of destination cards that are discarded **/
-	private DestinationCard[] destCardsToDiscard;
+    private DestinationCard[] destCardsToDiscard;
 
     /**
      * Constructor for the BoardmapPresenter
@@ -77,6 +76,7 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
 	public BoardmapPresenter() {
 		this.game = UIFacade.getInstance().getCurrentGame();
 		this.user = UIFacade.getInstance().getUser();
+		setDestCardsToDiscard(new DestinationCard[3]);
 		register();
 	}
 
@@ -95,6 +95,41 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
 	        this.view = (IBoardmapView)view;
 	    else
 	        throw new IllegalArgumentException("View arg was not an IBoardmapView");
+    }
+
+    @Override
+    public IBoardmapView getView() {
+        return view;
+    }
+
+    @Override
+    public void setView(IBoardmapView view) {
+        this.view = view;
+    }
+
+    @Override
+    public Game getGame() {
+        return game;
+    }
+
+    @Override
+    public User getUser() {
+        return user;
+    }
+
+    @Override
+    public IState getState() {
+        return state;
+    }
+
+    @Override
+    public DestinationCard[] getDestCardsToDiscard() {
+        return destCardsToDiscard;
+    }
+
+    @Override
+    public void setDestCardsToDiscard(DestinationCard[] destCardsToDiscard) {
+        this.destCardsToDiscard = destCardsToDiscard;
     }
 
     /*********************** OBSERVER METHODS *********************************/
@@ -122,8 +157,19 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
 		        view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
 				view.setPlayerDestinationCardList(game.getPlayer(user).getDestinationCards());
 		        view.setClaimRoutesList(game.getRoutes());
-		        if(!discarding)
+		        if(destCardsToDiscard == null || destCardsToDiscard[0] == null)
 		            view.setDestinationCardChoices();
+                //initialize state to PreTurn state for all players
+                if (state == null)
+                    setState(new PreTurnState());
+                //if waiting for your turn, check if it is your turn
+                if (state instanceof PreTurnState){
+                    if (game.getPlayer(user).isTurn())
+                        //if it is your turn, setTurn transitions between preTurn and TurnState
+                        state.setTurn(this, game.getPlayer(user));
+                }
+
+
 	        }
         }
         /** if changed object is the GameChatLog update the chat room in the view **/
@@ -162,9 +208,6 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
     }
     public String getGameName(){
         return this.game.getName();
-    }
-    public void setDiscarding(boolean areu) {
-        discarding = areu;
     }
 
 
@@ -240,9 +283,7 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
      * @return int of the resource
      */
     public static int getResId(String resName, Context context) {
-
         try {
-            //System.out.println(resName);
             return context.getResources().getIdentifier(resName, "drawable", context.getPackageName());
         } catch (Exception e) {
             e.printStackTrace();
@@ -288,6 +329,7 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
      *
      */
 	public void startPollingCommands() {
+		stopPolling();
 		UIFacade.getInstance().pollCurrentGameParts(view);
 	}
 
@@ -310,46 +352,45 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
             view.backToLogin();
         }
     }
-    /**
-     *
-     * @param index
-     */
-	public void discardDestination(int index) {
-		if(destCardsToDiscard == null)
-			return;
-		try {
-			UIFacade.getInstance().discardDestinationCard(destCardsToDiscard[index]);
-		} catch (GameActionException e) {
-			e.printStackTrace();
-		}
-	}
+    
     /**
      *
      */
-	public void doneDiscarding() {
-		destCardsToDiscard = null;
-		discarding = false;
-		UIFacade.getInstance().stopDiscarding();
+	public void discardDestinations(boolean[] shouldDiscard) {
 
+        state.discardDestinationTickets(this, destCardsToDiscard, shouldDiscard);
+//      if(destCardsToDiscard == null)
+//            return;
+//      List<DestinationCard> toDiscard = new ArrayList<>();
+//		for(int i = 0; i < shouldDiscard.length; i++)
+//			if(shouldDiscard[i])
+//				toDiscard.add(destCardsToDiscard[i]);
+//		destCardsToDiscard = new DestinationCard[3];
+//		try {
+//            state.discardDestinationTickets(this, toDiscard);
+//			UIFacade.getInstance().discardDestinationCards(toDiscard);
+//		} catch (GameActionException e) {
+//			e.printStackTrace();
+//		} catch(BadUserException e) {
+//			e.printStackTrace();
+//			view.backToLogin();
+//		}
 	}
     /**
      *
      * @return
      */
-	public TrainCardColor drawTrainCardFromDeck(){
-        return this.state.drawTrainCardFromDeck(this);
-        /*TrainCardColor color = null;
-		try {
-			color = UIFacade.getInstance().drawTrainCardFromDeck();
-		} catch(GameActionException e) {
-			e.printStackTrace();
-		}
-        if(!(color == null)) {
-            String toDisplay = "You drew 1 " + color.name() + " card";
-            Toast.makeText(view.getActivity(), toDisplay, Toast.LENGTH_SHORT).show();
-        }
-        return color;
-        */
+	public boolean drawTrainCardFromDeck(){
+//        try {
+            this.state.drawTrainCardFromDeck(this);
+			return true;
+//		} catch(GameActionException e) {
+//			e.printStackTrace();
+//		} catch(BadUserException e) {
+//			e.printStackTrace();
+//			view.backToLogin();
+//		}
+//		return false;
 	}
 
     /**
@@ -357,20 +398,9 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
      * @param position
      * @return
      */
-	public TrainCardColor drawFromFaceUp(int position) {
-        return this.state.drawFaceUpCard(this, position);
-        /*TrainCardColor color = null;
-		try {
-			color = UIFacade.getInstance().drawTrainCard(position);
-		} catch(GameActionException e) {
-			e.printStackTrace();
-		}
-        if(!(color == null)) {
-            String toDisplay = "You drew 1 " + color.name() + " card";
-            Toast.makeText(view.getActivity(), toDisplay, Toast.LENGTH_SHORT).show();
-        }
-        return color;
-        */
+	public boolean drawFromFaceUp(int position) {
+		this.state.drawFaceUpCard(this, position);
+		return true; //TODO this should be like the function above
 	}
 
     /**
@@ -428,11 +458,6 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
      */
 	public void drawNewDestinationCards() {
         this.state.drawDestinationTickets(this);
-		/*try {
-			UIFacade.getInstance().drawDestinationCards();
-		} catch(GameActionException e) {
-			e.printStackTrace();
-		}*/
 	}
 
     /**
@@ -451,13 +476,20 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
      * @param route
      */
 	public void claimButtonClicked(Route route) {
-        this.state.claimRoute(this, route);
-		/*if(route != null) {
-			UIFacade.getInstance().claimRoute(route);
-			Toast.makeText(view.getActivity(), "Claimed route: " + route.getFirstCity().getName() + " to " + route.getSecondCity().getName(), Toast.LENGTH_SHORT).show();
-		} else
-			Toast.makeText(view.getActivity(), "No routes can be claimed!", Toast.LENGTH_SHORT).show();
-			*/
+		if(route != null) {
+			try {
+				this.state.claimRoute(this, route);
+				Toast.makeText(view.getActivity(), "Claimed route: " + route.getFirstCity().getName() + " to " + route.getSecondCity().getName(), Toast.LENGTH_SHORT).show();
+				return;
+			} catch(BadUserException e) {
+				e.printStackTrace();
+				view.backToLogin();
+			} catch(GameActionException e) {
+				e.printStackTrace();
+			}
+		}
+		Toast.makeText(view.getActivity(), "No routes can be claimed!", Toast.LENGTH_SHORT).show();
+//        this.state.claimRoute(this, route);
 	}
 
     /**
@@ -537,10 +569,13 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
     }
 
     public void setState(IState state) {
+        System.out.println("Presenter: setState");
         if(this.state != null)
         {
             this.state.exit(this);
         }
+        System.out.println("Changing State: "+state.getClass().getName());
+        this.displayMessage_short("Changing State: "+state.getClass().getSimpleName());
         this.state = state;
         this.state.enter(this);
     }
@@ -553,6 +588,26 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
     @Override
     public void displayMessage_long(String message) {
         Toast.makeText(view.getActivity(), message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void updateDestinationDrawer() {
+
+    }
+
+    @Override
+    public void tryOpenDestinationDrawer() {
+        state.openDestinationDraw(this);
+    }
+
+    @Override
+    public void tryOpenDrawTrainDrawer() {
+        state.openTrainDraw(this);
+    }
+
+    @Override
+    public void tryOpenClaimRouteDrawer() {
+        state.openClaimRoute(this);
     }
 
     /************************ END STATE ACCESS METHODS *************************************/

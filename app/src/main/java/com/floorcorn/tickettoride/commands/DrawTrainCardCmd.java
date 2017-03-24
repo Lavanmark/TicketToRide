@@ -12,10 +12,10 @@ import com.floorcorn.tickettoride.model.User;
 public class DrawTrainCardCmd extends DrawTrainCardCmdData {
     private DrawTrainCardCmd(){}
 
-    public DrawTrainCardCmd(Player player, boolean bool, int cardPosition, TrainCard trainCard){
+    public DrawTrainCardCmd(Player player, boolean bool, int cardPosition){
         this.drawingPlayer = player;
         this.firstDraw = bool;
-        this.cardDrawn = trainCard;
+        this.cardDrawn = null;
         this.cardPosition = cardPosition;
     }
 

@@ -10,6 +10,9 @@ import com.floorcorn.tickettoride.model.User;
  */
 
 public class ClaimRouteCmd extends ClaimRouteCmdData {
+    
+    private ClaimRouteCmd() {}
+    
     public ClaimRouteCmd(Player player, Route route){
         claimingPlayer = player;
         routeToClaim = route;
@@ -19,11 +22,16 @@ public class ClaimRouteCmd extends ClaimRouteCmdData {
     public ICommand getCmdFor(User user) {
         if(user.getUserID() == claimingPlayer.getUserID())
             return this;
-        return new ClaimRouteCmd(claimingPlayer.getCensoredPlayer(user), routeToClaim);
+        ICommand cmd = new ClaimRouteCmd(claimingPlayer.getCensoredPlayer(user), routeToClaim);
+        cmd.setCmdID(this.commandID);
+        cmd.setGameID(this.gameID);
+        return cmd;
     }
 
     @Override
     public void execute(Game game) {
+        claimingPlayer = game.getPlayer(claimingPlayer);
         game.claimRoute(routeToClaim, claimingPlayer);
+        routeToClaim = game.getBoard().getRoute(routeToClaim.getRouteID());
     }
 }

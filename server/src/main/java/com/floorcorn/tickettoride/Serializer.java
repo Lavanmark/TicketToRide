@@ -45,7 +45,7 @@ public class Serializer {
 		try {
 			return mapper.writeValueAsString(o);
 		} catch(JsonProcessingException e) {
-			Corn.log(Level.SEVERE, e.getStackTrace());
+			Corn.log(Level.SEVERE, e.getMessage());
 		}
 		return null;
 	}
@@ -59,7 +59,7 @@ public class Serializer {
 		try {
 			return mapper.readValue(str, User.class);
 		} catch(IOException e) {
-			Corn.log(Level.SEVERE, e.getStackTrace());
+			Corn.log(Level.SEVERE, e.getMessage());
 		}
 		return null;
 	}
@@ -73,7 +73,7 @@ public class Serializer {
 		try {
 			return mapper.readValue(str, GameInfo.class);
 		} catch(IOException e) {
-			Corn.log(Level.SEVERE, e.getStackTrace());
+			Corn.log(Level.SEVERE, e.getMessage());
 		}
 		return null;
 	}
@@ -87,7 +87,7 @@ public class Serializer {
 		try {
 			return mapper.readValue(str, PlayerInfo.class);
 		} catch(IOException e) {
-			Corn.log(Level.SEVERE, e.getStackTrace());
+			Corn.log(Level.SEVERE, e.getMessage());
 		}
 		return null;
 	}
@@ -101,7 +101,7 @@ public class Serializer {
 		try {
 			return mapper.readValue(str, CommandRequest.class);
 		} catch(IOException e) {
-			Corn.log(Level.SEVERE, e.getStackTrace());
+			Corn.log(Level.SEVERE, e.getMessage());
 		}
 		return null;
 	}
@@ -115,7 +115,7 @@ public class Serializer {
 		try {
 			return mapper.readValue(str, ICommand.class);
 		} catch(IOException e) {
-			Corn.log(Level.SEVERE, e.getStackTrace());
+			Corn.log(Level.SEVERE, e.getMessage());
 		}
 		return null;
 	}
@@ -124,7 +124,7 @@ public class Serializer {
 		try {
 			return mapper.readValue(str, Message.class);
 		} catch(IOException e) {
-			Corn.log(Level.SEVERE, e.getStackTrace());
+			Corn.log(Level.SEVERE, e.getMessage());
 		}
 		return null;
 	}

@@ -12,6 +12,9 @@ import java.util.Arrays;
  */
 
 public class DiscardDestinationCmd extends DiscardDestinationCmdData{
+    
+    private DiscardDestinationCmd() {}
+    
     public DiscardDestinationCmd(Player player, DestinationCard[] cards){
         this.discardingPlayer = player;
         this.cards = cards;
@@ -21,11 +24,15 @@ public class DiscardDestinationCmd extends DiscardDestinationCmdData{
     public ICommand getCmdFor(User user) {
         if(user.getUserID() == discardingPlayer.getUserID())
             return this;
-        return new DiscardDestinationCmd(discardingPlayer.getCensoredPlayer(user), null);
+        ICommand cmd = new DiscardDestinationCmd(discardingPlayer.getCensoredPlayer(user), null);
+        cmd.setCmdID(this.commandID);
+        cmd.setGameID(this.gameID);
+        return cmd;
     }
 
     @Override
     public void execute(Game game) {
+        discardingPlayer = game.getPlayer(discardingPlayer);
         game.discardDestinationCards(discardingPlayer, Arrays.asList(cards));
     }
 }

@@ -100,19 +100,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		drawDestinationTicketsButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				destinationDrawer.open();
+				presenter.tryOpenDestinationDrawer();
 			}
 		});
 		drawCardsButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				trainCardDrawer.open();
+				presenter.tryOpenDrawTrainDrawer();
 			}
 		});
 		claimRouteButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				claimRouteDrawer.open();
+				presenter.tryOpenClaimRouteDrawer();
 			}
 		});
 		displayHandButton.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +125,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		// Set player icons to default "blank."
 		initializePlayerIcons();
 
-		checkStarted();
+		if(checkStarted())
+			presenter.startPollingCommands();
 		if(!presenter.gameInProgress())
 			launchPregame();
 		if(presenter.gameFinished())
@@ -143,7 +144,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	@Override
 	protected void onResume(){
 		super.onResume();
-		checkStarted();
+		if(checkStarted())
+			presenter.startPollingCommands();
 	}
 	
 	/**
@@ -252,7 +254,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	}
 	
 	@Override
-	public void checkStarted() {
+	public boolean checkStarted() {
 		if(!presenter.gameInProgress()) {
 			// Note: User can click out of the Pregame Activity. It's ok because we have disabled
 			// buttons, but maybe in a later version we won't want that to be possible.
@@ -260,13 +262,11 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			displayHandButton.setEnabled(false);
 			claimRouteButton.setEnabled(false);
 			drawCardsButton.setEnabled(false);
+			return false;
 		} else {
-			presenter.startPollingCommands();
-			drawDestinationTicketsButton.setEnabled(true);
-			drawCardsButton.setEnabled(true);
-			claimRouteButton.setEnabled(true);
-			displayHandButton.setEnabled(true);
+			//LET the states enable these buttons
 			setupPlayerIcons();
+			return true;
 		}
 	}
 	
@@ -278,6 +278,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	@Override
 	public void setPlayerTrainCardList(Map<TrainCardColor, Integer> cards) {
 		handDrawer.displayTrainCards(cards);
+		handDrawer.displayTrainCarsLeft(presenter.getTrainCars());
 	}
 	
 	@Override
