@@ -27,6 +27,10 @@ public class MockBoardMapPresenter implements IBoardMapPresenter {
         claimRoutesEnabled = false;
     }
     @Override
+    public void lockDrawerClosed(){
+
+    }
+    @Override
     public void enableDrawTrainCards() {
         this.drawTrainCardsEnabled = true;
     }

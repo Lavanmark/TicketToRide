@@ -48,4 +48,6 @@ public interface IBoardMapPresenter {
     public IState getState();
     public DestinationCard[] getDestCardsToDiscard();
     public void setDestCardsToDiscard(DestinationCard[] destCardsToDiscard);
+
+    public void lockDrawerClosed();
 }

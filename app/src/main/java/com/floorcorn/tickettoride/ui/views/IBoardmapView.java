@@ -106,4 +106,6 @@ public interface IBoardmapView extends IView {
 	TrainCardDrawer getTrainCardDrawer();
 
 	DestinationDrawer getDestinationDrawer();
+
+	public void lockDrawerClosed();
 }
