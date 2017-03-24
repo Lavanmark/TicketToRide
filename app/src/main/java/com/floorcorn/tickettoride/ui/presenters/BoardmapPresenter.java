@@ -352,7 +352,10 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
             view.backToLogin();
         }
     }
-    
+    @Override
+    public void lockDrawerClosed(){
+        this.view.lockDrawerClosed();
+    }
     /**
      *
      */

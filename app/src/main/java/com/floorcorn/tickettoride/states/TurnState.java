@@ -21,6 +21,7 @@ public class TurnState extends IState {
         presenter.enableDrawTrainCards();
         presenter.enableClaimRoute();
         presenter.enableDrawDestinationCards();
+        presenter.lockDrawerClosed();
     }
 
     @Override
@@ -30,6 +31,7 @@ public class TurnState extends IState {
         presenter.disableDrawTrainCards();
         //TODO: destinationCardState should override this method and not disable the Draw Destination button if new tickets drawn
         presenter.disableDrawDestinationCards();
+        presenter.lockDrawerClosed();
     }
 
     @Override

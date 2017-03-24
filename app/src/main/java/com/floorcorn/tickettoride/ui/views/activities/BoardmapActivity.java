@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -132,6 +133,12 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		if(presenter.gameFinished())
 			showGameOver();
 		//TODO we will want something to launch the game over when it happens in the game.
+	}
+
+	@Override
+	public void lockDrawerClosed(){
+		DrawerLayout BM_DRAWER_LAYOUT = (DrawerLayout) findViewById(R.id.boardmapActivity);
+		BM_DRAWER_LAYOUT.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 	}
 	
 	@Override
