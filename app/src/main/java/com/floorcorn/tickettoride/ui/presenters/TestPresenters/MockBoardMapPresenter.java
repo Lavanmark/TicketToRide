@@ -1,7 +1,11 @@
 package com.floorcorn.tickettoride.ui.presenters.TestPresenters;
 
+import com.floorcorn.tickettoride.model.DestinationCard;
+import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.states.IState;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
+import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 
 /**
  * Created by Michael on 3/22/2017.
@@ -89,6 +93,66 @@ public class MockBoardMapPresenter implements IBoardMapPresenter {
 
     @Override
     public void displayMessage_long(String message) {
+
+    }
+
+    @Override
+    public int[] getDiscardableDestinationCards() throws Exception {
+        return new int[0];
+    }
+
+    @Override
+    public void updateDestinationDrawer() {
+
+    }
+
+    @Override
+    public void tryOpenDestinationDrawer() {
+
+    }
+
+    @Override
+    public void tryOpenDrawTrainDrawer() {
+
+    }
+
+    @Override
+    public void tryOpenClaimRouteDrawer() {
+
+    }
+
+    @Override
+    public IBoardmapView getView() {
+        return null;
+    }
+
+    @Override
+    public void setView(IBoardmapView view) {
+
+    }
+
+    @Override
+    public Game getGame() {
+        return null;
+    }
+
+    @Override
+    public User getUser() {
+        return null;
+    }
+
+    @Override
+    public IState getState() {
+        return null;
+    }
+
+    @Override
+    public DestinationCard[] getDestCardsToDiscard() {
+        return new DestinationCard[0];
+    }
+
+    @Override
+    public void setDestCardsToDiscard(DestinationCard[] destCardsToDiscard) {
 
     }
 }

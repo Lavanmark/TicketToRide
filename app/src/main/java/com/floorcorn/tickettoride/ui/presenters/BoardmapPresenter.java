@@ -18,6 +18,7 @@ import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.states.IState;
+import com.floorcorn.tickettoride.states.PreTurnState;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
 import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
@@ -62,7 +63,7 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
     private IState state = null;
 
     /** array of destination cards that are discarded **/
-	private DestinationCard[] destCardsToDiscard;
+    private DestinationCard[] destCardsToDiscard;
 
     /**
      * Constructor for the BoardmapPresenter
@@ -75,7 +76,7 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
 	public BoardmapPresenter() {
 		this.game = UIFacade.getInstance().getCurrentGame();
 		this.user = UIFacade.getInstance().getUser();
-		destCardsToDiscard = new DestinationCard[3];
+		setDestCardsToDiscard(new DestinationCard[3]);
 		register();
 	}
 
@@ -94,6 +95,41 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
 	        this.view = (IBoardmapView)view;
 	    else
 	        throw new IllegalArgumentException("View arg was not an IBoardmapView");
+    }
+
+    @Override
+    public IBoardmapView getView() {
+        return view;
+    }
+
+    @Override
+    public void setView(IBoardmapView view) {
+        this.view = view;
+    }
+
+    @Override
+    public Game getGame() {
+        return game;
+    }
+
+    @Override
+    public User getUser() {
+        return user;
+    }
+
+    @Override
+    public IState getState() {
+        return state;
+    }
+
+    @Override
+    public DestinationCard[] getDestCardsToDiscard() {
+        return destCardsToDiscard;
+    }
+
+    @Override
+    public void setDestCardsToDiscard(DestinationCard[] destCardsToDiscard) {
+        this.destCardsToDiscard = destCardsToDiscard;
     }
 
     /*********************** OBSERVER METHODS *********************************/
@@ -123,6 +159,17 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
 		        view.setClaimRoutesList(game.getRoutes());
 		        if(destCardsToDiscard == null || destCardsToDiscard[0] == null)
 		            view.setDestinationCardChoices();
+                //initialize state to PreTurn state for all players
+                if (state == null)
+                    setState(new PreTurnState());
+                //if waiting for your turn, check if it is your turn
+                if (state instanceof PreTurnState){
+                    if (game.getPlayer(user).isTurn())
+                        //if it is your turn, setTurn transitions between preTurn and TurnState
+                        state.setTurn(this, game.getPlayer(user));
+                }
+
+
 	        }
         }
         /** if changed object is the GameChatLog update the chat room in the view **/
@@ -310,22 +357,24 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
      *
      */
 	public void discardDestinations(boolean[] shouldDiscard) {
-		if(destCardsToDiscard == null)
-			return;
-		
-		List<DestinationCard> toDiscard = new ArrayList<>();
-		for(int i = 0; i < shouldDiscard.length; i++)
-			if(shouldDiscard[i])
-				toDiscard.add(destCardsToDiscard[i]);
-		destCardsToDiscard = new DestinationCard[3];
-		try {
-			UIFacade.getInstance().discardDestinationCards(toDiscard);
-		} catch (GameActionException e) {
-			e.printStackTrace();
-		} catch(BadUserException e) {
-			e.printStackTrace();
-			view.backToLogin();
-		}
+
+        state.discardDestinationTickets(this, destCardsToDiscard, shouldDiscard);
+//      if(destCardsToDiscard == null)
+//            return;
+//      List<DestinationCard> toDiscard = new ArrayList<>();
+//		for(int i = 0; i < shouldDiscard.length; i++)
+//			if(shouldDiscard[i])
+//				toDiscard.add(destCardsToDiscard[i]);
+//		destCardsToDiscard = new DestinationCard[3];
+//		try {
+//            state.discardDestinationTickets(this, toDiscard);
+//			UIFacade.getInstance().discardDestinationCards(toDiscard);
+//		} catch (GameActionException e) {
+//			e.printStackTrace();
+//		} catch(BadUserException e) {
+//			e.printStackTrace();
+//			view.backToLogin();
+//		}
 	}
     /**
      *
@@ -520,10 +569,13 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
     }
 
     public void setState(IState state) {
+        System.out.println("Presenter: setState");
         if(this.state != null)
         {
             this.state.exit(this);
         }
+        System.out.println("Changing State: "+state.getClass().getName());
+        this.displayMessage_short("Changing State: "+state.getClass().getSimpleName());
         this.state = state;
         this.state.enter(this);
     }
@@ -536,6 +588,26 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
     @Override
     public void displayMessage_long(String message) {
         Toast.makeText(view.getActivity(), message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void updateDestinationDrawer() {
+
+    }
+
+    @Override
+    public void tryOpenDestinationDrawer() {
+        state.openDestinationDraw(this);
+    }
+
+    @Override
+    public void tryOpenDrawTrainDrawer() {
+        state.openTrainDraw(this);
+    }
+
+    @Override
+    public void tryOpenClaimRouteDrawer() {
+        state.openClaimRoute(this);
     }
 
     /************************ END STATE ACCESS METHODS *************************************/
