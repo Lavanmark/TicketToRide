@@ -532,7 +532,7 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
 
     @Override
     public void disableClaimRoute() {
-        view.enableClaimRouteButton(true);
+        view.enableClaimRouteButton(false);
     }
 
     @Override
