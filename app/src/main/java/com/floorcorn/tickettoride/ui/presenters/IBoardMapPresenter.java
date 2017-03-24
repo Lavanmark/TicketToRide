@@ -1,6 +1,10 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
+import com.floorcorn.tickettoride.model.DestinationCard;
+import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.states.IState;
+import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 
 /**
  * Created by Michael on 3/15/2017.
@@ -28,4 +32,18 @@ public interface IBoardMapPresenter {
 
     public int[] getDiscardableDestinationCards() throws Exception;
     public void updateDestinationDrawer();
+
+    void tryOpenDestinationDrawer();
+
+    void tryOpenDrawTrainDrawer();
+
+    void tryOpenClaimRouteDrawer();
+
+    public IBoardmapView getView();
+    public void setView(IBoardmapView view);
+    public Game getGame();
+    public User getUser();
+    public IState getState();
+    public DestinationCard[] getDestCardsToDiscard();
+    public void setDestCardsToDiscard(DestinationCard[] destCardsToDiscard);
 }

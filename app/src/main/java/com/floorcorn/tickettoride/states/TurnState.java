@@ -2,6 +2,8 @@ package com.floorcorn.tickettoride.states;
 
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.model.DestinationCard;
+import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
@@ -15,6 +17,7 @@ public class TurnState extends IState {
     @Override
     public void enter(IBoardMapPresenter presenter) {
         super.enter(presenter);
+        System.out.println("Entering TurnState");
         presenter.enableDrawTrainCards();
         presenter.enableClaimRoute();
         presenter.enableDrawDestinationCards();
@@ -30,8 +33,8 @@ public class TurnState extends IState {
     }
 
     @Override
-    public void setTurn(IBoardMapPresenter presenter) {
-        super.setTurn(presenter);
+    public void setTurn(IBoardMapPresenter presenter, Player me) {
+        super.setTurn(presenter, me);
     }
 
     @Override
@@ -55,8 +58,8 @@ public class TurnState extends IState {
     }
 
     @Override
-    public void discardDestinationTickets(IBoardMapPresenter presenter) {
-        super.discardDestinationTickets(presenter);
+    public void discardDestinationTickets(IBoardMapPresenter presenter, DestinationCard[] toDiscard, boolean[] shouldDiscard) {
+        super.discardDestinationTickets(presenter, toDiscard, shouldDiscard);
     }
 
     @Override

@@ -100,19 +100,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		drawDestinationTicketsButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				destinationDrawer.open();
+				presenter.tryOpenDestinationDrawer();
 			}
 		});
 		drawCardsButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				trainCardDrawer.open();
+				presenter.tryOpenDrawTrainDrawer();
 			}
 		});
 		claimRouteButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				claimRouteDrawer.open();
+				presenter.tryOpenClaimRouteDrawer();
 			}
 		});
 		displayHandButton.setOnClickListener(new View.OnClickListener() {
@@ -264,10 +264,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			drawCardsButton.setEnabled(false);
 			return false;
 		} else {
-			drawDestinationTicketsButton.setEnabled(true);
-			drawCardsButton.setEnabled(true);
-			claimRouteButton.setEnabled(true);
-			displayHandButton.setEnabled(true);
+			//LET the states enable these buttons
 			setupPlayerIcons();
 			return true;
 		}
