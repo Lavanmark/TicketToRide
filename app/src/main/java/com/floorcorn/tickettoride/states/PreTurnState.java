@@ -33,6 +33,7 @@ public class PreTurnState extends IState {
             if(presenter.getDiscardableDestinationCards().length > 0){
                 //opens drawer
                 presenter.openDestinationDrawer();
+                //TODO: LOCK DRAWER OPEN
                 presenter.updateDestinationDrawer();
             }
         } catch (Exception e) {

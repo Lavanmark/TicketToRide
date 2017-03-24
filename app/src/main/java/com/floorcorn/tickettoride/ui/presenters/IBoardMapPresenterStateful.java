@@ -7,13 +7,13 @@ import com.floorcorn.tickettoride.states.IState;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 
 /**
- * Created by Michael on 3/15/2017.
- * @author Lily
- * Implements the methods the view needs on the Presenter
+ * Created by Lily on 3/24/17
+ * Includes the methods that the states need from the IBoardMap Presenter
  */
 
-public interface IBoardMapPresenter {
+public interface IBoardMapPresenterStateful {
 
+    // Incomplete
     public void enableDrawTrainCards();
     public void enableDrawDestinationCards();
     public void enableClaimRoute();

@@ -264,8 +264,11 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 			drawCardsButton.setEnabled(false);
 			return false;
 		} else {
-			//LET the states enable these buttons
 			setupPlayerIcons();
+			drawDestinationTicketsButton.setEnabled(true);
+			displayHandButton.setEnabled(true);
+			claimRouteButton.setEnabled(true);
+			drawCardsButton.setEnabled(true);
 			return true;
 		}
 	}
