@@ -15,6 +15,7 @@ import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 
 import java.util.List;
 import java.util.Map;
@@ -61,7 +62,7 @@ public class HandDrawer extends BMDrawer{
 	 */
 	private ScrollView chatScroll;
 	
-	public HandDrawer(AppCompatActivity activity, final BoardmapPresenter presenter) {
+	public HandDrawer(AppCompatActivity activity, final IBoardMapPresenter presenter) {
 		super(activity, presenter);
 		
 		redCount = (TextView)activity.findViewById(R.id.red_card_count);

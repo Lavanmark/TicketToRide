@@ -7,7 +7,7 @@ import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Player;
-import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenterStateful;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class PreTurnState extends IState {
     private boolean myTurn;
 
     @Override
-    public void enter(IBoardMapPresenter presenter) {
+    public void enter(IBoardMapPresenterStateful presenter) {
         super.enter(presenter);
         myTurn = false;
         System.out.println("Entering PreTurnState");
@@ -33,8 +33,12 @@ public class PreTurnState extends IState {
             if(presenter.getDiscardableDestinationCards().length > 0){
                 //opens drawer
                 presenter.openDestinationDrawer();
+                presenter.openDestinationDrawer();
                 //TODO: LOCK DRAWER OPEN
                 presenter.updateDestinationDrawer();
+            }
+            else{
+                presenter.disableDrawDestinationCards();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -42,7 +46,7 @@ public class PreTurnState extends IState {
     }
 
     @Override
-    public void exit(IBoardMapPresenter presenter) {
+    public void exit(IBoardMapPresenterStateful presenter) {
         super.exit(presenter);
         //close destination drawer
         presenter.closeDestinationDrawer();
@@ -51,7 +55,7 @@ public class PreTurnState extends IState {
     }
 
     @Override
-    public void setTurn(IBoardMapPresenter presenter, Player me) {
+    public void setTurn(IBoardMapPresenterStateful presenter, Player me) {
         System.out.println("In PreTurn setTurn");
         super.setTurn(presenter, me);
         //if it is not my turn, return
@@ -81,7 +85,7 @@ public class PreTurnState extends IState {
     }
 
     @Override
-    public void discardDestinationTickets(IBoardMapPresenter presenter, DestinationCard[] destCardsToDiscard, boolean[] shouldDiscard) {
+    public void discardDestinationTickets(IBoardMapPresenterStateful presenter, DestinationCard[] destCardsToDiscard, boolean[] shouldDiscard) {
         super.discardDestinationTickets(presenter, destCardsToDiscard, shouldDiscard);
         if(destCardsToDiscard == null)
             return;
@@ -108,14 +112,14 @@ public class PreTurnState extends IState {
     }
 
     @Override
-    public void openDestinationDraw(IBoardMapPresenter presenter) {
+    public void openDestinationDraw(IBoardMapPresenterStateful presenter) {
         super.openDestinationDraw(presenter);
         presenter.openDestinationDrawer();
         presenter.updateDestinationDrawer();
     }
 
     @Override
-    public void closeDestinationDraw(IBoardMapPresenter presenter) {
+    public void closeDestinationDraw(IBoardMapPresenterStateful presenter) {
         super.closeDestinationDraw(presenter);
         presenter.closeDestinationDrawer();
     }

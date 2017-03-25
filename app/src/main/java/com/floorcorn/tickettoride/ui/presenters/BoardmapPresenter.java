@@ -19,6 +19,7 @@ import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.states.IState;
 import com.floorcorn.tickettoride.states.PreTurnState;
+import com.floorcorn.tickettoride.states.TurnState;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
 import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
@@ -39,7 +40,7 @@ import java.util.Observer;
 /**
  * The Boardmap Presenter class is responsible for interpreting user inputs from the view,
  * and updating the view when the model changes.
- *
+ * <p>
  * THIS CLASS IS ORGANIZED INTO 6 GROUPS
  * (1) OBSERVER METHODS
  * (2) GET AND SET METHODS
@@ -47,64 +48,36 @@ import java.util.Observer;
  * (4) METHODS TO MANIPULATE THE VIEW
  * (5) METHODS TO INTERACT WITH UIFACADE
  * (6) STATE ACCESS METHODS
- *
- *
  */
-public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresenter {
+public class BoardmapPresenter
+        implements IPresenter, Observer, IBoardMapPresenter, IBoardMapPresenterStateful {
 
-    /** reference to the view **/
+
     private IBoardmapView view = null;
-    /** reference to the current game **/
-	private Game game = null;
-    /** reference to the current user **/
-	private User user = null;
-
-    /** reference to the current state object **/
+    private Game game = null;
+    private User user = null;
     private IState state = null;
 
-    /** array of destination cards that are discarded **/
     private DestinationCard[] destCardsToDiscard;
 
-    /**
-     * Constructor for the BoardmapPresenter
-     * Called by the BoardMap Activity when the activity is created
-     *
-     * @pre: The model does not contain a null instance of current game or user
-     * @post: The presenter now has a reference to the current game and user
-     * @post: The presenter is now registered as an observer of the model
-     */
-	public BoardmapPresenter() {
-		this.game = UIFacade.getInstance().getCurrentGame();
-		this.user = UIFacade.getInstance().getUser();
-		setDestCardsToDiscard(new DestinationCard[3]);
-		register();
-	}
+    public BoardmapPresenter() {
+        this.game = UIFacade.getInstance().getCurrentGame();
+        this.user = UIFacade.getInstance().getUser();
+        setDestCardsToDiscard(new DestinationCard[3]);
+        register();
+    }
 
-    /**
-     * Called by the BoardMap Activity, to connect itself to the presenter
-     * @param view the view corresponding to this presenter.
-     * @pre view(parameter) is an IBoardMapView
-     * @pre view(parameter) != null
-     * @post this.view != null
-     * @exception IllegalArgumentException thrown if view != IBoardmapView
-     *
-     */
     @Override
     public void setView(IView view) {
-        if(view instanceof IBoardmapView)
-	        this.view = (IBoardmapView)view;
-	    else
-	        throw new IllegalArgumentException("View arg was not an IBoardmapView");
+        if (view instanceof IBoardmapView)
+            this.view = (IBoardmapView) view;
+        else
+            throw new IllegalArgumentException("View arg was not an IBoardmapView");
     }
 
     @Override
     public IBoardmapView getView() {
         return view;
-    }
-
-    @Override
-    public void setView(IBoardmapView view) {
-        this.view = view;
     }
 
     @Override
@@ -132,127 +105,96 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
         this.destCardsToDiscard = destCardsToDiscard;
     }
 
-    /*********************** OBSERVER METHODS *********************************/
-
-    /**
-     * This method is part of the observer pattern. When the model is changed, it notifies this
-     * presenter and calls update
-     *
-     * @param o Observable object
-     * @param arg Object that updated
-     */
     @Override
     public void update(Observable o, Object arg) {
         /** changed object is the Game **/
-        if(arg instanceof Game) {
+        if (arg instanceof Game) {
             /** update presenter's reference to game **/
-	        game = (Game)arg;
-	        if(!game.hasStarted()) {
+            game = (Game) arg;
+            if (!game.hasStarted()) {
                 /** if the game not started update view **/
-		        view.checkStarted();
-	        } else {
+                view.checkStarted();
+            } else {
                 /** if game started, update view, set cards, etc. **/
-		        view.checkStarted();
-		        view.setFaceUpTrainCards();
-		        view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
-				view.setPlayerDestinationCardList(game.getPlayer(user).getDestinationCards());
-		        view.setClaimRoutesList(game.getRoutes());
-		        if(destCardsToDiscard == null || destCardsToDiscard[0] == null)
-		            view.setDestinationCardChoices();
+                view.checkStarted();
+                view.setFaceUpTrainCards();
+                view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
+                view.setPlayerDestinationCardList(game.getPlayer(user).getDestinationCards());
+                view.setClaimRoutesList(game.getRoutes());
+                if (destCardsToDiscard == null || destCardsToDiscard[0] == null)
+                    view.setDestinationCardChoices();
                 //initialize state to PreTurn state for all players
                 if (state == null)
                     setState(new PreTurnState());
                 //if waiting for your turn, check if it is your turn
-                if (state instanceof PreTurnState){
+                if (state instanceof PreTurnState) {
                     if (game.getPlayer(user).isTurn())
                         //if it is your turn, setTurn transitions between preTurn and TurnState
                         state.setTurn(this, game.getPlayer(user));
                 }
 
 
-	        }
+            }
         }
         /** if changed object is the GameChatLog update the chat room in the view **/
-	    if(arg instanceof GameChatLog) {
-		    view.setChatLog((GameChatLog)arg);
-	    }
+        if (arg instanceof GameChatLog) {
+            view.setChatLog((GameChatLog) arg);
+        }
     }
 
-    /**
-     * This method unregisters the Boardmap Presenter as an observer of the model class
-     * @pre presenter is an observer (will be notified)
-     * @post presenter is not an observer (will not be notified)
-     */
+    @Override
     public void unregister() {
         UIFacade.getInstance().unregisterObserver(this);
     }
 
-    /**
-     * This method registers the Boardmap Presenter as an observer of the model class
-     * @pre presenter is not an observer (not notified)
-     * @post presenter is an observer (will be notified)
-     */
+    @Override
     public void register() {
         UIFacade.getInstance().registerObserver(this);
     }
 
-    /*********************** END OBSERVER METHODS *********************************/
-
-    /*********************** GET AND SET METHODS *********************************/
-
+    @Override
     public void setUser(User user) {
         this.user = user;
     }
+
+    @Override
     public void setGame(Game game) {
         this.game = game;
     }
-    public String getGameName(){
+
+    @Override
+    public String getGameName() {
         return this.game.getName();
     }
 
 
-    /*********************** END GET AND SET METHODS *********************************/
-
-    /*********************** GAME REFERENCE METHODS *********************************/
-    /** Game reference methods are usually called by the view to get information about what to display**/
-    /**
-     *
-     * @return
-     */
+    @Override
     public boolean gameInProgress() {
         return game.hasStarted();
     }
 
-    /**
-     *
-     * @return
-     */
+    @Override
     public int getTrainCars() {
         return game.getPlayer(user).getTrainCarsLeft();
     }
 
-    /**
-     *
-     * @return
-     */
-    public ArrayList<Player> getPlayers(){
+    @Override
+    public ArrayList<Player> getPlayers() {
         return game.getPlayerList();
     }
 
-    /**
-     *
-     * @return
-     */
+    @Override
     public int getGameSize() {
         return game.getGameSize();
     }
 
+    @Override
     public int[] getDiscardableDestinationCards() throws Exception {
-        if (!gameInProgress()){
+        if (!gameInProgress()) {
             throw new Exception("Game not Started");
         }
         destCardsToDiscard = game.getPlayer(user).getDiscardableDestinationCards();
-        if(destCardsToDiscard == null)
+        if (destCardsToDiscard == null)
             return null;
 
         int[] DestId = new int[destCardsToDiscard.length];
@@ -266,23 +208,36 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
         return DestId;
     }
 
+    @Override
     public int getDiscardableCount() {
-        if(game.getPlayer(user).getDiscardableDestinationCards() != null) {
-            if(game.getPlayer(user).getDestinationCards().size() == 3)
+        if (game.getPlayer(user).getDiscardableDestinationCards() != null) {
+            if (game.getPlayer(user).getDestinationCards().size() == 3)
                 return 1;
             return 2;
         }
         return 0;
     }
 
+    @Override
+    public void clickedFaceUpCard(int temp) {
+        state.drawFaceUpCard(this, temp);
+    }
+
+    @Override
+    public void clickedTrainCardDeck() {
+        state.drawTrainCardFromDeck(this);
+    }
+
     /**
      * Takes a string and converts it to a resource Id.
      * Used to match the destination card object to the correct image
+     *
      * @param resName string of teh resource name, i.e. dest_card_name
      * @param context the class the resource is in, i.e. Drawable
      * @return int of the resource
      */
-    public static int getResId(String resName, Context context) {
+    @Override
+    public int getResId(String resName, Context context) {
         try {
             return context.getResources().getIdentifier(resName, "drawable", context.getPackageName());
         } catch (Exception e) {
@@ -291,19 +246,15 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
         }
     }
 
+    @Override
     public String getPlayerName(int playerID) {
-        for(Player p : game.getPlayerList())
-            if(p.getPlayerID() == playerID)
+        for (Player p : game.getPlayerList())
+            if (p.getPlayerID() == playerID)
                 return p.getName();
         return "NONE";
     }
 
-    /**
-     * Returns the player color corresponding to the player ID. Returns null if playerID does
-     * not correspond to a player.
-     * @param playerID int player's ID
-     * @return PlayerColor object or null
-     */
+    @Override
     public PlayerColor getPlayerColor(int playerID) {
         for (Player p : game.getPlayerList())
             if (p.getPlayerID() == playerID)
@@ -311,55 +262,47 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
         return null;
     }
 
-	public boolean gameFinished() {
-		return game.isFinished();
-	}
+    public boolean gameFinished() {
+        return game.isFinished();
+    }
 
-
-    /*********************** END GAME REFERENCE METHODS *********************************/
-
-
-    /*********************** INTERACTIONS WITH UI FACADE *********************************/
 
     /**
-     * This method is used to start the poller for commands.
-     * Commands only start being used when the game has started.
-     * @pre: game started
-     * @post: poller active
-     *
-     */
-	public void startPollingCommands() {
-		stopPolling();
-		UIFacade.getInstance().pollCurrentGameParts(view);
-	}
+     * POLLER
+     **/
+    @Override
+    public void startPollingCommands() {
+        stopPolling();
+        UIFacade.getInstance().pollCurrentGameParts(view);
+    }
 
-    /**
-     *
-     */
+    @Override
     public void stopPolling() {
-		UIFacade.getInstance().stopPollingGameStuff();
-	}
+        UIFacade.getInstance().stopPollingGameStuff();
+    }
 
-    /**
-     *
-     * @param text
-     */
+    @Override
     public void sendMessage(String text) {
         try {
             UIFacade.getInstance().sendChatMessage(new Message(text, game.getGameID(), game.getPlayer(user).getName()));
-        } catch(BadUserException e) {
+        } catch (BadUserException e) {
             e.printStackTrace();
             view.backToLogin();
         }
     }
+
+
+    /**
+     * STATE
+     **/
+
     @Override
-    public void lockDrawerClosed(){
+    public void lockDrawerClosed() {
         this.view.lockDrawerClosed();
     }
-    /**
-     *
-     */
-	public void discardDestinations(boolean[] shouldDiscard) {
+
+    @Override
+    public void discardDestinations(boolean[] shouldDiscard) {
 
         state.discardDestinationTickets(this, destCardsToDiscard, shouldDiscard);
 //      if(destCardsToDiscard == null)
@@ -378,15 +321,30 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
 //			e.printStackTrace();
 //			view.backToLogin();
 //		}
-	}
-    /**
-     *
-     * @return
-     */
-	public boolean drawTrainCardFromDeck(){
+    }
+
+    @Override
+    public void clickedOutOfRoutes() {
+        //TODO: FIXME
+        // you won't always go to turn state. this is just for testing the drawer listener
+        setState(new TurnState());
+    }
+
+    @Override
+    public void clickedOutOfDestinations() {
+
+    }
+
+    @Override
+    public void clickedOutOfCards() {
+
+    }
+
+    @Override
+    public boolean drawTrainCardFromDeck() {
 //        try {
-            this.state.drawTrainCardFromDeck(this);
-			return true;
+        this.state.drawTrainCardFromDeck(this);
+        return true;
 //		} catch(GameActionException e) {
 //			e.printStackTrace();
 //		} catch(BadUserException e) {
@@ -394,31 +352,23 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
 //			view.backToLogin();
 //		}
 //		return false;
-	}
+    }
 
-    /**
-     *
-     * @param position
-     * @return
-     */
-	public boolean drawFromFaceUp(int position) {
-		this.state.drawFaceUpCard(this, position);
-		return true; //TODO this should be like the function above
-	}
+    @Override
+    public boolean drawFromFaceUp(int position) {
+        this.state.drawFaceUpCard(this, position);
+        return true; //TODO this should be like the function above
+    }
 
-    /**
-     *
-     * @return
-     * @throws GameActionException
-     */
+    @Override
     public int[] getFaceupCardColors() throws GameActionException {
-        if (!gameInProgress()){
+        if (!gameInProgress()) {
             throw new GameActionException("Game not Started");
         }
         TrainCard[] faceUp = UIFacade.getInstance().getFaceUpCards();
         int[] imageId = new int[5];
         for (int i = 0; i < 5; i++) {
-            if(faceUp[i] == null) {
+            if (faceUp[i] == null) {
                 imageId[i] = R.drawable.back_trains;
                 continue;
             }
@@ -456,76 +406,60 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
         return imageId;
     }
 
-    /**
-     *
-     */
-	public void drawNewDestinationCards() {
+    @Override
+    public void drawNewDestinationCards() {
         this.state.drawDestinationTickets(this);
-	}
-
-    /**
-     *
-     * @return
-     */
-	public List<Route> getRoutes(){
-		List<Route> lr = UIFacade.getInstance().getRoutes();
-		System.out.println(lr.toString());
-		return lr;
-
-	}
-
-    /**
-     *
-     * @param route
-     */
-	public void claimButtonClicked(Route route) {
-		if(route != null) {
-			try {
-				this.state.claimRoute(this, route);
-				Toast.makeText(view.getActivity(), "Claimed route: " + route.getFirstCity().getName() + " to " + route.getSecondCity().getName(), Toast.LENGTH_SHORT).show();
-				return;
-			} catch(BadUserException e) {
-				e.printStackTrace();
-				view.backToLogin();
-			} catch(GameActionException e) {
-				e.printStackTrace();
-			}
-		}
-		Toast.makeText(view.getActivity(), "No routes can be claimed!", Toast.LENGTH_SHORT).show();
-//        this.state.claimRoute(this, route);
-	}
-
-    /**
-     *
-     * @param route
-     * @return
-     */
-	public boolean canClaim(Route route) {
-		return UIFacade.getInstance().canClaimRoute(route);
-	}
-
-    /*********************** END INTERACTIONS WITH UI FACADE *********************************/
-
-    /************************ BEGIN STATE ACCESS METHODS ************************************/
+    }
 
     @Override
-    public void enableDrawTrainCards(){
+    public List<Route> getRoutes() {
+        List<Route> lr = UIFacade.getInstance().getRoutes();
+        System.out.println(lr.toString());
+        return lr;
+
+    }
+
+    @Override
+    public void claimButtonClicked(Route route) {
+        if (route != null) {
+            try {
+                this.state.claimRoute(this, route);
+                Toast.makeText(view.getActivity(), "Claimed route: " + route.getFirstCity().getName() + " to " + route.getSecondCity().getName(), Toast.LENGTH_SHORT).show();
+                return;
+            } catch (BadUserException e) {
+                e.printStackTrace();
+                view.backToLogin();
+            } catch (GameActionException e) {
+                e.printStackTrace();
+            }
+        }
+        Toast.makeText(view.getActivity(), "No routes can be claimed!", Toast.LENGTH_SHORT).show();
+//        this.state.claimRoute(this, route);
+    }
+
+    @Override
+    public boolean canClaim(Route route) {
+        return UIFacade.getInstance().canClaimRoute(route);
+    }
+
+    @Override
+    public void enableDrawTrainCards() {
         view.enableTrainCardButton(true);
     }
 
     @Override
-    public void enableDrawDestinationCards(){
+    public void enableDrawDestinationCards() {
         view.enableDestinationCardButton(true);
     }
 
     @Override
-    public void enableClaimRoute(){
+    public void enableClaimRoute() {
         view.enableClaimRouteButton(true);
     }
 
     @Override
     public void disableDrawTrainCards() {
-       view.enableTrainCardButton(false);
+        view.enableTrainCardButton(false);
     }
 
     @Override
@@ -546,12 +480,11 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
     @Override
     public void openClaimRouteDrawer() {
         view.getClaimRouteDrawer().open();
-
     }
 
     @Override
     public void openDrawTrainDrawer() {
-       view.getTrainCardDrawer().open();
+        view.getTrainCardDrawer().open();
 
     }
 
@@ -571,14 +504,14 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
         view.getTrainCardDrawer().hide();
     }
 
+    @Override
     public void setState(IState state) {
         System.out.println("Presenter: setState");
-        if(this.state != null)
-        {
+        if (this.state != null) {
             this.state.exit(this);
         }
-        System.out.println("Changing State: "+state.getClass().getName());
-        this.displayMessage_short("Changing State: "+state.getClass().getSimpleName());
+        System.out.println("Changing State: " + state.getClass().getName());
+        this.displayMessage_short("Changing State: " + state.getClass().getSimpleName());
         this.state = state;
         this.state.enter(this);
     }
@@ -612,6 +545,4 @@ public class BoardmapPresenter implements IPresenter, Observer, IBoardMapPresent
     public void tryOpenClaimRouteDrawer() {
         state.openClaimRoute(this);
     }
-
-    /************************ END STATE ACCESS METHODS *************************************/
 }
