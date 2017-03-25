@@ -14,6 +14,12 @@ import java.util.logging.Level;
 
 public class DrawDestinationCardState extends TurnState {
 
+
+    @Override
+    public void enter(IBoardMapPresenterStateful presenter){
+        presenter.openClaimRouteDrawer();
+    }
+
     @Override
     public void drawDestinationTickets(IBoardMapPresenterStateful presenter) {
         super.drawDestinationTickets(presenter);

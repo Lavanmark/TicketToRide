@@ -13,6 +13,10 @@ import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenterStateful;
 public class ClaimRouteState extends TurnState {
 
     @Override
+    public void enter(IBoardMapPresenterStateful presenter){
+        presenter.openClaimRouteDrawer();
+    }
+    @Override
     public void claimRoute(IBoardMapPresenterStateful presenter, Route route) throws BadUserException, GameActionException {
         super.claimRoute(presenter, route);
         if(route != null) {

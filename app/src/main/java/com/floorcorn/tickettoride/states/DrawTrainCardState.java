@@ -16,6 +16,13 @@ import java.util.logging.Level;
 public class DrawTrainCardState extends TurnState {
 
     boolean hasDrawn = false;
+
+    @Override
+    public void enter(IBoardMapPresenterStateful presenter){
+        presenter.openDrawTrainDrawer();
+    }
+
+
     @Override
     public TrainCardColor drawFaceUpCard(IBoardMapPresenterStateful presenter, int position) {
         super.drawFaceUpCard(presenter, position);

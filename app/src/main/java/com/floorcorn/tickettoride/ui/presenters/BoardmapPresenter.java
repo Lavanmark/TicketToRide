@@ -462,7 +462,6 @@ public class BoardmapPresenter
     @Override
     public void openClaimRouteDrawer() {
         view.getClaimRouteDrawer().open();
-
     }
 
     @Override

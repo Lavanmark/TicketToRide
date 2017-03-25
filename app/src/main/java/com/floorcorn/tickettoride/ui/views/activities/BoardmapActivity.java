@@ -274,10 +274,10 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
             return false;
         } else {
             setupPlayerIcons();
-            drawDestinationTicketsButton.setEnabled(true);
+//            drawDestinationTicketsButton.setEnabled(true);
             displayHandButton.setEnabled(true);
-            claimRouteButton.setEnabled(true);
-            drawCardsButton.setEnabled(true);
+//            claimRouteButton.setEnabled(true);
+//            drawCardsButton.setEnabled(true);
             return true;
         }
     }
