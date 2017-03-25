@@ -42,32 +42,32 @@ abstract class BMDrawer {
 
 			@Override
 			public void onDrawerClosed(View drawerView) {
-				if(notified){
-					return;
-				}
-				else if (drawerView.findViewById(R.id.drawer_place_routes) != null){
-					Toast toast=Toast.makeText(parentActivity,"routes just closed!", Toast.LENGTH_SHORT);
-					toast.show();
-					presenter.clickedOutOfRoutes();
-					notified = true;
-				}
-				else if (drawerView.findViewById(R.id.drawer_draw_cards) != null){
-					Toast toast=Toast.makeText(parentActivity,"cards just closed!", Toast.LENGTH_SHORT);
-					toast.show();
-					presenter.clickedOutOfCards();
-					notified = true;
-				}
-				else if (drawerView.findViewById(R.id.drawer_destinations) != null){
-					Toast toast=Toast.makeText(parentActivity,"destinations just closed!", Toast.LENGTH_SHORT);
-					toast.show();
-					presenter.clickedOutOfDestinations();
-					notified = true;
-				}
-				else {
-					Toast toast=Toast.makeText(parentActivity,"drawer just closed!", Toast.LENGTH_SHORT);
-					toast.show();
-					notified = true;
-				}
+//				if(notified){
+//					return;
+//				}
+//				else if (drawerView.findViewById(R.id.drawer_place_routes) != null){
+//					Toast toast=Toast.makeText(parentActivity,"routes just closed!", Toast.LENGTH_SHORT);
+//					toast.show();
+//					presenter.clickedOutOfRoutes();
+//					notified = true;
+//				}
+//				else if (drawerView.findViewById(R.id.drawer_draw_cards) != null){
+//					Toast toast=Toast.makeText(parentActivity,"cards just closed!", Toast.LENGTH_SHORT);
+//					toast.show();
+//					presenter.clickedOutOfCards();
+//					notified = true;
+//				}
+//				else if (drawerView.findViewById(R.id.drawer_destinations) != null){
+//					Toast toast=Toast.makeText(parentActivity,"destinations just closed!", Toast.LENGTH_SHORT);
+//					toast.show();
+//					presenter.clickedOutOfDestinations();
+//					notified = true;
+//				}
+//				else {
+//					Toast toast=Toast.makeText(parentActivity,"drawer just closed!", Toast.LENGTH_SHORT);
+//					toast.show();
+//					notified = true;
+//				}
 			}
 
 			@Override
