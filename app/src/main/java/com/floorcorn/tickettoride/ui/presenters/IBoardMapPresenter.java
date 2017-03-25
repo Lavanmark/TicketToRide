@@ -117,5 +117,9 @@ public interface IBoardMapPresenter {
     void discardDestinations(boolean[] discardem);
 
 
+    void clickedOutOfRoutes();
 
+    void clickedOutOfDestinations();
+
+    void clickedOutOfCards();
 }

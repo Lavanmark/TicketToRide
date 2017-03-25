@@ -19,6 +19,7 @@ import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.states.IState;
 import com.floorcorn.tickettoride.states.PreTurnState;
+import com.floorcorn.tickettoride.states.TurnState;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
 import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
@@ -320,6 +321,23 @@ public class BoardmapPresenter
 //			e.printStackTrace();
 //			view.backToLogin();
 //		}
+    }
+
+    @Override
+    public void clickedOutOfRoutes() {
+        //TODO: FIXME
+        // you won't always go to turn state. this is just for testing the drawer listener
+        setState(new TurnState());
+    }
+
+    @Override
+    public void clickedOutOfDestinations() {
+
+    }
+
+    @Override
+    public void clickedOutOfCards() {
+
     }
 
     @Override

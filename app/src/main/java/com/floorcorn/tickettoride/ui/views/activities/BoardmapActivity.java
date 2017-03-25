@@ -93,12 +93,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         claimRouteButton = (Button) findViewById(R.id.open_route_button);
         drawCardsButton = (Button) findViewById(R.id.open_card_button);
 
-
-        handDrawer = new HandDrawer(this, presenter);
-        claimRouteDrawer = new ClaimRouteDrawer(this, presenter);
-        trainCardDrawer = new TrainCardDrawer(this, presenter);
-        destinationDrawer = new DestinationDrawer(this, presenter);
-
         drawDestinationTicketsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,6 +117,11 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
                 handDrawer.open();
             }
         });
+
+        handDrawer = new HandDrawer(this, presenter);
+        claimRouteDrawer = new ClaimRouteDrawer(this, presenter);
+        trainCardDrawer = new TrainCardDrawer(this, presenter);
+        destinationDrawer = new DestinationDrawer(this, presenter);
 
         // Set player icons to default "blank."
         initializePlayerIcons();

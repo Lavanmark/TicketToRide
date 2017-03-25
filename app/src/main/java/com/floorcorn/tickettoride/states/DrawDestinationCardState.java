@@ -17,7 +17,7 @@ public class DrawDestinationCardState extends TurnState {
 
     @Override
     public void enter(IBoardMapPresenterStateful presenter){
-        presenter.openClaimRouteDrawer();
+        presenter.openDestinationDrawer();
     }
 
     @Override
