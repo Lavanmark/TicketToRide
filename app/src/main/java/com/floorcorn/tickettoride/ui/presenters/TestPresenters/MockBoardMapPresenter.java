@@ -1,17 +1,22 @@
 package com.floorcorn.tickettoride.ui.presenters.TestPresenters;
 
+import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.states.IState;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenterStateful;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
+
+import java.util.List;
 
 /**
  * Created by Michael on 3/22/2017.
  */
 
-public class MockBoardMapPresenter implements IBoardMapPresenter {
+public class MockBoardMapPresenter implements IBoardMapPresenterStateful {
 
     public boolean drawTrainCardsEnabled;
     public boolean drawDestinationCardsEnabled;
@@ -111,28 +116,8 @@ public class MockBoardMapPresenter implements IBoardMapPresenter {
     }
 
     @Override
-    public void tryOpenDestinationDrawer() {
-
-    }
-
-    @Override
-    public void tryOpenDrawTrainDrawer() {
-
-    }
-
-    @Override
-    public void tryOpenClaimRouteDrawer() {
-
-    }
-
-    @Override
     public IBoardmapView getView() {
         return null;
-    }
-
-    @Override
-    public void setView(IBoardmapView view) {
-
     }
 
     @Override
@@ -158,5 +143,45 @@ public class MockBoardMapPresenter implements IBoardMapPresenter {
     @Override
     public void setDestCardsToDiscard(DestinationCard[] destCardsToDiscard) {
 
+    }
+
+    @Override
+    public void discardDestinations(boolean[] shouldDiscard) {
+
+    }
+
+    @Override
+    public boolean drawTrainCardFromDeck() {
+        return false;
+    }
+
+    @Override
+    public boolean drawFromFaceUp(int position) {
+        return false;
+    }
+
+    @Override
+    public int[] getFaceupCardColors() throws GameActionException {
+        return new int[0];
+    }
+
+    @Override
+    public void drawNewDestinationCards() {
+
+    }
+
+    @Override
+    public List<Route> getRoutes() {
+        return null;
+    }
+
+    @Override
+    public void claimButtonClicked(Route route) {
+
+    }
+
+    @Override
+    public boolean canClaim(Route route) {
+        return false;
     }
 }

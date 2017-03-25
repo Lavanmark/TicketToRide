@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.model.DestinationCard;
-import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class DestinationDrawer extends BMDrawer {
 	private Button keepDestinations;
 	private ImageButton destinationTickets[] = new ImageButton[MAXDESTINATIONS];
 	
-	public DestinationDrawer(AppCompatActivity activity, BoardmapPresenter presenter) {
+	public DestinationDrawer(AppCompatActivity activity, IBoardMapPresenter presenter) {
 		super(activity, presenter);
 	}
 	

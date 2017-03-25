@@ -5,7 +5,7 @@ import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.TrainCardColor;
-import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenterStateful;
 
 import java.util.logging.Level;
 
@@ -17,7 +17,7 @@ public class DrawTrainCardState extends TurnState {
 
     boolean hasDrawn = false;
     @Override
-    public TrainCardColor drawFaceUpCard(IBoardMapPresenter presenter, int position) {
+    public TrainCardColor drawFaceUpCard(IBoardMapPresenterStateful presenter, int position) {
         super.drawFaceUpCard(presenter, position);
         TrainCardColor color = null;
 
@@ -51,7 +51,7 @@ public class DrawTrainCardState extends TurnState {
     }
 
     @Override
-    public TrainCardColor drawTrainCardFromDeck(IBoardMapPresenter presenter) {
+    public TrainCardColor drawTrainCardFromDeck(IBoardMapPresenterStateful presenter) {
         super.drawTrainCardFromDeck(presenter);
         TrainCardColor color = null;
         try {
@@ -77,12 +77,12 @@ public class DrawTrainCardState extends TurnState {
     }
 
     @Override
-    public void openTrainDraw(IBoardMapPresenter presenter) {
+    public void openTrainDraw(IBoardMapPresenterStateful presenter) {
         super.openTrainDraw(presenter);
     }
 
     @Override
-    public void closeTrainDraw(IBoardMapPresenter presenter) {
+    public void closeTrainDraw(IBoardMapPresenterStateful presenter) {
         super.closeTrainDraw(presenter);
         presenter.setState(new TurnState());
     }

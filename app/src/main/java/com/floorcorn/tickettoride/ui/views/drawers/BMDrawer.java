@@ -6,6 +6,7 @@ import android.widget.FrameLayout;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 
 /**
  * Created by Tyler on 3/21/2017.
@@ -16,9 +17,9 @@ abstract class BMDrawer {
 	FrameLayout DRAWER_HOLDER;
 	
 	AppCompatActivity parentActivity;
-	BoardmapPresenter parentPresenter;
+	IBoardMapPresenter parentPresenter;
 	
-	BMDrawer(AppCompatActivity activity, final BoardmapPresenter presenter) {
+	BMDrawer(AppCompatActivity activity, final IBoardMapPresenter presenter) {
 		parentActivity = activity;
 		parentPresenter = presenter;
 		BM_DRAWER_LAYOUT = (DrawerLayout) activity.findViewById(R.id.boardmapActivity);
