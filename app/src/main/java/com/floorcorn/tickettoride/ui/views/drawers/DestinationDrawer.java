@@ -2,12 +2,14 @@ package com.floorcorn.tickettoride.ui.views.drawers;
 
 import android.content.Context;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.model.DestinationCard;
@@ -29,6 +31,22 @@ public class DestinationDrawer extends BMDrawer {
 	
 	public DestinationDrawer(AppCompatActivity activity, IBoardMapPresenter presenter) {
 		super(activity, presenter);
+		BM_DRAWER_LAYOUT.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+			
+			@Override
+			public void onDrawerOpened(View drawerView) {
+				if (drawerView.findViewById(R.id.drawer_destinations) != null){
+					parentPresenter.openedDestinations();
+				}
+			}
+			
+			@Override
+			public void onDrawerClosed(View drawerView) {
+				if (drawerView.findViewById(R.id.drawer_destinations) != null){
+					parentPresenter.closedDestinations();
+				}
+			}
+		});
 	}
 	
 	public void updateDestinations() {

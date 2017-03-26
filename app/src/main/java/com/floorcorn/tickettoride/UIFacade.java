@@ -309,18 +309,12 @@ public class UIFacade {
         return getCurrentGame().getBoard().getFaceUpCards();
     }
 
-    public void drawTrainCardFromDeck() throws GameActionException, BadUserException {
-	    //TODO change true to proper value. (first or second draw)
-	    ICommand cmd = new DrawTrainCardCmd(getCurrentGame().getPlayer(getUser()), true, -1);
-	    cmd.setCmdID(getCurrentGame().getLatestCommandID());
-	    cmd.setGameID(getCurrentGame().getGameID());
-	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);
-	    commandManager.addCommands(res);
+    public void drawTrainCardFromDeck(boolean firstDraw) throws GameActionException, BadUserException {
+	    drawTrainCard(-1, firstDraw);
     }
 
-    public void drawTrainCard(int position) throws GameActionException, BadUserException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
-	    //TODO change true to proper value. (first or second draw)
-        ICommand cmd = new DrawTrainCardCmd(getCurrentGame().getPlayer(getUser()), true, position);
+    public void drawTrainCard(int position, boolean firstDraw) throws GameActionException, BadUserException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
+        ICommand cmd = new DrawTrainCardCmd(getCurrentGame().getPlayer(getUser()), firstDraw, position);
 	    cmd.setCmdID(getCurrentGame().getLatestCommandID());
 	    cmd.setGameID(getCurrentGame().getGameID());
 	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);

@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride.model;
 
+import com.floorcorn.tickettoride.exceptions.GameActionException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -95,6 +97,29 @@ public class DeckManager {
 		this.trainCardDiscard = new ArrayList<>(dm.trainCardDiscard);
 		this.destinationCardDeck = new ArrayList<>(dm.destinationCardDeck);
 	}
+	
+	public boolean isTrainCardDeckEmpty() {
+		if(trainCardDeck.isEmpty() && trainCardDiscard.isEmpty())
+			return true;
+		return false;
+	}
+	
+	public boolean nothingButWild() {
+		//Checks to see if nothing but wilds are left so the game doesn't get stuck
+		for(TrainCard card : trainCardDeck)
+			if(card.getColor() != TrainCardColor.WILD)
+				return false;
+		boolean shuffle = false;
+		for(TrainCard card : trainCardDiscard)
+			if(card.getColor() != TrainCardColor.WILD)
+				shuffle = true;
+		if(shuffle) {
+			reshuffleTrainCardDiscard();
+			return false;
+		}
+		return true;
+	}
+	
 
 	/**
 	 * This method calls shuffle on each deck of cards
@@ -159,7 +184,8 @@ public class DeckManager {
 	 *
      */
     public void discard(TrainCard card){
-        trainCardDiscard.add(card); //don't care where we add it to
+	    if(card != null && card.getColor() != null)
+            trainCardDiscard.add(card); //don't care where we add it to
     }
 
 	/**
@@ -173,7 +199,8 @@ public class DeckManager {
 	 * @post destinationCardDeck.length() = OLD destinationCardDeck.length() + 1
      */
     public void discard(DestinationCard card){
-        destinationCardDeck.add(card); // add to bottom of deck
+	    if(card != null)
+            destinationCardDeck.add(card); // add to bottom of deck
     }
 
 	/**
@@ -188,10 +215,10 @@ public class DeckManager {
 	 * @post the order of the destinationDeck did not change
 	 *
      */
-    public DestinationCard drawFromDestinationCardDeck(){
+    public DestinationCard drawFromDestinationCardDeck() throws GameActionException {
 	    if(destinationCardDeck.size() > 0)
             return destinationCardDeck.remove(0);
-	    return null;
+	    throw new GameActionException("No Destination Cards Left!");
     }
 
 	/**

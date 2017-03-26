@@ -358,7 +358,7 @@ public class Board {
 			    } catch (GameActionException e) {
 				    e.printStackTrace();
 				    Corn.log(Level.SEVERE, "Out of Cards!");
-				    break;
+				    return;
 			    }
 		    }
 	    }
@@ -374,6 +374,10 @@ public class Board {
 	 * @return
 	 */
 	private Boolean shouldResetFaceUp() {
+		if(deckManager == null || deckManager.isTrainCardDeckEmpty())
+			return false;
+		if(deckManager.nothingButWild())
+			return false;
 	    int wildcount = 0;
 	    for (int i = 0; i < FACEUP_DECK_SIZE; i++)
 		    if (faceUpCards[i] != null && faceUpCards[i].getColor() == TrainCardColor.WILD)

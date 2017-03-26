@@ -37,75 +37,62 @@ import java.util.Observer;
 
 public interface IBoardMapPresenter {
 
-    //pertaining to observable pattern
-    public void update(Observable o, Object arg);
+    void unregister();
 
-    public void unregister();
-
-    public void register();
+    void register();
 
     //pertaining to poller
-    public void startPollingCommands();
+    void startPollingCommands();
 
-    public void stopPolling();
+    void stopPolling();
 
-    public void sendMessage(String text);
+    void sendMessage(String text);
 
     // pertaining to view
     void setView(IView boardmapActivity);
 
-    public IBoardmapView getView();
-
-    // when the view is notifying the presenter that a user wants to open a drawer
-    public void tryOpenDestinationDrawer();
-
-    public void tryOpenDrawTrainDrawer();
-
-    public void tryOpenClaimRouteDrawer();
+    IBoardmapView getView();
 
     //pertaining to game & player's hand
-    public Game getGame();
+    Game getGame();
 
-    public void setGame(Game game);
+    void setGame(Game game);
 
-    public User getUser();
+    User getUser();
 
-    public void setUser(User user);
+    void setUser(User user);
 
-    public String getGameName();
+    String getGameName();
 
-    public boolean gameInProgress();
+    boolean gameInProgress();
 
-    public boolean gameFinished();
+    boolean gameFinished();
 
-    public ArrayList<Player> getPlayers();
+    ArrayList<Player> getPlayers();
 
-    public int getGameSize();
+    int getGameSize();
 
-    public int getTrainCars();
+    int getTrainCars();
 
-    public String getPlayerName(int playerID);
+    String getPlayerName(int playerID);
 
-    public PlayerColor getPlayerColor(int playerID);
+    PlayerColor getPlayerColor(int playerID);
 
-    public int getResId(String resName, Context context);
+    int getResId(String resName, Context context);
 
     //pertaining to destinations
-    public int[] getDiscardableDestinationCards() throws Exception;
+    int[] getDiscardableDestinationCards() throws Exception;
 
-    public int getDiscardableCount();
+    int getDiscardableCount();
 
     //train card drawer notifying presenter of user action
-    public void clickedFaceUpCard(int temp);
+    void clickedFaceUpCard(int temp);
 
-    public void clickedTrainCardDeck();
+    void clickedTrainCardDeck();
 
     //building train card drawer
-    public int[] getFaceupCardColors() throws GameActionException;
-
-
-
-    //TODO
+    int[] getFaceupCardColors() throws GameActionException;
+    
     List<Route> getRoutes();
 
     boolean canClaim(Route r);
@@ -115,11 +102,16 @@ public interface IBoardMapPresenter {
     void drawNewDestinationCards();
 
     void discardDestinations(boolean[] discardem);
+    
+    void closedRoutes();
 
+    void closedDestinations();
 
-    void clickedOutOfRoutes();
-
-    void clickedOutOfDestinations();
-
-    void clickedOutOfCards();
+    void closedCards();
+    
+    void openedRoutes();
+    
+    void openedDestinations();
+    
+    void openedCards();
 }

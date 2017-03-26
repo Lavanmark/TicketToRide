@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.commands;
 
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 
 import java.util.ArrayList;
@@ -71,6 +72,24 @@ public class CommandManager {
 		command.setGameID(game.getGameID());
 		command.execute(game);
 		game.addCommand(command);
+		
+		if(command instanceof ClaimRouteCmd) {
+			if(game.getLastPlayer() == null)
+				if(game.getPlayer(((ClaimRouteCmd) command).claimingPlayer).getTrainCarsLeft() < 3)
+					reactions.add(new LastRoundCmd(game.getPlayer(((ClaimRouteCmd) command).claimingPlayer)));
+		}
+		
+		if(game.getLastPlayer() != null) {
+			if(command instanceof DrawTrainCardCmd)
+				if(((DrawTrainCardCmd)command).drawingPlayer.getPlayerID() == game.getLastPlayer().getPlayerID())
+					reactions.add(new GameOverCmd(game.getPlayerList()));
+			if(command instanceof DrawDestinationCmd)
+				if(((DrawDestinationCmd)command).drawingPlayer.getPlayerID() == game.getLastPlayer().getPlayerID())
+					reactions.add(new GameOverCmd(game.getPlayerList()));
+			if(command instanceof ClaimRouteCmd)
+				if(((ClaimRouteCmd)command).claimingPlayer.getPlayerID() == game.getLastPlayer().getPlayerID())
+					reactions.add(new GameOverCmd(game.getPlayerList()));
+		}
 		
 		for(ICommand reaction : reactions){
 			reaction.setCmdID(game.getLatestCommandID() + 1);

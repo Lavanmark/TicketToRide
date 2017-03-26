@@ -25,20 +25,11 @@ public class PreTurnState extends IState {
         super.enter(presenter);
         myTurn = false;
         System.out.println("Entering PreTurnState");
-        //Disable all turn buttons except draw destination cards drawer.
-        presenter.disableClaimRoute();
-        presenter.disableDrawTrainCards();
         // if there are discardable cards, open the destination drawer
         try {
-            if(presenter.getDiscardableDestinationCards().length > 0){
+            if(presenter.getDiscardableCount() > 0){
                 //opens drawer
                 presenter.openDestinationDrawer();
-                presenter.openDestinationDrawer();
-                //TODO: LOCK DRAWER OPEN
-                presenter.updateDestinationDrawer();
-            }
-            else{
-                presenter.disableDrawDestinationCards();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -46,18 +37,8 @@ public class PreTurnState extends IState {
     }
 
     @Override
-    public void exit(IBoardMapPresenterStateful presenter) {
-        super.exit(presenter);
-        //close destination drawer
-        presenter.closeDestinationDrawer();
-
-
-    }
-
-    @Override
     public void setTurn(IBoardMapPresenterStateful presenter, Player me) {
         System.out.println("In PreTurn setTurn");
-        super.setTurn(presenter, me);
         //if it is not my turn, return
         if (!me.isTurn())
             return;
@@ -86,7 +67,6 @@ public class PreTurnState extends IState {
 
     @Override
     public void discardDestinationTickets(IBoardMapPresenterStateful presenter, DestinationCard[] destCardsToDiscard, boolean[] shouldDiscard) {
-        super.discardDestinationTickets(presenter, destCardsToDiscard, shouldDiscard);
         if(destCardsToDiscard == null)
             return;
         List<DestinationCard> toDiscard = new ArrayList<>();
@@ -100,7 +80,6 @@ public class PreTurnState extends IState {
             if (myTurn){
                 presenter.displayMessage_short("Begin your turn");
                 presenter.setState(new TurnState());
-
             }
 		} catch (GameActionException e) {
 			e.printStackTrace();
@@ -113,14 +92,6 @@ public class PreTurnState extends IState {
 
     @Override
     public void openDestinationDraw(IBoardMapPresenterStateful presenter) {
-        super.openDestinationDraw(presenter);
-        presenter.openDestinationDrawer();
         presenter.updateDestinationDrawer();
-    }
-
-    @Override
-    public void closeDestinationDraw(IBoardMapPresenterStateful presenter) {
-        super.closeDestinationDraw(presenter);
-        presenter.closeDestinationDrawer();
     }
 }

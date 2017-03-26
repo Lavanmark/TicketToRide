@@ -133,6 +133,8 @@ public class Route {
 		    return false;
 	    if(p.getTotalTrainCards() < length) //Route longer than the amount of cards player has
 		    return false;
+	    if(p.getTrainCarsLeft() < length)
+	    	return false;
 
         Map<TrainCardColor, Integer> pCards = p.getTrainCards();
 	    int wildnum = 0;
