@@ -4,7 +4,7 @@ import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.Route;
-import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenterStateful;
 
 /**
  * Created by Michael on 3/20/2017.
@@ -13,7 +13,11 @@ import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 public class ClaimRouteState extends TurnState {
 
     @Override
-    public void claimRoute(IBoardMapPresenter presenter, Route route) throws BadUserException, GameActionException {
+    public void enter(IBoardMapPresenterStateful presenter){
+        presenter.openClaimRouteDrawer();
+    }
+    @Override
+    public void claimRoute(IBoardMapPresenterStateful presenter, Route route) throws BadUserException, GameActionException {
         super.claimRoute(presenter, route);
         if(route != null) {
             UIFacade.getInstance().claimRoute(route);
@@ -24,13 +28,13 @@ public class ClaimRouteState extends TurnState {
     }
 
     @Override
-    public void openClaimRoute(IBoardMapPresenter presenter) {
+    public void openClaimRoute(IBoardMapPresenterStateful presenter) {
         super.openClaimRoute(presenter);
         presenter.openClaimRouteDrawer();
     }
 
     @Override
-    public void closeClaimRoute(IBoardMapPresenter presenter) {
+    public void closeClaimRoute(IBoardMapPresenterStateful presenter) {
         super.closeClaimRoute(presenter);
         presenter.closeClaimRouteDrawer();
         presenter.setState(new TurnState());
