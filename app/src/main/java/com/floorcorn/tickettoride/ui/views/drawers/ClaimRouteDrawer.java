@@ -18,6 +18,7 @@ import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class ClaimRouteDrawer extends BMDrawer {
 	
 	private BoardmapActivity parentActivity;
 	
-	public ClaimRouteDrawer(AppCompatActivity activity, final BoardmapPresenter presenter) {
+	public ClaimRouteDrawer(AppCompatActivity activity, final IBoardMapPresenter presenter) {
 		super(activity, presenter);
 		assert activity instanceof BoardmapActivity;
 		parentActivity = (BoardmapActivity) activity;

@@ -36,7 +36,7 @@ public class RegisterHandler extends HandlerBase {
 				Corn.log("New User Registered");
 				Corn.log(userInfo.toString());
 			} catch(UserCreationException e) {
-				Corn.log(Level.SEVERE, e.getStackTrace());
+				Corn.log(Level.SEVERE, e.getStackTrace().toString());
 				results = new Results(false, e);
 			}
 

@@ -11,7 +11,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.floorcorn.tickettoride.R;
-import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 
 /**
  * Created by Tyler on 3/22/2017.
@@ -22,7 +22,7 @@ public class TrainCardDrawer extends BMDrawer {
 	private final int MAXFACEUP = 5;
 	private ImageButton faceupCards[] = new ImageButton[MAXFACEUP];
 	
-	public TrainCardDrawer(AppCompatActivity activity, BoardmapPresenter presenter) {
+	public TrainCardDrawer(AppCompatActivity activity, IBoardMapPresenter presenter) {
 		super(activity, presenter);
 	}
 
@@ -75,7 +75,7 @@ public class TrainCardDrawer extends BMDrawer {
 		drawFromCardDeck.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				parentPresenter.drawTrainCardFromDeck();
+				parentPresenter.clickedTrainCardDeck();
 			}
 		});
 		
@@ -85,7 +85,7 @@ public class TrainCardDrawer extends BMDrawer {
 			faceupCards[i].setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					parentPresenter.drawFromFaceUp(temp);
+					parentPresenter.clickedFaceUpCard(temp);
 				}
 			});
 		}
