@@ -79,7 +79,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         setContentView(R.layout.activity_boardmap);
 
         presenter = new BoardmapPresenter();
-        presenter.setView((IView) this);
+        presenter.setView(this);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.bmap_toolbar);
         setSupportActionBar(mToolbar);
@@ -96,19 +96,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         drawDestinationTicketsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.tryOpenDestinationDrawer();
+                destinationDrawer.open();
             }
         });
         drawCardsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.tryOpenDrawTrainDrawer();
+                trainCardDrawer.open();
             }
         });
         claimRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.tryOpenClaimRouteDrawer();
+                claimRouteDrawer.open();
             }
         });
         displayHandButton.setOnClickListener(new View.OnClickListener() {
@@ -135,12 +135,14 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         //TODO we will want something to launch the game over when it happens in the game.
     }
 
-    @Override
-    public void lockDrawerClosed() {
+    private void lockDrawersClosed() {
         DrawerLayout BM_DRAWER_LAYOUT = (DrawerLayout) findViewById(R.id.boardmapActivity);
         BM_DRAWER_LAYOUT.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
-
+    private void unlockDrawers() {
+        DrawerLayout BM_DRAWER_LAYOUT = (DrawerLayout) findViewById(R.id.boardmapActivity);
+        BM_DRAWER_LAYOUT.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
     @Override
     public void onStop() {
         presenter.unregister();
@@ -264,19 +266,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     @Override
     public boolean checkStarted() {
         if (!presenter.gameInProgress()) {
-            // Note: User can click out of the Pregame Activity. It's ok because we have disabled
-            // buttons, but maybe in a later version we won't want that to be possible.
+            lockDrawersClosed();
             drawDestinationTicketsButton.setEnabled(false);
             displayHandButton.setEnabled(false);
             claimRouteButton.setEnabled(false);
             drawCardsButton.setEnabled(false);
             return false;
         } else {
+            //unlockDrawers();
             setupPlayerIcons();
-//            drawDestinationTicketsButton.setEnabled(true);
+            drawDestinationTicketsButton.setEnabled(true);
             displayHandButton.setEnabled(true);
-//            claimRouteButton.setEnabled(true);
-//            drawCardsButton.setEnabled(true);
+            claimRouteButton.setEnabled(true);
+            drawCardsButton.setEnabled(true);
             return true;
         }
     }
@@ -331,33 +333,18 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     }
 
     @Override
-    public void enableClaimRouteButton(boolean enabled) {
-        claimRouteButton.setEnabled(enabled);
+    public DestinationDrawer getDestinationDrawer() {
+        return destinationDrawer;
     }
-
-    @Override
-    public void enableTrainCardButton(boolean enabled) {
-        drawCardsButton.setEnabled(enabled);
-    }
-
-    @Override
-    public void enableDestinationCardButton(boolean enabled) {
-        drawDestinationTicketsButton.setEnabled(enabled);
-    }
-
+    
     @Override
     public ClaimRouteDrawer getClaimRouteDrawer() {
         return claimRouteDrawer;
     }
-
+    
     @Override
     public TrainCardDrawer getTrainCardDrawer() {
         return trainCardDrawer;
     }
-
-    @Override
-    public DestinationDrawer getDestinationDrawer() {
-        return destinationDrawer;
-    }
-
+    
 }

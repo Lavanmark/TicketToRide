@@ -1,16 +1,12 @@
 package com.floorcorn.tickettoride.ui.presenters.TestPresenters;
 
-import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
-import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.states.IState;
-import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenterStateful;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
-
-import java.util.List;
+import com.floorcorn.tickettoride.ui.views.drawers.BMDrawer;
 
 /**
  * Created by Michael on 3/22/2017.
@@ -31,65 +27,17 @@ public class MockBoardMapPresenter implements IBoardMapPresenterStateful {
         drawTrainCardsEnabled = false;
         claimRoutesEnabled = false;
     }
-    @Override
-    public void lockDrawerClosed(){
-
-    }
-    @Override
-    public void enableDrawTrainCards() {
-        this.drawTrainCardsEnabled = true;
-    }
-
-    @Override
-    public void enableDrawDestinationCards() {
-        this.drawDestinationCardsEnabled = true;
-    }
-
-    @Override
-    public void enableClaimRoute() {
-        this.claimRoutesEnabled = true;
-    }
-
-    @Override
-    public void disableDrawTrainCards() {
-        this.drawTrainCardsEnabled = false;
-    }
-
-    @Override
-    public void disableDrawDestinationCards() {
-        this.drawDestinationCardsEnabled = false;
-    }
-
-    @Override
-    public void disableClaimRoute() {
-        this.claimRoutesEnabled = false;
-    }
 
     @Override
     public void openDestinationDrawer() {
 
     }
-
+    
     @Override
-    public void openClaimRouteDrawer() {
+    public BMDrawer getOpenDrawer() {
+        return null;
     }
-
-    @Override
-    public void openDrawTrainDrawer() {
-    }
-
-    @Override
-    public void closeDestinationDrawer() {
-    }
-
-    @Override
-    public void closeClaimRouteDrawer() {
-    }
-
-    @Override
-    public void closeDrawTrainDrawer() {
-    }
-
+    
     @Override
     public void setState(IState state) {
         this.state = state;
@@ -129,59 +77,15 @@ public class MockBoardMapPresenter implements IBoardMapPresenterStateful {
     public User getUser() {
         return null;
     }
-
-    @Override
-    public IState getState() {
-        return null;
-    }
-
-    @Override
-    public DestinationCard[] getDestCardsToDiscard() {
-        return new DestinationCard[0];
-    }
-
+    
     @Override
     public void setDestCardsToDiscard(DestinationCard[] destCardsToDiscard) {
 
     }
-
+    
     @Override
-    public void discardDestinations(boolean[] shouldDiscard) {
-
+    public int getDiscardableCount() {
+        return 0;
     }
-
-    @Override
-    public boolean drawTrainCardFromDeck() {
-        return false;
-    }
-
-    @Override
-    public boolean drawFromFaceUp(int position) {
-        return false;
-    }
-
-    @Override
-    public int[] getFaceupCardColors() throws GameActionException {
-        return new int[0];
-    }
-
-    @Override
-    public void drawNewDestinationCards() {
-
-    }
-
-    @Override
-    public List<Route> getRoutes() {
-        return null;
-    }
-
-    @Override
-    public void claimButtonClicked(Route route) {
-
-    }
-
-    @Override
-    public boolean canClaim(Route route) {
-        return false;
-    }
+    
 }

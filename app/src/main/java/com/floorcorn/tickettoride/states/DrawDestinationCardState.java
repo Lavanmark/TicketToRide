@@ -13,37 +13,29 @@ import java.util.logging.Level;
  */
 
 public class DrawDestinationCardState extends TurnState {
-
-
+    
     @Override
-    public void enter(IBoardMapPresenterStateful presenter){
-        presenter.openDestinationDrawer();
+    public void enter(IBoardMapPresenterStateful presenter) {
+        
     }
-
+    
     @Override
     public void drawDestinationTickets(IBoardMapPresenterStateful presenter) {
-        super.drawDestinationTickets(presenter);
         try {
             UIFacade.getInstance().drawDestinationCards();
         } catch (GameActionException e){
             Corn.log(Level.SEVERE, e.getMessage());
+            return;
         } catch(BadUserException e) {
             e.printStackTrace();
             //TODO logout
+            return;
         }
         presenter.setState(new PreTurnState());
     }
 
     @Override
-    public void openDestinationDraw(IBoardMapPresenterStateful presenter) {
-        super.openDestinationDraw(presenter);
-        presenter.openDestinationDrawer();
-    }
-
-    @Override
     public void closeDestinationDraw(IBoardMapPresenterStateful presenter) {
-        super.closeDestinationDraw(presenter);
-        presenter.closeDestinationDrawer();
         presenter.setState(new TurnState());
     }
 }
