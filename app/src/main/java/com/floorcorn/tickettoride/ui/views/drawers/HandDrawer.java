@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.ui.views.drawers;
 
 import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.communication.GameChatLog;
@@ -15,6 +17,7 @@ import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 
 import java.util.List;
 import java.util.Map;
@@ -61,7 +64,7 @@ public class HandDrawer extends BMDrawer{
 	 */
 	private ScrollView chatScroll;
 	
-	public HandDrawer(AppCompatActivity activity, final BoardmapPresenter presenter) {
+	public HandDrawer(AppCompatActivity activity, final IBoardMapPresenter presenter) {
 		super(activity, presenter);
 		
 		redCount = (TextView)activity.findViewById(R.id.red_card_count);

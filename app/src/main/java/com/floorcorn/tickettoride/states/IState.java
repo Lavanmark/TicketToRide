@@ -7,6 +7,7 @@ import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenterStateful;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 
 import java.util.List;
@@ -20,23 +21,54 @@ public class IState {
     public IState(){
         System.out.println("Constructing new state");
     }
-    public void enter(IBoardMapPresenter presenter){
+    public void enter(IBoardMapPresenterStateful presenter){
         System.out.println("Entering");
     }
-    public void exit(IBoardMapPresenter presenter){
+    public void exit(IBoardMapPresenterStateful presenter){
         System.out.println("Exiting");
     }
-    public void setTurn(IBoardMapPresenter presenter, Player me){}
-    public TrainCardColor drawFaceUpCard(IBoardMapPresenter presenter, int position){return null;}
-    public TrainCardColor drawTrainCardFromDeck(IBoardMapPresenter presenter){return null;}
-    public void claimRoute(IBoardMapPresenter presenter, Route route) throws BadUserException, GameActionException {}
-    public void drawDestinationTickets(IBoardMapPresenter presenter){}
-    public void discardDestinationTickets(IBoardMapPresenter presenter, DestinationCard[] toDiscard, boolean[] shouldDiscard){}
-    public void openTrainDraw(IBoardMapPresenter presenter){}
-    public void closeTrainDraw(IBoardMapPresenter presenter){}
-    public void openDestinationDraw(IBoardMapPresenter presenter){}
-    public void closeDestinationDraw(IBoardMapPresenter presenter){}
-    public void openClaimRoute(IBoardMapPresenter presenter){}
-    public void closeClaimRoute(IBoardMapPresenter presenter){}
-
+    public void setTurn(IBoardMapPresenterStateful presenter, Player me) {}
+    public boolean drawFaceUpCard(IBoardMapPresenterStateful presenter, int position) {
+        displayNotTurn(presenter);
+        return false;
+    }
+    public boolean drawTrainCardFromDeck(IBoardMapPresenterStateful presenter) {
+        displayNotTurn(presenter);
+        return false;
+    }
+    public void claimRoute(IBoardMapPresenterStateful presenter, Route route) {
+        displayNotTurn(presenter);
+    }
+    public void drawDestinationTickets(IBoardMapPresenterStateful presenter){
+        displayNotTurn(presenter);
+    }
+    public void discardDestinationTickets(IBoardMapPresenterStateful presenter, DestinationCard[] toDiscard, boolean[] shouldDiscard) {
+        displayNotHappen(presenter);
+    }
+    public void openTrainDraw(IBoardMapPresenterStateful presenter) {
+        
+    }
+    public void closeTrainDraw(IBoardMapPresenterStateful presenter) {
+        
+    }
+    public void openDestinationDraw(IBoardMapPresenterStateful presenter) {
+        
+    }
+    public void closeDestinationDraw(IBoardMapPresenterStateful presenter) {
+        
+    }
+    public void openClaimRoute(IBoardMapPresenterStateful presenter) {
+        
+    }
+    public void closeClaimRoute(IBoardMapPresenterStateful presenter) {
+        
+    }
+    
+    protected void displayNotTurn(IBoardMapPresenterStateful presenter) {
+        presenter.displayMessage_short("Not your turn!");
+    }
+    
+    protected void displayNotHappen(IBoardMapPresenterStateful presenter) {
+        presenter.displayMessage_short("That shouldn't happen...");
+    }
 }

@@ -32,7 +32,7 @@ public class DrawTrainCardCmd extends DrawTrainCardCmdData {
     }
 
     @Override
-    public void execute(Game game) {
+    public boolean execute(Game game) {
         try {
             if(cardPosition == -1)
                 cardDrawn = game.getBoard().drawFromTrainCardDeck();
@@ -40,8 +40,10 @@ public class DrawTrainCardCmd extends DrawTrainCardCmdData {
                 cardDrawn = game.getBoard().drawFromFaceUp(cardPosition);
             drawingPlayer = game.getPlayer(drawingPlayer);
             game.addCard(drawingPlayer, cardDrawn);
+            return true;
         } catch(GameActionException e) {
             e.printStackTrace();
         }
+        return false;
     }
 }

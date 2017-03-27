@@ -22,10 +22,11 @@ public class DrawDestinationCmd extends DrawDestinationCmdData {
     }
 
     @Override
-    public void execute(Game game) {
+    public boolean execute(Game game) {
         if(drawingPlayer.isCensoredPlayer())
             game.updatePlayer(drawingPlayer);
         else
-            game.addDestinationCardsToPlayer(drawingPlayer, cardsDrawn);
+            return game.addDestinationCardsToPlayer(drawingPlayer, cardsDrawn);
+        return true;
     }
 }

@@ -4,35 +4,39 @@ import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.Route;
-import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenterStateful;
 
 /**
  * Created by Michael on 3/20/2017.
  */
 
 public class ClaimRouteState extends TurnState {
-
+    
     @Override
-    public void claimRoute(IBoardMapPresenter presenter, Route route) throws BadUserException, GameActionException {
-        super.claimRoute(presenter, route);
+    public void enter(IBoardMapPresenterStateful presenter) {
+        
+    }
+    
+    @Override
+    public void claimRoute(IBoardMapPresenterStateful presenter, Route route) {
         if(route != null) {
-            UIFacade.getInstance().claimRoute(route);
-            presenter.displayMessage_short("Claimed route: " + route.getFirstCity().getName() + " to " + route.getSecondCity().getName());
-            presenter.setState(new PreTurnState());
+            try {
+                UIFacade.getInstance().claimRoute(route);
+                presenter.displayMessage_short("Claimed route: " + route.getFirstCity().getName() + " to " + route.getSecondCity().getName());
+                presenter.setState(new PreTurnState());
+            } catch(BadUserException e) {
+                e.printStackTrace();
+                //TODO logout
+            } catch(GameActionException e) {
+                e.printStackTrace();
+            }
+            
         } else
             presenter.displayMessage_short("No routes can be claimed!");
     }
 
     @Override
-    public void openClaimRoute(IBoardMapPresenter presenter) {
-        super.openClaimRoute(presenter);
-        presenter.openClaimRouteDrawer();
-    }
-
-    @Override
-    public void closeClaimRoute(IBoardMapPresenter presenter) {
-        super.closeClaimRoute(presenter);
-        presenter.closeClaimRouteDrawer();
+    public void closeClaimRoute(IBoardMapPresenterStateful presenter) {
         presenter.setState(new TurnState());
     }
 }

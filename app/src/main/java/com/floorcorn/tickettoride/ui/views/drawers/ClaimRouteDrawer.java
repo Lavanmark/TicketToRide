@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.ui.views.drawers;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,11 +14,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
 
 import java.util.ArrayList;
@@ -34,10 +37,26 @@ public class ClaimRouteDrawer extends BMDrawer {
 	
 	private BoardmapActivity parentActivity;
 	
-	public ClaimRouteDrawer(AppCompatActivity activity, final BoardmapPresenter presenter) {
+	public ClaimRouteDrawer(AppCompatActivity activity, IBoardMapPresenter presenter) {
 		super(activity, presenter);
 		assert activity instanceof BoardmapActivity;
 		parentActivity = (BoardmapActivity) activity;
+		BM_DRAWER_LAYOUT.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+			
+			@Override
+			public void onDrawerOpened(View drawerView) {
+				if (drawerView.findViewById(R.id.drawer_place_routes) != null){
+					parentPresenter.openedRoutes();
+				}
+			}
+			
+			@Override
+			public void onDrawerClosed(View drawerView) {
+				if (drawerView.findViewById(R.id.drawer_place_routes) != null){
+					parentPresenter.closedRoutes();
+				}
+			}
+		});
 	}
 	
 	public void setList(List<Route> routes) {

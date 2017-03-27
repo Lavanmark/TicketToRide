@@ -2,23 +2,26 @@ package com.floorcorn.tickettoride.ui.views.drawers;
 
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 
 /**
  * Created by Tyler on 3/21/2017.
  */
 
-abstract class BMDrawer {
+public abstract class BMDrawer {
 	DrawerLayout BM_DRAWER_LAYOUT;
 	FrameLayout DRAWER_HOLDER;
 	
 	AppCompatActivity parentActivity;
-	BoardmapPresenter parentPresenter;
+	IBoardMapPresenter parentPresenter;
 	
-	BMDrawer(AppCompatActivity activity, final BoardmapPresenter presenter) {
+	BMDrawer(AppCompatActivity activity, final IBoardMapPresenter presenter) {
 		parentActivity = activity;
 		parentPresenter = presenter;
 		BM_DRAWER_LAYOUT = (DrawerLayout) activity.findViewById(R.id.boardmapActivity);

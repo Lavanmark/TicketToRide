@@ -1,12 +1,17 @@
 package com.floorcorn.tickettoride.states;
 
+import com.floorcorn.tickettoride.commands.ClaimRouteCmd;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.TrainCardColor;
-import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenterStateful;
+import com.floorcorn.tickettoride.ui.views.drawers.BMDrawer;
+import com.floorcorn.tickettoride.ui.views.drawers.ClaimRouteDrawer;
+import com.floorcorn.tickettoride.ui.views.drawers.DestinationDrawer;
+import com.floorcorn.tickettoride.ui.views.drawers.TrainCardDrawer;
 
 /**
  * Created by Michael on 3/15/2017.
@@ -15,88 +20,54 @@ import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 public class TurnState extends IState {
 
     @Override
-    public void enter(IBoardMapPresenter presenter) {
-        super.enter(presenter);
+    public void enter(IBoardMapPresenterStateful presenter) {
         System.out.println("Entering TurnState");
-        presenter.enableDrawTrainCards();
-        presenter.enableClaimRoute();
-        presenter.enableDrawDestinationCards();
-        presenter.lockDrawerClosed();
+        //check if any of the drawers are open already
+	    BMDrawer isopen = presenter.getOpenDrawer();
+        if(isopen != null) {
+	        if(isopen instanceof ClaimRouteDrawer)
+	        	openClaimRoute(presenter);
+	        else if(isopen instanceof DestinationDrawer)
+	        	openDestinationDraw(presenter);
+	        else if(isopen instanceof TrainCardDrawer)
+	        	openTrainDraw(presenter);
+        }
     }
 
     @Override
-    public void exit(IBoardMapPresenter presenter) {
-        super.exit(presenter);
-        presenter.disableClaimRoute();
-        presenter.disableDrawTrainCards();
-        //TODO: destinationCardState should override this method and not disable the Draw Destination button if new tickets drawn
-        presenter.disableDrawDestinationCards();
-        presenter.lockDrawerClosed();
+    public boolean drawFaceUpCard(IBoardMapPresenterStateful presenter, int position) {
+        displayNotHappen(presenter);
+        return false;
     }
 
     @Override
-    public void setTurn(IBoardMapPresenter presenter, Player me) {
-        super.setTurn(presenter, me);
+    public boolean drawTrainCardFromDeck(IBoardMapPresenterStateful presenter) {
+        displayNotHappen(presenter);
+        return false;
     }
 
     @Override
-    public TrainCardColor drawFaceUpCard(IBoardMapPresenter presenter, int position) {
-        return super.drawFaceUpCard(presenter, position);
+    public void claimRoute(IBoardMapPresenterStateful presenter, Route route) {
+        displayNotHappen(presenter);
     }
 
     @Override
-    public TrainCardColor drawTrainCardFromDeck(IBoardMapPresenter presenter) {
-        return super.drawTrainCardFromDeck(presenter);
+    public void drawDestinationTickets(IBoardMapPresenterStateful presenter) {
+        displayNotHappen(presenter);
     }
 
     @Override
-    public void claimRoute(IBoardMapPresenter presenter, Route route) throws BadUserException, GameActionException {
-        super.claimRoute(presenter, route);
-    }
-
-    @Override
-    public void drawDestinationTickets(IBoardMapPresenter presenter) {
-        super.drawDestinationTickets(presenter);
-    }
-
-    @Override
-    public void discardDestinationTickets(IBoardMapPresenter presenter, DestinationCard[] toDiscard, boolean[] shouldDiscard) {
-        super.discardDestinationTickets(presenter, toDiscard, shouldDiscard);
-    }
-
-    @Override
-    public void openTrainDraw(IBoardMapPresenter presenter) {
-        super.openTrainDraw(presenter);
+    public void openTrainDraw(IBoardMapPresenterStateful presenter) {
         presenter.setState(new DrawTrainCardState());
     }
 
     @Override
-    public void closeTrainDraw(IBoardMapPresenter presenter) {
-        super.closeTrainDraw(presenter);
-    }
-
-    @Override
-    public void openDestinationDraw(IBoardMapPresenter presenter) {
-        super.openDestinationDraw(presenter);
-        presenter.openDestinationDrawer();
+    public void openDestinationDraw(IBoardMapPresenterStateful presenter) {
         presenter.setState(new DrawDestinationCardState());
     }
 
     @Override
-    public void closeDestinationDraw(IBoardMapPresenter presenter) {
-        super.closeDestinationDraw(presenter);
-        presenter.closeDestinationDrawer();
-    }
-
-    @Override
-    public void openClaimRoute(IBoardMapPresenter presenter) {
-        super.openClaimRoute(presenter);
-        presenter.openClaimRouteDrawer();
+    public void openClaimRoute(IBoardMapPresenterStateful presenter) {
         presenter.setState(new ClaimRouteState());
-    }
-
-    @Override
-    public void closeClaimRoute(IBoardMapPresenter presenter) {
-        super.closeClaimRoute(presenter);
     }
 }

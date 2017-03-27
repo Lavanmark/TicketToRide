@@ -22,8 +22,9 @@ public class StartTurnCmd extends StartTurnCmdData {
     }
 
     @Override
-    public void execute(Game game) {
+    public boolean execute(Game game) {
         //TODO might need to check stuff here...
         game.setTurn(this.player);
+        return true;
     }
 }

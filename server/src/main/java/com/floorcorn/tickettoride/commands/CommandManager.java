@@ -2,12 +2,15 @@ package com.floorcorn.tickettoride.commands;
 
 
 import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.logging.Level;
 
 /**
  * Created by Tyler on 2/23/2017.
@@ -52,14 +55,21 @@ public class CommandManager {
 		if(command instanceof DrawTrainCardCmd){
 			if(((DrawTrainCardCmd)command).cardPosition != -1) {
 				reactions.add(new SetFaceUpDeckCmd());
-			}
-			if(!((DrawTrainCardCmd)command).firstDraw) {
+				if(!((DrawTrainCardCmd)command).firstDraw)
+					reactions.add(new StartTurnCmd(game.getNextPlayer()));
+			} else if(game.getBoard().isDeckEmpty() && (game.getBoard().isFaceUpEmpty() || game.getBoard().isAllWildFaceUp()) && !((DrawTrainCardCmd)command).firstDraw) {
+				command = new StartTurnCmd(game.getNextPlayer());
+				reactions.clear();
+				Corn.log(Level.SEVERE, "No cards left.");
+			} else if(!((DrawTrainCardCmd)command).firstDraw) {
 				reactions.add(new StartTurnCmd(game.getNextPlayer()));
 			}
 		}
 		
 		if(command instanceof ClaimRouteCmd) {
 			reactions.add(new StartTurnCmd(game.getNextPlayer()));
+			if(game.getBoard().isDeckEmpty() || game.getBoard().shouldResetFaceUp())
+				reactions.add(new SetFaceUpDeckCmd());
 		}
 		
 		if(command instanceof DrawDestinationCmd) {
@@ -69,14 +79,34 @@ public class CommandManager {
 		int lastCommandClient = command.getCmdID();
 		command.setCmdID(game.getLatestCommandID() + 1);
 		command.setGameID(game.getGameID());
-		command.execute(game);
+		if(!command.execute(game))
+			throw new GameActionException("Could not execute command!");
 		game.addCommand(command);
+		
+		if(command instanceof ClaimRouteCmd) {
+			if(game.getLastPlayer() == null)
+				if(game.getPlayer(((ClaimRouteCmd) command).claimingPlayer).getTrainCarsLeft() < 3)
+					reactions.add(new LastRoundCmd(game.getPlayer(((ClaimRouteCmd) command).claimingPlayer)));
+		}
+		
+		if(game.getLastPlayer() != null) {
+			if(command instanceof DrawTrainCardCmd)
+				if(((DrawTrainCardCmd)command).drawingPlayer.getPlayerID() == game.getLastPlayer().getPlayerID())
+					if(!((DrawTrainCardCmd)command).firstDraw)
+						reactions.add(new GameOverCmd(game.getPlayerList()));
+			if(command instanceof DrawDestinationCmd)
+				if(((DrawDestinationCmd)command).drawingPlayer.getPlayerID() == game.getLastPlayer().getPlayerID())
+					reactions.add(new GameOverCmd(game.getPlayerList()));
+			if(command instanceof ClaimRouteCmd)
+				if(((ClaimRouteCmd)command).claimingPlayer.getPlayerID() == game.getLastPlayer().getPlayerID())
+					reactions.add(new GameOverCmd(game.getPlayerList()));
+		}
 		
 		for(ICommand reaction : reactions){
 			reaction.setCmdID(game.getLatestCommandID() + 1);
 			reaction.setGameID(game.getGameID());
-			reaction.execute(game);
-			game.addCommand(reaction);
+			if(reaction.execute(game))
+				game.addCommand(reaction);
 		}
 
 		return getCommandsSince(user, game, lastCommandClient);

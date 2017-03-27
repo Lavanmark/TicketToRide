@@ -91,21 +91,9 @@ public interface IBoardmapView extends IView {
 	 */
 	void setChatLog(GameChatLog log);
 
-	/**
-	 * Disable or enable Claim Route Button with boolean
-	 * @param enabled
-     */
-	void enableClaimRouteButton(boolean enabled);
-
-	void enableTrainCardButton(boolean enabled);
-
-	void enableDestinationCardButton(boolean enabled);
-
-	ClaimRouteDrawer getClaimRouteDrawer();
-
-	TrainCardDrawer getTrainCardDrawer();
-
 	DestinationDrawer getDestinationDrawer();
-
-	public void lockDrawerClosed();
+	ClaimRouteDrawer getClaimRouteDrawer();
+	TrainCardDrawer getTrainCardDrawer();
+	
+	void showGameOver();
 }

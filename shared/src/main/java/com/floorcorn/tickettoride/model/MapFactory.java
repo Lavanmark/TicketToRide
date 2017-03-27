@@ -49,9 +49,9 @@ public class MapFactory {
 	private static final String FILE_STRING_DEST = "dest" + File.separator;
 
 	/** The list of routes for the given game **/
-	private static List<Route> marsRoutes = null;
+	private List<Route> marsRoutes = null;
 	/** The list of destination cards for the game **/
-	private static List<DestinationCard> marsDest = null;
+	private List<DestinationCard> marsDest = null;
 
 	/** This methods calls the respective import methods for each type of .csv, namely
 	 * routes, cities, and destination cards.

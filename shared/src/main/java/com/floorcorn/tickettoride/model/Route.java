@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride.model;
 
+import com.floorcorn.tickettoride.log.Corn;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -133,7 +135,11 @@ public class Route {
 		    return false;
 	    if(p.getTotalTrainCards() < length) //Route longer than the amount of cards player has
 		    return false;
-
+	    if(p.getTrainCarsLeft() < length)
+	    	return false;
+	
+	    Corn.log("not basics");
+	    
         Map<TrainCardColor, Integer> pCards = p.getTrainCards();
 	    int wildnum = 0;
 	    if(pCards.containsKey(TrainCardColor.WILD)) //Save num wilds
@@ -143,15 +149,17 @@ public class Route {
 
 	    if(color == TrainCardColor.WILD) { //If path is wild, check all color types.
 		    for(TrainCardColor tcc : pCards.keySet()) {
-			    if(tcc != TrainCardColor.WILD && pCards.get(tcc) + wildnum >= length)
+			    if(tcc != TrainCardColor.WILD && (pCards.get(tcc) + wildnum) >= length)
 				    return true;
 		    }
+		    Corn.log("that young loop");
 		    return false;
 	    }
 
 	    int colornum = 0;
 	    if(pCards.containsKey(color)) //Check the specific color
 		    colornum = pCards.get(color);
+	    Corn.log("final possible problem");
 	    return colornum + wildnum >= length;
     }
 

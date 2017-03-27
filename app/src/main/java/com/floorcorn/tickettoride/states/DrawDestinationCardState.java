@@ -4,7 +4,7 @@ import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.log.Corn;
-import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenterStateful;
 
 import java.util.logging.Level;
 
@@ -13,31 +13,29 @@ import java.util.logging.Level;
  */
 
 public class DrawDestinationCardState extends TurnState {
-
+    
     @Override
-    public void drawDestinationTickets(IBoardMapPresenter presenter) {
-        super.drawDestinationTickets(presenter);
+    public void enter(IBoardMapPresenterStateful presenter) {
+        
+    }
+    
+    @Override
+    public void drawDestinationTickets(IBoardMapPresenterStateful presenter) {
         try {
             UIFacade.getInstance().drawDestinationCards();
         } catch (GameActionException e){
             Corn.log(Level.SEVERE, e.getMessage());
+            return;
         } catch(BadUserException e) {
             e.printStackTrace();
             //TODO logout
+            return;
         }
         presenter.setState(new PreTurnState());
     }
 
     @Override
-    public void openDestinationDraw(IBoardMapPresenter presenter) {
-        super.openDestinationDraw(presenter);
-        presenter.openDestinationDrawer();
-    }
-
-    @Override
-    public void closeDestinationDraw(IBoardMapPresenter presenter) {
-        super.closeDestinationDraw(presenter);
-        presenter.closeDestinationDrawer();
+    public void closeDestinationDraw(IBoardMapPresenterStateful presenter) {
         presenter.setState(new TurnState());
     }
 }
