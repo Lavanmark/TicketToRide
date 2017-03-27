@@ -177,6 +177,7 @@ public class MapFactory {
 			return routes;
 		} catch(IOException e) {
 			e.printStackTrace();
+			Corn.log(Level.SEVERE, e.getMessage() + e.getStackTrace());
 		}
 		return new ArrayList<>();
 	}
