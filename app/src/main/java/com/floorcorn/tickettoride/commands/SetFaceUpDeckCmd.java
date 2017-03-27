@@ -15,11 +15,13 @@ public class SetFaceUpDeckCmd extends SetFaceUpDeckCmdData {
 	}
 
 	@Override
-	public void execute(Game game) {
+	public boolean execute(Game game) {
 		try {
 			game.getBoard().setFaceUpCards(this.faceUpDeck);
+			return true;
 		} catch(GameActionException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 }

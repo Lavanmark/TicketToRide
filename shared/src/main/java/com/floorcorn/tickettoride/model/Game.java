@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.log.Corn;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Created by Tyler on 2/2/2017.
@@ -212,44 +214,54 @@ public class Game {
 		return null;
 	}
 
-	public void addCard(Player player, TrainCard card) {
+	public boolean addCard(Player player, TrainCard card) {
 		if((player = getPlayer(player)) != null) {
-			player.addTrainCard(card, 1);
+			return player.addTrainCard(card);
 		}
+		return false;
 	}
 
-	public void addDestinationCardsToPlayer(Player player, List<DestinationCard> cards) {
+	public boolean addDestinationCardsToPlayer(Player player, List<DestinationCard> cards) {
 		if((player = getPlayer(player)) != null) {
 			for(DestinationCard card : cards)
-				player.addDestinationCard(card);
+				if(!player.addDestinationCard(card))
+					return false;
+			return true;
 		}
+		return false;
 	}
 
-	public void discardDestinationCards(Player player, List<DestinationCard> cards) {
+	public boolean discardDestinationCards(Player player, List<DestinationCard> cards) {
 		if((player = getPlayer(player)) != null) {
 			for(DestinationCard card : cards) {
 				if(player.removeDestinationCard(card))
-					board.discard(card);
+					if(!board.discard(card))
+						return false;
 			}
 			player.markAllNotDiscardable();
 		}
+		return true;
 	}
 
 	public List<Route> getRoutes() {
 		return board.getRoutes();
 	}
 
-	public void claimRoute(Route route, Player player) {
-		if((player = getPlayer(player)) == null)
-			return;
+	public boolean claimRoute(Route route, Player player) {
+		if((player = getPlayer(player)) == null) {
+			Corn.log(Level.SEVERE, "BAD PLAYER NO CLAIM");
+			return false;
+		}
 		for(Route r : getRoutes()) {
 			if(r.getRouteID() == route.getRouteID()) {
 				route = r;
 				break;
 			}
 		}
-		if(!route.canClaim(player))
-			return;
+		if(!route.canClaim(player)) {
+			Corn.log(Level.SEVERE, "CANT CLAIM ROUTE");
+			return false;
+		}
 
 		System.out.println("claiming route");
 		List<TrainCard> discard = route.claim(player);
@@ -257,6 +269,7 @@ public class Game {
 			board.discard(card);
 		}
 		board.updateRoute(route);
+		return true;
 	}
 	
 	public Player getNextPlayer() {

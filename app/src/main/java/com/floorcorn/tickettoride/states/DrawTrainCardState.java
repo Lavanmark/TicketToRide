@@ -43,10 +43,9 @@ public class DrawTrainCardState extends TurnState {
 			    presenter.displayMessage_long(message);
 			    return false;
 		    }
-		    hasDrawn = true;
         }
         try {
-            UIFacade.getInstance().drawTrainCard(position, !hasDrawn);
+            UIFacade.getInstance().drawTrainCard(position, toDraw != TrainCardColor.WILD && !hasDrawn);
         } catch (GameActionException e){
             Corn.log(Level.SEVERE, e.getMessage());
             return false;
