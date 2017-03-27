@@ -90,6 +90,7 @@ public class MapFactoryTest {
         assertEquals(res.get(6).getSecondCity().getName().toLowerCase(), "kaysville");
         assertEquals(res.get(6).getColor(), TrainCardColor.PURPLE);
         assertEquals(res.get(6).getLength(), 2);
+
     }
 
     @Test
@@ -130,6 +131,7 @@ public class MapFactoryTest {
         assertEquals(testCard.getFirstCity().getName().toLowerCase(), "farmington");
         assertEquals(testCard.getSecondCity().getName().toLowerCase(), "provo");
         assertEquals(testCard.getValue(), 9);
+
     }
 
 
