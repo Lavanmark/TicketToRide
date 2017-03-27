@@ -25,10 +25,11 @@ public class DrawTrainCardCmd extends DrawTrainCardCmdData {
     }
 
     @Override
-    public void execute(Game game) {
+    public boolean execute(Game game) {
         if(drawingPlayer.isCensoredPlayer())
             game.updatePlayer(drawingPlayer);
         else
-            game.addCard(drawingPlayer, cardDrawn);
+            return game.addCard(drawingPlayer, cardDrawn);
+        return true;
     }
 }

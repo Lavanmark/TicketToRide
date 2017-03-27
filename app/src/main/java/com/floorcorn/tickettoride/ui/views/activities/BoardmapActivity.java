@@ -254,7 +254,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         startActivity(new Intent(BoardmapActivity.this, PregameActivity.class));
     }
 
-    private void showGameOver() {
+    @Override
+    public void showGameOver() {
+        presenter.stopPolling();
         startActivity(new Intent(BoardmapActivity.this, GameOverActivity.class));
     }
 

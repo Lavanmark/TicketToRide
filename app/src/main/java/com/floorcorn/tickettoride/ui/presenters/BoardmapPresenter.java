@@ -106,6 +106,10 @@ public class BoardmapPresenter
             } else {
                 /** if game started, update view, set cards, etc. **/
                 view.checkStarted();
+	            if(game.isFinished()) {
+		            view.showGameOver();
+		            return;
+	            }
                 view.setFaceUpTrainCards();
                 view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
                 view.setPlayerDestinationCardList(game.getPlayer(user).getDestinationCards());
@@ -116,11 +120,7 @@ public class BoardmapPresenter
                 if (state == null)
                     setState(new PreTurnState());
                 //if waiting for your turn, check if it is your turn
-                if (state instanceof PreTurnState) {
-                    if (game.getPlayer(user).isTurn())
-                        //if it is your turn, setTurn transitions between preTurn and TurnState
-                        state.setTurn(this, game.getPlayer(user));
-                }
+                state.setTurn(this, game.getPlayer(user));
             }
         }
         /** if changed object is the GameChatLog update the chat room in the view **/
@@ -156,7 +156,7 @@ public class BoardmapPresenter
 	
     @Override
     public boolean gameInProgress() {
-        return game.hasStarted();
+        return game.hasStarted() && !game.isFinished();
     }
 
     @Override

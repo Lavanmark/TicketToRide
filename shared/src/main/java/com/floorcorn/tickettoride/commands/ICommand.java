@@ -13,12 +13,7 @@ public abstract class ICommand {
 	public static final int NO_CMD_ID = -1;
 
 	protected int commandID = NO_CMD_ID;
-	protected CmdType type;
 	protected int gameID = Game.NO_GAME_ID;
-
-	public CmdType getType() {
-		return type;
-	}
 
 	public int getCmdID() {
 		return commandID;
@@ -38,5 +33,5 @@ public abstract class ICommand {
 
 	public abstract boolean forPlayer(User user);
 	public abstract ICommand getCmdFor(User user);
-	public abstract void execute(Game game);
+	public abstract boolean execute(Game game);
 }

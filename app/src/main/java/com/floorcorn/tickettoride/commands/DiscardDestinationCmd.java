@@ -25,10 +25,11 @@ public class DiscardDestinationCmd extends DiscardDestinationCmdData {
     }
 
     @Override
-    public void execute(Game game) {
+    public boolean execute(Game game) {
         if(discardingPlayer.isCensoredPlayer())
             game.updatePlayer(discardingPlayer);
         else
-            game.discardDestinationCards(discardingPlayer, Arrays.asList(this.cards));
+            return game.discardDestinationCards(discardingPlayer, Arrays.asList(this.cards));
+        return true;
     }
 }

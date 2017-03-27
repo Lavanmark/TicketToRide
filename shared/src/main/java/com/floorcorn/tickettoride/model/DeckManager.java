@@ -159,7 +159,7 @@ public class DeckManager {
 	 *
 	 *
      */
-    public TrainCard drawFromTrainCardDeck(){
+    public TrainCard drawFromTrainCardDeck() throws GameActionException {
 		// if the deck is empty, reshuffle the discard deck
         if(trainCardDeck.isEmpty())
 	        reshuffleTrainCardDiscard(); // now the deck should not be empty
@@ -167,7 +167,7 @@ public class DeckManager {
 		// if the deck is not empty, return the card from the top of the deck
 	    if(!trainCardDeck.isEmpty())
 	        return trainCardDeck.remove(0);
-		return null;
+		throw new GameActionException("Deck Empty!");
     }
 
 	/**

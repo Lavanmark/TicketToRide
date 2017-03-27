@@ -3,7 +3,7 @@ package com.floorcorn.tickettoride.model;
 import com.floorcorn.tickettoride.log.Corn;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +47,7 @@ public class Player {
 		this.totalTrainCards = player.getTotalTrainCards();
 		this.totalDestinationCards = player.getTotalDestinationCards();
 		this.destinationCards = new ArrayList<>(player.getDestinationCards());
-		this.trainCards = new HashMap<>(player.getTrainCards());
+		this.trainCards = new EnumMap<>(player.getTrainCards());
 		this.routesClaimed = new ArrayList<>(player.getRoutesClaimed());
 	}
 
@@ -63,7 +63,7 @@ public class Player {
 		this.totalTrainCards = 0;
 		this.totalDestinationCards = 0;
 		this.destinationCards = new ArrayList<>();
-		this.trainCards = new HashMap<>();
+		this.trainCards = new EnumMap<>(TrainCardColor.class);
 		this.routesClaimed = new ArrayList<>();
 	}
 
@@ -76,7 +76,7 @@ public class Player {
 			return new Player(this);
 		Player p = new Player(this);
 		p.setDestinationCards(new ArrayList<DestinationCard>());
-		p.setTrainCards(new HashMap<TrainCardColor, Integer>());
+		p.setTrainCards(new EnumMap<TrainCardColor, Integer>(TrainCardColor.class));
 		return p;
 	}
 
@@ -141,10 +141,6 @@ public class Player {
 		return score;
 	}
 
-	public void setScore(int score){
-		this.score = score;
-	}
-
 	public int getTrainCarsLeft() {
 		return trainCarsLeft;
 	}
@@ -187,7 +183,7 @@ public class Player {
 	}
 
 	private void setTrainCards(Map<TrainCardColor, Integer> trainCards) {
-		this.trainCards = new HashMap<>(trainCards);
+		this.trainCards = new EnumMap<>(trainCards);
 	}
 
 	public List<Route> getRoutesClaimed() {
@@ -228,23 +224,26 @@ public class Player {
 		}
 	}
 
-	public void addDestinationCard(DestinationCard card){
+	public boolean addDestinationCard(DestinationCard card){
 		if(destinationCards == null)
-			return;
+			return false;
 		if(destinationCards.contains(card))
-			return;
-		destinationCards.add(card);
+			return false;
+		if(!destinationCards.add(card))
+			return false;
 		totalDestinationCards++;
+		return true;
 	}
 
-	public void addTrainCard(TrainCard card, int amount){
+	public boolean addTrainCard(TrainCard card){
 		if(card == null)
-			return;
+			return false;
 		int cur = 0;
 		if(trainCards.containsKey(card.getColor()))
 			cur = trainCards.get(card.getColor());
-		trainCards.put(card.getColor(), cur + amount);
+		trainCards.put(card.getColor(), cur + 1);
 		totalTrainCards++;
+		return true;
 	}
 
 	public boolean removeDestinationCard(DestinationCard card){
@@ -292,7 +291,7 @@ public class Player {
 		this.totalTrainCards = player.getTotalTrainCards();
 		this.totalDestinationCards = player.getTotalDestinationCards();
 		this.destinationCards = new ArrayList<>(player.getDestinationCards());
-		this.trainCards = new HashMap<>(player.getTrainCards());
+		this.trainCards = new EnumMap<>(player.getTrainCards());
 		this.routesClaimed = new ArrayList<>(player.getRoutesClaimed());
 	}
 

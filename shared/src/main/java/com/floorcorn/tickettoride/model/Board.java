@@ -120,6 +120,26 @@ public class Board {
 		deckManager = dm;
 	}
 
+	public boolean isDeckEmpty() {
+		return deckManager.isTrainCardDeckEmpty();
+	}
+	
+	public boolean isFaceUpEmpty() {
+		for(TrainCard card : faceUpCards) {
+			if(card != null && card.getColor() != null)
+				return false;
+		}
+		return true;
+	}
+	
+	public boolean isAllWildFaceUp() {
+		for(TrainCard card : faceUpCards) {
+			if(card != null && card.getColor() != TrainCardColor.WILD)
+				return false;
+		}
+		return true;
+	}
+	
 	/**
 	 * Tells whether this game allows double routes.
 	 *
@@ -141,51 +161,7 @@ public class Board {
     public List<Route> getRoutes(){
         return routeList;
     }
-
-	/**
-	 * Sets the route list for this board.
-	 *
-	 * @pre routes != null
-	 * @post routeList == param routes
-	 * @param routes
-	 */
-	private void setRoutes(List<Route> routes) {
-		routeList = routes;
-	}
-
-	/**
-	 * Returns the list of available routes from this board.
-	 *
-	 * @pre routeList is initialized
-	 * @post returned list of routes that are not claimed from routeList
-	 * @post routeList unchanged
-	 * @return List of Route objects available routes
-	 */
-    public List<Route> getAvailableRoutes() {
-	    List<Route> routes = new ArrayList<>();
-	    for (Route route : routeList)
-	        if (!route.isClaimed())
-		        routes.add(route);
-        return routes;
-    }
-
-	/**
-	 * Returns the list of routes that have the city "city" as an endpoint.
-	 *
-	 * @pre city != null
-	 * @post returned sublist of routeList where each route r has one endpoint == param city
-	 * @post routeList unchanged
-	 * @param city City object
-	 * @return List of Route objects routes with city as an endpoint
-	 */
-	public List<Route> getRoutes(City city){
-	    List<Route> cityRoutes = new ArrayList<>();
-	    for (Route route : routeList)
-	        if (route.hasCity(city))
-		        cityRoutes.add(route);
-        return cityRoutes;
-    }
-
+	
 	/**
 	 * Gets route with ID that matches routeID.
 	 *
@@ -295,18 +271,21 @@ public class Board {
 	 * @post the route in the routeList that matches r is updated so routeList[position] == r
 	 * @param r Route to update
 	 */
-	public void updateRoute(Route r) {
+	public boolean updateRoute(Route r) {
 		if(r == null)
-			return;
+			return false;
+		
+		boolean foundRoute = false;
 	    for (Route route : routeList) {
 		    if (route.getRouteID() == r.getRouteID()) {
-			    //if (!route.equals(r)) {
-					route.update(r);
-			    //}
+			    route.update(r);
+			    foundRoute = true;
 		    } else if (!allowDoubles && r.isDoubleRoute(route)) {
-				route.markDoubleRoute(r);
+				route.markDoubleRoute(getRoute(r.getRouteID()));
+			    foundRoute = true;
 		    }
 	    }
+	    return foundRoute;
     }
 
 	/**
@@ -373,7 +352,7 @@ public class Board {
 	 * @post if number of face up wild cards > 2: returned true, else: returned false
 	 * @return
 	 */
-	private Boolean shouldResetFaceUp() {
+	public Boolean shouldResetFaceUp() {
 		if(deckManager == null || deckManager.isTrainCardDeckEmpty())
 			return false;
 		if(deckManager.nothingButWild())

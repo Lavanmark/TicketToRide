@@ -14,8 +14,9 @@ public class GameOverCmd extends GameOverCmdData {
     }
 
     @Override
-    public void execute(Game game) {
+    public boolean execute(Game game) {
         game.endGame();
         game.setPlayerList(playerList);
+        return true;
     }
 }

@@ -14,7 +14,8 @@ public class LastRoundCmd extends LastRoundCmdData{
     }
 
     @Override
-    public void execute(Game game) {
+    public boolean execute(Game game) {
         game.setLastPlayerID(this.lastPlayerID);
+        return true;
     }
 }

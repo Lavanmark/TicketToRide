@@ -94,4 +94,6 @@ public interface IBoardmapView extends IView {
 	DestinationDrawer getDestinationDrawer();
 	ClaimRouteDrawer getClaimRouteDrawer();
 	TrainCardDrawer getTrainCardDrawer();
+	
+	void showGameOver();
 }

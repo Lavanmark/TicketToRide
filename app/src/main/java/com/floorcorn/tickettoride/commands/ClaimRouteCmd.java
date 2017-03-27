@@ -23,12 +23,12 @@ public class ClaimRouteCmd extends ClaimRouteCmdData {
     }
 
     @Override
-    public void execute(Game game) {
+    public boolean execute(Game game) {
         if(claimingPlayer.isCensoredPlayer()) {
             game.updatePlayer(claimingPlayer);
-            game.getBoard().updateRoute(routeToClaim);
+            return game.getBoard().updateRoute(routeToClaim);
         } else {
-            game.claimRoute(routeToClaim, claimingPlayer);
+            return game.claimRoute(routeToClaim, claimingPlayer);
         }
     }
 }
