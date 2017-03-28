@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
+import com.floorcorn.tickettoride.ClientCommunicator;
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.ui.views.ILoginView;
@@ -40,12 +41,22 @@ public class LoginPresenter implements IPresenter, Observer {
         String password = this.loginView.getPassword();
 
         try {
+
             UIFacade.getInstance().login(userName, password);
+
         }catch(Exception e){
             e.printStackTrace();
             this.loginView.displayMessage(e.getMessage());
         }
 
+    }
+
+    public void communicationHandler(){
+        String host = this.loginView.getIP();
+        String port = this.loginView.getPort();
+        if (host == null || host.isEmpty()) return;
+        if (port == null || host.isEmpty()) return;
+        UIFacade.getInstance().setServer(host, port);
     }
 
     public void registerClicked(){
