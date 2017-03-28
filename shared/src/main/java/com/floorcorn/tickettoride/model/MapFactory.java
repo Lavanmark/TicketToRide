@@ -164,13 +164,14 @@ public class MapFactory {
 			int routeID = 0;
 			while((line = br.readLine()) != null) {
 				String[] parts = line.split(",");
-				if(parts.length == 4) {
+				if(parts.length == 5) {
 					City city1 = new City(parts[0]);
 					City city2 = new City(parts[1]);
 					TrainCardColor color = TrainCardColor.convertString(parts[2]);
 					int length = Integer.valueOf(parts[3]);
+					String imageResource = parts[4];
 					if(cities.contains(city1) && cities.contains(city2))
-						routes.add(new Route(routeID++, city1, city2, length, color));
+						routes.add(new Route(routeID++, city1, city2, length, color, imageResource));
 				}
 			}
 			br.close();

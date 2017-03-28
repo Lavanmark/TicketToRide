@@ -1,90 +1,90 @@
-Arcadia,Phoenix Lander,Grey,4
-Arcadia,Alba,Orange,4
-Arcadia,Amazonis,Grey,2
-Amazonis,Olympus,Blue,2
-Amazonis,Copernicus,Yellow,5
-Copernicus,Arsia,White,3
-Copernicus,Solis,Black,5
-Arsia,Solis,Orange,3
-Arsia,Olympus,Red,2
-Arsia,Olympus,Green,2
-Arsia,Pavonis,Grey,1
-Arsia,Pavonis,Grey,1
-Olympus,Alba,Purple,2
-Olympus,Alba,Black,2
-Olympus,Ascraeus,Grey,2
-Olympus,Ascraeus,Grey,2
-Alba,Phoenix Lander,White,2
-Alba,Phoenix Lander,Yellow,2
-Alba,Ascraeus,Grey,2
-Alba,Ascraeus,Grey,2
-Alba,Barabashov,Grey,3
-Phoenix Lander,Acydalia,Red,7
-Ascraeus,Pavonis,Grey,1
-Ascraeus,Pavonis,Grey,1
-Ascraeus,Viking 1,White,4
-Pavonis,Valles Marineras,Blue,2
-Pavonis,Valles Marineras,Yellow,2
-Solis,Valles Marineras,Grey,2
-Solis,Argyre,Grey,4
-Solis,Green,Blue,7
-Valles Marineras,Holden,Red,3
-Barabashov,Viking 1,Grey,3
-Barabashov,Cydonia,Purple,4
-Barabashov,Acydalia,Grey,2
-Viking 1,Pathfinder,Grey,1
-Viking 1,Pathfinder,Grey,1
-Holden,Pathfinder,Grey,2
-Holden,Opportunity Rover,Purple,4
-Holden,Argyre,Grey,1
-Holden,Argyre,Grey,1
-Argyre,Green,Grey,3
-Pathfinder,Cydonia,Black,2
-Pathfinder,Cassini,Orange,4
-Cydonia,Dueteronilus,Blue,3
-Green,Le Verrier,Grey,3
-Green,Le Verrier,Grey,3
-Opportunity Rover,Le Verrier,Grey,2
-Opportunity Rover,Isidis,Yellow,6
-Opportunity Rover,Cassini,Green,2
-Le Verrier,Huygens,Blue,2
-Le Verrier,Hellas,White,3
-Cassini,Syrtis Major,Black,2
-Cassini,Dueteronilus,Grey,1
-Cassini,Dueteronilus,Grey,1
-Dueteronilus,Vastitas Borealis,Grey,2
-Dueteronilus,Vastitas Borealis,Grey,2
-Dueteronilus,Utopia,Grey,4
-Dueteronilus,Syrtis Major,White,3
-Huygens,Hellas,Grey,2
-Huygens,Isidis,Orange,2
-Hellas,Isidis,Black,4
-Hellas,Hesperia,Orange,4
-Hellas,Huxley,Purple,3
-Syrtis Major,Isidis,Purple,1
-Syrtis Major,Isidis,Green,1
-Isidis,Utopia,Grey,2
-Isidis,Utopia,Grey,2
-Isidis,Hesperia,Grey,2
-Isidis,Hesperia,Grey,2
-Isidis,Elysium,Red,5
-Isidis,Elysium,Blue,5
-Utopia,Viking 2,Yellow,3
-Utopia,Elysium,Grey,4
-Utopia,Elysium,Grey,4
-Hesperia,Huxley,Grey,4
-Hesperia,Kepler,White,4
-Hesperia,Spirit Rover,Grey,4
-Hesperia,Cerberus,Green,4
-Viking 2,Elysium,White,2
-Elysium,Cerberus,Grey,1
-Elysium,Cerberus,Grey,1
-Cerberus,Spirit Rover,Black,2
-Spirit Rover,Kepler,Red,3
-Acydalia,Vastitas Borealis,Green,5
-Acydalia,Vastitas Borealis,Black,5
-Vastitas Borealis,Utopia,Purple,6
-Vastitas Borealis,Utopia,Orange,6
-Acydalia,Cydonia,Grey,2
-Huxley,Kepler,Yellow,2
-Holden,Le Verrier,Green,5
+Acydalia,Cydonia,Grey,2,rt__0070_acydalia_cydonia
+Acydalia,Vastitas Borealis,Green,5,rt__0073_acydalia_vastitas_borealis_green
+Acydalia,Vastitas Borealis,Black,5,rt__0072_acydalia_vastitas_borealis_black
+Alba,Ascraeus,Grey,2,rt__0040_ascraeus_alba
+Alba,Ascraeus,Grey,2,rt__0041_alba_ascraeus
+Alba,Barabashov,Grey,3,rt__0067_alba_barabashov
+Alba,Phoenix Lander,White,2,rt__0043_pheonix_lander_alba_white
+Alba,Phoenix Lander,Yellow,2,rt__0042_pheonix_lander_alba_yellow
+Amazonis,Copernicus,Yellow,5,rt__0079_copernicus_amazonis
+Amazonis,Olympus,Blue,2,rt__0075_amazonis_olympus
+Arcadia,Alba,Orange,4,rt__0076_arcadia_alba
+Arcadia,Amazonis,Grey,2,rt__0078_amazonis_arcadia
+Arcadia,Phoenix Lander,Grey,4,rt__0077_arcadia_pheonix_lander
+Argyre,Green,Grey,3,rt__0087_argyre_green
+Arsia,Olympus,Red,2,rt__0048_olympus_arsia_red
+Arsia,Olympus,Green,2,rt__0047_olympus_arsia_green
+Arsia,Pavonis,Grey,1,rt__0045_pavonis_arsia
+Arsia,Pavonis,Grey,1,rt__0046_arsia_pavonis
+Arsia,Solis,Orange,3,rt__0063_arsia_solis
+Ascraeus,Pavonis,Grey,1,rt__0051_ascraeus_pavonis
+Ascraeus,Pavonis,Grey,1,rt__0052_pavonis_ascraeus
+Ascraeus,Viking 1,White,4,rt__0044_ascraeus_viking_1
+Barabashov,Acydalia,Grey,2,rt__0071_barabashov_acydalia
+Barabashov,Cydonia,Purple,4,rt__0068_barabashov_cydonia
+Barabashov,Viking 1,Grey,3,rt__0064_barabashov_viking_1
+Cassini,Dueteronilus,Grey,1,rt__0028_cassini_deuteronilus
+Cassini,Dueteronilus,Grey,1,rt__0029_deuteronilus_cassini
+Cassini,Syrtis Major,Black,2,rt__0056_cassini_syrtis_major
+Cerberus,Spirit Rover,Black,2,rt__0014_spirit_rover_cerberus
+Copernicus,Arsia,White,3,rt__0080_copernicus_arsia
+Copernicus,Solis,Black,5,rt__2000
+Cydonia,Dueteronilus,Blue,3,rt__0069_cydonia_deuteronilus
+Dueteronilus,Syrtis Major,White,3,rt__0026_deuteronilus_syrtis_major
+Dueteronilus,Utopia,Grey,4,rt__0027_deuteronilus_utopia
+Dueteronilus,Vastitas Borealis,Grey,2,rt__0030_deuteronilus_vastitas_borealis
+Dueteronilus,Vastitas Borealis,Grey,2,rt__0031_vastitas_borealis_deuteronilus
+Elysium,Cerberus,Grey,1,rt__0002_cerberus_elysium
+Elysium,Cerberus,Grey,1,rt__0003_elysium_cerberus
+Green,Le Verrier,Grey,3,rt__0083_le_verrier_green
+Green,Le Verrier,Grey,3,rt__0084_green_le_verrier
+Hellas,Hesperia,Orange,4,rt__0018_hellas_hesperia
+Hellas,Huxley,Purple,3,rt__0082_hellas_huxley
+Hellas,Isidis,Black,4,rt__0019_hellas_isidis
+Hesperia,Cerberus,Green,4,rt__0012_hesperia_cerberus
+Hesperia,Huxley,Grey,4,rt__0017_huxley_hesperia
+Hesperia,Kepler,White,4,rt__0013_hesperia_kepler
+Hesperia,Spirit Rover,Grey,4,rt__0015_hesperia_spirit_rover
+Holden,Argyre,Grey,1,rt__0035_argyre_holden
+Holden,Argyre,Grey,1,rt__0036_holden_argyre
+Holden,Le Verrier,Green,5,rt__0086_holden_le_verrier
+Holden,Opportunity Rover,Purple,4,rt__0060_holden_opportunity_rover
+Holden,Pathfinder,Grey,2,rt__0037_holden_pathfinder
+Huxley,Kepler,Yellow,2,rt__0081_huxley_kepler
+Huygens,Hellas,Grey,2,rt__0023_hellas_huygens
+Huygens,Isidis,Orange,2,rt__0020_huygens_isidis
+Isidis,Elysium,Red,5,rt__1000
+Isidis,Elysium,Blue,5,rt__0000_isidis_elysium_blue
+Isidis,Hesperia,Grey,2,rt__0008_isidis_hesperia_
+Isidis,Hesperia,Grey,2,rt__0009_isidis_hesperia
+Isidis,Utopia,Grey,2,rt__0006_isidis_utopia
+Isidis,Utopia,Grey,2,rt__0007_utopia_isidis
+Le Verrier,Hellas,White,3,rt__0085_le_verier_hellas
+Le Verrier,Huygens,Blue,2,rt__0021_le_verrier_huygens
+Olympus,Alba,Purple,2,rt__0066_olympus_alba_purple
+Olympus,Alba,Black,2,rt__0065_olympus_alba_black
+Olympus,Ascraeus,Grey,2,rt__0049_ascraeus_olympus
+Olympus,Ascraeus,Grey,2,rt__0050_olympus_ascraeus
+Opportunity Rover,Cassini,Green,2,rt__0057_opportunity_rover_cassini
+Opportunity Rover,Isidis,Yellow,6,rt__0055_opportunity_rover_isidis
+Opportunity Rover,Le Verrier,Grey,2,rt__0022_opportunity_rover_le_verrier
+Pathfinder,Cassini,Orange,4,rt__0058_pathfinder_cassini
+Pathfinder,Cydonia,Black,2,rt__0059_cydonia_pathfinder
+Pavonis,Valles Marineras,Blue,2,rt__0053_pavonis_valles_marineras_blue
+Pavonis,Valles Marineras,Yellow,2,rt__0054_pavonis_valles_marineras_yellow
+Phoenix Lander,Acydalia,Red,7,rt__0074_pheonix_lander_acydalia
+Solis,Argyre,Grey,4,rt__0034_solis_argyre
+Solis,Green,Blue,7,rt__0088_solis_green
+Solis,Valles Marineras,Grey,2,rt__0062_solis_valles_marineras
+Spirit Rover,Kepler,Red,3,rt__0016_kepler_spirit_rover
+Syrtis Major,Isidis,Purple,1,rt__0025_syrtis_major_isidis_pink
+Syrtis Major,Isidis,Green,1,rt__0024_syrtis_major_isidis_green
+Utopia,Elysium,Grey,4,rt__0004_elysium_utopia
+Utopia,Elysium,Grey,4,rt__0005_utopia_elysium
+Utopia,Viking 2,Yellow,3,rt__0011_utopia_viking_2
+Valles Marineras,Holden,Red,3,rt__0061_valles_marineras_holden
+Vastitas Borealis,Utopia,Purple,6,rt__0032_vastitas_borealis_utopia_pink
+Vastitas Borealis,Utopia,Orange,6,rt__0033_vastitas_borealis_utopia_orange
+Viking 1,Pathfinder,Grey,1,rt__0038_pathfinder_viking_1
+Viking 1,Pathfinder,Grey,1,rt__0039_viking_1_pathfinder
+Viking 2,Elysium,White,2,rt__0010_viking2_elysium
