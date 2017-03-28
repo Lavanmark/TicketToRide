@@ -297,6 +297,7 @@ public class BoardmapPresenter
 	@Override
 	public void closedRoutes() {
 		state.closeClaimRoute(this);
+
 	}
 	
 	@Override

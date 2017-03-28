@@ -96,4 +96,6 @@ public interface IBoardmapView extends IView {
 	TrainCardDrawer getTrainCardDrawer();
 	
 	void showGameOver();
+
+    void updateMap();
 }

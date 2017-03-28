@@ -164,7 +164,7 @@ public class MapFactory {
 			int routeID = 0;
 			while((line = br.readLine()) != null) {
 				String[] parts = line.split(",");
-				if(parts.length == 4) {
+				if(parts.length == 5) {
 					City city1 = new City(parts[0]);
 					City city2 = new City(parts[1]);
 					TrainCardColor color = TrainCardColor.convertString(parts[2]);

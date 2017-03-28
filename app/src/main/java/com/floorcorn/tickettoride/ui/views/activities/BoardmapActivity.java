@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.communication.GameChatLog;
@@ -89,11 +90,11 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     <color name="colorBluePlayer">#4f8bea</color>
          */
         Map<Enum, Integer> aMap = new HashMap<Enum, Integer>();
-        aMap.put(PlayerColor.BLACK, 0x6b6a6700);
-        aMap.put(PlayerColor.BLUE, 0x4f8bea00);
-        aMap.put(PlayerColor.GREEN, 0x46d65000);
-        aMap.put(PlayerColor.RED, 0xff4f4f00);
-        aMap.put(PlayerColor.YELLOW, 0xccc10a00);
+        aMap.put(PlayerColor.BLACK, 0xff6b6a67);
+        aMap.put(PlayerColor.BLUE, 0xff4f8bea);
+        aMap.put(PlayerColor.GREEN, 0xff46d650);
+        aMap.put(PlayerColor.RED, 0xffff4f4f);
+        aMap.put(PlayerColor.YELLOW, 0xffccc10a);
         routeColors = Collections.unmodifiableMap(aMap);
     }
 
@@ -159,28 +160,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
             showGameOver();
         //TODO we will want something to launch the game over when it happens in the game.
 
-
-        ImageView map = (ImageView)findViewById(R.id.mapImageView);
-
-        Resources r = getResources();
-        Drawable[] layers = new Drawable[2];
-        layers[0] = r.getDrawable(R.drawable.map);
-        layers[1] = r.getDrawable(R.drawable.rt__0088_solis_green);
-        layers[2] = r.getDrawable(R.drawable.rt__0000_isidis_elysium_blue);
-        layers[3] = r.getDrawable(R.drawable.rt__0002_cerberus_elysium);
-        layers[4] = r.getDrawable(R.drawable.rt__0004_elysium_utopia);
-        layers[5] = r.getDrawable(R.drawable.rt__0005_utopia_elysium);
-
-        layers[1].mutate().setColorFilter(routeColors.get(PlayerColor.BLUE), PorterDuff.Mode.MULTIPLY );
-        layers[2].mutate().setColorFilter(routeColors.get(PlayerColor.RED), PorterDuff.Mode.MULTIPLY);
-        layers[3].mutate().setColorFilter(routeColors.get(PlayerColor.GREEN), PorterDuff.Mode.MULTIPLY);
-        layers[4].mutate().setColorFilter(routeColors.get(PlayerColor.BLACK), PorterDuff.Mode.MULTIPLY);
-        layers[5].mutate().setColorFilter(routeColors.get(PlayerColor.YELLOW), PorterDuff.Mode.MULTIPLY);
-
-        LayerDrawable layerDrawable = new LayerDrawable(layers);
-        map.setImageDrawable(layerDrawable);
-
-
+        this.updateMap();
     }
 
     private void lockDrawersClosed() {
@@ -203,6 +183,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         super.onResume();
         if (checkStarted())
             presenter.startPollingCommands();
+
     }
 
     /**
@@ -395,6 +376,27 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     @Override
     public TrainCardDrawer getTrainCardDrawer() {
         return trainCardDrawer;
+    }
+
+    @Override
+    public void updateMap(){
+        ImageView map = (ImageView)findViewById(R.id.mapImageView);
+        Resources res = getResources();
+        List<Drawable> layers = new ArrayList<Drawable>();
+        layers.add(res.getDrawable(R.drawable.map));
+        for (Player p : presenter.getPlayers()){
+            for (Route rt : p.getRoutesClaimed()){
+                Drawable d = res.getDrawable(presenter.getResId(rt.getImageResource(), this));
+                d.mutate().mutate().setColorFilter(routeColors.get(p.getColor()), PorterDuff.Mode.MULTIPLY );
+                layers.add(d);
+            }
+        }
+
+        Drawable [] layerArray = layers.toArray(new Drawable[layers.size()]);
+        LayerDrawable layerDrawable = new LayerDrawable(layerArray);
+        map.setImageDrawable(layerDrawable);
+
+        System.out.println("route list size: "+presenter.getGame().getRoutes().size());
     }
     
 }
