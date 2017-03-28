@@ -7,6 +7,7 @@ import com.floorcorn.tickettoride.communication.CommandRequest;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.exceptions.SerializerException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.User;
 import com.sun.net.httpserver.HttpExchange;
@@ -42,10 +43,12 @@ public class GetCommandsHandler extends HandlerBase {
 
 			Results results;
 			try {
+				if (cr == null)
+					throw new SerializerException("Serializer returned null");
 				ArrayList<ICommand> commands = ServerFacade.getInstance().getCommandsSince(new User(token), cr.getGameID(), cr.getLastCommandID());
 				results = new Results(true, commands);
 				Corn.log("Returning " + commands.size() + " commands to client.");
-			} catch(BadUserException | GameActionException e) {
+			} catch(BadUserException | GameActionException | SerializerException e) {
 				Corn.log(Level.SEVERE, e.getMessage());
 				results = new Results(false, e);
 			}

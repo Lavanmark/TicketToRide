@@ -4,6 +4,7 @@ import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.SerializerException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.User;
 import com.sun.net.httpserver.HttpExchange;
@@ -31,10 +32,12 @@ public class LoginHandler extends HandlerBase {
 
 			Results results;
 			try {
+				if (userInfo == null)
+					throw new SerializerException("Serializer returned null");
 				userInfo = ServerFacade.getInstance().login(userInfo);
 				results = new Results(true, userInfo);
 				Corn.log("User " + userInfo.getUsername() + " has logged in.");
-			} catch(BadUserException e) {
+			} catch(BadUserException | SerializerException e) {
 				Corn.log(Level.SEVERE, e.getStackTrace());
 				results = new Results(false, e);
 			}
