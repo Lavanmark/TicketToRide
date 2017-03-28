@@ -23,6 +23,7 @@ public class ClaimRouteState extends TurnState {
             try {
                 UIFacade.getInstance().claimRoute(route);
                 presenter.displayMessage_short("Claimed route: " + route.getFirstCity().getName() + " to " + route.getSecondCity().getName());
+                //presenter.getView().updateMap();
                 presenter.setState(new PreTurnState());
             } catch(BadUserException e) {
                 e.printStackTrace();

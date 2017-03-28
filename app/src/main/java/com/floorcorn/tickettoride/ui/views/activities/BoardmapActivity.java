@@ -386,7 +386,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         layers.add(res.getDrawable(R.drawable.map));
         for (Player p : presenter.getPlayers()){
             for (Route rt : p.getRoutesClaimed()){
-                Drawable d = res.getDrawable(presenter.getResId(rt.getImageResource(), this));
+                Drawable d = res.getDrawable(presenter.getResId(rt.getResource(), this));
                 d.mutate().mutate().setColorFilter(routeColors.get(p.getColor()), PorterDuff.Mode.MULTIPLY );
                 layers.add(d);
             }

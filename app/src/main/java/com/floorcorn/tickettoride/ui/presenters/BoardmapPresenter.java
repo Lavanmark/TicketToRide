@@ -120,6 +120,7 @@ public class BoardmapPresenter
                 view.setClaimRoutesList(game.getRoutes());
                 if (destCardsToDiscard == null || destCardsToDiscard[0] == null)
                     view.setDestinationCardChoices();
+                view.updateMap();
                 //initialize state to PreTurn state for all players
                 if (state == null)
                     setState(new PreTurnState());

@@ -169,9 +169,9 @@ public class MapFactory {
 					City city2 = new City(parts[1]);
 					TrainCardColor color = TrainCardColor.convertString(parts[2]);
 					int length = Integer.valueOf(parts[3]);
-					String imageResource = parts[4];
+					String resource = parts[4];
 					if(cities.contains(city1) && cities.contains(city2))
-						routes.add(new Route(routeID++, city1, city2, length, color, imageResource));
+						routes.add(new Route(routeID++, city1, city2, length, color, resource));
 				}
 			}
 			br.close();
