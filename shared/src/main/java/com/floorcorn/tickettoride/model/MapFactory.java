@@ -47,6 +47,12 @@ public class MapFactory {
 	private static final String FILE_STRING_ROUTES = "routes" + File.separator;
 	/** Extension for the destination cards .csv **/
 	private static final String FILE_STRING_DEST = "dest" + File.separator;
+	/** Filename for the cities.csv **/
+	private static String Mars_Cities_File = "MarsCities.csv";
+	/** Filename for the routes.csv **/
+	private static String Mars_Routes_File = "MarsRoutes.csv";
+	/** Filename for the DestianationCards.csv **/
+	private static String Mars_Destinations_File = "MarsDestinationCards.csv";
 
 	/** The list of routes for the given game **/
 	private List<Route> marsRoutes = null;
@@ -67,15 +73,9 @@ public class MapFactory {
 	 * @post neither of the two lists, marsRoutes and marsDest are null
 	 */
 	private void createMarsMap() {
-		Set<City> marsCities = readCities("MarsCities.csv");
-        marsRoutes = readRoutes("MarsRoutes.csv", marsCities);
-        marsDest = readDestionationCards("MarsDestinationCards.csv", marsCities);
-
-		//Note: Comment out the above 3 lines and uncomment those 3 below to test.
-        /*Set<City> testCities = readCities("TestCities.csv");
-        marsRoutes = readRoutes("TestRoutes.csv", testCities);
-        marsDest = readDestionationCards("TestDestinationCards.csv", testCities);
-		*/
+		Set<City> marsCities = readCities(Mars_Cities_File);
+        marsRoutes = readRoutes(Mars_Routes_File, marsCities);
+        marsDest = readDestionationCards(Mars_Destinations_File, marsCities);
 	}
 
 	/**
@@ -234,4 +234,15 @@ public class MapFactory {
         FILE_STRING = path;
     }
 
+	public static void setMars_Cities_File(String mars_Cities_File) {
+		Mars_Cities_File = mars_Cities_File;
+	}
+
+	public static void setMars_Routes_File(String mars_Routes_File) {
+		Mars_Routes_File = mars_Routes_File;
+	}
+
+	public static void setMars_Destinations_File(String mars_Destinations_File) {
+		Mars_Destinations_File = mars_Destinations_File;
+	}
 }

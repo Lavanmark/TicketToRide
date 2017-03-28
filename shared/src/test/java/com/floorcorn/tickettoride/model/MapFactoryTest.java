@@ -33,6 +33,9 @@ public class MapFactoryTest {
     public void setup(){
         mapFactory = new MapFactory();
         mapFactory.setFilePath(FILE_PATH);
+        mapFactory.setMars_Cities_File("TestCities.csv");
+        mapFactory.setMars_Routes_File("TestRoutes.csv");
+        mapFactory.setMars_Destinations_File("TestDestinationCards.csv");
     }
 
     /**
