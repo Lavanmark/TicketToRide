@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride.model;
 
+import com.floorcorn.tickettoride.log.Corn;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,11 +16,13 @@ public class Route {
     private City city2;
     private int length;
     private TrainCardColor color;
-    private Boolean claimed;
+    private boolean claimed;
     private int owner;
+	boolean visited = false;
+	private String resource;
 
     private Route(){}
-    public Route(int rID, City c1, City c2, int l, TrainCardColor tcc){
+    public Route(int rID, City c1, City c2, int l, TrainCardColor tcc, String resource){
         routeID = rID;
         city1 = c1;
         city2 = c2;
@@ -26,6 +30,7 @@ public class Route {
         color = tcc;
         claimed = false;
         owner = Player.NO_PLAYER_ID;
+		this.resource = resource;
     }
 
     public int getRouteID(){
@@ -59,6 +64,8 @@ public class Route {
     public int getOwner(){
         return owner;
     }
+
+    public String getResource() { return resource;}
 
     public List<TrainCard> claim(Player p){
 	    //TODO UPDATE SO THIS CHECKS REMOVE TRAIN CARD BOOL
@@ -133,25 +140,38 @@ public class Route {
 		    return false;
 	    if(p.getTotalTrainCards() < length) //Route longer than the amount of cards player has
 		    return false;
-
+	    if(p.getTrainCarsLeft() < length)
+	    	return false;
+	    
+	    for(Route route : p.getRoutesClaimed()) {
+		    if(route.isDoubleRoute(this) && route.getOwner() == p.getPlayerID())
+		    	return false;
+	    }
+	    
+	    //TODO check if player can claim it based on double routes
+	
+	    Corn.log("not basics");
+	    
         Map<TrainCardColor, Integer> pCards = p.getTrainCards();
 	    int wildnum = 0;
 	    if(pCards.containsKey(TrainCardColor.WILD)) //Save num wilds
 		    wildnum = pCards.get(TrainCardColor.WILD);
 	    if(wildnum >= length) //Have enough wilds?
 		    return true;
-
+	    Corn.log("pre loop");
 	    if(color == TrainCardColor.WILD) { //If path is wild, check all color types.
 		    for(TrainCardColor tcc : pCards.keySet()) {
-			    if(tcc != TrainCardColor.WILD && pCards.get(tcc) + wildnum >= length)
+			    if(tcc != TrainCardColor.WILD && (pCards.get(tcc) + wildnum) >= length)
 				    return true;
 		    }
+		    Corn.log("that young loop");
 		    return false;
 	    }
-
+		
 	    int colornum = 0;
 	    if(pCards.containsKey(color)) //Check the specific color
 		    colornum = pCards.get(color);
+	    Corn.log("final possible problem");
 	    return colornum + wildnum >= length;
     }
 
@@ -180,36 +200,36 @@ public class Route {
 		claimed = route.claimed;
 		owner = route.owner;
 	}
-
-    @Override
-    public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
-
-        Route route = (Route) o;
-
-        if(routeID != route.routeID) return false;
-        if(length != route.length) return false;
-        if(owner != route.owner) return false;
-        if(!city1.equals(route.city1)) return false;
-        if(!city2.equals(route.city2)) return false;
-        if(color != route.color) return false;
-        return claimed.equals(route.claimed);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = routeID;
-        result = 31 * result + city1.hashCode();
-        result = 31 * result + city2.hashCode();
-        result = 31 * result + length;
-        result = 31 * result + color.hashCode();
-        result = 31 * result + claimed.hashCode();
-        result = 31 * result + owner;
-        return result;
-    }
-
+	
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) return true;
+		if(o == null || getClass() != o.getClass()) return false;
+		
+		Route route = (Route) o;
+		
+		if(routeID != route.routeID) return false;
+		if(length != route.length) return false;
+		if(claimed != route.claimed) return false;
+		if(owner != route.owner) return false;
+		if(!city1.equals(route.city1)) return false;
+		if(!city2.equals(route.city2)) return false;
+		return color == route.color;
+		
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = routeID;
+		result = 31 * result + city1.hashCode();
+		result = 31 * result + city2.hashCode();
+		result = 31 * result + length;
+		result = 31 * result + color.hashCode();
+		result = 31 * result + (claimed ? 1 : 0);
+		result = 31 * result + owner;
+		return result;
+	}
+	
 	@Override
     public String toString(){
         StringBuilder sb = new StringBuilder();

@@ -1,7 +1,21 @@
-Alpine,American Fork,Grey,1
-Alpine,Provo,Red,3
-American Fork,Saratoga Springs,White,4
-Orem,Provo,Blue,1
-Provo,Salt Lake City,Yellow,5
-Salt Lake City,Farmington,Green,3
-Farmington,Kaysville,Purple,2
+Alpine,American Fork,Grey,1,img
+Alpine,Provo,Red,3,img
+American Fork,Saratoga Springs,White,4,img
+Orem,Provo,Blue,1,img
+Provo,Salt Lake City,Yellow,5,img
+Salt Lake City,Farmington,Green,3,img
+Farmington,Kaysville,Purple,2,img
+Salt Lake City,Orem,Grey,3,img
+Provo,Farmington,Grey,2,img
+Alpine,Orem,Grey,2,img
+Alpine,Saratoga Springs,Yellow,2,img
+Orem,American Fork,Blue,2,img
+Kaysville,Alpine,Grey,2,img
+Kaysville,Provo,Grey,2,img
+Salt Lake City,Kaysville,Grey,2,img
+American Fork,Kaysville,Grey,2,img
+Alpine,Farmington,Grey,2,img
+Provo,Provo,White,2,img
+Orem,Orem,Grey,2,img
+Kaysville,Kaysville,Grey,2,img
+Salt Lake City,Salt Lake City,Grey,2,img

@@ -15,7 +15,8 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 	}
 
 	@Override
-	public void execute(Game game) {
+	public boolean execute(Game game) {
 		game.setPlayerList(players);
+		return true;
 	}
 }

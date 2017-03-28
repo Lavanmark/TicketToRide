@@ -2,7 +2,11 @@ package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -11,8 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.communication.GameChatLog;
@@ -32,6 +38,8 @@ import com.floorcorn.tickettoride.ui.views.drawers.HandDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.TrainCardDrawer;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,6 +80,24 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     private TrainCardDrawer trainCardDrawer;
     private DestinationDrawer destinationDrawer;
 
+    private static final Map<Enum, Integer> routeColors;
+    static {
+        /*
+    <color name="colorBlackPlayer">#6b6a67</color>
+    <color name="colorRedPlayer">#ff4f4f</color>
+    <color name="colorGreenPlayer">#</color>
+    <color name="colorYellowPlayer">#ccc10a</color>
+    <color name="colorBluePlayer">#4f8bea</color>
+         */
+        Map<Enum, Integer> aMap = new HashMap<Enum, Integer>();
+        aMap.put(PlayerColor.BLACK, 0xff6b6a67);
+        aMap.put(PlayerColor.BLUE, 0xff4f8bea);
+        aMap.put(PlayerColor.GREEN, 0xff46d650);
+        aMap.put(PlayerColor.RED, 0xffff4f4f);
+        aMap.put(PlayerColor.YELLOW, 0xffccc10a);
+        routeColors = Collections.unmodifiableMap(aMap);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +105,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         setContentView(R.layout.activity_boardmap);
 
         presenter = new BoardmapPresenter();
-        presenter.setView((IView) this);
+        presenter.setView(this);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.bmap_toolbar);
         setSupportActionBar(mToolbar);
@@ -96,19 +122,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         drawDestinationTicketsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.tryOpenDestinationDrawer();
+                destinationDrawer.open();
             }
         });
         drawCardsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.tryOpenDrawTrainDrawer();
+                trainCardDrawer.open();
             }
         });
         claimRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.tryOpenClaimRouteDrawer();
+                claimRouteDrawer.open();
             }
         });
         displayHandButton.setOnClickListener(new View.OnClickListener() {
@@ -133,14 +159,18 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         if (presenter.gameFinished())
             showGameOver();
         //TODO we will want something to launch the game over when it happens in the game.
+
+        this.updateMap();
     }
 
-    @Override
-    public void lockDrawerClosed() {
+    private void lockDrawersClosed() {
         DrawerLayout BM_DRAWER_LAYOUT = (DrawerLayout) findViewById(R.id.boardmapActivity);
         BM_DRAWER_LAYOUT.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
-
+    private void unlockDrawers() {
+        DrawerLayout BM_DRAWER_LAYOUT = (DrawerLayout) findViewById(R.id.boardmapActivity);
+        BM_DRAWER_LAYOUT.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
     @Override
     public void onStop() {
         presenter.unregister();
@@ -153,6 +183,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         super.onResume();
         if (checkStarted())
             presenter.startPollingCommands();
+
     }
 
     /**
@@ -185,7 +216,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
                 public void onClick(View v) {
                     // TODO (future phases) might need to update on every player list because p is final
                     Snackbar snackbar = Snackbar.make(playerIcons, p.getCriticalPlayerInfo(), Snackbar.LENGTH_LONG);
-                    ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text)).setMaxLines(6);
+                    ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text)).setMaxLines(7);
                     snackbar.show();
                 }
             });
@@ -252,7 +283,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         startActivity(new Intent(BoardmapActivity.this, PregameActivity.class));
     }
 
-    private void showGameOver() {
+    @Override
+    public void showGameOver() {
+        presenter.stopPolling();
         startActivity(new Intent(BoardmapActivity.this, GameOverActivity.class));
     }
 
@@ -264,19 +297,19 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     @Override
     public boolean checkStarted() {
         if (!presenter.gameInProgress()) {
-            // Note: User can click out of the Pregame Activity. It's ok because we have disabled
-            // buttons, but maybe in a later version we won't want that to be possible.
+            lockDrawersClosed();
             drawDestinationTicketsButton.setEnabled(false);
             displayHandButton.setEnabled(false);
             claimRouteButton.setEnabled(false);
             drawCardsButton.setEnabled(false);
             return false;
         } else {
+            //unlockDrawers();
             setupPlayerIcons();
-//            drawDestinationTicketsButton.setEnabled(true);
+            drawDestinationTicketsButton.setEnabled(true);
             displayHandButton.setEnabled(true);
-//            claimRouteButton.setEnabled(true);
-//            drawCardsButton.setEnabled(true);
+            claimRouteButton.setEnabled(true);
+            drawCardsButton.setEnabled(true);
             return true;
         }
     }
@@ -331,33 +364,39 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     }
 
     @Override
-    public void enableClaimRouteButton(boolean enabled) {
-        claimRouteButton.setEnabled(enabled);
+    public DestinationDrawer getDestinationDrawer() {
+        return destinationDrawer;
     }
-
-    @Override
-    public void enableTrainCardButton(boolean enabled) {
-        drawCardsButton.setEnabled(enabled);
-    }
-
-    @Override
-    public void enableDestinationCardButton(boolean enabled) {
-        drawDestinationTicketsButton.setEnabled(enabled);
-    }
-
+    
     @Override
     public ClaimRouteDrawer getClaimRouteDrawer() {
         return claimRouteDrawer;
     }
-
+    
     @Override
     public TrainCardDrawer getTrainCardDrawer() {
         return trainCardDrawer;
     }
 
     @Override
-    public DestinationDrawer getDestinationDrawer() {
-        return destinationDrawer;
-    }
+    public void updateMap(){
+        ImageView map = (ImageView)findViewById(R.id.mapImageView);
+        Resources res = getResources();
+        List<Drawable> layers = new ArrayList<Drawable>();
+        layers.add(res.getDrawable(R.drawable.map));
+        for (Player p : presenter.getPlayers()){
+            for (Route rt : p.getRoutesClaimed()){
+                Drawable d = res.getDrawable(presenter.getResId(rt.getResource(), this));
+                d.mutate().mutate().setColorFilter(routeColors.get(p.getColor()), PorterDuff.Mode.MULTIPLY );
+                layers.add(d);
+            }
+        }
 
+        Drawable [] layerArray = layers.toArray(new Drawable[layers.size()]);
+        LayerDrawable layerDrawable = new LayerDrawable(layerArray);
+        map.setImageDrawable(layerDrawable);
+
+        System.out.println("route list size: "+presenter.getGame().getRoutes().size());
+    }
+    
 }

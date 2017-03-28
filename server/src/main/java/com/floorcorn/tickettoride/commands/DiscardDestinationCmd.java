@@ -31,8 +31,8 @@ public class DiscardDestinationCmd extends DiscardDestinationCmdData{
     }
 
     @Override
-    public void execute(Game game) {
+    public boolean execute(Game game) {
         discardingPlayer = game.getPlayer(discardingPlayer);
-        game.discardDestinationCards(discardingPlayer, Arrays.asList(cards));
+        return game.discardDestinationCards(discardingPlayer, Arrays.asList(cards));
     }
 }

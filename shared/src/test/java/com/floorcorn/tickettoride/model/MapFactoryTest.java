@@ -33,6 +33,9 @@ public class MapFactoryTest {
     public void setup(){
         mapFactory = new MapFactory();
         mapFactory.setFilePath(FILE_PATH);
+        mapFactory.setMars_Cities_File("TestCities.csv");
+        mapFactory.setMars_Routes_File("TestRoutes.csv");
+        mapFactory.setMars_Destinations_File("TestDestinationCards.csv");
     }
 
     /**
@@ -90,6 +93,7 @@ public class MapFactoryTest {
         assertEquals(res.get(6).getSecondCity().getName().toLowerCase(), "kaysville");
         assertEquals(res.get(6).getColor(), TrainCardColor.PURPLE);
         assertEquals(res.get(6).getLength(), 2);
+
     }
 
     @Test
@@ -130,6 +134,7 @@ public class MapFactoryTest {
         assertEquals(testCard.getFirstCity().getName().toLowerCase(), "farmington");
         assertEquals(testCard.getSecondCity().getName().toLowerCase(), "provo");
         assertEquals(testCard.getValue(), 9);
+
     }
 
 

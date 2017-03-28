@@ -29,9 +29,13 @@ public class ClaimRouteCmd extends ClaimRouteCmdData {
     }
 
     @Override
-    public void execute(Game game) {
+    public boolean execute(Game game) {
         claimingPlayer = game.getPlayer(claimingPlayer);
-        game.claimRoute(routeToClaim, claimingPlayer);
-        routeToClaim = game.getBoard().getRoute(routeToClaim.getRouteID());
+        if(game.claimRoute(routeToClaim, claimingPlayer)) {
+            routeToClaim = game.getBoard().getRoute(routeToClaim.getRouteID());
+            game.calculateLongestRoute(claimingPlayer);
+            return true;
+        }
+        return false;
     }
 }

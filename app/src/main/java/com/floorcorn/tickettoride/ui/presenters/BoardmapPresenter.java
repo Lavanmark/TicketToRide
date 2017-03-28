@@ -19,13 +19,15 @@ import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.states.IState;
 import com.floorcorn.tickettoride.states.PreTurnState;
-import com.floorcorn.tickettoride.states.TurnState;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
-import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
+import com.floorcorn.tickettoride.ui.views.drawers.BMDrawer;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -64,6 +66,7 @@ public class BoardmapPresenter
         this.game = UIFacade.getInstance().getCurrentGame();
         this.user = UIFacade.getInstance().getUser();
         setDestCardsToDiscard(new DestinationCard[3]);
+
         register();
     }
 
@@ -89,17 +92,7 @@ public class BoardmapPresenter
     public User getUser() {
         return user;
     }
-
-    @Override
-    public IState getState() {
-        return state;
-    }
-
-    @Override
-    public DestinationCard[] getDestCardsToDiscard() {
-        return destCardsToDiscard;
-    }
-
+    
     @Override
     public void setDestCardsToDiscard(DestinationCard[] destCardsToDiscard) {
         this.destCardsToDiscard = destCardsToDiscard;
@@ -117,23 +110,22 @@ public class BoardmapPresenter
             } else {
                 /** if game started, update view, set cards, etc. **/
                 view.checkStarted();
+	            if(game.isFinished()) {
+		            view.showGameOver();
+		            return;
+	            }
                 view.setFaceUpTrainCards();
                 view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
                 view.setPlayerDestinationCardList(game.getPlayer(user).getDestinationCards());
                 view.setClaimRoutesList(game.getRoutes());
                 if (destCardsToDiscard == null || destCardsToDiscard[0] == null)
                     view.setDestinationCardChoices();
+                view.updateMap();
                 //initialize state to PreTurn state for all players
                 if (state == null)
                     setState(new PreTurnState());
                 //if waiting for your turn, check if it is your turn
-                if (state instanceof PreTurnState) {
-                    if (game.getPlayer(user).isTurn())
-                        //if it is your turn, setTurn transitions between preTurn and TurnState
-                        state.setTurn(this, game.getPlayer(user));
-                }
-
-
+                state.setTurn(this, game.getPlayer(user));
             }
         }
         /** if changed object is the GameChatLog update the chat room in the view **/
@@ -166,11 +158,10 @@ public class BoardmapPresenter
     public String getGameName() {
         return this.game.getName();
     }
-
-
+	
     @Override
     public boolean gameInProgress() {
-        return game.hasStarted();
+        return game.hasStarted() && !game.isFinished();
     }
 
     @Override
@@ -220,12 +211,14 @@ public class BoardmapPresenter
 
     @Override
     public void clickedFaceUpCard(int temp) {
-        state.drawFaceUpCard(this, temp);
+	    if(!state.drawFaceUpCard(this, temp))
+	    	displayMessage_short("Could not draw card!");
     }
 
     @Override
     public void clickedTrainCardDeck() {
-        state.drawTrainCardFromDeck(this);
+	    if(!state.drawTrainCardFromDeck(this))
+	    	displayMessage_short("Could not draw card!");
     }
 
     /**
@@ -261,7 +254,8 @@ public class BoardmapPresenter
                 return p.getColor();
         return null;
     }
-
+    
+    @Override
     public boolean gameFinished() {
         return game.isFinished();
     }
@@ -295,72 +289,44 @@ public class BoardmapPresenter
     /**
      * STATE
      **/
-
-    @Override
-    public void lockDrawerClosed() {
-        this.view.lockDrawerClosed();
-    }
-
+    
     @Override
     public void discardDestinations(boolean[] shouldDiscard) {
-
         state.discardDestinationTickets(this, destCardsToDiscard, shouldDiscard);
-//      if(destCardsToDiscard == null)
-//            return;
-//      List<DestinationCard> toDiscard = new ArrayList<>();
-//		for(int i = 0; i < shouldDiscard.length; i++)
-//			if(shouldDiscard[i])
-//				toDiscard.add(destCardsToDiscard[i]);
-//		destCardsToDiscard = new DestinationCard[3];
-//		try {
-//            state.discardDestinationTickets(this, toDiscard);
-//			UIFacade.getInstance().discardDestinationCards(toDiscard);
-//		} catch (GameActionException e) {
-//			e.printStackTrace();
-//		} catch(BadUserException e) {
-//			e.printStackTrace();
-//			view.backToLogin();
-//		}
     }
+	
+	@Override
+	public void closedRoutes() {
+		state.closeClaimRoute(this);
 
-    @Override
-    public void clickedOutOfRoutes() {
-        //TODO: FIXME
-        // you won't always go to turn state. this is just for testing the drawer listener
-        setState(new TurnState());
-    }
-
-    @Override
-    public void clickedOutOfDestinations() {
-
-    }
-
-    @Override
-    public void clickedOutOfCards() {
-
-    }
-
-    @Override
-    public boolean drawTrainCardFromDeck() {
-//        try {
-        this.state.drawTrainCardFromDeck(this);
-        return true;
-//		} catch(GameActionException e) {
-//			e.printStackTrace();
-//		} catch(BadUserException e) {
-//			e.printStackTrace();
-//			view.backToLogin();
-//		}
-//		return false;
-    }
-
-    @Override
-    public boolean drawFromFaceUp(int position) {
-        this.state.drawFaceUpCard(this, position);
-        return true; //TODO this should be like the function above
-    }
-
-    @Override
+	}
+	
+	@Override
+	public void closedDestinations() {
+		state.closeDestinationDraw(this);
+	}
+	
+	@Override
+	public void closedCards() {
+		state.closeTrainDraw(this);
+	}
+	
+	@Override
+	public void openedRoutes() {
+		state.openClaimRoute(this);
+	}
+	
+	@Override
+	public void openedDestinations() {
+		state.openDestinationDraw(this);
+	}
+	
+	@Override
+	public void openedCards() {
+		state.openTrainDraw(this);
+	}
+	
+	@Override
     public int[] getFaceupCardColors() throws GameActionException {
         if (!gameInProgress()) {
             throw new GameActionException("Game not Started");
@@ -368,7 +334,7 @@ public class BoardmapPresenter
         TrainCard[] faceUp = UIFacade.getInstance().getFaceUpCards();
         int[] imageId = new int[5];
         for (int i = 0; i < 5; i++) {
-            if (faceUp[i] == null) {
+            if (faceUp[i] == null || faceUp[i].getColor() == null) {
                 imageId[i] = R.drawable.back_trains;
                 continue;
             }
@@ -410,108 +376,48 @@ public class BoardmapPresenter
     public void drawNewDestinationCards() {
         this.state.drawDestinationTickets(this);
     }
-
+    
     @Override
     public List<Route> getRoutes() {
         List<Route> lr = UIFacade.getInstance().getRoutes();
         System.out.println(lr.toString());
         return lr;
-
     }
-
+    
     @Override
     public void claimButtonClicked(Route route) {
-        if (route != null) {
-            try {
-                this.state.claimRoute(this, route);
-                Toast.makeText(view.getActivity(), "Claimed route: " + route.getFirstCity().getName() + " to " + route.getSecondCity().getName(), Toast.LENGTH_SHORT).show();
-                return;
-            } catch (BadUserException e) {
-                e.printStackTrace();
-                view.backToLogin();
-            } catch (GameActionException e) {
-                e.printStackTrace();
-            }
-        }
-        Toast.makeText(view.getActivity(), "No routes can be claimed!", Toast.LENGTH_SHORT).show();
-//        this.state.claimRoute(this, route);
+	    this.state.claimRoute(this, route);
     }
-
+    
     @Override
     public boolean canClaim(Route route) {
         return UIFacade.getInstance().canClaimRoute(route);
     }
 
     @Override
-    public void enableDrawTrainCards() {
-        view.enableTrainCardButton(true);
-    }
-
-    @Override
-    public void enableDrawDestinationCards() {
-        view.enableDestinationCardButton(true);
-    }
-
-    @Override
-    public void enableClaimRoute() {
-        view.enableClaimRouteButton(true);
-    }
-
-    @Override
-    public void disableDrawTrainCards() {
-        view.enableTrainCardButton(false);
-    }
-
-    @Override
-    public void disableDrawDestinationCards() {
-        view.enableDestinationCardButton(false);
-    }
-
-    @Override
-    public void disableClaimRoute() {
-        view.enableClaimRouteButton(false);
-    }
-
-    @Override
     public void openDestinationDrawer() {
         view.getDestinationDrawer().open();
     }
-
-    @Override
-    public void openClaimRouteDrawer() {
-        view.getClaimRouteDrawer().open();
-    }
-
-    @Override
-    public void openDrawTrainDrawer() {
-        view.getTrainCardDrawer().open();
-
-    }
-
-    @Override
-    public void closeDestinationDrawer() {
-        view.getDestinationDrawer().hide();
-
-    }
-
-    @Override
-    public void closeClaimRouteDrawer() {
-        view.getClaimRouteDrawer().hide();
-    }
-
-    @Override
-    public void closeDrawTrainDrawer() {
-        view.getTrainCardDrawer().hide();
-    }
-
-    @Override
+	
+	@Override
+	public BMDrawer getOpenDrawer() {
+		if(view.getDestinationDrawer().isOpen())
+			return view.getDestinationDrawer();
+		if(view.getClaimRouteDrawer().isOpen())
+			return view.getClaimRouteDrawer();
+		if(view.getTrainCardDrawer().isOpen())
+			return view.getTrainCardDrawer();
+		return null;
+	}
+	
+	@Override
     public void setState(IState state) {
         System.out.println("Presenter: setState");
         if (this.state != null) {
             this.state.exit(this);
         }
         System.out.println("Changing State: " + state.getClass().getName());
-        this.displayMessage_short("Changing State: " + state.getClass().getSimpleName());
+        //this.displayMessage_short("Changing State: " + state.getClass().getSimpleName());
         this.state = state;
         this.state.enter(this);
     }
@@ -528,21 +434,6 @@ public class BoardmapPresenter
 
     @Override
     public void updateDestinationDrawer() {
-
-    }
-
-    @Override
-    public void tryOpenDestinationDrawer() {
-        state.openDestinationDraw(this);
-    }
-
-    @Override
-    public void tryOpenDrawTrainDrawer() {
-        state.openTrainDraw(this);
-    }
-
-    @Override
-    public void tryOpenClaimRouteDrawer() {
-        state.openClaimRoute(this);
+        view.getDestinationDrawer().updateDestinations();
     }
 }

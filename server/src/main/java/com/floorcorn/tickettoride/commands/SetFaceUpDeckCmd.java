@@ -20,8 +20,9 @@ public class SetFaceUpDeckCmd extends SetFaceUpDeckCmdData {
 	}
 
 	@Override
-	public void execute(Game game) {
+	public boolean execute(Game game) {
 		game.getBoard().replaceFaceUpCard();
 		this.faceUpDeck = game.getBoard().getFaceUpCards();
+		return true;
 	}
 }

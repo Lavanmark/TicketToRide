@@ -29,14 +29,15 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 	}
 
 	@Override
-	public void execute(Game game) {
+	public boolean execute(Game game) {
 		// Deal initial train cards
 		for(int i = 0; i < Game.INITIAL_TRAIN_CARDS; i++) {
 			for(Player p : players) {
 				try {
-					p.addTrainCard(game.getBoard().drawFromTrainCardDeck(), 1);
+					p.addTrainCard(game.getBoard().drawFromTrainCardDeck());
 				} catch(GameActionException e) {
 					e.printStackTrace();
+					return false;
 				}
 			}
 		}
@@ -48,6 +49,7 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 					p.addDestinationCard(game.getBoard().drawFromDestinationCardDeck());
 				} catch(GameActionException e) {
 					e.printStackTrace();
+					return false;
 				}
 			}
 		}
@@ -58,5 +60,6 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 				p.setTurn(false);
 		}
 		game.setPlayerList(players);
+		return true;
 	}
 }

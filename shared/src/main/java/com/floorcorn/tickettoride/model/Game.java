@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.log.Corn;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Created by Tyler on 2/2/2017.
@@ -212,51 +214,76 @@ public class Game {
 		return null;
 	}
 
-	public void addCard(Player player, TrainCard card) {
+	public boolean addCard(Player player, TrainCard card) {
 		if((player = getPlayer(player)) != null) {
-			player.addTrainCard(card, 1);
+			return player.addTrainCard(card);
 		}
+		return false;
 	}
 
-	public void addDestinationCardsToPlayer(Player player, List<DestinationCard> cards) {
+	public boolean addDestinationCardsToPlayer(Player player, List<DestinationCard> cards) {
 		if((player = getPlayer(player)) != null) {
 			for(DestinationCard card : cards)
-				player.addDestinationCard(card);
+				if(!player.addDestinationCard(card))
+					return false;
+			return true;
 		}
+		return false;
 	}
 
-	public void discardDestinationCards(Player player, List<DestinationCard> cards) {
+	public boolean discardDestinationCards(Player player, List<DestinationCard> cards) {
 		if((player = getPlayer(player)) != null) {
 			for(DestinationCard card : cards) {
 				if(player.removeDestinationCard(card))
-					board.discard(card);
+					if(!board.discard(card))
+						return false;
 			}
 			player.markAllNotDiscardable();
 		}
+		return true;
 	}
 
 	public List<Route> getRoutes() {
 		return board.getRoutes();
 	}
 
-	public void claimRoute(Route route, Player player) {
-		if((player = getPlayer(player)) == null)
-			return;
+	public boolean claimRoute(Route route, Player player) {
+		if((player = getPlayer(player)) == null) {
+			Corn.log(Level.SEVERE, "BAD PLAYER NO CLAIM");
+			return false;
+		}
 		for(Route r : getRoutes()) {
 			if(r.getRouteID() == route.getRouteID()) {
 				route = r;
 				break;
 			}
 		}
-		if(!route.canClaim(player))
-			return;
 
-		System.out.println("claiming route");
+		Corn.log("claiming route");
 		List<TrainCard> discard = route.claim(player);
+		if(discard.size() < 0) {
+			Corn.log(Level.SEVERE, "CANT CLAIM ROUTE");
+			return false;
+		}
 		for(TrainCard card : discard) {
 			board.discard(card);
 		}
 		board.updateRoute(route);
+		
+		Corn.log("claimed");
+		return true;
+	}
+	
+	public int calculateLongestRoute(Player player) {
+		if((player = getPlayer(player)) == null) {
+			return 0;
+		}
+		Corn.log("calc longest");
+		player.calcualteLongestRoute();
+		Corn.log("end calc longest");
+		if(player.getLongestRoute() > longestRoute)
+			longestRoute = player.getLongestRoute();
+		return player.getLongestRoute();
 	}
 	
 	public Player getNextPlayer() {
@@ -291,15 +318,13 @@ public class Game {
 	}
 
 	public void endGame() {
+		for(Player p : getPlayerLongestRoute())
+			p.addToScore(10); //TODO this will probably mess it up in the end... b/c of how command was implemented.
 		this.finished = true;
 	}
 
 	public Board getBoard() {
 		return board;
-	}
-
-	public void setBoard(Board board) {
-		this.board = board;
 	}
 
 	public List<Player> getPlayerLongestRoute(){ // returns 1..* players with the longest route. 10 points goes to all those who are tied for the longest route
@@ -309,14 +334,6 @@ public class Game {
 				playerLongestRoute.add(player);
 		}
 		return playerLongestRoute;
-	}
-
-	public void calculateLongestRoute(){ // gets the longest route from each player to determine the longest route in the entire game.
-		for(Player player : playerList){
-			if(player.getLongestRoute() > longestRoute)
-				longestRoute = player.getLongestRoute();
-				board.setLongestRoute(longestRoute); // sets the child
-		}
 	}
 
 	public int getLongestRoute(){ // just a simple getter

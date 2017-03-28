@@ -32,17 +32,19 @@ public class DrawDestinationCmd extends DrawDestinationCmdData{
     }
 
     @Override
-    public void execute(Game game) {
+    public boolean execute(Game game) {
         if(cardsDrawn != null && cardsDrawn.size() > 0)
-	        return;
+	        return false;
 	    cardsDrawn = new ArrayList<>();
 	    try {
 		    for(int i = 0; i < 3; i++)
 			    cardsDrawn.add(game.getBoard().drawFromDestinationCardDeck());
 	    } catch(GameActionException e) {
 		    e.printStackTrace();
+		    return false;
 	    }
 	    drawingPlayer = game.getPlayer(drawingPlayer);
 	    game.addDestinationCardsToPlayer(drawingPlayer, cardsDrawn);
+	    return true;
     }
 }

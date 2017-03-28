@@ -4,6 +4,7 @@ import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class GameOverCmd extends GameOverCmdData {
     public GameOverCmd(List<Player> playerList){
-        this.playerList = playerList;
+        this.playerList = new ArrayList<>(playerList);
     }
 
     @Override
@@ -21,8 +22,9 @@ public class GameOverCmd extends GameOverCmdData {
     }
 
     @Override
-    public void execute(Game game) {
+    public boolean execute(Game game) {
         game.endGame();
         game.setPlayerList(this.playerList); //TODO might not be necessary...
+        return true;
     }
 }
