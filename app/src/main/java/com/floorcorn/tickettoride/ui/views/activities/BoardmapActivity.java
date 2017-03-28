@@ -2,7 +2,11 @@ package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -32,6 +37,8 @@ import com.floorcorn.tickettoride.ui.views.drawers.HandDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.TrainCardDrawer;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,6 +78,24 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     private ClaimRouteDrawer claimRouteDrawer;
     private TrainCardDrawer trainCardDrawer;
     private DestinationDrawer destinationDrawer;
+
+    private static final Map<Enum, Integer> routeColors;
+    static {
+        /*
+    <color name="colorBlackPlayer">#6b6a67</color>
+    <color name="colorRedPlayer">#ff4f4f</color>
+    <color name="colorGreenPlayer">#</color>
+    <color name="colorYellowPlayer">#ccc10a</color>
+    <color name="colorBluePlayer">#4f8bea</color>
+         */
+        Map<Enum, Integer> aMap = new HashMap<Enum, Integer>();
+        aMap.put(PlayerColor.BLACK, 0x6b6a6700);
+        aMap.put(PlayerColor.BLUE, 0x4f8bea00);
+        aMap.put(PlayerColor.GREEN, 0x46d65000);
+        aMap.put(PlayerColor.RED, 0xff4f4f00);
+        aMap.put(PlayerColor.YELLOW, 0xccc10a00);
+        routeColors = Collections.unmodifiableMap(aMap);
+    }
 
 
     @Override
@@ -133,6 +158,29 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         if (presenter.gameFinished())
             showGameOver();
         //TODO we will want something to launch the game over when it happens in the game.
+
+
+        ImageView map = (ImageView)findViewById(R.id.mapImageView);
+
+        Resources r = getResources();
+        Drawable[] layers = new Drawable[2];
+        layers[0] = r.getDrawable(R.drawable.map);
+        layers[1] = r.getDrawable(R.drawable.rt__0088_solis_green);
+        layers[2] = r.getDrawable(R.drawable.rt__0000_isidis_elysium_blue);
+        layers[3] = r.getDrawable(R.drawable.rt__0002_cerberus_elysium);
+        layers[4] = r.getDrawable(R.drawable.rt__0004_elysium_utopia);
+        layers[5] = r.getDrawable(R.drawable.rt__0005_utopia_elysium);
+
+        layers[1].mutate().setColorFilter(routeColors.get(PlayerColor.BLUE), PorterDuff.Mode.MULTIPLY );
+        layers[2].mutate().setColorFilter(routeColors.get(PlayerColor.RED), PorterDuff.Mode.MULTIPLY);
+        layers[3].mutate().setColorFilter(routeColors.get(PlayerColor.GREEN), PorterDuff.Mode.MULTIPLY);
+        layers[4].mutate().setColorFilter(routeColors.get(PlayerColor.BLACK), PorterDuff.Mode.MULTIPLY);
+        layers[5].mutate().setColorFilter(routeColors.get(PlayerColor.YELLOW), PorterDuff.Mode.MULTIPLY);
+
+        LayerDrawable layerDrawable = new LayerDrawable(layers);
+        map.setImageDrawable(layerDrawable);
+
+
     }
 
     private void lockDrawersClosed() {

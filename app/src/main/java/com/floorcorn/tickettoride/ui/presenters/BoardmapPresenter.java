@@ -24,7 +24,10 @@ import com.floorcorn.tickettoride.ui.views.IView;
 import com.floorcorn.tickettoride.ui.views.drawers.BMDrawer;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -63,6 +66,7 @@ public class BoardmapPresenter
         this.game = UIFacade.getInstance().getCurrentGame();
         this.user = UIFacade.getInstance().getUser();
         setDestCardsToDiscard(new DestinationCard[3]);
+
         register();
     }
 
