@@ -28,7 +28,11 @@ public class ClaimRouteCmd extends ClaimRouteCmdData {
             game.updatePlayer(claimingPlayer);
             return game.getBoard().updateRoute(routeToClaim);
         } else {
-            return game.claimRoute(routeToClaim, claimingPlayer);
+            if(game.claimRoute(routeToClaim, claimingPlayer)) {
+                game.calculateLongestRoute(claimingPlayer);
+                return true;
+            }
         }
+        return false;
     }
 }
