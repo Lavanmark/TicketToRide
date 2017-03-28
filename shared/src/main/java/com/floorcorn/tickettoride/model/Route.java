@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.model;
 import com.floorcorn.tickettoride.log.Corn;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +44,7 @@ public class Route {
         return city2;
     }
 
-    public Boolean hasCity(City city){
+    public boolean hasCity(City city){
         return (city.equals(city1)||city.equals(city2));
     }
 
@@ -55,7 +56,7 @@ public class Route {
         return color;
     }
 
-    public Boolean isClaimed(){
+    public boolean isClaimed(){
         return claimed;
     }
 
@@ -129,7 +130,7 @@ public class Route {
 	    return toDiscard;
     }
 
-    public Boolean canClaim(Player p){
+    public boolean canClaim(Player p){
 	    if(claimed)
 		    return false;
 	    if(owner != Player.NO_PLAYER_ID)
@@ -190,6 +191,22 @@ public class Route {
 			r.claimed = true;
 		else if(r.isClaimed())
 			this.claimed = true;
+	}
+	
+	protected static Map<City, List<Route>> buildCityRouteMap(List<Route> routes) {
+		Map<City, List<Route>> map = new HashMap<>();
+		//Build Map
+		for(Route route : routes) {
+			//Add route to first city
+			if(!map.containsKey(route.getFirstCity()))
+				map.put(route.getFirstCity(),new ArrayList<Route>());
+			map.get(route.getFirstCity()).add(route);
+			//Add route to second city
+			if(!map.containsKey(route.getSecondCity()))
+				map.put(route.getSecondCity(),new ArrayList<Route>());
+			map.get(route.getSecondCity()).add(route);
+		}
+		return map;
 	}
 
 	protected void update(Route route) {

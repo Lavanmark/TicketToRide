@@ -199,21 +199,19 @@ public class Player {
 	public void claimRoute(Route route){
 		routesClaimed.add(route);
 		score += route.getValue();
+		checkDestinations();
+	}
+	
+	private void checkDestinations() {
+		for(DestinationCard dest : destinationCards) {
+			if(!dest.isComplete())
+				if(dest.checkCompletion(routesClaimed))
+					addToScore(dest.getValue());
+		}
 	}
 
 	public int calcualteLongestRoute(){
-		Map<City, List<Route>> map = new HashMap<>();
-		//Build Map
-		for(Route route : routesClaimed) {
-			//Add route to first city
-			if(!map.containsKey(route.getFirstCity()))
-				map.put(route.getFirstCity(),new ArrayList<Route>());
-			map.get(route.getFirstCity()).add(route);
-			//Add route to second city
-			if(!map.containsKey(route.getSecondCity()))
-				map.put(route.getSecondCity(),new ArrayList<Route>());
-			map.get(route.getSecondCity()).add(route);
-		}
+		Map<City, List<Route>> map = Route.buildCityRouteMap(routesClaimed);
 		int longestPathTemp = 0;
 		for(City city : map.keySet()) {
 			int cur = longest(map, city, 0);
@@ -243,7 +241,7 @@ public class Player {
 		return longestRoute;
 	}
 
-	public Boolean removeTrainCars(int amount){
+	public boolean removeTrainCars(int amount){
 		if(trainCarsLeft >= amount) {
 			trainCarsLeft -= amount;
 			return true;

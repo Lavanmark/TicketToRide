@@ -352,7 +352,7 @@ public class Board {
 	 * @post if number of face up wild cards > 2: returned true, else: returned false
 	 * @return
 	 */
-	public Boolean shouldResetFaceUp() {
+	public boolean shouldResetFaceUp() {
 		if(deckManager == null || deckManager.isTrainCardDeckEmpty())
 			return false;
 		if(deckManager.nothingButWild())
