@@ -4,6 +4,7 @@ import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.SerializerException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
@@ -37,17 +38,20 @@ public class GetGameHandler extends HandlerBase {
 
 			GameInfo gi = Serializer.getInstance().deserializeGameInfo(reqBody);
 
-			if(gi == null) {
-				httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);
-				return;
-			}
+			// Joseph commented this out because I think we want to return a Results(false...)
+//			if(gi == null) {
+//				httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);
+//				return;
+//			}
 
 			Results results;
 			try {
+				if (gi == null)
+					throw new SerializerException("Serializer returned null");
 				Game game = ServerFacade.getInstance().getGame(new User(token), gi.getGameID());
 				results = new Results(true, game);
 				Corn.log("Game: " + game.getGameID() + " returned to user.");
-			} catch(BadUserException e) {
+			} catch(BadUserException | SerializerException e) {
 				Corn.log(Level.SEVERE, e.getMessage());
 				results = new Results(false, e);
 			}

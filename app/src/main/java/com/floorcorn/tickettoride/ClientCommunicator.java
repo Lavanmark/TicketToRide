@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.SerializerException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.User;
 
@@ -132,7 +133,11 @@ public class ClientCommunicator {
 					InputStream respBody = http.getInputStream();
 					String respData = readString(respBody);
 					Corn.log("ClientCommunicator success");
-					return Serializer.getInstance().deserializeResults(respData);
+					Results r = Serializer.getInstance().deserializeResults(respData);
+					if (r == null) {
+						return new Results(false, new SerializerException("Serializer returned null in ClientCommunicator"));
+					}
+					return r;
 				} else {
 					Corn.log("ClientCommunicator bad stuff: " + http.getResponseCode());
 					Corn.log(http.getResponseMessage());
