@@ -28,8 +28,13 @@
         android:layout_width="wrap_content"
         android:layout_height="530dp"
         android:layout_below="@id/playerTokenHolder"
-        android:background="@drawable/map_crop"
         android:layout_centerHorizontal="true">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/mapImageView" />
+            <!--app:srcCompat="@drawable/map"-->
+
     </FrameLayout>
     
     <LinearLayout
