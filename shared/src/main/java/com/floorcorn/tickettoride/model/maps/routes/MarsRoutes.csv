@@ -7,7 +7,7 @@ Copernicus,Arsia,White,3
 Copernicus,Solis,Black,5
 Arsia,Solis,Orange,3
 Arsia,Olympus,Red,2
-Arsia ,Olympus,Green,2
+Arsia,Olympus,Green,2
 Arsia,Pavonis,Grey,1
 Arsia,Pavonis,Grey,1
 Olympus,Alba,Purple,2
@@ -19,7 +19,7 @@ Alba,Phoenix Lander,Yellow,2
 Alba,Ascraeus,Grey,2
 Alba,Ascraeus,Grey,2
 Alba,Barabashov,Grey,3
-Pheonix Lander,Acydalia,Red,7
+Phoenix Lander,Acydalia,Red,7
 Ascraeus,Pavonis,Grey,1
 Ascraeus,Pavonis,Grey,1
 Ascraeus,Viking 1,White,4
@@ -41,7 +41,7 @@ Holden,Argyre,Grey,1
 Argyre,Green,Grey,3
 Pathfinder,Cydonia,Black,2
 Pathfinder,Cassini,Orange,4
-Cydonia,Deuternilus,Blue,3
+Cydonia,Dueteronilus,Blue,3
 Green,Le Verrier,Grey,3
 Green,Le Verrier,Grey,3
 Opportunity Rover,Le Verrier,Grey,2
@@ -50,12 +50,12 @@ Opportunity Rover,Cassini,Green,2
 Le Verrier,Huygens,Blue,2
 Le Verrier,Hellas,White,3
 Cassini,Syrtis Major,Black,2
-Cassini,Deuternilus,Grey,1
-Cassini,Deuternilus,Grey,1
-Deuternilus,Vastitas Borealis,Grey,2
-Deuternilus,Vastitas Borealis,Grey,2
-Deuternilus,Utopia,Grey,4
-Deuternilus,Syrtis Major,White,3
+Cassini,Dueteronilus,Grey,1
+Cassini,Dueteronilus,Grey,1
+Dueteronilus,Vastitas Borealis,Grey,2
+Dueteronilus,Vastitas Borealis,Grey,2
+Dueteronilus,Utopia,Grey,4
+Dueteronilus,Syrtis Major,White,3
 Huygens,Hellas,Grey,2
 Huygens,Isidis,Orange,2
 Hellas,Isidis,Black,4
@@ -81,3 +81,10 @@ Elysium,Cerberus,Grey,1
 Elysium,Cerberus,Grey,1
 Cerberus,Spirit Rover,Black,2
 Spirit Rover,Kepler,Red,3
+Acydalia,Vastitas Borealis,Green,5
+Acydalia,Vastitas Borealis,Black,5
+Vastitas Borealis,Utopia,Purple,6
+Vastitas Borealis,Utopia,Orange,6
+Acydalia,Cydonia,Grey,2
+Huxley,Kepler,Yellow,2
+Holden,Le Verrier,Green,5
