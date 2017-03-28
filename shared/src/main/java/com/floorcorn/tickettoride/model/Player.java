@@ -4,6 +4,7 @@ import com.floorcorn.tickettoride.log.Corn;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -88,11 +89,15 @@ public class Player {
 		return false;
 	}
 
+	void addToScore(int amt) {
+		score += amt;
+	}
+	
 	public int getPlayerID() {
 		return playerID;
 	}
 
-	public void setPlayerID(int playerID) {
+	void setPlayerID(int playerID) {
 		this.playerID = playerID;
 	}
 
@@ -197,18 +202,41 @@ public class Player {
 	}
 
 	public int calcualteLongestRoute(){
-		//this is the calculation right here
-		//TODO calculate this and calculate on claim route
-
-		/*
-		for each city that the player is connected to
-			for each path the player own connected to that city
-				count the number of consecutive trains from that city
-				recurse at each city
-
-		sets longestRoute variable
-		 */
-		return 0;
+		Map<City, List<Route>> map = new HashMap<>();
+		//Build Map
+		for(Route route : routesClaimed) {
+			//Add route to first city
+			if(!map.containsKey(route.getFirstCity()))
+				map.put(route.getFirstCity(),new ArrayList<Route>());
+			map.get(route.getFirstCity()).add(route);
+			//Add route to second city
+			if(!map.containsKey(route.getSecondCity()))
+				map.put(route.getSecondCity(),new ArrayList<Route>());
+			map.get(route.getSecondCity()).add(route);
+		}
+		int longestPathTemp = 0;
+		for(City city : map.keySet()) {
+			int cur = longest(map, city, 0);
+			if(cur > longestPathTemp)
+				longestPathTemp = cur;
+		}
+		
+		longestRoute = longestPathTemp;
+		return longestRoute;
+	}
+	
+	
+	private int longest(Map<City, List<Route>> map, City city, int best) {
+		for(Route route : map.get(city)) {
+			if(route.visited)
+				continue;
+			route.visited = true;
+			int next = longest(map, city.equals(route.getFirstCity())? route.getSecondCity() : route.getFirstCity(), best + route.getLength());
+			route.visited = false;
+			if(next > best)
+				best = next;
+		}
+		return best;
 	}
 
 	public int getLongestRoute(){ // just a simple getter
@@ -279,7 +307,8 @@ public class Player {
 		sb.append("Score: ").append(score).append("\n");
 		sb.append("Train Cards: ").append(totalTrainCards).append("\n");
 		sb.append("Destination Cards: ").append(totalDestinationCards).append("\n");
-		sb.append("Train Cars: ").append(trainCarsLeft);
+		sb.append("Train Cars: ").append(trainCarsLeft).append("\n");
+		sb.append("Longest Path: ").append(longestRoute);
 
 		return sb.toString();
 	}

@@ -187,7 +187,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
                 public void onClick(View v) {
                     // TODO (future phases) might need to update on every player list because p is final
                     Snackbar snackbar = Snackbar.make(playerIcons, p.getCriticalPlayerInfo(), Snackbar.LENGTH_LONG);
-                    ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text)).setMaxLines(6);
+                    ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text)).setMaxLines(7);
                     snackbar.show();
                 }
             });
