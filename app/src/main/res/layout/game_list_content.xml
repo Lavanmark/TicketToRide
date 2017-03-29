@@ -36,7 +36,6 @@
         android:id="@+id/joinButton"
         android:layout_weight="1"
         android:textColor="@color/colorMarsDark"
-        android:backgroundTint="@color/colorMarsComplementary"
         tools:text="Join"/>
 
 </LinearLayout>
