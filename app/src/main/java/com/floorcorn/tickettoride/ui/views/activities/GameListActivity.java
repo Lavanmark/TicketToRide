@@ -330,13 +330,13 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 				holder.mJoinButton.setBackgroundResource(R.color.colorBluePlayer);
 			}
 
+			if (holder.mItem.isFinished()) {
+				holder.mJoinButton.setText(RESULTS_BUTTON_TEXT);
+			}
+
 			if (!holder.mJoinButton.isEnabled()) {
 				holder.mJoinButton.setText(CANT_JOIN_BUTTON_TEXT);
 				holder.mJoinButton.setBackgroundResource(R.color.colorRedPlayer);
-			}
-
-			if (UIFacade.getInstance().currentGameFinished()) {
-				holder.mJoinButton.setText(RESULTS_BUTTON_TEXT);
 			}
 
 			holder.mView.setOnClickListener(new View.OnClickListener() {
