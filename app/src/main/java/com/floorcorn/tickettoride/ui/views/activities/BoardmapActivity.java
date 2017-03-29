@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.model.DestinationCard;
-import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.Route;
 import com.floorcorn.tickettoride.model.TrainCardColor;
@@ -25,13 +24,11 @@ import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
-import com.floorcorn.tickettoride.ui.views.IView;
 import com.floorcorn.tickettoride.ui.views.drawers.ClaimRouteDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.DestinationDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.HandDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.TrainCardDrawer;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

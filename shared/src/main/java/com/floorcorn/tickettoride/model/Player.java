@@ -182,6 +182,7 @@ public class Player {
 	}
 
 	private void setDestinationCards(List<DestinationCard> destinationCards) {
+		System.err.println("SET DEST CHANGED");
 		this.destinationCards = new ArrayList<>(destinationCards);
 	}
 
@@ -206,8 +207,9 @@ public class Player {
 	}
 	
 	private void checkDestinations() {
+		System.err.println("DEST CHECKED");
 		for(DestinationCard dest : destinationCards) {
-			if(!dest.isComplete()) //TODO this is causing them not to be checked client side
+			if(!dest.isComplete())
 				if(dest.checkCompletion(routesClaimed))
 					addToScore(dest.getValue());
 		}
@@ -262,6 +264,7 @@ public class Player {
 		if(!destinationCards.add(card))
 			return false;
 		totalDestinationCards++;
+		System.err.println("ADDED DEST CARDS");
 		return true;
 	}
 
@@ -277,6 +280,7 @@ public class Player {
 	}
 
 	public boolean removeDestinationCard(DestinationCard card){
+		System.err.println("REMOVIN DEST CARDS");
 		if(destinationCards.remove(card)) {
 			totalDestinationCards--;
 			return true;
@@ -285,6 +289,7 @@ public class Player {
 	}
 
 	public void markAllNotDiscardable() {
+		System.err.println("MARK DESTS NOT DISCARD");
 		for(DestinationCard dc : destinationCards)
 			dc.setCanDiscard(false);
 	}
@@ -327,6 +332,11 @@ public class Player {
 		this.trainCards = new EnumMap<>(player.getTrainCards());
 		this.routesClaimed = new ArrayList<>(player.getRoutesClaimed());
 		this.longestRoute = player.getLongestRoute();
+		System.err.println("DEST UPDATED " + name);
+		for(DestinationCard dest : destinationCards)
+			System.out.println("UPDATE DEST WAS: " + dest.isComplete());
+		for(DestinationCard dest : player.getDestinationCards())
+			System.out.println("ORG DEST WAS: " + dest.isComplete());
 	}
 
 	@Override

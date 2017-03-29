@@ -31,7 +31,7 @@ public class DestinationCard {
     
     public boolean checkCompletion(List<Route> routes) {
         if(complete)
-            return complete;
+            return true;
         boolean firstFound = false;
         boolean secondFound = false;
         //check that routes contain both cities
@@ -46,7 +46,7 @@ public class DestinationCard {
 	
 	    Map<City, List<Route>> map = Route.buildCityRouteMap(routes);
 	    
-	    return depthFirst(map, city1);
+	    return (complete = depthFirst(map, city1));
     }
     
     private boolean depthFirst(Map<City, List<Route>> map, City at) {

@@ -319,8 +319,13 @@ public class BoardmapPresenter
 	public void openedCards() {
 		state.openTrainDraw(this);
 	}
-	
-	@Override
+    
+    @Override
+    public List<DestinationCard> getDestinationCards() {
+        return game.getPlayer(user.getUserID()).getDestinationCards();
+    }
+    
+    @Override
     public int[] getFaceupCardColors() throws GameActionException {
         if (!gameInProgress()) {
             throw new GameActionException("Game not Started");
