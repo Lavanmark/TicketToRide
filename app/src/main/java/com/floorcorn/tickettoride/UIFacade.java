@@ -266,6 +266,10 @@ public class UIFacade {
 		clientModelRoot.setCurrentUser(null);
 	}
 
+	public boolean currentGameFinished() {
+        return getCurrentGame().isFinished();
+    }
+
     // Observer things.
 
     /**

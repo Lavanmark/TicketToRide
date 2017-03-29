@@ -44,6 +44,8 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 
 	public static final String JOIN_BUTTON_TEXT = "Join";
 	public static final String RESUME_BUTTON_TEXT = "Resume";
+	public static final String CANT_JOIN_BUTTON_TEXT = "Can't join";
+	public static final String RESULTS_BUTTON_TEXT = "Results";
 
 	/**
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -329,7 +331,12 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 			}
 
 			if (!holder.mJoinButton.isEnabled()) {
+				holder.mJoinButton.setText(CANT_JOIN_BUTTON_TEXT);
 				holder.mJoinButton.setBackgroundResource(R.color.colorRedPlayer);
+			}
+
+			if (UIFacade.getInstance().currentGameFinished()) {
+				holder.mJoinButton.setText(RESULTS_BUTTON_TEXT);
 			}
 
 			holder.mView.setOnClickListener(new View.OnClickListener() {
