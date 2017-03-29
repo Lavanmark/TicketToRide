@@ -78,13 +78,13 @@ public class Route {
 			int colornum = pCards.get(color);
 		    if(colornum >= length) {
 			    for(int i = 0; i < length; i++) {
-				    System.out.println("remove");
+				    System.out.println("remove high");
 				    p.removeTrainCard(new TrainCard(color));
 				    toDiscard.add(new TrainCard(color));
 			    }
 		    } else {
 			    for(int i = 0; i < colornum; i++) {
-				    System.out.println("remove");
+				    System.out.println("remove mid");
 				    p.removeTrainCard(new TrainCard(color));
 				    toDiscard.add(new TrainCard(color));
 			    }
@@ -97,7 +97,7 @@ public class Route {
 		} else {
 		    //TODO optimize card removal
 		    int most = 0;
-		    TrainCardColor mostColor = TrainCardColor.WILD;
+		    TrainCardColor mostColor = null;
 		    int wild = 0;
 		    for(TrainCardColor tcc : pCards.keySet()) {
 			    if(tcc == TrainCardColor.WILD) {
@@ -111,12 +111,14 @@ public class Route {
 			    }
 		    }
 		    if(most + wild >= length) {
-			    for(int i = 0; i < most; i++) {
-				    System.out.println("remove");
-				    p.removeTrainCard(new TrainCard(mostColor));
-				    toDiscard.add(new TrainCard(mostColor));
+			    if(most > 0 && mostColor != null) {
+				    for(int i = 0; i < most; i++) {
+					    System.out.println("remove lower");
+					    p.removeTrainCard(new TrainCard(mostColor));
+					    toDiscard.add(new TrainCard(mostColor));
+				    }
 			    }
-			    for(int i = 0; i < wild - most; i++) {
+			    for(int i = 0; i < length - most; i++) {
 				    System.out.println("remove");
 				    p.removeTrainCard(new TrainCard(TrainCardColor.WILD));
 				    toDiscard.add(new TrainCard(TrainCardColor.WILD));
