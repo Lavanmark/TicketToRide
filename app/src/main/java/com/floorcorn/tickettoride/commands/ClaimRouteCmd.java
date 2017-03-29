@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.commands;
 
+import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.Route;
@@ -24,15 +25,7 @@ public class ClaimRouteCmd extends ClaimRouteCmdData {
 
     @Override
     public boolean execute(Game game) {
-        if(claimingPlayer.isCensoredPlayer()) {
-            game.updatePlayer(claimingPlayer);
-            return game.getBoard().updateRoute(routeToClaim);
-        } else {
-            if(game.claimRoute(routeToClaim, claimingPlayer)) {
-                game.calculateLongestRoute(claimingPlayer);
-                return true;
-            }
-        }
-        return false;
+        game.updatePlayer(claimingPlayer);
+        return game.getBoard().updateRoute(routeToClaim);
     }
 }
