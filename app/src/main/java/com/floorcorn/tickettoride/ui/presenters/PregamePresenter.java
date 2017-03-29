@@ -82,7 +82,7 @@ public class PregamePresenter implements IPresenter, Observer {
     }
 
 	public boolean canCancel() {
-		return game.getPlayer(user).isConductor();
+		return game.getPlayer(user.getUserID()).isConductor();
 	}
 
     /**

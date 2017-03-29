@@ -47,6 +47,7 @@ public class Player {
 		this.trainCarsLeft = player.getTrainCarsLeft();
 		this.totalTrainCards = player.getTotalTrainCards();
 		this.totalDestinationCards = player.getTotalDestinationCards();
+		this.longestRoute = player.getLongestRoute();
 		this.destinationCards = new ArrayList<>(player.getDestinationCards());
 		this.trainCards = new EnumMap<>(player.getTrainCards());
 		this.routesClaimed = new ArrayList<>(player.getRoutesClaimed());
@@ -63,6 +64,7 @@ public class Player {
 		this.trainCarsLeft = Game.INITIAL_TRAIN_CARS;
 		this.totalTrainCards = 0;
 		this.totalDestinationCards = 0;
+		this.longestRoute = 0;
 		this.destinationCards = new ArrayList<>();
 		this.trainCards = new EnumMap<>(TrainCardColor.class);
 		this.routesClaimed = new ArrayList<>();
@@ -180,6 +182,7 @@ public class Player {
 	}
 
 	private void setDestinationCards(List<DestinationCard> destinationCards) {
+		System.err.println("SET DEST CHANGED");
 		this.destinationCards = new ArrayList<>(destinationCards);
 	}
 
@@ -199,21 +202,21 @@ public class Player {
 	public void claimRoute(Route route){
 		routesClaimed.add(route);
 		score += route.getValue();
+		System.out.println("checking destinations.");
+		checkDestinations();
+	}
+	
+	private void checkDestinations() {
+		System.err.println("DEST CHECKED");
+		for(DestinationCard dest : destinationCards) {
+			if(!dest.isComplete())
+				if(dest.checkCompletion(routesClaimed))
+					addToScore(dest.getValue());
+		}
 	}
 
 	public int calcualteLongestRoute(){
-		Map<City, List<Route>> map = new HashMap<>();
-		//Build Map
-		for(Route route : routesClaimed) {
-			//Add route to first city
-			if(!map.containsKey(route.getFirstCity()))
-				map.put(route.getFirstCity(),new ArrayList<Route>());
-			map.get(route.getFirstCity()).add(route);
-			//Add route to second city
-			if(!map.containsKey(route.getSecondCity()))
-				map.put(route.getSecondCity(),new ArrayList<Route>());
-			map.get(route.getSecondCity()).add(route);
-		}
+		Map<City, List<Route>> map = Route.buildCityRouteMap(routesClaimed);
 		int longestPathTemp = 0;
 		for(City city : map.keySet()) {
 			int cur = longest(map, city, 0);
@@ -227,11 +230,12 @@ public class Player {
 	
 	
 	private int longest(Map<City, List<Route>> map, City city, int best) {
+		int here = best;
 		for(Route route : map.get(city)) {
 			if(route.visited)
 				continue;
 			route.visited = true;
-			int next = longest(map, city.equals(route.getFirstCity())? route.getSecondCity() : route.getFirstCity(), best + route.getLength());
+			int next = longest(map, city.equals(route.getFirstCity())? route.getSecondCity() : route.getFirstCity(), here + route.getLength());
 			route.visited = false;
 			if(next > best)
 				best = next;
@@ -243,7 +247,7 @@ public class Player {
 		return longestRoute;
 	}
 
-	public Boolean removeTrainCars(int amount){
+	public boolean removeTrainCars(int amount){
 		if(trainCarsLeft >= amount) {
 			trainCarsLeft -= amount;
 			return true;
@@ -260,6 +264,7 @@ public class Player {
 		if(!destinationCards.add(card))
 			return false;
 		totalDestinationCards++;
+		System.err.println("ADDED DEST CARDS");
 		return true;
 	}
 
@@ -275,6 +280,7 @@ public class Player {
 	}
 
 	public boolean removeDestinationCard(DestinationCard card){
+		System.err.println("REMOVIN DEST CARDS");
 		if(destinationCards.remove(card)) {
 			totalDestinationCards--;
 			return true;
@@ -283,16 +289,19 @@ public class Player {
 	}
 
 	public void markAllNotDiscardable() {
+		System.err.println("MARK DESTS NOT DISCARD");
 		for(DestinationCard dc : destinationCards)
 			dc.setCanDiscard(false);
 	}
 
 	public boolean removeTrainCard(TrainCard card){
+		System.out.println("card color " +card.getColor().toString());
 		if(!trainCards.containsKey(card.getColor()))
 			return false;
 		if(trainCards.get(card.getColor()) > 0) {
 			trainCards.put(card.getColor(), trainCards.get(card.getColor()) - 1);
 			totalTrainCards--;
+			System.out.println("removed card " + card.getColor().toString());
 			return true;
 		} else {
 			Corn.log("Player is out of cards!");
@@ -322,6 +331,12 @@ public class Player {
 		this.destinationCards = new ArrayList<>(player.getDestinationCards());
 		this.trainCards = new EnumMap<>(player.getTrainCards());
 		this.routesClaimed = new ArrayList<>(player.getRoutesClaimed());
+		this.longestRoute = player.getLongestRoute();
+		System.err.println("DEST UPDATED " + name);
+		for(DestinationCard dest : destinationCards)
+			System.out.println("UPDATE DEST WAS: " + dest.isComplete());
+		for(DestinationCard dest : player.getDestinationCards())
+			System.out.println("ORG DEST WAS: " + dest.isComplete());
 	}
 
 	@Override

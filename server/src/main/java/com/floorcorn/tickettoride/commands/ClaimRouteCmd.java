@@ -30,10 +30,10 @@ public class ClaimRouteCmd extends ClaimRouteCmdData {
 
     @Override
     public boolean execute(Game game) {
-        claimingPlayer = game.getPlayer(claimingPlayer);
         if(game.claimRoute(routeToClaim, claimingPlayer)) {
             routeToClaim = game.getBoard().getRoute(routeToClaim.getRouteID());
             game.calculateLongestRoute(claimingPlayer);
+            claimingPlayer = new Player(game.getPlayer(claimingPlayer.getUserID()));
             return true;
         }
         return false;
