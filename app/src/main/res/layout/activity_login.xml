@@ -235,7 +235,7 @@
                             android:hint="@string/ip_address"
                             android:imeActionId="@+id/login"
                             android:imeOptions="actionUnspecified"
-                            android:inputType="textPassword"
+                            android:inputType="text"
                             android:textColor="@color/colorMarsDark"
                             android:textColorHint="@color/colorMarsBright" />
                         android:maxLines="1" />
