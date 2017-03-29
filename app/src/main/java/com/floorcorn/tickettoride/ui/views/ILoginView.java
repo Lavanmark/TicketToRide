@@ -124,5 +124,8 @@ public interface ILoginView extends IView {
      */
     public void launchNextActivity();
 
+    public String getIP();
+
+    public String getPort();
 
 }

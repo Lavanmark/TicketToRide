@@ -11,24 +11,13 @@
     tools:showIn="@layout/activity_boardmap"
      >
 
-    <LinearLayout
-        android:id="@+id/playerTokenHolder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_centerHorizontal="true">
-
-    </LinearLayout>
-
-
-
     <FrameLayout
         android:id="@+id/mapFrame"
-        android:paddingTop="5dp"
         android:layout_width="wrap_content"
-        android:layout_height="530dp"
-        android:layout_below="@id/playerTokenHolder"
-        android:layout_centerHorizontal="true">
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom = "true"
+        android:layout_alignParentTop="true">
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -36,56 +25,67 @@
             <!--app:srcCompat="@drawable/map"-->
 
     </FrameLayout>
-    
+
+    <LinearLayout
+        android:id="@+id/playerTokenHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop = "true">
+
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/mapFrame"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom = "true">
+
         <Button
+            android:id="@+id/open_card_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/button_selector_dark"
+            android:padding="5dp"
             android:text="Draw Card"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_selector_dark"
-            android:textColor="@android:color/white"
-            android:id="@+id/open_card_button" />
+            android:textColor="@android:color/white" />
 
         <Button
+            android:id="@+id/open_route_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/button_selector_dark"
+            android:padding="5dp"
             android:text="Place Route"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_selector_dark"
-            android:textColor="@android:color/white"
-            android:id="@+id/open_route_button" />
+            android:textColor="@android:color/white" />
 
         <Button
+            android:id="@+id/open_dest_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/button_selector_dark"
+            android:padding="5dp"
             android:text="Destination Drawer"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_selector_dark"
-            android:textColor="@android:color/white"
-            android:id="@+id/open_dest_button" />
+            android:textColor="@android:color/white" />
 
         <Button
-            android:text="Open Hand"
-            android:layout_margin="5dp"
-            android:padding="5dp"
+            android:id="@+id/open_hand_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:background="@drawable/button_selector_dark"
-            android:textColor="@android:color/white"
-            android:id="@+id/open_hand_button" />
+            android:padding="5dp"
+            android:text="Open Hand"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 
 
-    
+
 
 
 

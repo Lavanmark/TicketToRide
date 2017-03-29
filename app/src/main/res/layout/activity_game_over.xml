@@ -1,56 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.floorcorn.tickettoride.ui.views.activities.GameOverActivity"
-    android:fitsSystemWindows="true">
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.floorcorn.tickettoride.ui.views.activities.GameOverActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:text="PLAYER_NAME Won!"
+        <ImageView
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/i_colonized_mars_1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/winnerTextField"/>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:text="Player:"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:text="Score:"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-
-        </LinearLayout>
-
-        <LinearLayout
+            android:background="@drawable/border"
+            android:layout_gravity="center"
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:id="@+id/gameOverPlayerList">
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/winnerTextField"
+                style="@style/LoginTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PLAYER_NAME Won!"
+                android:background="@android:color/transparent"
+                android:padding="2dp"
+                android:gravity="center_horizontal"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@android:color/transparent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Player:"
+                    android:background="@android:color/transparent"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Score:"
+                    android:background="@android:color/transparent"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/gameOverPlayerList"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:orientation="vertical"
+                android:background="@android:color/transparent">
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/longestPathWinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PLAYER had the longest path"
+                android:background="@android:color/transparent"
+                android:gravity="center_horizontal"/>
+
+            <ImageView
+                android:layout_width="450dp"
+                android:layout_height="250dp"
+                android:background="@drawable/martian_celebration"
+                android:scaleType="centerCrop"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Congratulations, you colonized Mars."
+                android:background="@android:color/transparent"
+                android:gravity="center_horizontal"/>
+
+
 
         </LinearLayout>
+    </FrameLayout>
 
-        <TextView
-            android:text="PLAYER had the longest path"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/longestPathWinner"/>
 
-    </LinearLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+
+</LinearLayout>
