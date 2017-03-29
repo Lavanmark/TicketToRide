@@ -3,8 +3,10 @@ package com.floorcorn.tickettoride.ui.views.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -318,10 +320,20 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 				holder.mJoinButton.setEnabled(true);
 			}
 
-			if(holder.mItem.isPlayer(UIFacade.getInstance().getUser().getUserID()))
+			if (holder.mItem.isPlayer(UIFacade.getInstance().getUser().getUserID())) {
 				holder.mJoinButton.setText(RESUME_BUTTON_TEXT);
-			else
+				holder.mJoinButton.setBackgroundResource(R.color.colorGreenPlayer);
+//				holder.mJoinButton.setBackgroundColor(Color.parseColor("green"));
+			} else {
 				holder.mJoinButton.setText(JOIN_BUTTON_TEXT);
+				holder.mJoinButton.setBackgroundResource(R.color.colorBluePlayer);
+//				holder.mJoinButton.setBackgroundColor(Color.parseColor("blue"));
+			}
+
+			if (!holder.mJoinButton.isEnabled()) {
+				holder.mJoinButton.setBackgroundResource(R.color.colorRedPlayer);
+//				holder.mJoinButton.setBackgroundColor(Color.parseColor("red"));
+			}
 
 			holder.mView.setOnClickListener(new View.OnClickListener() {
 				@Override
