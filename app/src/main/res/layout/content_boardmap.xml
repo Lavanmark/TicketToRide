@@ -69,7 +69,7 @@
             android:layout_margin="5dp"
             android:background="@drawable/button_selector_dark"
             android:padding="5dp"
-            android:text="Destination Drawer"
+            android:text="Draw Destinations"
             android:textColor="@android:color/white" />
 
         <Button
