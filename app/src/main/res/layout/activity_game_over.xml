@@ -81,10 +81,19 @@
                 android:scaleType="centerCrop"
                 android:gravity="center_horizontal"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Congratulations, you colonized Mars."
+                android:background="@android:color/transparent"
+                android:gravity="center_horizontal"/>
+
 
 
         </LinearLayout>
     </FrameLayout>
+
+
 
 
 </LinearLayout>
