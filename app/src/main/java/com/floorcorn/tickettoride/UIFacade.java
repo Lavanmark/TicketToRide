@@ -63,6 +63,7 @@ public class UIFacade {
     }
 
     public void setServer(String host, String port){
+        System.out.println("setting Server" + host +":"+ port);
         serverProxy.setPort(port);
         serverProxy.setHost(host);
     }
