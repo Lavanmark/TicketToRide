@@ -82,6 +82,10 @@
     <string name="train_count_label">My Trains</string>
     <string name="card_count_label">My Cards</string>
     <string name="destination_count_label">My Destinations</string>
+    <string name="portNumber">Port Number</string>
+    <string name="ip_address">Host Address</string>
+    <string name="ip_instructions">By default we will use http://10.0.2.2:8080 to host your game, which will only run on a local emulator and server. If you are registering for the first time, and not running locally enter all the information below:</string>
+    <string name="game_over_header">Game Over!</string>
 
 
 </resources>

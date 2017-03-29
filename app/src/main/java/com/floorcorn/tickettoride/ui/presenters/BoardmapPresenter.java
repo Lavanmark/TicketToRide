@@ -24,7 +24,10 @@ import com.floorcorn.tickettoride.ui.views.IView;
 import com.floorcorn.tickettoride.ui.views.drawers.BMDrawer;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -63,6 +66,7 @@ public class BoardmapPresenter
         this.game = UIFacade.getInstance().getCurrentGame();
         this.user = UIFacade.getInstance().getUser();
         setDestCardsToDiscard(new DestinationCard[3]);
+
         register();
     }
 
@@ -116,6 +120,7 @@ public class BoardmapPresenter
                 view.setClaimRoutesList(game.getRoutes());
                 if (destCardsToDiscard == null || destCardsToDiscard[0] == null)
                     view.setDestinationCardChoices();
+                view.updateMap();
                 //initialize state to PreTurn state for all players
                 if (state == null)
                     setState(new PreTurnState());
@@ -293,6 +298,7 @@ public class BoardmapPresenter
 	@Override
 	public void closedRoutes() {
 		state.closeClaimRoute(this);
+
 	}
 	
 	@Override

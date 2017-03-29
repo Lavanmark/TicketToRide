@@ -34,6 +34,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 	private EditText mNewUsernameView;
 	private EditText mNewPasswordView;
 	private EditText mConfirmPasswordView;
+    private EditText mIPAddressView;
+    private EditText mPortView;
 
     private Button mSignInButton;
     private Button mRegisterButton;
@@ -59,6 +61,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 		mNewUsernameView = (EditText) findViewById(R.id.register_username);
         mNewPasswordView = (EditText) findViewById(R.id.register_password);
         mConfirmPasswordView = (EditText) findViewById(R.id.register_password_confirm);
+        mIPAddressView = (EditText) findViewById(R.id.ip_address);
+        mPortView = (EditText) findViewById(R.id.port_number);
 
         passwordEntered = false;
         usernameEntered = false;
@@ -316,6 +320,16 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 	    //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	    presenter.unregister();
         startActivity(i);
+    }
+
+    @Override
+    public String getIP() {
+        return this.mIPAddressView.getText().toString();
+    }
+
+    @Override
+    public String getPort() {
+        return this.mPortView.getText().toString();
     }
 
     @Override

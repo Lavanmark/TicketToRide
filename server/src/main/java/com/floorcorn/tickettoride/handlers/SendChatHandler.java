@@ -6,6 +6,7 @@ import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.SerializerException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.User;
 import com.sun.net.httpserver.HttpExchange;
@@ -40,10 +41,12 @@ public class SendChatHandler extends HandlerBase {
 
 			Results results;
 			try {
+				if (message == null)
+					throw new SerializerException("Serializer returned null");
 				GameChatLog chats = ServerFacade.getInstance().sendChatMessage(new User(token), message);
 				results = new Results(true, chats);
 				Corn.log("Message added to log, returning chat log object.");
-			} catch(BadUserException e) {
+			} catch(BadUserException | SerializerException e) {
 				Corn.log(Level.SEVERE, e.getStackTrace());
 				results = new Results(false, e);
 			}

@@ -20,9 +20,10 @@ public class Route {
     private boolean claimed;
     private int owner;
 	boolean visited = false;
+	private String resource;
 
     private Route(){}
-    public Route(int rID, City c1, City c2, int l, TrainCardColor tcc){
+    public Route(int rID, City c1, City c2, int l, TrainCardColor tcc, String resource){
         routeID = rID;
         city1 = c1;
         city2 = c2;
@@ -30,6 +31,7 @@ public class Route {
         color = tcc;
         claimed = false;
         owner = Player.NO_PLAYER_ID;
+		this.resource = resource;
     }
 
     public int getRouteID(){
@@ -63,6 +65,8 @@ public class Route {
     public int getOwner(){
         return owner;
     }
+
+    public String getResource() { return resource;}
 
     public List<TrainCard> claim(Player p){
 	    //TODO UPDATE SO THIS CHECKS REMOVE TRAIN CARD BOOL

@@ -46,8 +46,8 @@ public class Serializer {
 			return mapper.writeValueAsString(o);
 		} catch(JsonProcessingException e) {
 			Corn.log(Level.SEVERE, e.getMessage());
+			return "";
 		}
-		return null;
 	}
 
 	/**

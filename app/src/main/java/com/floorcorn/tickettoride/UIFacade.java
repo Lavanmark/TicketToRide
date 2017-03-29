@@ -50,11 +50,9 @@ public class UIFacade {
         clientModelRoot = new ClientModel();
 	    commandManager = new CommandManager(clientModelRoot);
         serverProxy = new ServerProxy();
-        serverProxy.setPort("8080");
         // Special alias to your host loopback interface (i.e., 127.0.0.1 on your development
         // machine). Don't need to change if hooking to server on your computer.
-        serverProxy.setHost("10.0.2.2");
-
+        setServer("10.0.2.2", "8080");
         poller = new Poller(serverProxy, commandManager);
     }
     private static UIFacade instance = null;
@@ -64,6 +62,10 @@ public class UIFacade {
         return instance;
     }
 
+    public void setServer(String host, String port){
+        serverProxy.setPort(port);
+        serverProxy.setHost(host);
+    }
     // Login and register related.
 
     /**
