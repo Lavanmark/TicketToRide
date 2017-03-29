@@ -123,7 +123,7 @@ public class Game {
 	public Player addPlayer(User user, PlayerColor color) throws GameActionException {
 		if(user == null) throw new GameActionException("Cannot add null User to game!");
 		if(color == null) throw new GameActionException("Color was not selected!");
-		Player np = getPlayer(user);
+		Player np = getPlayer(user.getUserID());
 		if(np == null && !hasStarted()) {
 			np = new Player(user.getUserID(), user.getFullName(), gameID, color);
 			np.setPlayerID(playerList.size());
@@ -139,7 +139,7 @@ public class Game {
 	 * @throws GameActionException
 	 */
 	public boolean removePlayer(User user) throws GameActionException {
-		Player player = getPlayer(user);
+		Player player = getPlayer(user.getUserID());
 		if(player != null) {
 			if(!hasStarted()) {
 				if(player.isConductor()) {
@@ -194,35 +194,27 @@ public class Game {
 
 	/**
 	 * get the player object for the specified user
-	 * @param user contains at least user.id
+	 * @param userID userID of player you seek
 	 * @return Player object of the user, null if user not in game
 	 */
-	public Player getPlayer(User user) {
-		if(user == null) return null; // Don't throw BadUserException here.
+	public Player getPlayer(int userID) {
+		if(userID == User.NO_USER_ID) return null; // Don't throw BadUserException here.
 		for(Player p : playerList) {
-			if(p.getUserID() == user.getUserID())
-				return p;
-		}
-		return null;
-	}
-	public Player getPlayer(Player player) {
-		if(player == null) return null; // Don't throw BadUserException here.
-		for(Player p : playerList) {
-			if(p.getUserID() == player.getUserID())
+			if(p.getUserID() == userID)
 				return p;
 		}
 		return null;
 	}
 
 	public boolean addCard(Player player, TrainCard card) {
-		if((player = getPlayer(player)) != null) {
+		if((player = getPlayer(player.getUserID())) != null) {
 			return player.addTrainCard(card);
 		}
 		return false;
 	}
 
 	public boolean addDestinationCardsToPlayer(Player player, List<DestinationCard> cards) {
-		if((player = getPlayer(player)) != null) {
+		if((player = getPlayer(player.getUserID())) != null) {
 			for(DestinationCard card : cards)
 				if(!player.addDestinationCard(card))
 					return false;
@@ -232,15 +224,17 @@ public class Game {
 	}
 
 	public boolean discardDestinationCards(Player player, List<DestinationCard> cards) {
-		if((player = getPlayer(player)) != null) {
+		boolean couldNotDiscard = false;
+		if((player = getPlayer(player.getUserID())) != null) {
 			for(DestinationCard card : cards) {
 				if(player.removeDestinationCard(card))
 					if(!board.discard(card))
-						return false;
+						couldNotDiscard = true;
 			}
 			player.markAllNotDiscardable();
+			return !couldNotDiscard;
 		}
-		return true;
+		return false;
 	}
 
 	public List<Route> getRoutes() {
@@ -248,18 +242,20 @@ public class Game {
 	}
 
 	public boolean claimRoute(Route route, Player player) {
-		if((player = getPlayer(player)) == null) {
+		if((player = getPlayer(player.getUserID())) == null) {
 			Corn.log(Level.SEVERE, "BAD PLAYER NO CLAIM");
 			return false;
 		}
 		for(Route r : getRoutes()) {
 			if(r.getRouteID() == route.getRouteID()) {
 				route = r;
+				System.out.println("found route");
 				break;
 			}
 		}
 
-		Corn.log("claiming route");
+		System.out.println("claiming route");
+		System.out.println("Card total: " + player.getTotalTrainCards());
 		List<TrainCard> discard = route.claim(player);
 		if(discard.size() < 0) {
 			Corn.log(Level.SEVERE, "CANT CLAIM ROUTE");
@@ -271,11 +267,12 @@ public class Game {
 		board.updateRoute(route);
 		
 		Corn.log("claimed");
+		System.out.println("Card total: " + player.getTotalTrainCards());
 		return true;
 	}
 	
 	public int calculateLongestRoute(Player player) {
-		if((player = getPlayer(player)) == null) {
+		if((player = getPlayer(player.getUserID())) == null) {
 			return 0;
 		}
 		Corn.log("calc longest");
@@ -378,7 +375,7 @@ public class Game {
 	}
 
 	public void updatePlayer(Player player) {
-		Player listPlayer = getPlayer(player);
+		Player listPlayer = getPlayer(player.getUserID());
 		if(listPlayer == null)
 			return;
 		listPlayer.update(player);

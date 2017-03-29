@@ -47,6 +47,7 @@ public class Player {
 		this.trainCarsLeft = player.getTrainCarsLeft();
 		this.totalTrainCards = player.getTotalTrainCards();
 		this.totalDestinationCards = player.getTotalDestinationCards();
+		this.longestRoute = player.getLongestRoute();
 		this.destinationCards = new ArrayList<>(player.getDestinationCards());
 		this.trainCards = new EnumMap<>(player.getTrainCards());
 		this.routesClaimed = new ArrayList<>(player.getRoutesClaimed());
@@ -63,6 +64,7 @@ public class Player {
 		this.trainCarsLeft = Game.INITIAL_TRAIN_CARS;
 		this.totalTrainCards = 0;
 		this.totalDestinationCards = 0;
+		this.longestRoute = 0;
 		this.destinationCards = new ArrayList<>();
 		this.trainCards = new EnumMap<>(TrainCardColor.class);
 		this.routesClaimed = new ArrayList<>();
@@ -199,12 +201,13 @@ public class Player {
 	public void claimRoute(Route route){
 		routesClaimed.add(route);
 		score += route.getValue();
+		System.out.println("checking destinations.");
 		checkDestinations();
 	}
 	
 	private void checkDestinations() {
 		for(DestinationCard dest : destinationCards) {
-			if(!dest.isComplete())
+			if(!dest.isComplete()) //TODO this is causing them not to be checked client side
 				if(dest.checkCompletion(routesClaimed))
 					addToScore(dest.getValue());
 		}
@@ -225,11 +228,12 @@ public class Player {
 	
 	
 	private int longest(Map<City, List<Route>> map, City city, int best) {
+		int here = best;
 		for(Route route : map.get(city)) {
 			if(route.visited)
 				continue;
 			route.visited = true;
-			int next = longest(map, city.equals(route.getFirstCity())? route.getSecondCity() : route.getFirstCity(), best + route.getLength());
+			int next = longest(map, city.equals(route.getFirstCity())? route.getSecondCity() : route.getFirstCity(), here + route.getLength());
 			route.visited = false;
 			if(next > best)
 				best = next;
@@ -286,11 +290,13 @@ public class Player {
 	}
 
 	public boolean removeTrainCard(TrainCard card){
+		System.out.println("card color " +card.getColor().toString());
 		if(!trainCards.containsKey(card.getColor()))
 			return false;
 		if(trainCards.get(card.getColor()) > 0) {
 			trainCards.put(card.getColor(), trainCards.get(card.getColor()) - 1);
 			totalTrainCards--;
+			System.out.println("removed card " + card.getColor().toString());
 			return true;
 		} else {
 			Corn.log("Player is out of cards!");
@@ -320,6 +326,7 @@ public class Player {
 		this.destinationCards = new ArrayList<>(player.getDestinationCards());
 		this.trainCards = new EnumMap<>(player.getTrainCards());
 		this.routesClaimed = new ArrayList<>(player.getRoutesClaimed());
+		this.longestRoute = player.getLongestRoute();
 	}
 
 	@Override

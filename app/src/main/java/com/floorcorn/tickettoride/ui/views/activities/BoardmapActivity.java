@@ -132,7 +132,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
             launchPregame();
         if (presenter.gameFinished())
             showGameOver();
-        //TODO we will want something to launch the game over when it happens in the game.
     }
 
     private void lockDrawersClosed() {
@@ -172,21 +171,21 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
      * @post if !isTurn(playerOf(aPlayerIcon)): player icon's text color == white
      */
     private void setupPlayerIcons() {
-        ArrayList<Player> players = presenter.getPlayers();
-        for (final Player p : players) {
-            Button button = (Button) playerIcons.getChildAt(p.getPlayerID());
-            if (p.isTurn())
+        for (int i = 0; i < presenter.getPlayers().size(); i++) {
+            final int pos = i;
+            Button button = (Button) playerIcons.getChildAt(presenter.getPlayers().get(i).getPlayerID());
+            if (presenter.getPlayers().get(i).isTurn())
                 button.setTextColor(Color.BLACK);
             else
                 button.setTextColor(Color.WHITE);
-            button.setText(p.getName());
-            button.setBackgroundColor(getPlayerColor(p.getColor()));
+            button.setText(presenter.getPlayers().get(i).getName());
+            button.setBackgroundColor(getPlayerColor(presenter.getPlayers().get(i).getColor()));
             // TODO (future phases) check if the player is self. If so it should open the drawer.
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // TODO (future phases) might need to update on every player list because p is final
-                    Snackbar snackbar = Snackbar.make(playerIcons, p.getCriticalPlayerInfo(), Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(playerIcons, presenter.getPlayers().get(pos).getCriticalPlayerInfo(), Snackbar.LENGTH_LONG);
                     ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text)).setMaxLines(7);
                     snackbar.show();
                 }

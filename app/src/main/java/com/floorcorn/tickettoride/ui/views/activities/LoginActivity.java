@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.presenters.LoginPresenter;
 import com.floorcorn.tickettoride.ui.views.ILoginView;
@@ -49,6 +50,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginView {
 		setContentView(R.layout.activity_login);
 		// Set up the login form.
 
+		//new Corn("AppLog.log");
+		
         mUserView = (EditText) findViewById(R.id.username);
         mPasswordView = (EditText) findViewById(R.id.password);
         mFirstNameView = (EditText) findViewById(R.id.register_name_first);

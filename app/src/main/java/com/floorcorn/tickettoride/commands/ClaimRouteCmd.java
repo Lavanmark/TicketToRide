@@ -24,15 +24,16 @@ public class ClaimRouteCmd extends ClaimRouteCmdData {
 
     @Override
     public boolean execute(Game game) {
-        if(claimingPlayer.isCensoredPlayer()) {
+        //if(claimingPlayer.isCensoredPlayer()) {
+            System.out.println("THEY WERE CENSORED " + claimingPlayer.getName());
             game.updatePlayer(claimingPlayer);
             return game.getBoard().updateRoute(routeToClaim);
-        } else {
-            if(game.claimRoute(routeToClaim, claimingPlayer)) {
-                game.calculateLongestRoute(claimingPlayer);
-                return true;
-            }
-        }
-        return false;
+//        } else {
+//            if(game.claimRoute(routeToClaim, claimingPlayer)) {
+//                game.calculateLongestRoute(claimingPlayer);
+//                return true;
+//            }
+//        }
+//        return false;
     }
 }

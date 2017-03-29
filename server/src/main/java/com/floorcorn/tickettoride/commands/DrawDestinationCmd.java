@@ -43,7 +43,7 @@ public class DrawDestinationCmd extends DrawDestinationCmdData{
 		    e.printStackTrace();
 		    return false;
 	    }
-	    drawingPlayer = game.getPlayer(drawingPlayer);
+	    drawingPlayer = game.getPlayer(drawingPlayer.getUserID());
 	    game.addDestinationCardsToPlayer(drawingPlayer, cardsDrawn);
 	    return true;
     }

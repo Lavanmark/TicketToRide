@@ -114,8 +114,7 @@ public class DestinationCard {
     
     @Override
     public String toString(){
-        String s = city1.getName() + " to " + city2.getName() +": " + value;
-        return s;
+        return city1.getName() + " to " + city2.getName() + ": " + value + (complete? " complete" : "");
     }
 
 
