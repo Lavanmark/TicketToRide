@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class InitializeGameCmd extends InitializeGameCmdData {
 
 	public InitializeGameCmd(ArrayList<Player> players) {
-		this.players = new ArrayList<>(players);
+		this.players = players;
 	}
 
 	@Override
@@ -27,9 +27,16 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 		cmd.setGameID(this.gameID);
 		return cmd;
 	}
+	private void copyPlayers() {
+		ArrayList<Player> copy = new ArrayList<>();
+		for(Player p : players)
+			copy.add(new Player(p));
+		this.players = copy;
+	}
 
 	@Override
 	public boolean execute(Game game) {
+		this.players = game.getPlayerList();
 		// Deal initial train cards
 		for(int i = 0; i < Game.INITIAL_TRAIN_CARDS; i++) {
 			for(Player p : players) {
@@ -59,7 +66,7 @@ public class InitializeGameCmd extends InitializeGameCmdData {
 			else
 				p.setTurn(false);
 		}
-		game.setPlayerList(players);
+		copyPlayers();
 		return true;
 	}
 }

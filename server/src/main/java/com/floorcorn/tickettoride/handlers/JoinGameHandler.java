@@ -5,6 +5,7 @@ import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.exceptions.SerializerException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.PlayerInfo;
@@ -39,17 +40,20 @@ public class JoinGameHandler extends HandlerBase {
 
 			PlayerInfo player = Serializer.getInstance().deserializePlayerInfo(reqBody);
 
-			if(player == null) {
-				httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);
-				return;
-			}
+			// Joseph commented this out because I think we want to return a Results(false...)
+//			if(player == null) {
+//				httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);
+//				return;
+//			}
 
 			Results results;
 			try {
+				if (player == null)
+					throw new SerializerException("Serializer returned null");
 				GameInfo game = ServerFacade.getInstance().joinGame(new User(token), player.getGameID(), player.getColor());
 				results = new Results(true, game);
 				Corn.log("Player joined game: " + game.getGameID());
-			} catch(BadUserException | GameActionException e) {
+			} catch(BadUserException | GameActionException | SerializerException e) {
 				Corn.log(Level.SEVERE, e.getMessage());
 				results = new Results(false, e);
 			}

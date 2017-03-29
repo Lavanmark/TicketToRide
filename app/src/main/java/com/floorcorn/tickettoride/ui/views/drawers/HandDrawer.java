@@ -103,6 +103,7 @@ public class HandDrawer extends BMDrawer{
 	public void open() {
 		BM_DRAWER_LAYOUT.openDrawer(GravityCompat.END);
 		sendMessageBut.setEnabled(true);
+		displayDestinationCards(parentPresenter.getDestinationCards());
 	}
 	
 	public void hide() {
@@ -139,6 +140,7 @@ public class HandDrawer extends BMDrawer{
 	public void displayDestinationCards(List<DestinationCard> destinationCardList) {
 		destinationTicketHolder.removeAllViews();
 		for(DestinationCard destinationCard : destinationCardList) {
+			System.out.println("card complete: "+ destinationCard.isComplete());
 			TextView textView = new TextView(destinationTicketHolder.getContext());
 			String s = destinationCard.toString();
 			textView.setText(s);

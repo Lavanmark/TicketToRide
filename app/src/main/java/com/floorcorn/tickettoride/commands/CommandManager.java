@@ -36,8 +36,10 @@ public class CommandManager {
 			if(game.getLatestCommandID() > command.getCmdID())
 				continue;
 			System.out.println("doing command");
+			
+			if(!command.execute(game))
+				System.out.println("FAILED TO EXECUTE COMMAND");
 			game.addCommand(command);
-			command.execute(game);
 		}
 		model.notifyGameChanged();
 	}

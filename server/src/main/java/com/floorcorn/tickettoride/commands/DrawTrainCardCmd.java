@@ -38,7 +38,7 @@ public class DrawTrainCardCmd extends DrawTrainCardCmdData {
                 cardDrawn = game.getBoard().drawFromTrainCardDeck();
             else
                 cardDrawn = game.getBoard().drawFromFaceUp(cardPosition);
-            drawingPlayer = game.getPlayer(drawingPlayer);
+            drawingPlayer = game.getPlayer(drawingPlayer.getUserID());
             game.addCard(drawingPlayer, cardDrawn);
             return true;
         } catch(GameActionException e) {

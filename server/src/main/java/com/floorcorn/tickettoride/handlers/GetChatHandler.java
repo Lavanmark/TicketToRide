@@ -5,6 +5,7 @@ import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.SerializerException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.User;
@@ -40,10 +41,12 @@ public class GetChatHandler extends HandlerBase {
 
 			Results results;
 			try {
+				if (gameInfo == null)
+					throw new SerializerException("Serializer returned null");
 				GameChatLog chatLog = ServerFacade.getInstance().getChatLog(new User(token), gameInfo);
 				results = new Results(true, chatLog);
 				Corn.log("Returning chat log to client.");
-			} catch(BadUserException e) {
+			} catch(BadUserException | SerializerException e) {
 				Corn.log(Level.SEVERE, e.getMessage());
 				results = new Results(false, e);
 			}

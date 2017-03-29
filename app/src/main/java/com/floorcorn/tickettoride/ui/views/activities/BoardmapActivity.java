@@ -2,7 +2,11 @@ package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,13 +30,14 @@ import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.IPresenter;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
-import com.floorcorn.tickettoride.ui.views.IView;
 import com.floorcorn.tickettoride.ui.views.drawers.ClaimRouteDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.DestinationDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.HandDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.TrainCardDrawer;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,6 +77,24 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     private ClaimRouteDrawer claimRouteDrawer;
     private TrainCardDrawer trainCardDrawer;
     private DestinationDrawer destinationDrawer;
+
+    private static final Map<Enum, Integer> routeColors;
+    static {
+        /*
+    <color name="colorBlackPlayer">#6b6a67</color>
+    <color name="colorRedPlayer">#ff4f4f</color>
+    <color name="colorGreenPlayer">#</color>
+    <color name="colorYellowPlayer">#ccc10a</color>
+    <color name="colorBluePlayer">#4f8bea</color>
+         */
+        Map<Enum, Integer> aMap = new HashMap<Enum, Integer>();
+        aMap.put(PlayerColor.BLACK, 0xff6b6a67);
+        aMap.put(PlayerColor.BLUE, 0xff4f8bea);
+        aMap.put(PlayerColor.GREEN, 0xff46d650);
+        aMap.put(PlayerColor.RED, 0xffff4f4f);
+        aMap.put(PlayerColor.YELLOW, 0xffccc10a);
+        routeColors = Collections.unmodifiableMap(aMap);
+    }
 
 
     @Override
@@ -132,7 +156,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
             launchPregame();
         if (presenter.gameFinished())
             showGameOver();
-        //TODO we will want something to launch the game over when it happens in the game.
+        this.updateMap();
     }
 
     private void lockDrawersClosed() {
@@ -155,6 +179,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         super.onResume();
         if (checkStarted())
             presenter.startPollingCommands();
+
     }
 
     /**
@@ -172,21 +197,21 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
      * @post if !isTurn(playerOf(aPlayerIcon)): player icon's text color == white
      */
     private void setupPlayerIcons() {
-        ArrayList<Player> players = presenter.getPlayers();
-        for (final Player p : players) {
-            Button button = (Button) playerIcons.getChildAt(p.getPlayerID());
-            if (p.isTurn())
+        for (int i = 0; i < presenter.getPlayers().size(); i++) {
+            final int pos = i;
+            Button button = (Button) playerIcons.getChildAt(presenter.getPlayers().get(i).getPlayerID());
+            if (presenter.getPlayers().get(i).isTurn())
                 button.setTextColor(Color.BLACK);
             else
                 button.setTextColor(Color.WHITE);
-            button.setText(p.getName());
-            button.setBackgroundColor(getPlayerColor(p.getColor()));
+            button.setText(presenter.getPlayers().get(i).getName());
+            button.setBackgroundColor(getPlayerColor(presenter.getPlayers().get(i).getColor()));
             // TODO (future phases) check if the player is self. If so it should open the drawer.
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // TODO (future phases) might need to update on every player list because p is final
-                    Snackbar snackbar = Snackbar.make(playerIcons, p.getCriticalPlayerInfo(), Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(playerIcons, presenter.getPlayers().get(pos).getCriticalPlayerInfo(), Snackbar.LENGTH_LONG);
                     ((TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text)).setMaxLines(7);
                     snackbar.show();
                 }
@@ -347,6 +372,27 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     @Override
     public TrainCardDrawer getTrainCardDrawer() {
         return trainCardDrawer;
+    }
+
+    @Override
+    public void updateMap(){
+        ImageView map = (ImageView)findViewById(R.id.mapImageView);
+        Resources res = getResources();
+        List<Drawable> layers = new ArrayList<>();
+        layers.add(res.getDrawable(R.drawable.map));
+        for (Player p : presenter.getPlayers()){
+            for (Route rt : p.getRoutesClaimed()){
+                Drawable d = res.getDrawable(presenter.getResId(rt.getResource(), this));
+                d.mutate().mutate().setColorFilter(routeColors.get(p.getColor()), PorterDuff.Mode.MULTIPLY );
+                layers.add(d);
+            }
+        }
+
+        Drawable [] layerArray = layers.toArray(new Drawable[layers.size()]);
+        LayerDrawable layerDrawable = new LayerDrawable(layerArray);
+        map.setImageDrawable(layerDrawable);
+
+        System.out.println("route list size: "+presenter.getGame().getRoutes().size());
     }
     
 }

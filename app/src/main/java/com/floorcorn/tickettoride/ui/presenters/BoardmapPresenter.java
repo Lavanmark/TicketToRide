@@ -24,7 +24,10 @@ import com.floorcorn.tickettoride.ui.views.IView;
 import com.floorcorn.tickettoride.ui.views.drawers.BMDrawer;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -63,6 +66,7 @@ public class BoardmapPresenter
         this.game = UIFacade.getInstance().getCurrentGame();
         this.user = UIFacade.getInstance().getUser();
         setDestCardsToDiscard(new DestinationCard[3]);
+
         register();
     }
 
@@ -111,16 +115,17 @@ public class BoardmapPresenter
 		            return;
 	            }
                 view.setFaceUpTrainCards();
-                view.setPlayerTrainCardList(game.getPlayer(user).getTrainCards());
-                view.setPlayerDestinationCardList(game.getPlayer(user).getDestinationCards());
+                view.setPlayerTrainCardList(game.getPlayer(user.getUserID()).getTrainCards());
+                view.setPlayerDestinationCardList(game.getPlayer(user.getUserID()).getDestinationCards());
                 view.setClaimRoutesList(game.getRoutes());
                 if (destCardsToDiscard == null || destCardsToDiscard[0] == null)
                     view.setDestinationCardChoices();
+                view.updateMap();
                 //initialize state to PreTurn state for all players
                 if (state == null)
                     setState(new PreTurnState());
                 //if waiting for your turn, check if it is your turn
-                state.setTurn(this, game.getPlayer(user));
+                state.setTurn(this, game.getPlayer(user.getUserID()));
             }
         }
         /** if changed object is the GameChatLog update the chat room in the view **/
@@ -161,7 +166,7 @@ public class BoardmapPresenter
 
     @Override
     public int getTrainCars() {
-        return game.getPlayer(user).getTrainCarsLeft();
+        return game.getPlayer(user.getUserID()).getTrainCarsLeft();
     }
 
     @Override
@@ -179,7 +184,7 @@ public class BoardmapPresenter
         if (!gameInProgress()) {
             throw new Exception("Game not Started");
         }
-        destCardsToDiscard = game.getPlayer(user).getDiscardableDestinationCards();
+        destCardsToDiscard = game.getPlayer(user.getUserID()).getDiscardableDestinationCards();
         if (destCardsToDiscard == null)
             return null;
 
@@ -196,8 +201,8 @@ public class BoardmapPresenter
 
     @Override
     public int getDiscardableCount() {
-        if (game.getPlayer(user).getDiscardableDestinationCards() != null) {
-            if (game.getPlayer(user).getDestinationCards().size() == 3)
+        if (game.getPlayer(user.getUserID()).getDiscardableDestinationCards() != null) {
+            if (game.getPlayer(user.getUserID()).getDestinationCards().size() == 3)
                 return 1;
             return 2;
         }
@@ -273,7 +278,7 @@ public class BoardmapPresenter
     @Override
     public void sendMessage(String text) {
         try {
-            UIFacade.getInstance().sendChatMessage(new Message(text, game.getGameID(), game.getPlayer(user).getName()));
+            UIFacade.getInstance().sendChatMessage(new Message(text, game.getGameID(), game.getPlayer(user.getUserID()).getName()));
         } catch (BadUserException e) {
             e.printStackTrace();
             view.backToLogin();
@@ -293,6 +298,7 @@ public class BoardmapPresenter
 	@Override
 	public void closedRoutes() {
 		state.closeClaimRoute(this);
+
 	}
 	
 	@Override
@@ -319,8 +325,13 @@ public class BoardmapPresenter
 	public void openedCards() {
 		state.openTrainDraw(this);
 	}
-	
-	@Override
+    
+    @Override
+    public List<DestinationCard> getDestinationCards() {
+        return game.getPlayer(user.getUserID()).getDestinationCards();
+    }
+    
+    @Override
     public int[] getFaceupCardColors() throws GameActionException {
         if (!gameInProgress()) {
             throw new GameActionException("Game not Started");

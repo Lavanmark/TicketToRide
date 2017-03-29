@@ -3,8 +3,10 @@ package com.floorcorn.tickettoride.ui.views.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -42,6 +44,8 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 
 	public static final String JOIN_BUTTON_TEXT = "Join";
 	public static final String RESUME_BUTTON_TEXT = "Resume";
+	public static final String CANT_JOIN_BUTTON_TEXT = "Can't join";
+	public static final String RESULTS_BUTTON_TEXT = "Results";
 
 	/**
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -318,10 +322,22 @@ public class GameListActivity extends AppCompatActivity implements ILobbyView {
 				holder.mJoinButton.setEnabled(true);
 			}
 
-			if(holder.mItem.isPlayer(UIFacade.getInstance().getUser().getUserID()))
+			if (holder.mItem.isPlayer(UIFacade.getInstance().getUser().getUserID())) {
 				holder.mJoinButton.setText(RESUME_BUTTON_TEXT);
-			else
+				holder.mJoinButton.setBackgroundResource(R.color.colorGreenPlayer);
+			} else {
 				holder.mJoinButton.setText(JOIN_BUTTON_TEXT);
+				holder.mJoinButton.setBackgroundResource(R.color.colorBluePlayer);
+			}
+
+			if (holder.mItem.isFinished()) {
+				holder.mJoinButton.setText(RESULTS_BUTTON_TEXT);
+			}
+
+			if (!holder.mJoinButton.isEnabled()) {
+				holder.mJoinButton.setText(CANT_JOIN_BUTTON_TEXT);
+				holder.mJoinButton.setBackgroundResource(R.color.colorRedPlayer);
+			}
 
 			holder.mView.setOnClickListener(new View.OnClickListener() {
 				@Override

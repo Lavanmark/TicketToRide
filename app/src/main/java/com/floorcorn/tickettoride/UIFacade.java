@@ -50,11 +50,9 @@ public class UIFacade {
         clientModelRoot = new ClientModel();
 	    commandManager = new CommandManager(clientModelRoot);
         serverProxy = new ServerProxy();
-        serverProxy.setPort("8080");
         // Special alias to your host loopback interface (i.e., 127.0.0.1 on your development
         // machine). Don't need to change if hooking to server on your computer.
-        serverProxy.setHost("10.0.2.2");
-
+        setServer("10.0.2.2", "8080");
         poller = new Poller(serverProxy, commandManager);
     }
     private static UIFacade instance = null;
@@ -64,6 +62,10 @@ public class UIFacade {
         return instance;
     }
 
+    public void setServer(String host, String port){
+        serverProxy.setPort(port);
+        serverProxy.setHost(host);
+    }
     // Login and register related.
 
     /**
@@ -314,7 +316,7 @@ public class UIFacade {
     }
 
     public void drawTrainCard(int position, boolean firstDraw) throws GameActionException, BadUserException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
-        ICommand cmd = new DrawTrainCardCmd(getCurrentGame().getPlayer(getUser()), firstDraw, position);
+        ICommand cmd = new DrawTrainCardCmd(getCurrentGame().getPlayer(getUser().getUserID()), firstDraw, position);
 	    cmd.setCmdID(getCurrentGame().getLatestCommandID());
 	    cmd.setGameID(getCurrentGame().getGameID());
 	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);
@@ -327,7 +329,7 @@ public class UIFacade {
      * @throws GameActionException
      */
     public void drawDestinationCards() throws GameActionException, BadUserException {
-	    ICommand cmd = new DrawDestinationCmd(getCurrentGame().getPlayer(getUser()));
+	    ICommand cmd = new DrawDestinationCmd(getCurrentGame().getPlayer(getUser().getUserID()));
 	    cmd.setCmdID(getCurrentGame().getLatestCommandID());
 	    cmd.setGameID(getCurrentGame().getGameID());
 	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);
@@ -336,7 +338,7 @@ public class UIFacade {
 
     public void discardDestinationCards(List<DestinationCard> destinationCards) throws GameActionException, BadUserException {
 	    DestinationCard[] cardz = new DestinationCard[2];
-	    ICommand cmd = new DiscardDestinationCmd(getCurrentGame().getPlayer(getUser()), destinationCards.toArray(cardz));
+	    ICommand cmd = new DiscardDestinationCmd(getCurrentGame().getPlayer(getUser().getUserID()), destinationCards.toArray(cardz));
 	    cmd.setCmdID(getCurrentGame().getLatestCommandID());
 	    cmd.setGameID(getCurrentGame().getGameID());
 	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);
@@ -346,7 +348,7 @@ public class UIFacade {
     // Routes.
 
     public void claimRoute(Route route) throws BadUserException, GameActionException {
-	    ICommand cmd = new ClaimRouteCmd(getCurrentGame().getPlayer(getUser()), route);
+	    ICommand cmd = new ClaimRouteCmd(getCurrentGame().getPlayer(getUser().getUserID()), route);
 	    cmd.setCmdID(getCurrentGame().getLatestCommandID());
 	    cmd.setGameID(getCurrentGame().getGameID());
 	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);
@@ -354,7 +356,7 @@ public class UIFacade {
     }
 
     public Boolean canClaimRoute(Route route) {
-	    Player player = getCurrentGame().getPlayer(getUser());
+	    Player player = getCurrentGame().getPlayer(getUser().getUserID());
 	    return route.canClaim(player);
     }
 

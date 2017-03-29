@@ -4,4 +4,5 @@
     <stroke
         android:width="8dip"
         android:color="@color/colorMarsComplementary" />
+    <solid android:color="#B3ffffff" />
 </shape>

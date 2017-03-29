@@ -45,7 +45,7 @@ public class CommandManager {
 			throw new GameActionException("No game to get commands from!");
 		if(!game.isPlayer(user.getUserID()))
 			throw new GameActionException("User is not a player!");
-		if(!game.getPlayer(user).isTurn()) {
+		if(!game.getPlayer(user.getUserID()).isTurn()) {
 			if(!(command instanceof DiscardDestinationCmd))
 				throw new GameActionException("Not your turn!");
 		}
@@ -85,8 +85,8 @@ public class CommandManager {
 		
 		if(command instanceof ClaimRouteCmd) {
 			if(game.getLastPlayer() == null)
-				if(game.getPlayer(((ClaimRouteCmd) command).claimingPlayer).getTrainCarsLeft() < 3)
-					reactions.add(new LastRoundCmd(game.getPlayer(((ClaimRouteCmd) command).claimingPlayer)));
+				if(game.getPlayer(((ClaimRouteCmd) command).claimingPlayer.getUserID()).getTrainCarsLeft() < 3)
+					reactions.add(new LastRoundCmd(game.getPlayer(((ClaimRouteCmd) command).claimingPlayer.getUserID())));
 		}
 		
 		if(game.getLastPlayer() != null) {

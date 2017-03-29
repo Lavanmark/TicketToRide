@@ -3,6 +3,7 @@ package com.floorcorn.tickettoride.handlers;
 import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
+import com.floorcorn.tickettoride.exceptions.SerializerException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.User;
@@ -31,11 +32,13 @@ public class RegisterHandler extends HandlerBase {
 
 			Results results;
 			try {
+				if (userInfo == null)
+					throw new SerializerException("Serializer returned null");
 				userInfo = ServerFacade.getInstance().register(userInfo);
 				results = new Results(true, userInfo);
 				Corn.log("New User Registered");
 				Corn.log(userInfo.toString());
-			} catch(UserCreationException e) {
+			} catch(UserCreationException | SerializerException e) {
 				Corn.log(Level.SEVERE, e.getStackTrace().toString());
 				results = new Results(false, e);
 			}
