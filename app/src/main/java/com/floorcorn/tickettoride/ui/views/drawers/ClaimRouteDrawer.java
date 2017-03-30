@@ -52,14 +52,16 @@ public class ClaimRouteDrawer extends BMDrawer {
             @Override
             public void onDrawerOpened(View drawerView) {
                 if (drawerView.findViewById(R.id.drawer_place_routes) != null) {
-                    parentPresenter.openedRoutes();
+                    if(parentPresenter != null)
+                        parentPresenter.openedRoutes();
                 }
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 if (drawerView.findViewById(R.id.drawer_place_routes) != null) {
-                    parentPresenter.closedRoutes();
+                    if(parentPresenter != null)
+                        parentPresenter.closedRoutes();
                 }
             }
         });

@@ -156,7 +156,10 @@ public class BoardmapPresenter
 
     @Override
     public String getGameName() {
-        return this.game.getName();
+        if(game != null)
+            return this.game.getName();
+        else
+            return "No Name";
     }
 	
     @Override

@@ -116,6 +116,8 @@ public class ServerModel {
 		Game joinedGame = null;
 		for(Game g : games) {
 			if(g.getGameID() == gameID) {
+				if(!g.canJoinWithColor(color))
+					throw new GameActionException("Color not available!");
 				g.addPlayer(user, color);
 				joinedGame = g;
 				break;

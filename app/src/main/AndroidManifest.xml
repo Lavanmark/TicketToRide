@@ -51,8 +51,9 @@
         <activity
             android:name=".ui.views.activities.BoardmapActivity"
             android:label="@string/title_activity_boardmap"
-            android:configChanges="orientation"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity
             android:name=".ui.views.activities.GameOverActivity"
             android:label="@string/title_activity_gameover"
