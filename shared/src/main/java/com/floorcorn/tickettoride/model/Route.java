@@ -257,6 +257,10 @@ public class Route {
         return sb.toString();
     }
 
+    public String getEnglish(){
+		return city1.getName().toLowerCase()+city2.getName().toLowerCase();
+	}
+
 	public int getValue() {
 		if(length < 3)
 			return length;

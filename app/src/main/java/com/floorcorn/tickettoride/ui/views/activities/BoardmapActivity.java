@@ -157,6 +157,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         if (presenter.gameFinished())
             showGameOver();
         this.updateMap();
+        //uncomment this line to debug the game over
+        //showGameOver();
     }
 
     private void lockDrawersClosed() {
