@@ -150,13 +150,13 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         // Set player icons to default "blank."
         initializePlayerIcons();
 
-        if (checkStarted())
-            presenter.startPollingCommands();
-        if (!presenter.gameInProgress())
-            launchPregame();
-        if (presenter.gameFinished())
-            showGameOver();
-        this.updateMap();
+        //if (checkStarted())
+        //    presenter.startPollingCommands();
+        //if (!presenter.gameInProgress())
+        //    launchPregame();
+        //if (presenter.gameFinished())
+        //    showGameOver();
+        //this.updateMap();
         //uncomment this line to debug the game over
         //showGameOver();
     }
@@ -181,7 +181,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         super.onResume();
         if (checkStarted())
             presenter.startPollingCommands();
-
     }
 
     /**
@@ -378,23 +377,26 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
     @Override
     public void updateMap(){
+        System.out.println("UPDATE DA MAP MANNNNNNNNN");
         ImageView map = (ImageView)findViewById(R.id.mapImageView);
-        Resources res = getResources();
-        List<Drawable> layers = new ArrayList<>();
-        layers.add(res.getDrawable(R.drawable.map));
-        for (Player p : presenter.getPlayers()){
-            for (Route rt : p.getRoutesClaimed()){
-                Drawable d = res.getDrawable(presenter.getResId(rt.getResource(), this));
-                d.mutate().mutate().setColorFilter(routeColors.get(p.getColor()), PorterDuff.Mode.MULTIPLY );
-                layers.add(d);
-            }
-        }
-
-        Drawable [] layerArray = layers.toArray(new Drawable[layers.size()]);
+        //map.setImageResource(R.drawable.map);
+        //List<Drawable> layers = new ArrayList<>();
+    
+        Drawable [] layerArray = new Drawable[1];
+        layerArray[0] = getDrawable(R.drawable.map);
         LayerDrawable layerDrawable = new LayerDrawable(layerArray);
+        
+//        for (Player p : presenter.getPlayers()){
+//            for (Route rt : p.getRoutesClaimed()){
+//                Drawable d = getDrawable(presenter.getResId(rt.getResource(), this));
+//                if(d != null) {
+//                    d.setColorFilter(routeColors.get(p.getColor()), PorterDuff.Mode.MULTIPLY);
+//                    layerDrawable.addLayer(d);
+//                }
+//            }
+//        }
+        
         map.setImageDrawable(layerDrawable);
-
-        System.out.println("route list size: "+presenter.getGame().getRoutes().size());
     }
     
 }

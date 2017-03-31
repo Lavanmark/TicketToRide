@@ -235,6 +235,7 @@ public class BoardmapPresenter
     @Override
     public int getResId(String resName, Context context) {
         try {
+	        System.out.println("res: " + resName);
             return context.getResources().getIdentifier(resName, "drawable", context.getPackageName());
         } catch (Exception e) {
             e.printStackTrace();

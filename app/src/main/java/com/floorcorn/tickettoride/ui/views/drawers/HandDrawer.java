@@ -103,7 +103,6 @@ public class HandDrawer extends BMDrawer{
 	public void open() {
 		BM_DRAWER_LAYOUT.openDrawer(GravityCompat.END);
 		sendMessageBut.setEnabled(true);
-		displayDestinationCards(parentPresenter.getDestinationCards());
 	}
 	
 	public void hide() {
