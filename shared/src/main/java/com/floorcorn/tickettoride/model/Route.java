@@ -276,4 +276,8 @@ public class Route {
 			return 18;
 		return 0;
 	}
+
+	public void setColor(TrainCardColor color) {
+		if (this.color == TrainCardColor.WILD) this.color = color;
+	}
 }
