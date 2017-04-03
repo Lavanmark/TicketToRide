@@ -150,13 +150,13 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         // Set player icons to default "blank."
         initializePlayerIcons();
 
-        //if (checkStarted())
-        //    presenter.startPollingCommands();
-        //if (!presenter.gameInProgress())
-        //    launchPregame();
-        //if (presenter.gameFinished())
-        //    showGameOver();
-        //this.updateMap();
+        if (checkStarted())
+            presenter.startPollingCommands();
+        if (!presenter.gameInProgress())
+            launchPregame();
+        if (presenter.gameFinished())
+            showGameOver();
+        this.updateMap();
         //uncomment this line to debug the game over
         //showGameOver();
     }

@@ -38,8 +38,12 @@ public class GameOverActivity extends AppCompatActivity implements IGameOverView
 
 	@Override
 	public void onStop() {
-
+		backToGameList();
 		super.onStop();
+	}
+	
+	private void backToGameList() {
+		startActivity(new Intent(GameOverActivity.this, GameListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 	}
 
 	@Override
