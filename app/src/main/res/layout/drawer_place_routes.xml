@@ -9,8 +9,6 @@
 
     android:id="@+id/drawer_place_routes">
 
-
-
     <TextView
         android:text="Choose a Route"
         android:textSize="16dp"
@@ -23,6 +21,12 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"/>
 
+
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/route_search_view"
+        android:queryHint="@string/action_search"/>
 
     <LinearLayout
         android:orientation="horizontal"

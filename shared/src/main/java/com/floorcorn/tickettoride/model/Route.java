@@ -257,6 +257,10 @@ public class Route {
         return sb.toString();
     }
 
+    public String getEnglish(){
+		return city1.getName().toLowerCase()+city2.getName().toLowerCase();
+	}
+
 	public int getValue() {
 		if(length < 3)
 			return length;
@@ -271,5 +275,9 @@ public class Route {
 		if(length == 7)
 			return 18;
 		return 0;
+	}
+
+	public void setColor(TrainCardColor color) {
+		if (this.color == TrainCardColor.WILD) this.color = color;
 	}
 }
