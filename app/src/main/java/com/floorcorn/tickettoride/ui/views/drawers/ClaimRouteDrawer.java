@@ -1,9 +1,11 @@
 package com.floorcorn.tickettoride.ui.views.drawers;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
@@ -20,14 +23,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.Route;
+import com.floorcorn.tickettoride.model.TrainCard;
+import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Tyler on 3/22/2017.
@@ -90,6 +97,7 @@ public class ClaimRouteDrawer extends BMDrawer {
         routeSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
+                allRoutes = parentPresenter.getRoutes();
                 routeRecyclerView.swapAdapter(new RouteRecyclerViewAdapter(allRoutes),true);
                 displayedList = allRoutes;
                 return false;
@@ -104,6 +112,7 @@ public class ClaimRouteDrawer extends BMDrawer {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.isEmpty()){
+                    allRoutes = parentPresenter.getRoutes();
                     routeRecyclerView.swapAdapter(new RouteRecyclerViewAdapter(allRoutes),true);
                     displayedList = allRoutes;
                 }
@@ -116,7 +125,6 @@ public class ClaimRouteDrawer extends BMDrawer {
     private void filter(String text){
         List<Route> temp = new ArrayList<Route>();
         for(Route d: displayedList){
-            //or use .contains(text)
             if(d.getEnglish().contains(text.toLowerCase())){
                 temp.add(d);
             }
@@ -159,6 +167,53 @@ public class ClaimRouteDrawer extends BMDrawer {
         recyclerView.setAdapter(new RouteRecyclerViewAdapter(routes));
         assert recyclerView.getAdapter() != null;
         routeAdapter = (RouteRecyclerViewAdapter) recyclerView.getAdapter();
+    }
+
+    public void openWildRouteDialog(Route r) {
+        final Route toClaim = r;
+        final List<String> eligibleColors = new ArrayList<String>();
+        Player p = parentPresenter.getGame().getPlayer(parentPresenter.getUser().getUserID());
+        Map<TrainCardColor, Integer> trainCards = p.getTrainCards();
+        int num_wilds = 0;
+        if (trainCards.containsKey(TrainCardColor.WILD)){
+            num_wilds += trainCards.get(TrainCardColor.WILD);
+        }
+        for (TrainCardColor color: trainCards.keySet()){
+            if (color == TrainCardColor.WILD){
+                if (trainCards.get(color) >= r.getLength())
+                    eligibleColors.add(color.toString());
+            }
+            else{
+                if (trainCards.get(color) + num_wilds >= r.getLength())
+                    eligibleColors.add(color.toString());
+            }
+        }
+        CharSequence[] eligibleArray = new CharSequence[eligibleColors.size()];
+        int i = 0;
+        for (String c: eligibleColors) {
+            eligibleArray[i] = (CharSequence) c;
+            i++;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
+        builder.setTitle("Pick Color to Claim Wild Route")
+                .setItems(eligibleArray, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // The 'which' argument contains the index position
+                        // of the selected item
+                        toClaim.setColor(TrainCardColor.convertString(eligibleColors.get(which)));
+                        System.out.println("chosen Color: "+toClaim.getColor());
+                        parentPresenter.claimButtonClicked(toClaim);
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 
@@ -266,7 +321,13 @@ public class ClaimRouteDrawer extends BMDrawer {
             holder.claimButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    parentPresenter.claimButtonClicked(r);
+                    if (r.getColor() == TrainCardColor.WILD){
+                        openWildRouteDialog(r);
+                    }
+                    else{
+                        parentPresenter.claimButtonClicked(r);
+                    }
+
                 }
             });
 
