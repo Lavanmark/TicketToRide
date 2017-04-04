@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.model.Board;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.Route;
@@ -42,6 +43,7 @@ import java.util.Map;
 
 public class ClaimRouteDrawer extends BMDrawer {
 
+    private TextView header;
     private RouteRecyclerViewAdapter routeAdapter;
     private RecyclerView routeRecyclerView;
     private SearchView routeSearchView;
@@ -54,6 +56,7 @@ public class ClaimRouteDrawer extends BMDrawer {
         super(activity, presenter);
         assert activity instanceof BoardmapActivity;
         parentActivity = (BoardmapActivity) activity;
+
         BM_DRAWER_LAYOUT.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
 
             @Override
@@ -86,6 +89,11 @@ public class ClaimRouteDrawer extends BMDrawer {
         DRAWER_HOLDER.removeAllViews();
         DRAWER_HOLDER.addView(layout);
         BM_DRAWER_LAYOUT.openDrawer(GravityCompat.START);
+
+
+        header = (TextView)parentActivity.findViewById(R.id.choose_route_header);
+        PlayerColor pc = parentPresenter.getGame().getPlayer(parentPresenter.getUser().getUserID()).getColor();
+        header.setBackground(parentActivity.getPlayerHeader(pc));
 
         routeRecyclerView = (RecyclerView) parentActivity.findViewById(R.id.route_recycler);
         assert routeRecyclerView != null;
