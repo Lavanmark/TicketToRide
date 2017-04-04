@@ -36,14 +36,16 @@ public class DestinationDrawer extends BMDrawer {
 			@Override
 			public void onDrawerOpened(View drawerView) {
 				if (drawerView.findViewById(R.id.drawer_destinations) != null){
-					parentPresenter.openedDestinations();
+					if(parentPresenter != null)
+						parentPresenter.openedDestinations();
 				}
 			}
 			
 			@Override
 			public void onDrawerClosed(View drawerView) {
 				if (drawerView.findViewById(R.id.drawer_destinations) != null){
-					parentPresenter.closedDestinations();
+					if(parentPresenter != null)
+						parentPresenter.closedDestinations();
 				}
 			}
 		});

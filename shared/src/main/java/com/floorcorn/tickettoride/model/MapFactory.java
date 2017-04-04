@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Tyler on 3/1/17.
@@ -172,6 +173,8 @@ public class MapFactory {
 					String resource = parts[4];
 					if(cities.contains(city1) && cities.contains(city2))
 						routes.add(new Route(routeID++, city1, city2, length, color, resource));
+					else
+						Corn.log(Level.SEVERE, "Could not import route with cities: " + city1.getName() + " and " + city2.getName());
 				}
 			}
 			br.close();
@@ -211,6 +214,8 @@ public class MapFactory {
 					String resource = parts[3];
 					if(cities.contains(city1) && cities.contains(city2))
 						dest.add(new DestinationCard(city1, city2, value, resource));
+					else
+						Corn.log(Level.SEVERE, "Could not import destination card with cities: " + city1.getName() + " and " + city2.getName());
 				}
 			}
 			br.close();
