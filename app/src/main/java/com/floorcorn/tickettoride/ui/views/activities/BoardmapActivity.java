@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -34,6 +35,7 @@ import com.floorcorn.tickettoride.ui.views.drawers.ClaimRouteDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.DestinationDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.HandDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.TrainCardDrawer;
+import com.floorcorn.tickettoride.ui.views.fragments.DrawTrainCardFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -181,7 +183,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         super.onResume();
         if (checkStarted())
             presenter.startPollingCommands();
-
     }
 
     /**
@@ -378,23 +379,35 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 
     @Override
     public void updateMap(){
+        System.out.println("UPDATE DA MAP MANNNNNNNNN");
         ImageView map = (ImageView)findViewById(R.id.mapImageView);
-        Resources res = getResources();
-        List<Drawable> layers = new ArrayList<>();
-        layers.add(res.getDrawable(R.drawable.map));
-        for (Player p : presenter.getPlayers()){
-            for (Route rt : p.getRoutesClaimed()){
-                Drawable d = res.getDrawable(presenter.getResId(rt.getResource(), this));
-                d.mutate().mutate().setColorFilter(routeColors.get(p.getColor()), PorterDuff.Mode.MULTIPLY );
-                layers.add(d);
-            }
-        }
-
-        Drawable [] layerArray = layers.toArray(new Drawable[layers.size()]);
-        LayerDrawable layerDrawable = new LayerDrawable(layerArray);
-        map.setImageDrawable(layerDrawable);
-
-        System.out.println("route list size: "+presenter.getGame().getRoutes().size());
-    }
+        //map.setImageResource(R.drawable.map);
+        //List<Drawable> layers = new ArrayList<>();
     
+        Drawable [] layerArray = new Drawable[1];
+        layerArray[0] = getDrawable(R.drawable.map);
+        LayerDrawable layerDrawable = new LayerDrawable(layerArray);
+        
+//        for (Player p : presenter.getPlayers()){
+//            for (Route rt : p.getRoutesClaimed()){
+//                Drawable d = getDrawable(presenter.getResId(rt.getResource(), this));
+//                if(d != null) {
+//                    d.setColorFilter(routeColors.get(p.getColor()), PorterDuff.Mode.MULTIPLY);
+//                    layerDrawable.addLayer(d);
+//                }
+//            }
+//        }
+        
+        map.setImageDrawable(layerDrawable);
+    }
+
+    @Override
+    public void displayDrawTrainCardDialog(int cardImgId) {
+        DialogFragment drawCardFragment = new DrawTrainCardFragment();
+        Bundle args = new Bundle();
+        args.putInt("imgId", cardImgId);
+        drawCardFragment.setArguments(args);
+        drawCardFragment.show(getFragmentManager(), "CardFragment");
+    }
+
 }

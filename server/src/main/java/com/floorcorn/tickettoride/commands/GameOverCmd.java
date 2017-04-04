@@ -24,7 +24,7 @@ public class GameOverCmd extends GameOverCmdData {
     @Override
     public boolean execute(Game game) {
         game.endGame();
-        game.setPlayerList(this.playerList); //TODO might not be necessary...
+        this.playerList = game.getPlayerList();
         return true;
     }
 }
