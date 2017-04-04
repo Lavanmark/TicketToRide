@@ -312,8 +312,8 @@ public class UIFacade {
         return getCurrentGame().getBoard().getFaceUpCards();
     }
 
-    public void drawTrainCardFromDeck(boolean firstDraw) throws GameActionException, BadUserException {
-	    drawTrainCard(-1, firstDraw);
+    public TrainCardColor drawTrainCardFromDeck(boolean firstDraw) throws GameActionException, BadUserException {
+	    return drawTrainCard(-1, firstDraw);
     }
 
     public TrainCardColor drawTrainCard(int position, boolean firstDraw) throws GameActionException, BadUserException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
@@ -322,7 +322,6 @@ public class UIFacade {
 	    cmd.setGameID(getCurrentGame().getGameID());
 	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);
 	    commandManager.addCommands(res);
-        //TODO: loop through res to find if card was draw train card command, return that TrainCardColor. Change return type up chain to presenter.
         return getTrainCardColor(res);
     }
 

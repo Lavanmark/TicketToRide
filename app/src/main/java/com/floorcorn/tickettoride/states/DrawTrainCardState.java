@@ -68,8 +68,9 @@ public class DrawTrainCardState extends TurnState {
 
     @Override
     public boolean drawTrainCardFromDeck(IBoardMapPresenterStateful presenter) {
+        TrainCardColor drawn = null;
         try {
-            UIFacade.getInstance().drawTrainCardFromDeck(!hasDrawn);
+            drawn = UIFacade.getInstance().drawTrainCardFromDeck(!hasDrawn);
         } catch (GameActionException e){
             Corn.log(Level.SEVERE, e.getMessage());
             return false;
@@ -82,6 +83,9 @@ public class DrawTrainCardState extends TurnState {
             presenter.setState(new PreTurnState());
         } else
             hasDrawn = true;
+        if(drawn != null) {
+            presenter.displayCardDrawnDialog(drawn);
+        }
         return true;
     }
 
