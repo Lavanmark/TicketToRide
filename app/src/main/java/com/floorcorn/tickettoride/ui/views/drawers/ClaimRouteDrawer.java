@@ -321,8 +321,8 @@ public class ClaimRouteDrawer extends BMDrawer {
             holder.claimButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (r.getColor() == TrainCardColor.WILD){
-                        openWildRouteDialog(r);
+                    if (r.getColor() == TrainCardColor.WILD && parentPresenter.openWildRouteDialog()){
+                            openWildRouteDialog(r);
                     }
                     else{
                         parentPresenter.claimButtonClicked(r);

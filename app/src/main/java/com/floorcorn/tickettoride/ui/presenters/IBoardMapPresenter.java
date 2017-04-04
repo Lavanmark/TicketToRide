@@ -117,4 +117,5 @@ public interface IBoardMapPresenter {
     
     List<DestinationCard> getDestinationCards();
 
+    boolean openWildRouteDialog();
 }
