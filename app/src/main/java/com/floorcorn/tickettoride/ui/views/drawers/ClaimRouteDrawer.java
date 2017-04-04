@@ -76,7 +76,7 @@ public class ClaimRouteDrawer extends BMDrawer {
 
     public void setList(List<Route> routes) {
         if (isOpen())
-            routeAdapter.swapList(routes);
+            routeAdapter.swapList(displayedList);
     }
 
     @Override
@@ -120,9 +120,8 @@ public class ClaimRouteDrawer extends BMDrawer {
 
     private void listAll(){
         allRoutes = parentPresenter.getRoutes();
-        routeAdapter.swapList(allRoutes);
-        routeRecyclerView.scrollToPosition(0);
         displayedList = allRoutes;
+        routeAdapter.swapList(displayedList);
     }
 
     private void filter(String text){
@@ -134,7 +133,7 @@ public class ClaimRouteDrawer extends BMDrawer {
         }
         //update recyclerview
         this.displayedList = temp;
-        routeRecyclerView.swapAdapter(new RouteRecyclerViewAdapter(temp),true);
+        routeAdapter.swapList(this.displayedList);
     }
 
     @Override
