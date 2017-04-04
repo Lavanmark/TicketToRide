@@ -116,4 +116,5 @@ public interface IBoardMapPresenter {
     void openedCards();
     
     List<DestinationCard> getDestinationCards();
+
 }

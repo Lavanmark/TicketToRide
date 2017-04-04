@@ -2,6 +2,7 @@ package com.floorcorn.tickettoride.ui.presenters.TestPresenters;
 
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.states.IState;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenterStateful;
@@ -87,5 +88,10 @@ public class MockBoardMapPresenter implements IBoardMapPresenterStateful {
     public int getDiscardableCount() {
         return 0;
     }
-    
+
+    @Override
+    public void displayCardDrawnDialog(TrainCardColor color) {
+
+    }
+
 }

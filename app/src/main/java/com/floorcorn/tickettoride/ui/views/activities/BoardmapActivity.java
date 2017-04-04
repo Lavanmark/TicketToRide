@@ -1,6 +1,7 @@
 package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -34,6 +35,7 @@ import com.floorcorn.tickettoride.ui.views.drawers.ClaimRouteDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.DestinationDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.HandDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.TrainCardDrawer;
+import com.floorcorn.tickettoride.ui.views.fragments.DrawTrainCardFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -398,5 +400,14 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         
         map.setImageDrawable(layerDrawable);
     }
-    
+
+    @Override
+    public void displayDrawTrainCardDialog(int cardImgId) {
+        DialogFragment drawCardFragment = new DrawTrainCardFragment();
+        Bundle args = new Bundle();
+        args.putInt("imgId", cardImgId);
+        drawCardFragment.setArguments(args);
+        drawCardFragment.show(getFragmentManager(), "CardFragment");
+    }
+
 }
