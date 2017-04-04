@@ -333,10 +333,6 @@ public class Player {
 		this.routesClaimed = new ArrayList<>(player.getRoutesClaimed());
 		this.longestRoute = player.getLongestRoute();
 		System.err.println("DEST UPDATED " + name);
-		for(DestinationCard dest : destinationCards)
-			System.out.println("UPDATE DEST WAS: " + dest.isComplete());
-		for(DestinationCard dest : player.getDestinationCards())
-			System.out.println("ORG DEST WAS: " + dest.isComplete());
 	}
 
 	@Override

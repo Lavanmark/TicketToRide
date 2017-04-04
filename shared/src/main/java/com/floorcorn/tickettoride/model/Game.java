@@ -131,6 +131,13 @@ public class Game {
 		}
 		return np;
 	}
+	
+	public boolean canJoinWithColor(PlayerColor color) {
+		for(Player p : playerList)
+			if(p.getColor() == color)
+				return false;
+		return true;
+	}
 
 	/**
 	 * removes a player from the game or ends the game if the player was the conductor
@@ -317,6 +324,10 @@ public class Game {
 	public void endGame() {
 		for(Player p : getPlayerLongestRoute())
 			p.addToScore(10); //TODO this will probably mess it up in the end... b/c of how command was implemented.
+		for(Player p : playerList)
+			for(DestinationCard card : p.getDestinationCards())
+				if(!card.isComplete())
+					p.addToScore(-card.getValue());
 		this.finished = true;
 	}
 

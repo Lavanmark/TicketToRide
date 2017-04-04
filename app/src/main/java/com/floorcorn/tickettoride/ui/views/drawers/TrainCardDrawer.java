@@ -31,14 +31,16 @@ public class TrainCardDrawer extends BMDrawer {
 			@Override
 			public void onDrawerOpened(View drawerView) {
 				if (drawerView.findViewById(R.id.drawer_draw_cards) != null){
-					parentPresenter.openedCards();
+					if(parentPresenter != null)
+						parentPresenter.openedCards();
 				}
 			}
 			
 			@Override
 			public void onDrawerClosed(View drawerView) {
 				if (drawerView.findViewById(R.id.drawer_draw_cards) != null){
-					parentPresenter.closedCards();
+					if(parentPresenter != null)
+						parentPresenter.closedCards();
 				}
 			}
 		});

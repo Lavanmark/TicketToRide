@@ -156,7 +156,10 @@ public class BoardmapPresenter
 
     @Override
     public String getGameName() {
-        return this.game.getName();
+        if(game != null)
+            return this.game.getName();
+        else
+            return "No Name";
     }
 	
     @Override
@@ -232,6 +235,7 @@ public class BoardmapPresenter
     @Override
     public int getResId(String resName, Context context) {
         try {
+	        System.out.println("res: " + resName);
             return context.getResources().getIdentifier(resName, "drawable", context.getPackageName());
         } catch (Exception e) {
             e.printStackTrace();
