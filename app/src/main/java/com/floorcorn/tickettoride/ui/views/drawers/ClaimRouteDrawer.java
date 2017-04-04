@@ -183,7 +183,7 @@ public class ClaimRouteDrawer extends BMDrawer {
                 if (trainCards.get(color) >= r.getLength())
                     eligibleColors.add(color.toString());
             }
-            else{
+            else if (trainCards.get(color) > 0){
                 if (trainCards.get(color) + num_wilds >= r.getLength())
                     eligibleColors.add(color.toString());
             }
