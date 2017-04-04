@@ -24,10 +24,7 @@ import com.floorcorn.tickettoride.ui.views.IView;
 import com.floorcorn.tickettoride.ui.views.drawers.BMDrawer;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -333,6 +330,11 @@ public class BoardmapPresenter
     @Override
     public List<DestinationCard> getDestinationCards() {
         return game.getPlayer(user.getUserID()).getDestinationCards();
+    }
+
+    @Override
+    public boolean openWildRouteDialog() {
+        return state.openWildRouteDialog();
     }
 
     @Override
