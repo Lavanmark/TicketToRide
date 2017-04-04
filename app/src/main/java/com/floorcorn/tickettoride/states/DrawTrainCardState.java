@@ -33,6 +33,7 @@ public class DrawTrainCardState extends TurnState {
     @Override
     public boolean drawFaceUpCard(IBoardMapPresenterStateful presenter, int position) {
         TrainCardColor toDraw = UIFacade.getInstance().getFaceUpCards()[position].getColor();
+        TrainCardColor drawn = null;
         //Attempt to draw wild as second card. Error.
 	    if(toDraw == null)
 	    	return false;
@@ -45,7 +46,8 @@ public class DrawTrainCardState extends TurnState {
 		    }
         }
         try {
-            UIFacade.getInstance().drawTrainCard(position, toDraw != TrainCardColor.WILD && !hasDrawn);
+            drawn = UIFacade.getInstance().drawTrainCard(position, toDraw != TrainCardColor.WILD && !hasDrawn);
+            //TODO: display this card in a dialogue box.
         } catch (GameActionException e){
             Corn.log(Level.SEVERE, e.getMessage());
             return false;
