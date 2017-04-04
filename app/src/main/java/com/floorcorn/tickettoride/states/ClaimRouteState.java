@@ -4,6 +4,7 @@ import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.Route;
+import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenterStateful;
 
 /**
@@ -21,6 +22,7 @@ public class ClaimRouteState extends TurnState {
     public void claimRoute(IBoardMapPresenterStateful presenter, Route route) {
         if(route != null) {
             try {
+
                 UIFacade.getInstance().claimRoute(route);
                 presenter.displayMessage_short("Claimed route: " + route.getFirstCity().getName() + " to " + route.getSecondCity().getName());
                 //presenter.getView().updateMap();
@@ -39,5 +41,10 @@ public class ClaimRouteState extends TurnState {
     @Override
     public void closeClaimRoute(IBoardMapPresenterStateful presenter) {
         presenter.setState(new TurnState());
+    }
+
+    @Override
+    public boolean openWildRouteDialog(){
+        return true;
     }
 }
