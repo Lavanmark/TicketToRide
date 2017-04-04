@@ -255,7 +255,7 @@ public class Game {
 		}
 		for(Route r : getRoutes()) {
 			if(r.getRouteID() == route.getRouteID()) {
-				route = r;
+//				route = r;
 				System.out.println("found route");
 				break;
 			}
