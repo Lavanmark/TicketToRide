@@ -97,9 +97,7 @@ public class ClaimRouteDrawer extends BMDrawer {
         routeSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                allRoutes = parentPresenter.getRoutes();
-                routeRecyclerView.swapAdapter(new RouteRecyclerViewAdapter(allRoutes),true);
-                displayedList = allRoutes;
+                listAll();
                 return false;
             }
         });
@@ -112,9 +110,7 @@ public class ClaimRouteDrawer extends BMDrawer {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.isEmpty()){
-                    allRoutes = parentPresenter.getRoutes();
-                    routeRecyclerView.swapAdapter(new RouteRecyclerViewAdapter(allRoutes),true);
-                    displayedList = allRoutes;
+                    listAll();
                 }
                 filter(newText);
                 return true;
@@ -122,9 +118,16 @@ public class ClaimRouteDrawer extends BMDrawer {
         });
     }
 
+    private void listAll(){
+        allRoutes = parentPresenter.getRoutes();
+        routeAdapter.swapList(allRoutes);
+        routeRecyclerView.scrollToPosition(0);
+        displayedList = allRoutes;
+    }
+
     private void filter(String text){
         List<Route> temp = new ArrayList<Route>();
-        for(Route d: displayedList){
+        for(Route d: allRoutes){
             if(d.getEnglish().contains(text.toLowerCase())){
                 temp.add(d);
             }
@@ -203,7 +206,6 @@ public class ClaimRouteDrawer extends BMDrawer {
                         toClaim.setColor(TrainCardColor.convertString(eligibleColors.get(which)));
                         System.out.println("chosen Color: "+toClaim.getColor());
                         parentPresenter.claimButtonClicked(toClaim);
-
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
