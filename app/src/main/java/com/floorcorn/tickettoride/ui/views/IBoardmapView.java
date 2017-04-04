@@ -98,4 +98,6 @@ public interface IBoardmapView extends IView {
 	void showGameOver();
 
     void updateMap();
+
+	void displayDrawTrainCardDialog(int cardImgId);
 }

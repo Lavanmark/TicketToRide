@@ -334,7 +334,42 @@ public class BoardmapPresenter
     public List<DestinationCard> getDestinationCards() {
         return game.getPlayer(user.getUserID()).getDestinationCards();
     }
-    
+
+    @Override
+    public void displayCardDrawnDialog(TrainCardColor color) {
+        int colorId = 0;
+        switch (color){
+            case RED:
+                colorId = R.drawable.card_red;
+                break;
+            case GREEN:
+                colorId = R.drawable.card_green;
+                break;
+            case BLUE:
+                colorId = R.drawable.card_blue;
+                break;
+            case YELLOW:
+                colorId = R.drawable.card_yellow;
+                break;
+            case PURPLE:
+                colorId = R.drawable.card_purple;
+                break;
+            case BLACK:
+                colorId = R.drawable.card_black;
+                break;
+            case ORANGE:
+                colorId = R.drawable.card_orange;
+                break;
+            case WHITE:
+                colorId = R.drawable.card_white;
+                break;
+            case WILD:
+                colorId = R.drawable.card_wild;
+                break;
+        }
+        view.displayDrawTrainCardDialog(colorId);
+    }
+
     @Override
     public int[] getFaceupCardColors() throws GameActionException {
         if (!gameInProgress()) {

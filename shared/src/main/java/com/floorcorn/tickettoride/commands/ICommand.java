@@ -2,6 +2,7 @@ package com.floorcorn.tickettoride.commands;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.floorcorn.tickettoride.model.Game;
+import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
 
 /**
@@ -34,4 +35,5 @@ public abstract class ICommand {
 	public abstract boolean forPlayer(User user);
 	public abstract ICommand getCmdFor(User user);
 	public abstract boolean execute(Game game);
+	public TrainCardColor getColor(){return null;}
 }
