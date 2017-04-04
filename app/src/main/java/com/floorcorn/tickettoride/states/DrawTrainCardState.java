@@ -47,7 +47,6 @@ public class DrawTrainCardState extends TurnState {
         }
         try {
             drawn = UIFacade.getInstance().drawTrainCard(position, toDraw != TrainCardColor.WILD && !hasDrawn);
-            //TODO: display this card in a dialogue box.
         } catch (GameActionException e){
             Corn.log(Level.SEVERE, e.getMessage());
             return false;
@@ -61,6 +60,9 @@ public class DrawTrainCardState extends TurnState {
             presenter.setState(new PreTurnState());
         } else
             hasDrawn = true;
+        if(drawn != null) {
+            presenter.displayCardDrawnDialog(drawn);
+        }
         return true;
     }
 
