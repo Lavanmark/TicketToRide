@@ -328,7 +328,7 @@ public class UIFacade {
     private TrainCardColor getTrainCardColor(List<ICommand> commands){
         for (ICommand c: commands) {
             if(c instanceof DrawTrainCardCmd)
-                return c.getColor();
+                return ((DrawTrainCardCmd)c).getColor();
         }
         return null;
     }
