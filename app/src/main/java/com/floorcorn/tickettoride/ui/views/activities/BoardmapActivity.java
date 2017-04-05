@@ -215,6 +215,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
                 button.setAllCaps(true);
             } else {
                 button.setTextColor(Color.BLACK);
+                button.setTypeface(null, Typeface.NORMAL);
                 button.setAllCaps(false);
             }
             button.setText(presenter.getPlayers().get(i).getName());
