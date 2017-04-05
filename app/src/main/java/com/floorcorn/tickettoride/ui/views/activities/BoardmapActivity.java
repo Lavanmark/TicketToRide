@@ -150,7 +150,9 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         destinationDrawer = new DestinationDrawer(this, presenter);
 	    
 	    mapSurfaceView = new MapSurfaceView(this);
-	    ((FrameLayout)findViewById(R.id.mapFrame)).addView(mapSurfaceView);
+	    FrameLayout mapFrame = ((FrameLayout)findViewById(R.id.mapFrame));
+	    //mapSurfaceView.setLayoutParams(new DrawerLayout.LayoutParams());
+	    mapFrame.addView(mapSurfaceView);
 
         // Set player icons to default "blank."
         initializePlayerIcons();
@@ -161,7 +163,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
             launchPregame();
 	    if (presenter.gameFinished())
 		    showGameOver();
-        this.updateMap();
         //uncomment this line to debug the game over
         //showGameOver();
     }
@@ -440,9 +441,6 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 //	    }
 //
 //	    map.setImageBitmap(base);
-	
-	
-	    
     }
     
     
@@ -454,7 +452,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	    private Bitmap mapBitmap = null;
 	    public MapSurfaceView(Context context) {
 		    super(context);
-		    mapBitmap =  BitmapFactory.decodeResource(getResources(), R.drawable.map);
+		    mapBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.map);
 		    getHolder().addCallback(this);
 	    }
 	    
@@ -486,7 +484,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 					    }
 				    }
 			    }
-		    }, 0, 1, TimeUnit.SECONDS);
+		    }, 1, 1, TimeUnit.SECONDS);
 	    }
 	
 	    @Override
@@ -502,7 +500,11 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 	    public void updateMap(Canvas canvas) {
 		    if(canvas == null)
 		    	return;
-		    canvas.drawBitmap(mapBitmap, 0, 0, null);
+		
+		    int centreX = (canvas.getWidth()  - mapBitmap.getWidth()) /2;
+		
+		    int centreY = (canvas.getHeight() - mapBitmap.getHeight()) /2;
+		    canvas.drawBitmap(mapBitmap, centreX, centreY, null);
 		
 		    presenter.getGame().playerListMutex.lock();
 		    for (Player p : presenter.getPlayers()){
@@ -512,7 +514,7 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 				    Paint paint = new Paint();
 				    paint.setColorFilter(new PorterDuffColorFilter(getPlayerColor(p.getColor()), PorterDuff.Mode.SRC_IN));
 				
-				    canvas.drawBitmap(routeBitmap, 0, 0, paint);
+				    canvas.drawBitmap(routeBitmap, centreX, centreY, paint);
 			    }
 		    }
 		    presenter.getGame().playerListMutex.unlock();
