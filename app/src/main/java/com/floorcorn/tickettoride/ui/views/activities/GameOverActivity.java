@@ -30,6 +30,8 @@ public class GameOverActivity extends AppCompatActivity implements IGameOverView
 		setContentView(R.layout.activity_game_over);
 		presenter = new GameOverPresenter();
 		presenter.setView(this);
+		presenter.stopPolling();
+		
 
 		setPlayerList(presenter.getPlayerList());
 		setWinnerText(presenter.getWinnerName());
@@ -38,18 +40,14 @@ public class GameOverActivity extends AppCompatActivity implements IGameOverView
 
 	@Override
 	public void onStop() {
+		presenter.unregister();
+		presenter.stopPolling();
 		backToGameList();
 		super.onStop();
 	}
 	
 	private void backToGameList() {
 		startActivity(new Intent(GameOverActivity.this, GameListActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-
 	}
 
 	@Override
@@ -89,7 +87,9 @@ public class GameOverActivity extends AppCompatActivity implements IGameOverView
 	@Override
 	public void setLongestWinners(String playerNames) {
 		TextView view = (TextView)findViewById(R.id.longestPathWinner);
-		view.setText(playerNames + " had the longest route!");
+		String result = playerNames + " had the longest route!";
+		System.out.println(result);
+		view.setText(result);
 	}
 
 	@Override
@@ -99,6 +99,6 @@ public class GameOverActivity extends AppCompatActivity implements IGameOverView
 
 	@Override
 	public Activity getActivity() {
-		return this.getActivity();
+		return this;
 	}
 }

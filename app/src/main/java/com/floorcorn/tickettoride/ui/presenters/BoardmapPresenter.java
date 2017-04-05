@@ -97,15 +97,11 @@ public class BoardmapPresenter
 
     @Override
     public void update(Observable o, Object arg) {
-        /** changed object is the Game **/
         if (arg instanceof Game) {
-            /** update presenter's reference to game **/
             game = (Game) arg;
             if (!game.hasStarted()) {
-                /** if the game not started update view **/
                 view.checkStarted();
             } else {
-                /** if game started, update view, set cards, etc. **/
                 view.checkStarted();
 	            if(game.isFinished()) {
 		            view.showGameOver();
@@ -125,7 +121,6 @@ public class BoardmapPresenter
                 state.setTurn(this, game.getPlayer(user.getUserID()));
             }
         }
-        /** if changed object is the GameChatLog update the chat room in the view **/
         if (arg instanceof GameChatLog) {
             view.setChatLog((GameChatLog) arg);
         }
@@ -161,7 +156,7 @@ public class BoardmapPresenter
 	
     @Override
     public boolean gameInProgress() {
-        return game.hasStarted() && !game.isFinished();
+        return game.hasStarted();
     }
 
     @Override
@@ -232,7 +227,7 @@ public class BoardmapPresenter
     @Override
     public int getResId(String resName, Context context) {
         try {
-	        System.out.println("res: " + resName);
+	        //System.out.println("res: " + resName);
             return context.getResources().getIdentifier(resName, "drawable", context.getPackageName());
         } catch (Exception e) {
             e.printStackTrace();
