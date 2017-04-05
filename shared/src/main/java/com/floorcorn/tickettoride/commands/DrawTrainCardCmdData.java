@@ -22,9 +22,11 @@ public abstract class DrawTrainCardCmdData extends ICommand{
         return true;
     }
 
-    @Override
     public TrainCardColor getColor(){
         return this.cardDrawn.getColor();
     }
 
+    public boolean isFistDraw() {
+        return firstDraw;
+    }
 }

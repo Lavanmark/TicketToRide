@@ -35,5 +35,4 @@ public abstract class ICommand {
 	public abstract boolean forPlayer(User user);
 	public abstract ICommand getCmdFor(User user);
 	public abstract boolean execute(Game game);
-	public TrainCardColor getColor(){return null;}
 }

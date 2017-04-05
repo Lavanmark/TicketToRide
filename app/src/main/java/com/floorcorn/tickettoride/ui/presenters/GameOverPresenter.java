@@ -21,7 +21,9 @@ public class GameOverPresenter implements IGameOverPresenter, Observer{
 
 
 	public GameOverPresenter() {
+		UIFacade.getInstance().registerObserver(this);
 		game = UIFacade.getInstance().getCurrentGame();
+		
 	}
 
 	@Override
@@ -54,17 +56,31 @@ public class GameOverPresenter implements IGameOverPresenter, Observer{
 			else if(winner.getScore() < p.getScore())
 				winner = p;
 		}
-		return winner.getName();
+		if(winner != null)
+			return winner.getName();
+		return "NO WINNER";
 	}
 
 	@Override
 	public String getLongestRouteNames() {
 		StringBuilder sb = new StringBuilder();
+		System.out.println("Gonna make the names");
 		for(Player p : game.getPlayerLongestRoute()) {
+			
 			sb.append(p.getName());
 			if(game.getPlayerLongestRoute().size() > 1)
 				sb.append(", ");
+			System.out.println("making a name");
 		}
 		return sb.toString();
+	}
+	
+	public void unregister() {
+		UIFacade.getInstance().unregisterObserver(this);
+	}
+	
+	@Override
+	public void stopPolling() {
+		UIFacade.getInstance().stopPollingAll();
 	}
 }

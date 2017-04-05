@@ -1,6 +1,11 @@
 package com.floorcorn.tickettoride.states;
 
+import android.support.v4.widget.DrawerLayout;
+
 import com.floorcorn.tickettoride.commands.ClaimRouteCmd;
+import com.floorcorn.tickettoride.commands.DrawTrainCardCmd;
+import com.floorcorn.tickettoride.commands.ICommand;
+import com.floorcorn.tickettoride.commands.StartTurnCmd;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.DestinationCard;
@@ -12,6 +17,8 @@ import com.floorcorn.tickettoride.ui.views.drawers.BMDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.ClaimRouteDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.DestinationDrawer;
 import com.floorcorn.tickettoride.ui.views.drawers.TrainCardDrawer;
+
+import java.util.List;
 
 /**
  * Created by Michael on 3/15/2017.
@@ -31,6 +38,22 @@ public class TurnState extends IState {
 	        	openDestinationDraw(presenter);
 	        else if(isopen instanceof TrainCardDrawer)
 	        	openTrainDraw(presenter);
+        }
+        List<ICommand> cmds = presenter.getGame().getCommands();
+        for(int i = cmds.size() - 1; i > 0; i--) {
+            if(cmds.get(i) instanceof StartTurnCmd) {
+	            break;
+            } else {
+                if(cmds.get(i) instanceof DrawTrainCardCmd) {
+	                DrawTrainCardCmd cmd = (DrawTrainCardCmd) cmds.get(i);
+	                if(cmd.isFistDraw()) {
+		                DrawTrainCardState next = new DrawTrainCardState();
+		                next.hasDrawn = true;
+		                //openTrainDraw(presenter);
+		                presenter.setState(next);
+	                }
+                }
+            }
         }
     }
 
