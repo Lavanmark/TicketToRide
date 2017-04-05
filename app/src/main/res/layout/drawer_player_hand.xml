@@ -18,7 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
-        android:background="@drawable/side_nav_bar"/>
+        android:background="@drawable/side_nav_bar"
+        android:id="@+id/your_cards_header"/>
 
 
     <LinearLayout

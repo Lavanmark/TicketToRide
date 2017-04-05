@@ -275,6 +275,30 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         return ContextCompat.getColor(getBaseContext(), val);
     }
 
+    public Drawable getPlayerHeader(PlayerColor pc) {
+        int header;
+        switch (pc) {
+            case RED:
+                header = R.drawable.header_red;
+                break;
+            case GREEN:
+                header = R.drawable.header_green;
+                break;
+            case BLUE:
+                header = R.drawable.header_blue;
+                break;
+            case YELLOW:
+                header = R.drawable.header_yellow;
+                break;
+            case BLACK:
+                header = R.drawable.header_black;
+                break;
+            default:
+                header = R.drawable.side_nav_bar;
+        }
+        return ContextCompat.getDrawable(this.getBaseContext(), header);
+    }
+
     /**
      * Starts the PregameActivity, meaning the waiting screen that is shown until enough players
      * join.

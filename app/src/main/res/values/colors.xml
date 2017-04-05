@@ -21,9 +21,24 @@
     <!-- Specifically for the buttons designating which player goes with which color
         but probably works elsewhere -->
     <color name="colorBlackPlayer">#6b6a67</color>
+    <color name="colorBlackPlayerDark">#434240</color>
+    <color name="colorBlackPlayerLight">#A3A2A0</color>
+
     <color name="colorRedPlayer">#ff4f4f</color>
+    <color name="colorRedPlayerDark">#9F3131</color>
+    <color name="colorRedPlayerLight">#FF9191</color>
+
     <color name="colorGreenPlayer">#46d650</color>
+    <color name="colorGreenPlayerDark">#2C8632</color>
+    <color name="colorGreenPlayerLight">#8BE592</color>
+
     <color name="colorYellowPlayer">#ccc10a</color>
+    <color name="colorYellowPlayerDark">#B3A909</color>
+    <color name="colorYellowPlayerLight">#DFD866</color>
+
     <color name="colorBluePlayer">#4f8bea</color>
+    <color name="colorBluePlayerDark">#315792</color>
+    <color name="colorBluePlayerLight">#91b7f2</color>
+
     <color name="colorNotAPlayer">#ffffff</color>
 </resources>
