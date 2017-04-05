@@ -10,10 +10,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
+import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
 
 /**
  * Created by Tyler on 3/22/2017.
@@ -21,24 +24,28 @@ import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 
 public class TrainCardDrawer extends BMDrawer {
 
+	private TextView header;
 	private final int MAXFACEUP = 5;
 	private ImageButton faceupCards[] = new ImageButton[MAXFACEUP];
 	
 	public TrainCardDrawer(AppCompatActivity activity, IBoardMapPresenter presenter) {
 		super(activity, presenter);
+
 		BM_DRAWER_LAYOUT.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
 			
 			@Override
 			public void onDrawerOpened(View drawerView) {
 				if (drawerView.findViewById(R.id.drawer_draw_cards) != null){
-					parentPresenter.openedCards();
+					if(parentPresenter != null)
+						parentPresenter.openedCards();
 				}
 			}
 			
 			@Override
 			public void onDrawerClosed(View drawerView) {
 				if (drawerView.findViewById(R.id.drawer_draw_cards) != null){
-					parentPresenter.closedCards();
+					if(parentPresenter != null)
+						parentPresenter.closedCards();
 				}
 			}
 		});
@@ -82,7 +89,10 @@ public class TrainCardDrawer extends BMDrawer {
 		DRAWER_HOLDER.removeAllViews();
 		DRAWER_HOLDER.addView(layout);
 		BM_DRAWER_LAYOUT.openDrawer(GravityCompat.START);
-		
+
+		header = (TextView)parentActivity.findViewById(R.id.train_card_header);
+		PlayerColor pc = parentPresenter.getGame().getPlayer(parentPresenter.getUser().getUserID()).getColor();
+		header.setBackground(((BoardmapActivity) parentActivity).getPlayerHeader(pc));
 		//find button
 		Button drawFromCardDeck = (Button) parentActivity.findViewById(R.id.draw_from_card_deck);
 		

@@ -50,6 +50,7 @@ public class DestinationCard {
     }
     
     private boolean depthFirst(Map<City, List<Route>> map, City at) {
+        System.out.println("depth first");
 	    if(city2.equals(at))
 	    	return true;
 	    for(Route route : map.get(at)) {

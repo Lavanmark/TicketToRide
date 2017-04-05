@@ -312,16 +312,25 @@ public class UIFacade {
         return getCurrentGame().getBoard().getFaceUpCards();
     }
 
-    public void drawTrainCardFromDeck(boolean firstDraw) throws GameActionException, BadUserException {
-	    drawTrainCard(-1, firstDraw);
+    public TrainCardColor drawTrainCardFromDeck(boolean firstDraw) throws GameActionException, BadUserException {
+	    return drawTrainCard(-1, firstDraw);
     }
 
-    public void drawTrainCard(int position, boolean firstDraw) throws GameActionException, BadUserException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
+    public TrainCardColor drawTrainCard(int position, boolean firstDraw) throws GameActionException, BadUserException { // 0,1,2,3,4 for the position of the card that is drawn, top 0, bottom 4
         ICommand cmd = new DrawTrainCardCmd(getCurrentGame().getPlayer(getUser().getUserID()), firstDraw, position);
 	    cmd.setCmdID(getCurrentGame().getLatestCommandID());
 	    cmd.setGameID(getCurrentGame().getGameID());
 	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);
 	    commandManager.addCommands(res);
+        return getTrainCardColor(res);
+    }
+
+    private TrainCardColor getTrainCardColor(List<ICommand> commands){
+        for (ICommand c: commands) {
+            if(c instanceof DrawTrainCardCmd)
+                return ((DrawTrainCardCmd)c).getColor();
+        }
+        return null;
     }
 
     /**

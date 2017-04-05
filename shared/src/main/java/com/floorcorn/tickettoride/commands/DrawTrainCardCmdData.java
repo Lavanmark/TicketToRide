@@ -2,6 +2,7 @@ package com.floorcorn.tickettoride.commands;
 
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.TrainCard;
+import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
 
 /**
@@ -21,4 +22,11 @@ public abstract class DrawTrainCardCmdData extends ICommand{
         return true;
     }
 
+    public TrainCardColor getColor(){
+        return this.cardDrawn.getColor();
+    }
+
+    public boolean isFistDraw() {
+        return firstDraw;
+    }
 }

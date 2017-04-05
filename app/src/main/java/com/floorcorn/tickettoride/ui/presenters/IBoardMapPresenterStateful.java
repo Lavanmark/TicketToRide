@@ -4,6 +4,7 @@ import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Route;
+import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.states.IState;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
@@ -47,4 +48,6 @@ public interface IBoardMapPresenterStateful {
     void setDestCardsToDiscard(DestinationCard[] destCardsToDiscard);
     
     int getDiscardableCount();
+
+    public void displayCardDrawnDialog(TrainCardColor color);
 }

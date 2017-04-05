@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride.ui.views.drawers;
 
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -15,9 +17,13 @@ import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.model.DestinationCard;
+import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
+import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 import java.util.Map;
@@ -39,6 +45,7 @@ public class HandDrawer extends BMDrawer{
 	private TextView blackCount;
 	private TextView whiteCount;
 	private TextView wildCount;
+	private TextView header;
 	/**
 	 * TextView showing the train count for the player.
 	 */
@@ -66,7 +73,11 @@ public class HandDrawer extends BMDrawer{
 	
 	public HandDrawer(AppCompatActivity activity, final IBoardMapPresenter presenter) {
 		super(activity, presenter);
-		
+
+		header = (TextView)activity.findViewById(R.id.your_cards_header);
+		PlayerColor pc = presenter.getGame().getPlayer(presenter.getUser().getUserID()).getColor();
+        header.setBackground(((BoardmapActivity) parentActivity).getPlayerHeader(pc));
+
 		redCount = (TextView)activity.findViewById(R.id.red_card_count);
 		orangeCount = (TextView)activity.findViewById(R.id.orange_card_count);
 		yellowCount = (TextView)activity.findViewById(R.id.yellow_card_count);
@@ -99,18 +110,21 @@ public class HandDrawer extends BMDrawer{
 				chatTextField.setText("");
 			}
 		});
+
 	}
 	public void open() {
 		BM_DRAWER_LAYOUT.openDrawer(GravityCompat.END);
 		sendMessageBut.setEnabled(true);
-		displayDestinationCards(parentPresenter.getDestinationCards());
 	}
 	
 	public void hide() {
 		BM_DRAWER_LAYOUT.closeDrawer(GravityCompat.END);
 		sendMessageBut.setEnabled(false);
 	}
-	
+
+
+
+
 	public void displayChatLog(GameChatLog log) {
 		chatLayout.removeAllViews();
 		for(Message message : log.getRecentMessages()) {
