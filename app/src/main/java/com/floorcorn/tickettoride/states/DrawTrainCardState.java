@@ -1,5 +1,7 @@
 package com.floorcorn.tickettoride.states;
 
+import android.os.Handler;
+
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
@@ -18,6 +20,7 @@ import java.util.logging.Level;
 public class DrawTrainCardState extends TurnState {
 
     boolean hasDrawn = false;
+    boolean paused = false;
 	
 	@Override
 	public void enter(IBoardMapPresenterStateful presenter) {
@@ -34,6 +37,8 @@ public class DrawTrainCardState extends TurnState {
     public boolean drawFaceUpCard(IBoardMapPresenterStateful presenter, int position) {
         TrainCardColor toDraw = UIFacade.getInstance().getFaceUpCards()[position].getColor();
         TrainCardColor drawn = null;
+        if(paused)
+            return true;
         //Attempt to draw wild as second card. Error.
 	    if(toDraw == null)
 	    	return false;
@@ -47,6 +52,7 @@ public class DrawTrainCardState extends TurnState {
         }
         try {
             drawn = UIFacade.getInstance().drawTrainCard(position, toDraw != TrainCardColor.WILD && !hasDrawn);
+            paused = true;
         } catch (GameActionException e){
             Corn.log(Level.SEVERE, e.getMessage());
             return false;
@@ -63,14 +69,24 @@ public class DrawTrainCardState extends TurnState {
         if(drawn != null) {
             presenter.displayCardDrawnDialog(drawn);
         }
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                paused = false;
+            }
+        }, 1500);
         return true;
     }
 
     @Override
     public boolean drawTrainCardFromDeck(IBoardMapPresenterStateful presenter) {
         TrainCardColor drawn = null;
+        if(paused)
+            return true;
         try {
             drawn = UIFacade.getInstance().drawTrainCardFromDeck(!hasDrawn);
+            paused = true;
         } catch (GameActionException e){
             Corn.log(Level.SEVERE, e.getMessage());
             return false;
@@ -86,6 +102,15 @@ public class DrawTrainCardState extends TurnState {
         if(drawn != null) {
             presenter.displayCardDrawnDialog(drawn);
         }
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                paused = false;
+            }
+        }, 1500);
+
         return true;
     }
 
