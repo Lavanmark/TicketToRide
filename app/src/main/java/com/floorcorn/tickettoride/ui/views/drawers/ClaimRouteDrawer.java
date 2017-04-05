@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
+import com.floorcorn.tickettoride.model.Board;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.Route;
@@ -42,6 +43,7 @@ import java.util.Map;
 
 public class ClaimRouteDrawer extends BMDrawer {
 
+    private TextView header;
     private RouteRecyclerViewAdapter routeAdapter;
     private RecyclerView routeRecyclerView;
     private SearchView routeSearchView;
@@ -54,6 +56,7 @@ public class ClaimRouteDrawer extends BMDrawer {
         super(activity, presenter);
         assert activity instanceof BoardmapActivity;
         parentActivity = (BoardmapActivity) activity;
+
         BM_DRAWER_LAYOUT.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
 
             @Override
@@ -76,7 +79,7 @@ public class ClaimRouteDrawer extends BMDrawer {
 
     public void setList(List<Route> routes) {
         if (isOpen())
-            routeAdapter.swapList(routes);
+            routeAdapter.swapList(displayedList);
     }
 
     @Override
@@ -86,6 +89,11 @@ public class ClaimRouteDrawer extends BMDrawer {
         DRAWER_HOLDER.removeAllViews();
         DRAWER_HOLDER.addView(layout);
         BM_DRAWER_LAYOUT.openDrawer(GravityCompat.START);
+
+
+        header = (TextView)parentActivity.findViewById(R.id.choose_route_header);
+        PlayerColor pc = parentPresenter.getGame().getPlayer(parentPresenter.getUser().getUserID()).getColor();
+        header.setBackground(parentActivity.getPlayerHeader(pc));
 
         routeRecyclerView = (RecyclerView) parentActivity.findViewById(R.id.route_recycler);
         assert routeRecyclerView != null;
@@ -97,9 +105,7 @@ public class ClaimRouteDrawer extends BMDrawer {
         routeSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                allRoutes = parentPresenter.getRoutes();
-                routeRecyclerView.swapAdapter(new RouteRecyclerViewAdapter(allRoutes),true);
-                displayedList = allRoutes;
+                listAll();
                 return false;
             }
         });
@@ -112,9 +118,7 @@ public class ClaimRouteDrawer extends BMDrawer {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.isEmpty()){
-                    allRoutes = parentPresenter.getRoutes();
-                    routeRecyclerView.swapAdapter(new RouteRecyclerViewAdapter(allRoutes),true);
-                    displayedList = allRoutes;
+                    listAll();
                 }
                 filter(newText);
                 return true;
@@ -122,16 +126,22 @@ public class ClaimRouteDrawer extends BMDrawer {
         });
     }
 
+    private void listAll(){
+        allRoutes = parentPresenter.getRoutes();
+        displayedList = allRoutes;
+        routeAdapter.swapList(displayedList);
+    }
+
     private void filter(String text){
         List<Route> temp = new ArrayList<Route>();
-        for(Route d: displayedList){
+        for(Route d: allRoutes){
             if(d.getEnglish().contains(text.toLowerCase())){
                 temp.add(d);
             }
         }
         //update recyclerview
         this.displayedList = temp;
-        routeRecyclerView.swapAdapter(new RouteRecyclerViewAdapter(temp),true);
+        routeAdapter.swapList(this.displayedList);
     }
 
     @Override
@@ -183,7 +193,7 @@ public class ClaimRouteDrawer extends BMDrawer {
                 if (trainCards.get(color) >= r.getLength())
                     eligibleColors.add(color.toString());
             }
-            else{
+            else if (trainCards.get(color) > 0){
                 if (trainCards.get(color) + num_wilds >= r.getLength())
                     eligibleColors.add(color.toString());
             }
@@ -203,7 +213,6 @@ public class ClaimRouteDrawer extends BMDrawer {
                         toClaim.setColor(TrainCardColor.convertString(eligibleColors.get(which)));
                         System.out.println("chosen Color: "+toClaim.getColor());
                         parentPresenter.claimButtonClicked(toClaim);
-
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -321,8 +330,8 @@ public class ClaimRouteDrawer extends BMDrawer {
             holder.claimButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (r.getColor() == TrainCardColor.WILD){
-                        openWildRouteDialog(r);
+                    if (r.getColor() == TrainCardColor.WILD && parentPresenter.openWildRouteDialog()){
+                            openWildRouteDialog(r);
                     }
                     else{
                         parentPresenter.claimButtonClicked(r);

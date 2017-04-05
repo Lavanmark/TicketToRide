@@ -5,6 +5,7 @@ import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.log.Corn;
+import java.util.concurrent.locks.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class Game {
 	public static final int INITIAL_TRAIN_CARDS = 4;
 
 	private int gameID = NO_GAME_ID;
+	public ReentrantLock playerListMutex = new ReentrantLock();
 	private ArrayList<Player> playerList = null;
 	private int gameSize = -1;
 	private String name = null;
@@ -42,7 +44,9 @@ public class Game {
 		this.gameID = game.getGameID();
 		this.gameSize = game.getGameSize();
 		this.name = game.getName();
+		playerListMutex.lock();
 		this.playerList = new ArrayList<>(game.getPlayerList());
+		playerListMutex.unlock();
 		this.finished = game.isFinished();
 		this.commands = new ArrayList<>(game.getCommands());
 		this.board = new Board(game.getBoard());
@@ -53,7 +57,9 @@ public class Game {
 		if(size < 2) size = 2;
 		if(size > 5) size = 5;
 		this.gameSize = size;
+		playerListMutex.lock();
 		this.playerList = new ArrayList<>();
+		playerListMutex.unlock();
 		this.gameID = gameID;
 		this.commands = new ArrayList<>();
 		this.board = new Board(new MapFactory().getMarsRoutes(), (gameSize > 3));
@@ -69,18 +75,22 @@ public class Game {
 	public Game getCensoredGame(User user) {
 		Game game = new Game(this);
 		ArrayList<Player> censoredPlayers = new ArrayList<>();
+		playerListMutex.lock();
 		for(Player p : playerList)
 			censoredPlayers.add(p.getCensoredPlayer(user));
 		game.setPlayerList(censoredPlayers);
+		playerListMutex.unlock();
 		game.commands = new ArrayList<>();
 		return game;
 	}
 
 	public void setPlayerList(List<Player> newPlayers) {
+		playerListMutex.lock();
 		if(playerList == null)
 			playerList = new ArrayList<>();
 		this.playerList.clear();
 		this.playerList.addAll(newPlayers);
+		playerListMutex.unlock();
 	}
 
 	public ArrayList<ICommand> getCommands() {
@@ -126,16 +136,23 @@ public class Game {
 		Player np = getPlayer(user.getUserID());
 		if(np == null && !hasStarted()) {
 			np = new Player(user.getUserID(), user.getFullName(), gameID, color);
+			playerListMutex.lock();
 			np.setPlayerID(playerList.size());
 			playerList.add(np);
+			playerListMutex.unlock();
 		}
 		return np;
 	}
 	
 	public boolean canJoinWithColor(PlayerColor color) {
-		for(Player p : playerList)
-			if(p.getColor() == color)
+		playerListMutex.lock();
+		for(Player p : playerList) {
+			if(p.getColor() == color) {
+				playerListMutex.unlock();
 				return false;
+			}
+		}
+		playerListMutex.unlock();
 		return true;
 	}
 
@@ -150,11 +167,14 @@ public class Game {
 		if(player != null) {
 			if(!hasStarted()) {
 				if(player.isConductor()) {
+					playerListMutex.lock();
 					playerList.clear();
+					playerListMutex.unlock();
 					this.finished = true;
 					return true;
 				}
 				ArrayList<Player> newlist = new ArrayList<Player>();
+				playerListMutex.lock();
 				for(int i = 0; i < playerList.size(); i++) {
 					if(playerList.get(i).getUserID() != user.getUserID()) {
 						playerList.get(i).setPlayerID(newlist.size());
@@ -162,6 +182,7 @@ public class Game {
 					}
 				}
 				playerList = newlist;
+				playerListMutex.unlock();
 				return true;
 			} else
 			throw new GameActionException("Game has already started!");
@@ -178,12 +199,15 @@ public class Game {
 	 */
 	public boolean userCanJoin(User user) throws BadUserException, GameActionException {
 		if(user == null) throw new BadUserException("A null user cannot join!");
+		playerListMutex.lock();
 		for(Player p : playerList) {
-			if(p.getUserID() == user.getUserID())
+			if(p.getUserID() == user.getUserID()) {
+				playerListMutex.unlock();
 				throw new GameActionException("User already in the game!");
+			}
 		}
-		if(hasStarted()) return false;
-		return true;
+		playerListMutex.unlock();
+		return !hasStarted();
 	}
 
 	/**
@@ -192,10 +216,14 @@ public class Game {
 	 * @return true if user is in the game, false otherwise
 	 */
 	public boolean isPlayer(int userID) {
+		playerListMutex.lock();
 		for(Player p : playerList) {
-			if(p.getUserID() == userID)
+			if(p.getUserID() == userID) {
+				playerListMutex.unlock();
 				return true;
+			}
 		}
+		playerListMutex.unlock();
 		return false;
 	}
 
@@ -206,10 +234,14 @@ public class Game {
 	 */
 	public Player getPlayer(int userID) {
 		if(userID == User.NO_USER_ID) return null; // Don't throw BadUserException here.
+		playerListMutex.lock();
 		for(Player p : playerList) {
-			if(p.getUserID() == userID)
+			if(p.getUserID() == userID) {
+				playerListMutex.unlock();
 				return p;
+			}
 		}
+		playerListMutex.unlock();
 		return null;
 	}
 
@@ -253,13 +285,6 @@ public class Game {
 			Corn.log(Level.SEVERE, "BAD PLAYER NO CLAIM");
 			return false;
 		}
-		for(Route r : getRoutes()) {
-			if(r.getRouteID() == route.getRouteID()) {
-				route = r;
-				System.out.println("found route");
-				break;
-			}
-		}
 
 		System.out.println("claiming route");
 		System.out.println("Card total: " + player.getTotalTrainCards());
@@ -291,9 +316,15 @@ public class Game {
 	}
 	
 	public Player getNextPlayer() {
-		for(int i = 0; i < playerList.size(); i++)
-			if(playerList.get(i).isTurn())
-				return playerList.get(i + 1 >= playerList.size() ? 0 : i + 1);
+		playerListMutex.lock();
+		for(int i = 0; i < playerList.size(); i++) {
+			if(playerList.get(i).isTurn()) {
+				Player ret = playerList.get(i + 1 >= playerList.size() ? 0 : i + 1);
+				playerListMutex.unlock();
+				return ret;
+			}
+		}
+		playerListMutex.unlock();
 		return null;
 	}
 
@@ -302,7 +333,7 @@ public class Game {
 	}
 
 	public ArrayList<Player> getPlayerList() {
-		return playerList;
+		return new ArrayList<>(playerList);
 	}
 
 	public int getGameSize() {
@@ -322,12 +353,16 @@ public class Game {
 	}
 
 	public void endGame() {
+		playerListMutex.lock();
+		for(Player p : playerList)
+			calculateLongestRoute(p);
 		for(Player p : getPlayerLongestRoute())
 			p.addToScore(10); //TODO this will probably mess it up in the end... b/c of how command was implemented.
 		for(Player p : playerList)
 			for(DestinationCard card : p.getDestinationCards())
 				if(!card.isComplete())
 					p.addToScore(-card.getValue());
+		playerListMutex.unlock();
 		this.finished = true;
 	}
 
@@ -336,16 +371,16 @@ public class Game {
 	}
 
 	public List<Player> getPlayerLongestRoute(){ // returns 1..* players with the longest route. 10 points goes to all those who are tied for the longest route
-		List<Player> playerLongestRoute = new ArrayList<Player>();
+		List<Player> playerLongestRoute = new ArrayList<>();
+		System.out.println("Game: " + longestRoute);
+		playerListMutex.lock();
 		for(Player player : playerList){
+			System.out.println(player.getName() + ": " + player.getLongestRoute());
 			if(player.getLongestRoute() == longestRoute)
 				playerLongestRoute.add(player);
 		}
+		playerListMutex.unlock();
 		return playerLongestRoute;
-	}
-
-	public int getLongestRoute(){ // just a simple getter
-		return longestRoute;
 	}
 
 	/**
@@ -353,11 +388,13 @@ public class Game {
 	 * @param player player to set turn on
 	 */
 	public void setTurn(Player player) {
+		playerListMutex.lock();
 		for(Player p : playerList) {
 			p.setTurn(false);
 			if(p.equals(player))
 				p.setTurn(true);
 		}
+		playerListMutex.unlock();
 	}
 
 	@Override
@@ -369,7 +406,12 @@ public class Game {
 
 		if(gameID != game.gameID) return false;
 		if(gameSize != game.gameSize) return false;
-		if(!playerList.equals(game.playerList)) return false;
+		playerListMutex.lock();
+		if(!playerList.equals(game.playerList)) {
+			playerListMutex.unlock();
+			return false;
+		}
+		playerListMutex.lock();
 		return name.equals(game.name);
 	}
 
@@ -379,9 +421,14 @@ public class Game {
 	}
 
 	public Player getLastPlayer() {
-		for(Player p : playerList)
-			if(p.getPlayerID() == lastPlayerID)
+		playerListMutex.lock();
+		for(Player p : playerList) {
+			if(p.getPlayerID() == lastPlayerID) {
+				playerListMutex.unlock();
 				return p;
+			}
+		}
+		playerListMutex.unlock();
 		return null;
 	}
 
@@ -390,6 +437,8 @@ public class Game {
 		if(listPlayer == null)
 			return;
 		listPlayer.update(player);
+		if(listPlayer.getLongestRoute() > longestRoute)
+			longestRoute = listPlayer.getLongestRoute();
 	}
 
 	public void setLastPlayerID(int lastPlayerID) {

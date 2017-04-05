@@ -280,7 +280,8 @@ public class Board {
 		    if (route.getRouteID() == r.getRouteID()) {
 			    route.update(r);
 			    foundRoute = true;
-		    } else if (!allowDoubles && r.isDoubleRoute(route)) {
+		    }
+		    if (!allowDoubles && r.isDoubleRoute(route)) {
 				route.markDoubleRoute(getRoute(r.getRouteID()));
 			    foundRoute = true;
 		    }

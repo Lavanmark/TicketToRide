@@ -71,4 +71,8 @@ public class IState {
     protected void displayNotHappen(IBoardMapPresenterStateful presenter) {
         presenter.displayMessage_short("That shouldn't happen...");
     }
+
+    public boolean openWildRouteDialog() {
+        return false;
+    }
 }

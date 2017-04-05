@@ -9,11 +9,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
 import com.floorcorn.tickettoride.model.DestinationCard;
+import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
+import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +26,8 @@ import java.util.List;
  */
 
 public class DestinationDrawer extends BMDrawer {
-	
+
+	private TextView header;
 	private final int MAXDESTINATIONS = 3;
 	private Button drawFromDestinationDeck;
 	private Button keepDestinations;
@@ -31,6 +35,7 @@ public class DestinationDrawer extends BMDrawer {
 	
 	public DestinationDrawer(AppCompatActivity activity, IBoardMapPresenter presenter) {
 		super(activity, presenter);
+
 		BM_DRAWER_LAYOUT.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
 			
 			@Override
@@ -57,6 +62,10 @@ public class DestinationDrawer extends BMDrawer {
 	}
 	
 	private void buildDestinationDrawer() {
+		header = (TextView)parentActivity.findViewById(R.id.dest_card_header);
+		PlayerColor pc = parentPresenter.getGame().getPlayer(parentPresenter.getUser().getUserID()).getColor();
+		header.setBackground(((BoardmapActivity) parentActivity).getPlayerHeader(pc));
+
 		drawFromDestinationDeck = (Button) parentActivity.findViewById(R.id.draw_from_dest_deck);
 		drawFromDestinationDeck.setEnabled(false);
 		keepDestinations = (Button) parentActivity.findViewById(R.id.keepCards);

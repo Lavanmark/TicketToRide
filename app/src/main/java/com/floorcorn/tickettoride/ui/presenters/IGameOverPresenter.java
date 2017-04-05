@@ -12,4 +12,6 @@ public interface IGameOverPresenter extends IPresenter {
 	List<Player> getPlayerList();
 	String getWinnerName();
 	String getLongestRouteNames();
+	void unregister();
+	void stopPolling();
 }

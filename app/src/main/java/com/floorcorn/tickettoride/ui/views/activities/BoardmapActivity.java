@@ -2,10 +2,19 @@ package com.floorcorn.tickettoride.ui.views.activities;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
@@ -14,8 +23,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,6 +54,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This BoardmapActivity is an Android Activity that displays all the game board stuff. It has
@@ -79,26 +95,10 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     private ClaimRouteDrawer claimRouteDrawer;
     private TrainCardDrawer trainCardDrawer;
     private DestinationDrawer destinationDrawer;
-
-    private static final Map<Enum, Integer> routeColors;
-    static {
-        /*
-    <color name="colorBlackPlayer">#6b6a67</color>
-    <color name="colorRedPlayer">#ff4f4f</color>
-    <color name="colorGreenPlayer">#</color>
-    <color name="colorYellowPlayer">#ccc10a</color>
-    <color name="colorBluePlayer">#4f8bea</color>
-         */
-        Map<Enum, Integer> aMap = new HashMap<Enum, Integer>();
-        aMap.put(PlayerColor.BLACK, 0xff6b6a67);
-        aMap.put(PlayerColor.BLUE, 0xff4f8bea);
-        aMap.put(PlayerColor.GREEN, 0xff46d650);
-        aMap.put(PlayerColor.RED, 0xffff4f4f);
-        aMap.put(PlayerColor.YELLOW, 0xffccc10a);
-        routeColors = Collections.unmodifiableMap(aMap);
-    }
-
-
+	
+	
+	private MapSurfaceView mapSurfaceView;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,6 +148,11 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         claimRouteDrawer = new ClaimRouteDrawer(this, presenter);
         trainCardDrawer = new TrainCardDrawer(this, presenter);
         destinationDrawer = new DestinationDrawer(this, presenter);
+	    
+	    mapSurfaceView = new MapSurfaceView(this);
+	    FrameLayout mapFrame = ((FrameLayout)findViewById(R.id.mapFrame));
+	    //mapSurfaceView.setLayoutParams(new DrawerLayout.LayoutParams());
+	    mapFrame.addView(mapSurfaceView);
 
         // Set player icons to default "blank."
         initializePlayerIcons();
@@ -156,9 +161,8 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
             presenter.startPollingCommands();
         if (!presenter.gameInProgress())
             launchPregame();
-        if (presenter.gameFinished())
-            showGameOver();
-        this.updateMap();
+	    if (presenter.gameFinished())
+		    showGameOver();
         //uncomment this line to debug the game over
         //showGameOver();
     }
@@ -175,13 +179,14 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     public void onStop() {
         presenter.unregister();
         presenter.stopPolling();
+	    mapSurfaceView.stop();
         super.onStop();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (checkStarted())
+        if (presenter.gameInProgress())
             presenter.startPollingCommands();
     }
 
@@ -271,6 +276,30 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         return ContextCompat.getColor(getBaseContext(), val);
     }
 
+    public Drawable getPlayerHeader(PlayerColor pc) {
+        int header;
+        switch (pc) {
+            case RED:
+                header = R.drawable.header_red;
+                break;
+            case GREEN:
+                header = R.drawable.header_green;
+                break;
+            case BLUE:
+                header = R.drawable.header_blue;
+                break;
+            case YELLOW:
+                header = R.drawable.header_yellow;
+                break;
+            case BLACK:
+                header = R.drawable.header_black;
+                break;
+            default:
+                header = R.drawable.side_nav_bar;
+        }
+        return ContextCompat.getDrawable(this.getBaseContext(), header);
+    }
+
     /**
      * Starts the PregameActivity, meaning the waiting screen that is shown until enough players
      * join.
@@ -279,12 +308,14 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
      * @post PregameActivity launched with a new Android Intent (basically a waiting screen)
      */
     private void launchPregame() {
+	    System.out.println("Launching pre game...");
         startActivity(new Intent(BoardmapActivity.this, PregameActivity.class));
     }
 
     @Override
     public void showGameOver() {
         presenter.stopPolling();
+	    presenter.unregister();
         startActivity(new Intent(BoardmapActivity.this, GameOverActivity.class));
     }
 
@@ -376,38 +407,116 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
     public TrainCardDrawer getTrainCardDrawer() {
         return trainCardDrawer;
     }
-
+	
+	
+	@Override
+	public void displayDrawTrainCardDialog(int cardImgId) {
+		DialogFragment drawCardFragment = new DrawTrainCardFragment();
+		Bundle args = new Bundle();
+		args.putInt("imgId", cardImgId);
+		drawCardFragment.setArguments(args);
+		drawCardFragment.show(getFragmentManager(), "CardFragment");
+	}
+    
     @Override
     public void updateMap(){
-        System.out.println("UPDATE DA MAP MANNNNNNNNN");
-        ImageView map = (ImageView)findViewById(R.id.mapImageView);
-        //map.setImageResource(R.drawable.map);
-        //List<Drawable> layers = new ArrayList<>();
-    
-        Drawable [] layerArray = new Drawable[1];
-        layerArray[0] = getDrawable(R.drawable.map);
-        LayerDrawable layerDrawable = new LayerDrawable(layerArray);
-        
-//        for (Player p : presenter.getPlayers()){
-//            for (Route rt : p.getRoutesClaimed()){
-//                Drawable d = getDrawable(presenter.getResId(rt.getResource(), this));
-//                if(d != null) {
-//                    d.setColorFilter(routeColors.get(p.getColor()), PorterDuff.Mode.MULTIPLY);
-//                    layerDrawable.addLayer(d);
-//                }
-//            }
-//        }
-        
-        map.setImageDrawable(layerDrawable);
+//        System.out.println("UPDATE DA MAP MANNNNNNNNN");
+//        ImageView map = (ImageView)findViewById(R.id.mapImageView);
+//
+//	    Bitmap mapBitmap =  BitmapFactory.decodeResource(getResources(), R.drawable.map);
+//	    Bitmap base = Bitmap.createBitmap(mapBitmap.getWidth(), mapBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+//
+//	    Canvas canvas = new Canvas(base);
+//	    canvas.drawBitmap(mapBitmap, 0, 0, null);
+//
+//	    for (Player p : presenter.getPlayers()){
+//		    for (Route rt : p.getRoutesClaimed()){
+//			    Bitmap routeBitmap = BitmapFactory.decodeResource(getResources(), presenter.getResId(rt.getResource(), this));
+//
+//			    Paint paint = new Paint();
+//			    paint.setColorFilter(new PorterDuffColorFilter(getPlayerColor(p.getColor()), PorterDuff.Mode.SRC_IN));
+//
+//			    canvas.drawBitmap(routeBitmap, 0, 0, paint);
+//		    }
+//	    }
+//
+//	    map.setImageBitmap(base);
     }
-
-    @Override
-    public void displayDrawTrainCardDialog(int cardImgId) {
-        DialogFragment drawCardFragment = new DrawTrainCardFragment();
-        Bundle args = new Bundle();
-        args.putInt("imgId", cardImgId);
-        drawCardFragment.setArguments(args);
-        drawCardFragment.show(getFragmentManager(), "CardFragment");
+    
+    
+    
+    class MapSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
+	
+	    private ScheduledExecutorService mapSES = null;
+	    
+	    private Bitmap mapBitmap = null;
+	    public MapSurfaceView(Context context) {
+		    super(context);
+		    mapBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.map);
+		    getHolder().addCallback(this);
+	    }
+	    
+	    public void stop() {
+		    if(mapSES == null)
+		    	return;
+		    mapSES.shutdown();
+		    mapSES = null;
+	    }
+	
+	    @Override
+	    public void surfaceCreated(SurfaceHolder holder) {
+		    System.out.println("SURFACE CREATED");
+		    if(mapSES != null)
+		    	stop();
+		    mapSES = Executors.newScheduledThreadPool(1);
+		    mapSES.scheduleAtFixedRate(new Runnable() {
+			    @Override
+			    public void run() {
+				    Canvas canvas = null;
+				    try {
+					    canvas = MapSurfaceView.this.getHolder().lockCanvas(null);
+					    synchronized(MapSurfaceView.this.getHolder()) {
+						    updateMap(canvas);
+					    }
+				    } finally {
+					    if(canvas != null) {
+						    MapSurfaceView.this.getHolder().unlockCanvasAndPost(canvas);
+					    }
+				    }
+			    }
+		    }, 1, 1, TimeUnit.SECONDS);
+	    }
+	
+	    @Override
+	    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+			//Do nothing.
+	    }
+	
+	    @Override
+	    public void surfaceDestroyed(SurfaceHolder holder) {
+		    stop();
+	    }
+	    
+	    public void updateMap(Canvas canvas) {
+		    if(canvas == null)
+		    	return;
+		
+		    int centreX = (canvas.getWidth()  - mapBitmap.getWidth()) /2;
+		
+		    int centreY = (canvas.getHeight() - mapBitmap.getHeight()) /2;
+		    canvas.drawBitmap(mapBitmap, centreX, centreY, null);
+		
+		    presenter.getGame().playerListMutex.lock();
+		    for (Player p : presenter.getPlayers()){
+			    Paint paint = new Paint();
+			    paint.setColorFilter(new PorterDuffColorFilter(getPlayerColor(p.getColor()), PorterDuff.Mode.SRC_IN));
+			    for (Route rt : p.getRoutesClaimed()){
+				    Bitmap routeBitmap = BitmapFactory.decodeResource(getResources(), presenter.getResId(rt.getResource(), BoardmapActivity.this));
+				    canvas.drawBitmap(routeBitmap, centreX, centreY, paint);
+			    }
+		    }
+		    presenter.getGame().playerListMutex.unlock();
+	    }
     }
 
 }
