@@ -508,12 +508,10 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
 		
 		    presenter.getGame().playerListMutex.lock();
 		    for (Player p : presenter.getPlayers()){
+			    Paint paint = new Paint();
+			    paint.setColorFilter(new PorterDuffColorFilter(getPlayerColor(p.getColor()), PorterDuff.Mode.SRC_IN));
 			    for (Route rt : p.getRoutesClaimed()){
 				    Bitmap routeBitmap = BitmapFactory.decodeResource(getResources(), presenter.getResId(rt.getResource(), BoardmapActivity.this));
-				
-				    Paint paint = new Paint();
-				    paint.setColorFilter(new PorterDuffColorFilter(getPlayerColor(p.getColor()), PorterDuff.Mode.SRC_IN));
-				
 				    canvas.drawBitmap(routeBitmap, centreX, centreY, paint);
 			    }
 		    }
