@@ -23,7 +23,8 @@ public class DrawDestinationCardState extends TurnState {
     public void drawDestinationTickets(IBoardMapPresenterStateful presenter) {
         try {
             UIFacade.getInstance().drawDestinationCards();
-        } catch (GameActionException e){
+        } catch (GameActionException e) {
+            presenter.displayMessage_short("No more destination tickets! Do something else for your turn.");
             Corn.log(Level.SEVERE, e.getMessage());
             return;
         } catch(BadUserException e) {
