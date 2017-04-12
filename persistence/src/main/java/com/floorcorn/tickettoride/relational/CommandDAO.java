@@ -30,11 +30,12 @@ public class CommandDAO implements ICommandDAO {
     public boolean create(ICommandDTO dto) {
         String sql = "INSERT INTO deltas(GameID, CmdID, Data) VALUES(?,?,?)";
 
-        try(Connection connection = this.connection;
-            PreparedStatement prepStmnt = connection.prepareStatement(sql)){
+        try(PreparedStatement prepStmnt = this.connection.prepareStatement(sql)){
             prepStmnt.setInt(1,dto.getGameID());
             prepStmnt.setInt(2,dto.getID());
             prepStmnt.setString(3, dto.getData());
+
+            prepStmnt.executeUpdate();
         } catch (SQLException e){
             System.err.println(e.getMessage());
             return false;
@@ -50,12 +51,11 @@ public class CommandDAO implements ICommandDAO {
      */
     @Override
     public boolean update(ICommandDTO dto) {
-        String sql = "UPDATE deltas SET Data = ? "
-                + "WHERE GameID = ? AND "
+        String sql = "UPDATE deltas SET Data = ?"
+                + " WHERE GameID = ? AND"
                 + " CmdID = ?";
 
-        try(Connection conn = this.connection;
-            PreparedStatement pstmt = conn.prepareStatement(sql)){
+        try(PreparedStatement pstmt = this.connection.prepareStatement(sql)){
 
             pstmt.setString(1, dto.getData());
             pstmt.setInt(2, dto.getGameID());
@@ -76,8 +76,7 @@ public class CommandDAO implements ICommandDAO {
     @Override
     public List<ICommandDTO> getAll() {
         String sql = "SELECT GameID, CmdID, Data FROM deltas";
-        try(Connection connection = this.connection;
-            Statement stmt = connection.createStatement();
+        try(Statement stmt = this.connection.createStatement();
             ResultSet resultSet = stmt.executeQuery(sql)){
             return parseResultSet(resultSet);
         }catch (SQLException e){
@@ -102,8 +101,7 @@ public class CommandDAO implements ICommandDAO {
     public boolean delete(ICommandDTO dto) {
         String sql = "DELETE FROM deltas WHERE GameID = ? AND CmdID = ?";
 
-        try(Connection conn = this.connection;
-            PreparedStatement statement = conn.prepareStatement(sql)){
+        try(PreparedStatement statement = this.connection.prepareStatement(sql)){
             statement.setInt(1, dto.getGameID());
             statement.setInt(2, dto.getID());
 
