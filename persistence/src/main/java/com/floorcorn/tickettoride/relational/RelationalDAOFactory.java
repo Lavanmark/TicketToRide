@@ -5,6 +5,7 @@ import com.floorcorn.tickettoride.IDAOFactory;
 import com.floorcorn.tickettoride.IGameDAO;
 import com.floorcorn.tickettoride.IUserDAO;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -17,19 +18,22 @@ import java.sql.Statement;
 public class RelationalDAOFactory implements IDAOFactory {
 
     /**************** Strings for creating and connecting to database **************************/
-    private static final String DATABASe_URL = "jdbc:sqlite:sql/database.db";
-    private static final String SQL_CREATE_USERS = "CREATE TABLE users (\n"
-                + " ID integer PRIMARY KEY AUTOINCREMENT,\n"
+    private static final String DATABASe_URL = "jdbc:sqlite:." +
+                                                File.separator + "sql" +
+                                                File.separator + "database.db";
+    private static final String SQL_CREATE_USERS = "CREATE TABLE IF NOT EXISTS users (\n"
+                + " ID integer PRIMARY KEY AUTOINCREMENT NOT NULL, \n"
                 + " Username text, \n"
                 + " Password text, \n"
-                + " FullName text\n"
+                + " FullName text \n"
                 + ");";
-    private static final String SQL_CREATE_CHECKPOINTS = "CREATE TABLE checkpoints (\n" +
-                " GameID integer PRIMARY KEYNOT NULL, \n" +
+    private static final String SQL_CREATE_CHECKPOINTS = "CREATE TABLE IF NOT EXISTS checkpoints (\n" +
+                " GameID integer PRIMARY KEY NOT NULL, \n" +
                 " Data text\n" +
                 ");";
-    private static final String SQL_CREATE_DELTAS = "CREATE TABLE deltas (\n"
-                + " GameID integer PRIMARY KEY NOT NULL,\n"
+    private static final String SQL_CREATE_DELTAS = "CREATE TABLE IF NOT EXISTS deltas (\n"
+                + " ID integer PRIMARY KEY AUTOINCREMENT NOT NULL, \n"
+                + " GameID integer NOT NULL, \n"
                 + " CmdID Integer NOT NULL, \n"
                 + " Data text\n"
                 + ");";
@@ -41,7 +45,7 @@ public class RelationalDAOFactory implements IDAOFactory {
     }
     @Override
     public IUserDAO getUserDAOInstance() {
-        return null;
+        return new UserDAO(DATABASe_URL);
     }
 
     @Override
@@ -51,8 +55,9 @@ public class RelationalDAOFactory implements IDAOFactory {
 
     @Override
     public IGameDAO getGameDAOInstance() {
-        return null;
+        return new GameDAO(DATABASe_URL);
     }
+
     private boolean connectToDatabase(){
         Connection connection = null;
         try{
