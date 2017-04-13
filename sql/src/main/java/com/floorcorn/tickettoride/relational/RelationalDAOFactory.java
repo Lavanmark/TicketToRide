@@ -28,7 +28,7 @@ public class RelationalDAOFactory implements IDAOFactory {
                 + " FullName text \n"
                 + ");";
     private static final String SQL_CREATE_CHECKPOINTS = "CREATE TABLE IF NOT EXISTS checkpoints (\n" +
-                " GameID integer PRIMARY KEY NOT NULL, \n" +
+                " GameID integer PRIMARY KEY AUTOINCREMENT NOT NULL, \n" +
                 " Data text\n" +
                 ");";
     private static final String SQL_CREATE_DELTAS = "CREATE TABLE IF NOT EXISTS deltas (\n"
