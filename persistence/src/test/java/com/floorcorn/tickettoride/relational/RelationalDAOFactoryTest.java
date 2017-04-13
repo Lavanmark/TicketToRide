@@ -1,6 +1,8 @@
 package com.floorcorn.tickettoride.relational;
 
 import com.floorcorn.tickettoride.ICommandDAO;
+import com.floorcorn.tickettoride.IGameDAO;
+import com.floorcorn.tickettoride.IGameDTO;
 import com.floorcorn.tickettoride.IUserDAO;
 import com.floorcorn.tickettoride.IUserDTO;
 
@@ -86,6 +88,7 @@ public class RelationalDAOFactoryTest {
     public void getCommandDAOInstance() throws Exception {
         ICommandDAO dao = DAOFactory.getCommandDAOInstance();
         dao.connect();
+        dao.clear();
         CommandDTO dto = new CommandDTO();
 
         /** Test basic single command stored **/
@@ -123,6 +126,7 @@ public class RelationalDAOFactoryTest {
         assertEquals("The data in this command has been updated.", dao.getAll().get(1).getData());
 
         /** Test store command with a lot of data **/
+        dao.clear();
         CommandDTO longDatadto = new CommandDTO();
         longDatadto.setData("Dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
                 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
@@ -141,14 +145,62 @@ public class RelationalDAOFactoryTest {
                 "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" +
                 "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" +
                 "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg", dao.getAll().get(0).getData());
-        assertEquals(1, dao.getAll().get(0).getGameID());
+        assertEquals(2, dao.getAll().get(0).getGameID());
         assertEquals(1, dao.getAll().get(0).getID());
 
     }
 
     @Test
     public void getGameDAOInstance() throws Exception {
-        assert(true);
+        IGameDAO dao = DAOFactory.getGameDAOInstance();
+        dao.connect();
+        dao.clear();
+
+        GameDTO dto = new GameDTO();
+        dto.setID(1);
+        dto.setData("asdfasdfasdfasdfasdf");
+
+        /** Test insert 1 game **/
+        assertTrue(dao.create(dto));
+        assertEquals(1, dao.getAll().size());
+        assertEquals("asdfasdfasdfasdfasdf", dao.getAll().get(0).getData());
+        assertEquals(1, dao.getAll().get(0).getID());
+
+        /** Test update 1 game **/
+        dto.setData("This data actually makes sense");
+        assertTrue(dao.update(dto));
+        assertEquals("This data actually makes sense", dao.getAll().get(0).getData());
+
+        /** Test clear **/
+        assertTrue(dao.clear());
+        assertEquals(0, dao.getAll().size());
+
+        /** Test insert multiple games **/
+        GameDTO secondDto = new GameDTO();
+        secondDto.setData("Second DTO data");
+        secondDto.setID(2);
+
+        assertTrue(dao.create(dto));
+        assertTrue(dao.create(secondDto));
+        assertEquals("This data actually makes sense", dao.getAll().get(0).getData());
+        assertEquals("Second DTO data", dao.getAll().get(1).getData());
+        assertEquals(1, dao.getAll().get(0).getID());
+        assertEquals(2, dao.getAll().get(1).getID());
+
+        /** Test insert and get 20 games **/
+        dao.clear();
+        for(int i = 0; i < 20; i++){
+            GameDTO nextDTO = new GameDTO();
+            nextDTO.setData("Data " + i);
+            nextDTO.setID(i);
+            assertTrue(dao.create(nextDTO));
+        }
+
+        ArrayList<IGameDTO> results = (ArrayList) dao.getAll();
+        for(int i = 0; i < 20; i++){
+            assertEquals("Data " + i, results.get(i).getData());
+            assertEquals(i, results.get(i).getID());
+        }
     }
 
 }

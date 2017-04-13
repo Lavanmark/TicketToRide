@@ -146,7 +146,7 @@ public class GameDAO implements IGameDAO {
     public boolean clear() {
         String sql_drop = "DROP TABLE IF EXISTS checkpoints";
         String sql_create = "CREATE TABLE checkpoints (\n" +
-                " GameID integer PRIMARY KEYNOT NULL, \n" +
+                " GameID integer PRIMARY KEY NOT NULL, \n" +
                 " Data text\n" +
                 ");";
         try(Statement statement_drop = this.connection.createStatement();
