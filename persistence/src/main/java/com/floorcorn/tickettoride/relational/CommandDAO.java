@@ -36,6 +36,13 @@ public class CommandDAO implements ICommandDAO {
             prepStmnt.setString(3, dto.getData());
 
             prepStmnt.executeUpdate();
+
+            String idSql = "SELECT last_insert_rowid()";
+            Statement stmt = this.connection.createStatement();
+            ResultSet resultSet = stmt.executeQuery(idSql);
+            int id = resultSet.getInt("last_insert_rowid()");
+            dto.setID(id);
+
         } catch (SQLException e){
             System.err.println(e.getMessage());
             return false;
@@ -75,7 +82,7 @@ public class CommandDAO implements ICommandDAO {
      */
     @Override
     public List<ICommandDTO> getAll() {
-        String sql = "SELECT GameID, CmdID, Data FROM deltas";
+        String sql = "SELECT GameID, CmdID, Data FROM deltas ORDER BY CmdID";
         try(Statement stmt = this.connection.createStatement();
             ResultSet resultSet = stmt.executeQuery(sql)){
             return parseResultSet(resultSet);
@@ -156,9 +163,10 @@ public class CommandDAO implements ICommandDAO {
     public boolean clear() {
         String sql_drop = "DROP TABLE IF EXISTS deltas";
         String sql_create = "CREATE TABLE deltas (\n"
-                + " GameID integer PRIMARY KEY NOT NULL,\n"
+                + " ID integer PRIMARY KEY AUTOINCREMENT NOT NULL, \n"
+                + " GameID integer NOT NULL, \n"
                 + " CmdID Integer NOT NULL, \n"
-                + " Data text\n"
+                + " Data text \n"
                 + ");";
         try(Statement stmt_drop = this.connection.createStatement();
             Statement stmt_create = this.connection.createStatement()){

@@ -20,6 +20,10 @@ public class GameDAO implements IGameDAO {
     private String databaseURL;
     private Connection connection;
 
+    public GameDAO(String databaseURL){
+        this.databaseURL = databaseURL;
+    }
+
     @Override
     public boolean create(IGameDTO dto) {
         String sql = "INSERT INTO checkpoints(GameID, Data) VALUES(?, ?)";
@@ -29,6 +33,12 @@ public class GameDAO implements IGameDAO {
             statement.setString(2, dto.getData());
 
             statement.executeUpdate();
+
+            String idSql = "SELECT last_insert_rowid()";
+            Statement stmt = this.connection.createStatement();
+            ResultSet resultSet = stmt.executeQuery(idSql);
+            int id = resultSet.getInt("last_insert_rowid()");
+            dto.setID(id);
         } catch (SQLException e){
             System.err.println(e.getMessage());
             return false;
@@ -55,7 +65,7 @@ public class GameDAO implements IGameDAO {
 
     @Override
     public List<IGameDTO> getAll() {
-        String sql = "SELECT GameID, Data FROM Checkpoints";
+        String sql = "SELECT GameID, Data FROM Checkpoints ORDER BY GameID";
         try(Statement statement = this.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql)){
             return parseResultSet(resultSet);
