@@ -62,11 +62,11 @@ public class CommandDAO implements ICommandDAO {
             pstmt.setInt(3, dto.getID());
 
             pstmt.executeUpdate();
-            return true;
         } catch (SQLException e){
             System.err.println(e.getMessage());
             return false;
         }
+        return true;
     }
 
     /**
