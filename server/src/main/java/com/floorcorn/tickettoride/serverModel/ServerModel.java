@@ -1,5 +1,10 @@
 package com.floorcorn.tickettoride.serverModel;
 
+import com.floorcorn.tickettoride.ICommandDAO;
+import com.floorcorn.tickettoride.IDAO;
+import com.floorcorn.tickettoride.IDAOFactory;
+import com.floorcorn.tickettoride.IGameDAO;
+import com.floorcorn.tickettoride.IUserDAO;
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
@@ -9,6 +14,8 @@ import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.User;
+import com.floorcorn.tickettoride.relational.GameDTO;
+import com.floorcorn.tickettoride.relational.UserDTO;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -24,12 +31,23 @@ public class ServerModel {
 	private Set<User> users; // Stores all users ever.
 	private SecureRandom random;
     private ChatManager chatManager;
+	IUserDAO userDAO;
+	ICommandDAO commandDAO;
+	IGameDAO gameDAO;
 
-	public ServerModel() {
+	public ServerModel(IDAOFactory factory) {
 		games = new HashSet<>();
 		users = new HashSet<>();
 		random = new SecureRandom();
         chatManager = new ChatManager();
+		userDAO = factory.getUserDAOInstance();
+		commandDAO = factory.getCommandDAOInstance();
+		gameDAO = factory.getGameDAOInstance();
+		loadFromDatabase();
+	}
+	
+	private void loadFromDatabase() {
+		//TODO get all users, get all commands, get all games
 	}
 
 	private void generateToken(User u) {
@@ -77,7 +95,11 @@ public class ServerModel {
 	public GameInfo addGame(String name, int gameSize) {
 		Game newGame = new Game(name, gameSize, IDManager.getNextGameID());
 		games.add(newGame);
-        GameChatLog gameChatLog = new GameChatLog();
+		//TODO
+		//gameDAO.startTransaction();
+		//gameDAO.create(new GameDTO());
+        //gameDAO.endTransaction(true);
+		GameChatLog gameChatLog = new GameChatLog();
 		chatManager.addGameChatLog(newGame.getGameID(), gameChatLog);
 		return newGame.getGameInfo();
 	}
@@ -101,6 +123,10 @@ public class ServerModel {
 		User newUser = new User(user.getUsername(), user.getPassword(), user.getFullName(), IDManager.getNextUserID());
 		generateToken(newUser);
 		users.add(newUser);
+		//TODO
+		//userDAO.startTransaction();
+		//userDAO.create(new UserDTO());
+		//userDAO.endTransaction(true);
 		return newUser;
 	}
 
@@ -126,6 +152,12 @@ public class ServerModel {
 
 		if(joinedGame == null)
 			throw new GameActionException("Could not join game!");
+		
+		//TODO
+		//gameDAO.startTransaction();
+		//gameDAO.update(new GameDTO());
+		//gameDAO.endTransaction(true);
+		
 		return joinedGame.getGameInfo();
 	}
 
@@ -139,6 +171,10 @@ public class ServerModel {
 	public boolean removePlayer(User user, int gameID) throws GameActionException {
 		for(Game g : games) {
 			if(g.getGameID() == gameID) {
+				//TODO
+				//gameDAO.startTransaction();
+				//gameDAO.update(new GameDTO());
+				//gameDAO.endTransaction(true);
 				return g.removePlayer(user);
 			}
 		}

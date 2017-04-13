@@ -33,7 +33,7 @@ public class ServerFacade implements IServer {
 		return instance;
 	}
 	private ServerFacade() {
-		model = new ServerModel();
+		model = new ServerModel(factory);
 		commandManager = new CommandManager();
 	}
 

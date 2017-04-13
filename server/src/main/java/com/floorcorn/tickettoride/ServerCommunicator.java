@@ -15,6 +15,7 @@ import com.floorcorn.tickettoride.interfaces.IServer;
 import com.floorcorn.tickettoride.log.Corn;
 import com.sun.net.httpserver.HttpServer;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
@@ -40,7 +41,15 @@ public class ServerCommunicator {
 		}
 
 		server.setExecutor(null); // use the default executor
-
+		
+		Corn.log("Loading plugin");
+		PluginFactory factory = new PluginFactory();
+		try {
+			factory.loadPlugins();
+		} catch(FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
 		Corn.log("Creating contexts");
 		createContexts();
 
