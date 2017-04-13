@@ -79,7 +79,9 @@ public class Route {
 		List<TrainCard> toDiscard = new ArrayList<>();
 	    Map<TrainCardColor, Integer> pCards = p.getTrainCards();
 //	    if(color != TrainCardColor.WILD) {
-			int colornum = pCards.get(color);
+			int colornum = 0;
+			if (pCards.containsKey(color))
+				colornum = pCards.get(color);
 		    if(colornum >= length) {
 			    for(int i = 0; i < length; i++) {
 				    System.out.println("remove high");

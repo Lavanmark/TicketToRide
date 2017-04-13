@@ -15,6 +15,7 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
@@ -208,10 +209,15 @@ public class BoardmapActivity extends AppCompatActivity implements IBoardmapView
         for (int i = 0; i < presenter.getPlayers().size(); i++) {
             final int pos = i;
             Button button = (Button) playerIcons.getChildAt(presenter.getPlayers().get(i).getPlayerID());
-            if (presenter.getPlayers().get(i).isTurn())
-                button.setTextColor(Color.BLACK);
-            else
+            if (presenter.getPlayers().get(i).isTurn()) {
                 button.setTextColor(Color.WHITE);
+                button.setTypeface(null, Typeface.BOLD_ITALIC);
+                button.setAllCaps(true);
+            } else {
+                button.setTextColor(Color.BLACK);
+                button.setTypeface(null, Typeface.NORMAL);
+                button.setAllCaps(false);
+            }
             button.setText(presenter.getPlayers().get(i).getName());
             button.setBackgroundColor(getPlayerColor(presenter.getPlayers().get(i).getColor()));
             // TODO (future phases) check if the player is self. If so it should open the drawer.
