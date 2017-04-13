@@ -26,7 +26,7 @@ public class UserDAO implements IUserDAO {
     }
     @Override
     public boolean create(IUserDTO dto) {
-        String sql = "INSERT INTO Users(ID, Username, Password, FullName) VALUES(?,?,?)";
+        String sql = "INSERT INTO Users(Username, Password, FullName) VALUES(?,?,?)";
 
         try(PreparedStatement preparedStatement = this.connection.prepareStatement(sql)){
             preparedStatement.setString(1, dto.getUserName());
@@ -34,6 +34,12 @@ public class UserDAO implements IUserDAO {
             preparedStatement.setString(3, dto.getFullName());
 
             preparedStatement.executeUpdate();
+            String idSql = "SELECT last_insert_rowid()";
+            Statement statement = this.connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(idSql);
+            int id = resultSet.getInt("last_insert_rowid()");
+            dto.setID(id);
+
         } catch (SQLException e){
             System.err.println(e.getMessage());
             return false;
@@ -59,6 +65,7 @@ public class UserDAO implements IUserDAO {
             preparedStatement.setString(2, dto.getPassword());
             preparedStatement.setString(3, dto.getFullName());
             preparedStatement.setInt(4, dto.getID());
+            preparedStatement.executeUpdate();
         } catch (SQLException e){
             System.err.println(e.getMessage());
             return false;
@@ -72,7 +79,7 @@ public class UserDAO implements IUserDAO {
      */
     @Override
     public List<IUserDTO> getAll() {
-        String sql = "SELECT ID, Username, Password, FullName FROM users";
+        String sql = "SELECT ID, Username, Password, FullName FROM users ORDER BY ID";
 
         try(Statement statement = this.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql)){
