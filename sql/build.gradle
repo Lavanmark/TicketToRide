@@ -3,9 +3,9 @@ apply plugin: 'java'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('sqlite-jdbc-3.16.1.jar')
     compile 'junit:junit:4.12'
     compile files('libs/sqlite-jdbc-3.16.1.jar')
+    compile project(path: ':persistence')
 }
 
 sourceCompatibility = "1.7"

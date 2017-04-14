@@ -7,6 +7,7 @@ import com.floorcorn.tickettoride.IDAOFactory;
 import com.floorcorn.tickettoride.IGameDAO;
 import com.floorcorn.tickettoride.IGameDTO;
 import com.floorcorn.tickettoride.IUserDAO;
+import com.floorcorn.tickettoride.RelationalDAOFactory;
 import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.exceptions.CommandRequestException;
@@ -180,7 +181,7 @@ public class CommandManager {
 	
 	private void addCommandsToDB(List<ICommand> commands) {
 		if(commandDAO != null) {
-			commandDAO.startTransaction();
+			ServerFacade.daoFactory.startTransaction();
 			for(ICommand cmd : commands) {
 				ICommandDTO cmdDTO = ServerFacade.daoFactory.getCommandDTOInstance();
 				cmdDTO.setGameID(cmd.getGameID());
@@ -188,27 +189,31 @@ public class CommandManager {
 				cmdDTO.setData(Serializer.getInstance().serialize(cmd));
 				commandDAO.create(cmdDTO);
 			}
-			commandDAO.endTransaction(true);
+			ServerFacade.daoFactory.endTransaction(true);
 		}
 	}
 	
 	private void checkGameUpdate(Game game) {
 		if(gameDAO != null && commandDAO != null && game != null && ServerFacade.max_commands > -1
 				&& game.getCommands().size() > ServerFacade.max_commands) {
-			
 			//Store game before so that it is saved before we delete the commands.
-			gameDAO.startTransaction();
+			ServerFacade.daoFactory.startTransaction();
 			IGameDTO gameDTO = ServerFacade.daoFactory.getGameDTOInstance();
 			gameDTO.setID(game.getGameID());
 			gameDTO.setData(Serializer.getInstance().serialize(game));
-			gameDAO.update(gameDTO);
-			gameDAO.endTransaction(true);
+			if(!gameDAO.update(gameDTO)) {
+				ServerFacade.daoFactory.endTransaction(false);
+				Corn.log(Level.SEVERE, "Could not update game!");
+				return;
+			}
 			
-			commandDAO.startTransaction();
-			if(commandDAO.deleteAllForGame(game.getGameID()))
-				commandDAO.endTransaction(true);
-			else
-				commandDAO.endTransaction(false);
+			if(!commandDAO.deleteAllForGame(game.getGameID())) {
+				ServerFacade.daoFactory.endTransaction(false);
+				Corn.log(Level.SEVERE, "Could not delete commands for game!");
+				return;
+			}
+			
+			ServerFacade.daoFactory.endTransaction(true);
 			
 			//Do this last
 			game.clearCommands();
