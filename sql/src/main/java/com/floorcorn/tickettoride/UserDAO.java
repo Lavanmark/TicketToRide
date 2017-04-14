@@ -15,24 +15,18 @@ import java.util.List;
 
 public class UserDAO implements IUserDAO {
 
-    private String databaseURL;
-    private Connection connection;
-
-    public UserDAO(String databaseURL){
-        this.databaseURL = databaseURL;
-    }
     @Override
     public boolean create(IUserDTO dto) {
         String sql = "INSERT INTO Users(Username, Password, FullName) VALUES(?,?,?)";
 
-        try(PreparedStatement preparedStatement = this.connection.prepareStatement(sql)){
+        try(PreparedStatement preparedStatement = RelationalDAOFactory.connection.prepareStatement(sql)){
             preparedStatement.setString(1, dto.getUserName());
             preparedStatement.setString(2, dto.getPassword());
             preparedStatement.setString(3, dto.getFullName());
 
             preparedStatement.executeUpdate();
             String idSql = "SELECT last_insert_rowid()";
-            Statement statement = this.connection.createStatement();
+            Statement statement = RelationalDAOFactory.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(idSql);
             int id = resultSet.getInt("last_insert_rowid()");
             dto.setID(id);
@@ -57,7 +51,7 @@ public class UserDAO implements IUserDAO {
                 + " FullName = ? "
                 + " WHERE ID = ?";
 
-        try(PreparedStatement preparedStatement = this.connection.prepareStatement(sql)){
+        try(PreparedStatement preparedStatement = RelationalDAOFactory.connection.prepareStatement(sql)){
             preparedStatement.setString(1, dto.getUserName());
             preparedStatement.setString(2, dto.getPassword());
             preparedStatement.setString(3, dto.getFullName());
@@ -78,7 +72,7 @@ public class UserDAO implements IUserDAO {
     public List<IUserDTO> getAll() {
         String sql = "SELECT ID, Username, Password, FullName FROM users ORDER BY ID";
 
-        try(Statement statement = this.connection.createStatement();
+        try(Statement statement = RelationalDAOFactory.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql)){
             return parseResultsSet(resultSet);
         } catch (SQLException e){
@@ -104,7 +98,7 @@ public class UserDAO implements IUserDAO {
     public boolean delete(IUserDTO dto) {
         String sql = "DELETE FROM users WHERE ID = ?";
 
-        try(PreparedStatement statement = this.connection.prepareStatement(sql)){
+        try(PreparedStatement statement = RelationalDAOFactory.connection.prepareStatement(sql)){
             statement.setInt(1, dto.getID());
 
             statement.executeUpdate();
@@ -113,45 +107,6 @@ public class UserDAO implements IUserDAO {
             System.err.println(e.getMessage());
             return false;
         }
-    }
-
-    @Override
-    public boolean startTransaction() {
-        try {
-            this.connection.setAutoCommit(false);
-        } catch (SQLException e)
-        {
-            System.err.println(e.getMessage());
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean endTransaction(boolean commit) {
-        try {
-            if (commit) {
-                this.connection.commit();
-            } else {
-                this.connection.rollback();
-            }
-            this.connection.setAutoCommit(true);
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean connect() {
-        try {
-            this.connection = makeConnection();
-        } catch (SQLException e){
-            System.err.println(e.getMessage());
-            return false;
-        }
-        return true;
     }
 
     @Override
@@ -164,8 +119,8 @@ public class UserDAO implements IUserDAO {
                 + " FullName text\n"
                 + ");";
 
-        try(Statement stmt_drop = this.connection.createStatement();
-            Statement stmt_create = this.connection.createStatement()){
+        try(Statement stmt_drop = RelationalDAOFactory.connection.createStatement();
+            Statement stmt_create = RelationalDAOFactory.connection.createStatement()){
             stmt_drop.execute(sql_drop);
             stmt_create.execute(sql_create);
         } catch (SQLException e) {
@@ -173,11 +128,5 @@ public class UserDAO implements IUserDAO {
             return false;
         }
         return true;
-    }
-
-    private Connection makeConnection() throws SQLException {
-        Connection connection = null;
-        connection = DriverManager.getConnection(databaseURL);
-        return connection;
     }
 }

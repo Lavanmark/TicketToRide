@@ -75,7 +75,11 @@ public class HandDrawer extends BMDrawer{
 		super(activity, presenter);
 
 		header = (TextView)activity.findViewById(R.id.your_cards_header);
+		System.out.println(presenter.getUser().getUserID());
+		System.out.println(presenter.getGame().getPlayer(presenter.getUser().getUserID()));
+		
 		PlayerColor pc = presenter.getGame().getPlayer(presenter.getUser().getUserID()).getColor();
+		
         header.setBackground(((BoardmapActivity) parentActivity).getPlayerHeader(pc));
 
 		redCount = (TextView)activity.findViewById(R.id.red_card_count);

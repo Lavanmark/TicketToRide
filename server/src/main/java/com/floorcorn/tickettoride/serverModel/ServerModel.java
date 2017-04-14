@@ -56,25 +56,22 @@ public class ServerModel {
 	
 	private void loadFromDatabase() {
 		if(gameDAO != null && userDAO != null && commandDAO != null) {
-			userDAO.startTransaction();
+			ServerFacade.daoFactory.startTransaction();
 			List<IUserDTO> userDTOList = userDAO.getAll();
-			userDAO.endTransaction(false);
 			for(IUserDTO userDTO : userDTOList) {
 				User user = new User(userDTO.getUserName(), userDTO.getPassword(), userDTO.getFullName());
 				user.setUserID(userDTO.getID());
 				users.add(user);
 			}
 			
-			
-			gameDAO.startTransaction();
 			List<IGameDTO> gameDTOList = gameDAO.getAll();
-			gameDAO.endTransaction(false);
+
 			for(IGameDTO gameDTO : gameDTOList) {
 				Game game = Serializer.getInstance().deserializeGame(gameDTO.getData());
 				if(game != null) {
-					commandDAO.startTransaction();
 					List<ICommandDTO> cmdDTOs = commandDAO.getAllForGame(game.getGameID());
-					commandDAO.endTransaction(false);
+					if(cmdDTOs == null)
+						continue;
 					List<ICommand> unorderedCmds = new ArrayList<>();
 					for(ICommandDTO cmdDTO : cmdDTOs)
 						unorderedCmds.add(Serializer.getInstance().deserializeCommand(cmdDTO.getData()));
@@ -99,6 +96,7 @@ public class ServerModel {
 					games.add(game);
 				}
 			}
+			ServerFacade.daoFactory.endTransaction(false);
 		}
 	}
 
@@ -147,14 +145,14 @@ public class ServerModel {
 	public GameInfo addGame(String name, int gameSize) throws GameCreationException {
 		Game newGame = new Game(name, gameSize);
 		if(gameDAO != null) {
-			gameDAO.startTransaction();
+			ServerFacade.daoFactory.startTransaction();
 			IGameDTO gameDTO = ServerFacade.daoFactory.getGameDTOInstance();
 			gameDTO.setID(newGame.getGameID());
 			gameDTO.setData(Serializer.getInstance().serialize(newGame));
 			if(gameDAO.create(gameDTO)) {
-				gameDAO.endTransaction(true);
+				ServerFacade.daoFactory.endTransaction(true);
 			} else {
-				gameDAO.endTransaction(false);
+				ServerFacade.daoFactory.endTransaction(false);
 				throw new GameCreationException("Could not create game in Database.");
 			}
 			newGame.setGameID(gameDTO.getID());
@@ -189,13 +187,16 @@ public class ServerModel {
 		User newUser = new User(user.getUsername(), user.getPassword(), user.getFullName());
 		
 		if(userDAO != null) {
-			userDAO.startTransaction();
+			ServerFacade.daoFactory.startTransaction();
 			IUserDTO userDTO = ServerFacade.daoFactory.getUserDTOInstance();
-			userDTO.setID(newUser.getUserID());
+			userDTO.setUserName(user.getUsername());
+			userDTO.setPassword(user.getPassword());
+			userDTO.setFullName(user.getFullName());
 			if(userDAO.create(userDTO)) {
-				userDAO.endTransaction(true);
+				ServerFacade.daoFactory.endTransaction(true);
+				newUser.setUserID(userDTO.getID());
 			} else {
-				userDAO.endTransaction(false);
+				ServerFacade.daoFactory.endTransaction(false);
 				throw new UserCreationException("Could not create User in Database.");
 			}
 		} else {
@@ -230,14 +231,14 @@ public class ServerModel {
 			throw new GameActionException("Could not join game!");
 		
 		if(gameDAO != null) {
-			gameDAO.startTransaction();
+			ServerFacade.daoFactory.startTransaction();
 			IGameDTO gameDTO = ServerFacade.daoFactory.getGameDTOInstance();
 			gameDTO.setID(joinedGame.getGameID());
 			gameDTO.setData(Serializer.getInstance().serialize(joinedGame));
 			if(gameDAO.update(gameDTO))
-				gameDAO.endTransaction(true);
+				ServerFacade.daoFactory.endTransaction(true);
 			else
-				gameDAO.endTransaction(false);
+				ServerFacade.daoFactory.endTransaction(false);
 		}
 		
 		return joinedGame.getGameInfo();
@@ -255,14 +256,14 @@ public class ServerModel {
 			if(g.getGameID() == gameID) {
 				boolean success = g.removePlayer(user);
 				if(success && gameDAO != null) {
-					gameDAO.startTransaction();
+					ServerFacade.daoFactory.startTransaction();
 					IGameDTO gameDTO = ServerFacade.daoFactory.getGameDTOInstance();
 					gameDTO.setID(g.getGameID());
 					gameDTO.setData(Serializer.getInstance().serialize(g));
 					if(gameDAO.update(gameDTO))
-						gameDAO.endTransaction(true);
+						ServerFacade.daoFactory.endTransaction(true);
 					else
-						gameDAO.endTransaction(false);
+						ServerFacade.daoFactory.endTransaction(false);
 				}
 				return success;
 			}

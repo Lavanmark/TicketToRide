@@ -7,6 +7,7 @@ import com.floorcorn.tickettoride.IDAOFactory;
 import com.floorcorn.tickettoride.IGameDAO;
 import com.floorcorn.tickettoride.IGameDTO;
 import com.floorcorn.tickettoride.IUserDAO;
+import com.floorcorn.tickettoride.RelationalDAOFactory;
 import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.exceptions.CommandRequestException;
@@ -180,7 +181,7 @@ public class CommandManager {
 	
 	private void addCommandsToDB(List<ICommand> commands) {
 		if(commandDAO != null) {
-			commandDAO.startTransaction();
+			ServerFacade.daoFactory.startTransaction();
 			for(ICommand cmd : commands) {
 				ICommandDTO cmdDTO = ServerFacade.daoFactory.getCommandDTOInstance();
 				cmdDTO.setGameID(cmd.getGameID());
@@ -188,7 +189,7 @@ public class CommandManager {
 				cmdDTO.setData(Serializer.getInstance().serialize(cmd));
 				commandDAO.create(cmdDTO);
 			}
-			commandDAO.endTransaction(true);
+			ServerFacade.daoFactory.endTransaction(true);
 		}
 	}
 	
@@ -197,18 +198,18 @@ public class CommandManager {
 				&& game.getCommands().size() > ServerFacade.max_commands) {
 			
 			//Store game before so that it is saved before we delete the commands.
-			gameDAO.startTransaction();
+			ServerFacade.daoFactory.startTransaction();
 			IGameDTO gameDTO = ServerFacade.daoFactory.getGameDTOInstance();
 			gameDTO.setID(game.getGameID());
 			gameDTO.setData(Serializer.getInstance().serialize(game));
 			gameDAO.update(gameDTO);
-			gameDAO.endTransaction(true);
+			ServerFacade.daoFactory.endTransaction(true);
 			
-			commandDAO.startTransaction();
+			ServerFacade.daoFactory.startTransaction();
 			if(commandDAO.deleteAllForGame(game.getGameID()))
-				commandDAO.endTransaction(true);
+				ServerFacade.daoFactory.endTransaction(true);
 			else
-				commandDAO.endTransaction(false);
+				ServerFacade.daoFactory.endTransaction(false);
 			
 			//Do this last
 			game.clearCommands();

@@ -23,7 +23,7 @@ public class RelationalDAOFactoryTest {
     @Test
     public void getUserDAOInstance() throws Exception {
         IUserDAO userDAO = DAOFactory.getUserDAOInstance();
-        userDAO.connect();
+        //userDAO.connect();
         userDAO.clear();
 
         IUserDTO userDTO = new UserDTO();
@@ -78,7 +78,7 @@ public class RelationalDAOFactoryTest {
     @Test
     public void getCommandDAOInstance() throws Exception {
         ICommandDAO dao = DAOFactory.getCommandDAOInstance();
-        dao.connect();
+        //dao.connect();
         dao.clear();
         CommandDTO dto = new CommandDTO();
 
@@ -144,7 +144,7 @@ public class RelationalDAOFactoryTest {
     @Test
     public void getGameDAOInstance() throws Exception {
         IGameDAO dao = DAOFactory.getGameDAOInstance();
-        dao.connect();
+        //dao.connect();
         dao.clear();
 
         GameDTO dto = new GameDTO();

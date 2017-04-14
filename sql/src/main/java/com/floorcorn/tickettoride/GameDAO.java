@@ -14,24 +14,19 @@ import java.util.List;
  */
 
 public class GameDAO implements IGameDAO {
-    private String databaseURL;
-    private Connection connection;
 
-    public GameDAO(String databaseURL){
-        this.databaseURL = databaseURL;
-    }
 
     @Override
     public boolean create(IGameDTO dto) {
         String sql = "INSERT INTO checkpoints(Data) VALUES(?)";
 
-        try(PreparedStatement statement = this.connection.prepareStatement(sql)){
+        try(PreparedStatement statement = RelationalDAOFactory.connection.prepareStatement(sql)){
             statement.setString(1, dto.getData());
 
             statement.executeUpdate();
 
             String idSql = "SELECT last_insert_rowid()";
-            Statement stmt = this.connection.createStatement();
+            Statement stmt = RelationalDAOFactory.connection.createStatement();
             ResultSet resultSet = stmt.executeQuery(idSql);
             int id = resultSet.getInt("last_insert_rowid()");
             dto.setID(id);
@@ -47,7 +42,7 @@ public class GameDAO implements IGameDAO {
         String sql = "UPDATE checkpoints SET Data = ?"
                 + " WHERE GameID = ?";
 
-        try(PreparedStatement statement = this.connection.prepareStatement(sql)){
+        try(PreparedStatement statement = RelationalDAOFactory.connection.prepareStatement(sql)){
             statement.setString(1, dto.getData());
             statement.setInt(2, dto.getID());
 
@@ -62,7 +57,7 @@ public class GameDAO implements IGameDAO {
     @Override
     public List<IGameDTO> getAll() {
         String sql = "SELECT GameID, Data FROM Checkpoints ORDER BY GameID";
-        try(Statement statement = this.connection.createStatement();
+        try(Statement statement = RelationalDAOFactory.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql)){
             return parseResultSet(resultSet);
         } catch (SQLException e){
@@ -86,7 +81,7 @@ public class GameDAO implements IGameDAO {
     public boolean delete(IGameDTO dto) {
         String sql = "DELETE FROM checkpoints WHERE GameID = ?";
 
-        try(PreparedStatement statement = this.connection.prepareStatement(sql)){
+        try(PreparedStatement statement = RelationalDAOFactory.connection.prepareStatement(sql)){
             statement.setInt(1, dto.getID());
 
             statement.executeUpdate();
@@ -97,47 +92,6 @@ public class GameDAO implements IGameDAO {
         return true;
     }
 
-
-    @Override
-    public boolean startTransaction() {
-        try {
-            this.connection.setAutoCommit(false);
-        } catch (SQLException e)
-        {
-            System.err.println(e.getMessage());
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean endTransaction(boolean commit) {
-        try {
-            if (commit) {
-                this.connection.commit();
-            } else {
-                this.connection.rollback();
-            }
-            this.connection.setAutoCommit(true);
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean connect() {
-        try {
-            this.connection = makeConnection();
-        } catch (SQLException e){
-            System.err.println(e.getMessage());
-            return false;
-        }
-        return true;
-    }
-
-
     @Override
     public boolean clear() {
         String sql_drop = "DROP TABLE IF EXISTS checkpoints";
@@ -145,8 +99,8 @@ public class GameDAO implements IGameDAO {
                 " GameID integer PRIMARY KEY NOT NULL, \n" +
                 " Data text\n" +
                 ");";
-        try(Statement statement_drop = this.connection.createStatement();
-            Statement statement_create = this.connection.createStatement()){
+        try(Statement statement_drop = RelationalDAOFactory.connection.createStatement();
+            Statement statement_create = RelationalDAOFactory.connection.createStatement()){
             statement_drop.execute(sql_drop);
             statement_create.execute(sql_create);
         } catch (SQLException e){
@@ -155,11 +109,4 @@ public class GameDAO implements IGameDAO {
         }
         return true;
     }
-
-    private Connection makeConnection() throws SQLException {
-        Connection connection = null;
-        connection = DriverManager.getConnection(databaseURL);
-        return connection;
-    }
-
 }

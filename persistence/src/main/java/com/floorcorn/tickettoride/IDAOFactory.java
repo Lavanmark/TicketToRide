@@ -12,4 +12,7 @@ public interface IDAOFactory {
     IUserDTO getUserDTOInstance();
     ICommandDTO getCommandDTOInstance();
     IGameDTO getGameDTOInstance();
+    
+    boolean startTransaction();
+    boolean endTransaction(boolean commit);
 }

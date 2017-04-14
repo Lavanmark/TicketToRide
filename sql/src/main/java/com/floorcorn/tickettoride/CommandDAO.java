@@ -14,34 +14,38 @@ import java.util.List;
  */
 
 public class CommandDAO implements ICommandDAO {
-    String databaseURL;
-    Connection connection;
 
-    public CommandDAO(String databaseURL){
-        this.databaseURL = databaseURL;
-    }
+
     @Override
     public boolean create(ICommandDTO dto) {
         String sql = "INSERT INTO deltas(GameID, CmdID, Data) VALUES(?,?,?)";
-
-        try(PreparedStatement prepStmnt = this.connection.prepareStatement(sql)){
+    
+        PreparedStatement prepStmnt = null;
+        ResultSet resultSet = null;
+        try{
+            prepStmnt = RelationalDAOFactory.connection.prepareStatement(sql);
             prepStmnt.setInt(1,dto.getGameID());
             prepStmnt.setInt(2,dto.getID());
             prepStmnt.setString(3, dto.getData());
 
-            prepStmnt.executeUpdate();
-
-            String idSql = "SELECT last_insert_rowid()";
-            Statement stmt = this.connection.createStatement();
-            ResultSet resultSet = stmt.executeQuery(idSql);
-            int id = resultSet.getInt("last_insert_rowid()");
-            dto.setID(id);
+            if(prepStmnt.executeUpdate() == 1) {
+    
+                String idSql = "SELECT last_insert_rowid()";
+                Statement stmt = RelationalDAOFactory.connection.createStatement();
+                resultSet = stmt.executeQuery(idSql);
+                int id = resultSet.getInt("last_insert_rowid()");
+                dto.setID(id);
+                return true;
+            }
+            return false;
 
         } catch (SQLException e){
             System.err.println(e.getMessage());
             return false;
+        }finally {
+            RelationalDAOFactory.safeClose(prepStmnt);
+            RelationalDAOFactory.safeClose(resultSet);
         }
-        return true;
     }
 
     /**
@@ -56,7 +60,7 @@ public class CommandDAO implements ICommandDAO {
                 + " WHERE GameID = ? AND"
                 + " CmdID = ?";
 
-        try(PreparedStatement pstmt = this.connection.prepareStatement(sql)){
+        try(PreparedStatement pstmt = RelationalDAOFactory.connection.prepareStatement(sql)){
 
             pstmt.setString(1, dto.getData());
             pstmt.setInt(2, dto.getGameID());
@@ -77,7 +81,7 @@ public class CommandDAO implements ICommandDAO {
     @Override
     public List<ICommandDTO> getAll() {
         String sql = "SELECT GameID, CmdID, Data FROM deltas ORDER BY CmdID";
-        try(Statement stmt = this.connection.createStatement();
+        try(Statement stmt = RelationalDAOFactory.connection.createStatement();
             ResultSet resultSet = stmt.executeQuery(sql)){
             return parseResultSet(resultSet);
         }catch (SQLException e){
@@ -102,7 +106,7 @@ public class CommandDAO implements ICommandDAO {
     public boolean delete(ICommandDTO dto) {
         String sql = "DELETE FROM deltas WHERE GameID = ? AND CmdID = ?";
 
-        try(PreparedStatement statement = this.connection.prepareStatement(sql)){
+        try(PreparedStatement statement = RelationalDAOFactory.connection.prepareStatement(sql)){
             statement.setInt(1, dto.getGameID());
             statement.setInt(2, dto.getID());
 
@@ -116,52 +120,33 @@ public class CommandDAO implements ICommandDAO {
     
     @Override
     public List<ICommandDTO> getAllForGame(int gameID) {
-        return null;
+        String sql = "SELECT GameID, CmdID, Data FROM deltas WHERE GameID = ? ORDER BY CmdID";
+        try(PreparedStatement stmt = RelationalDAOFactory.connection.prepareStatement(sql)){
+            stmt.setInt(1, gameID);
+            
+            ResultSet resultSet = stmt.executeQuery();
+            return parseResultSet(resultSet);
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
     
     @Override
     public boolean deleteAllForGame(int gameID) {
-        return false;
-    }
+        String sql = "DELETE FROM deltas WHERE GameID = ?";
     
-    @Override
-    public boolean startTransaction() {
-        try {
-            this.connection.setAutoCommit(false);
-        } catch (SQLException e)
-        {
-            System.err.println(e.getMessage());
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean endTransaction(boolean commit) {
-        try {
-            if (commit) {
-                this.connection.commit();
-            } else {
-                this.connection.rollback();
-            }
-            this.connection.setAutoCommit(true);
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean connect() {
-        try {
-            this.connection = makeConnection();
+        try(PreparedStatement statement = RelationalDAOFactory.connection.prepareStatement(sql)){
+            statement.setInt(1, gameID);
+            
+            statement.executeUpdate();
+            return true;
         } catch (SQLException e){
             System.err.println(e.getMessage());
             return false;
         }
-        return true;
     }
+
 
     @Override
     public boolean clear() {
@@ -172,8 +157,8 @@ public class CommandDAO implements ICommandDAO {
                 + " CmdID Integer NOT NULL, \n"
                 + " Data text \n"
                 + ");";
-        try(Statement stmt_drop = this.connection.createStatement();
-            Statement stmt_create = this.connection.createStatement()){
+        try(Statement stmt_drop = RelationalDAOFactory.connection.createStatement();
+            Statement stmt_create = RelationalDAOFactory.connection.createStatement()){
             stmt_drop.execute(sql_drop);
             stmt_create.execute(sql_create);
         } catch (SQLException e) {
@@ -181,11 +166,5 @@ public class CommandDAO implements ICommandDAO {
             return false;
         }
         return true;
-    }
-
-    private Connection makeConnection() throws SQLException {
-        Connection connection = null;
-        connection = DriverManager.getConnection(databaseURL);
-        return connection;
     }
 }
