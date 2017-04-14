@@ -119,7 +119,17 @@ public class CommandDAO implements ICommandDAO {
             return false;
         }
     }
-
+    
+    @Override
+    public List<ICommandDTO> getAllForGame(int gameID) {
+        return null;
+    }
+    
+    @Override
+    public boolean deleteAllForGame(int gameID) {
+        return false;
+    }
+    
     @Override
     public boolean startTransaction() {
         try {

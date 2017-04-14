@@ -2,6 +2,7 @@ package com.floorcorn.tickettoride;
 
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.exceptions.GameCreationException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.PlayerColor;
@@ -177,7 +178,7 @@ public class ServerProxyUnitTest {
 		GameInfo game = null;
 		try {
 			game = sp.createGame(login, "Test", 3);
-		} catch(BadUserException e) {
+		} catch(BadUserException | GameCreationException e) {
 			e.printStackTrace();
 			assertFalse(true);
 		}

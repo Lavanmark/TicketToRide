@@ -5,6 +5,7 @@ import com.floorcorn.tickettoride.commands.CommandManager;
 import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.CommandRequestException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.ui.views.IView;
@@ -93,6 +94,16 @@ public class Poller {
 								stopPollingAll();
 							} catch(GameActionException e) {
 								e.printStackTrace();
+							} catch(CommandRequestException e) {
+								e.printStackTrace();
+								try {
+									Game game = serverProxy.getGame(commandManager.getUser(), commandManager.currentGameID());
+									commandManager.updateGame(game);
+								} catch(BadUserException e1) {
+									e1.printStackTrace();
+									view.backToLogin();
+									stopPollingAll();
+								}
 							}
 						} else {
 							stopPollingAll();
@@ -125,7 +136,6 @@ public class Poller {
 									return;
 								}
 								commandManager.setChatLog(gameChatLog);
-								//TODO this is an awful way to do this.
 							} catch(BadUserException e) {
 								e.printStackTrace();
 								view.backToLogin();

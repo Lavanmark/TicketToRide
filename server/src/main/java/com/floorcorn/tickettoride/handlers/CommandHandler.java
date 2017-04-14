@@ -6,6 +6,7 @@ import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.CommandRequestException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.exceptions.SerializerException;
 import com.floorcorn.tickettoride.log.Corn;
@@ -50,7 +51,7 @@ public class CommandHandler extends HandlerBase {
 		        ArrayList<ICommand> commands = ServerFacade.getInstance().doCommand(new User(token), cmd);
 		        results = new Results(true, commands);
 		        Corn.log("Command executed and " + commands.size() + " commands returned to client.");
-	        } catch(BadUserException | GameActionException | SerializerException e) {
+	        } catch(BadUserException | GameActionException | SerializerException | CommandRequestException e) {
 		        Corn.log(Level.SEVERE, e.getMessage());
 		        e.printStackTrace();
 		        results = new Results(false, e);
