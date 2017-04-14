@@ -1,9 +1,12 @@
 package com.floorcorn.tickettoride.relational;
 
 import com.floorcorn.tickettoride.ICommandDAO;
+import com.floorcorn.tickettoride.ICommandDTO;
 import com.floorcorn.tickettoride.IDAOFactory;
 import com.floorcorn.tickettoride.IGameDAO;
+import com.floorcorn.tickettoride.IGameDTO;
 import com.floorcorn.tickettoride.IUserDAO;
+import com.floorcorn.tickettoride.IUserDTO;
 
 import java.io.File;
 import java.sql.Connection;
@@ -57,7 +60,22 @@ public class RelationalDAOFactory implements IDAOFactory {
     public IGameDAO getGameDAOInstance() {
         return new GameDAO(DATABASe_URL);
     }
-
+    
+    @Override
+    public IUserDTO getUserDTOInstance() {
+        return null;
+    }
+    
+    @Override
+    public ICommandDTO getCommandDTOInstance() {
+        return null;
+    }
+    
+    @Override
+    public IGameDTO getGameDTOInstance() {
+        return null;
+    }
+    
     private boolean connectToDatabase(){
         Connection connection = null;
         try{

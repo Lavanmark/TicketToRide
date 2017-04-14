@@ -10,7 +10,9 @@ import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.CommandRequestException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.exceptions.GameCreationException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.model.Board;
 import com.floorcorn.tickettoride.model.DestinationCard;
@@ -190,9 +192,14 @@ public class UIFacade {
      * @return Game object representing the newly created game
      */
     public GameInfo createGame(String gameName, int playerCount, PlayerColor color) throws GameActionException, BadUserException {
-        GameInfo createdGame = serverProxy.createGame(getUser(), gameName, playerCount);
-
-        if(createdGame == null)
+	    GameInfo createdGame = null;
+	    try {
+		    createdGame = serverProxy.createGame(getUser(), gameName, playerCount);
+	    } catch(GameCreationException e) {
+		    e.printStackTrace();
+	    }
+	
+	    if(createdGame == null)
             return null;
         createdGame = joinGame(createdGame.getGameID(), color);
         return createdGame;
@@ -320,7 +327,14 @@ public class UIFacade {
         ICommand cmd = new DrawTrainCardCmd(getCurrentGame().getPlayer(getUser().getUserID()), firstDraw, position);
 	    cmd.setCmdID(getCurrentGame().getLatestCommandID());
 	    cmd.setGameID(getCurrentGame().getGameID());
-	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);
+	    List<ICommand> res = null;
+	    try {
+		    res = serverProxy.doCommand(getUser(), cmd);
+	    } catch(CommandRequestException e) {
+		    e.printStackTrace();
+		    requestGame(getCurrentGame().getGameInfo());
+		    return null;
+	    }
 	    commandManager.addCommands(res);
         return getTrainCardColor(res);
     }
@@ -342,7 +356,14 @@ public class UIFacade {
 	    ICommand cmd = new DrawDestinationCmd(getCurrentGame().getPlayer(getUser().getUserID()));
 	    cmd.setCmdID(getCurrentGame().getLatestCommandID());
 	    cmd.setGameID(getCurrentGame().getGameID());
-	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);
+	    List<ICommand> res = null;
+	    try {
+		    res = serverProxy.doCommand(getUser(), cmd);
+	    } catch(CommandRequestException e) {
+		    e.printStackTrace();
+		    requestGame(getCurrentGame().getGameInfo());
+		    return;
+	    }
 	    commandManager.addCommands(res);
     }
 
@@ -351,7 +372,14 @@ public class UIFacade {
 	    ICommand cmd = new DiscardDestinationCmd(getCurrentGame().getPlayer(getUser().getUserID()), destinationCards.toArray(cardz));
 	    cmd.setCmdID(getCurrentGame().getLatestCommandID());
 	    cmd.setGameID(getCurrentGame().getGameID());
-	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);
+	    List<ICommand> res = null;
+	    try {
+		    res = serverProxy.doCommand(getUser(), cmd);
+	    } catch(CommandRequestException e) {
+		    e.printStackTrace();
+		    requestGame(getCurrentGame().getGameInfo());
+		    return;
+	    }
 	    commandManager.addCommands(res);
     }
 
@@ -361,7 +389,14 @@ public class UIFacade {
 	    ICommand cmd = new ClaimRouteCmd(getCurrentGame().getPlayer(getUser().getUserID()), route);
 	    cmd.setCmdID(getCurrentGame().getLatestCommandID());
 	    cmd.setGameID(getCurrentGame().getGameID());
-	    List<ICommand> res = serverProxy.doCommand(getUser(), cmd);
+	    List<ICommand> res = null;
+	    try {
+		    res = serverProxy.doCommand(getUser(), cmd);
+	    } catch(CommandRequestException e) {
+		    e.printStackTrace();
+		    requestGame(getCurrentGame().getGameInfo());
+		    return;
+	    }
 	    commandManager.addCommands(res);
     }
 

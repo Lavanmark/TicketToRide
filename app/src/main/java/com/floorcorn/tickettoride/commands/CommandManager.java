@@ -48,6 +48,10 @@ public class CommandManager {
 		model.getCurrentGame().setPlayerList(players);
 		model.notifyGameChanged();
 	}
+	
+	public void updateGame(Game game) {
+		model.setCurrentGame(game); //Don't need to call notify.
+	}
 
 	public int currentGameID() {
 		if(model.getCurrentGame() == null)

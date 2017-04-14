@@ -4,7 +4,9 @@ import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.CommandRequestException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.exceptions.GameCreationException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
@@ -80,9 +82,9 @@ public interface IServer {
 	Game getGame(User user, int gameID) throws BadUserException;
 
 
-	ArrayList<ICommand> getCommandsSince(User user, int gameID, int lastCommand) throws BadUserException, GameActionException;
+	ArrayList<ICommand> getCommandsSince(User user, int gameID, int lastCommand) throws BadUserException, GameActionException, CommandRequestException;
 
-	ArrayList<ICommand> doCommand(User user, ICommand command) throws BadUserException, GameActionException;
+	ArrayList<ICommand> doCommand(User user, ICommand command) throws BadUserException, GameActionException, CommandRequestException;
 
 	/**
 	 * will create a new game
@@ -95,7 +97,7 @@ public interface IServer {
 	 * @return set of gameinfo objects with the new game
 	 * @throws BadUserException
 	 */
-	GameInfo createGame(User user, String gameName, int gameSize) throws BadUserException;
+	GameInfo createGame(User user, String gameName, int gameSize) throws BadUserException, GameCreationException;
 
 	/**
 	 * attempts to add the user to the specified game with the specified color.

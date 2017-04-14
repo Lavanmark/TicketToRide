@@ -8,6 +8,7 @@ import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.communication.CommandRequest;
 import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.log.Corn;
+import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.PlayerInfo;
 import com.floorcorn.tickettoride.model.User;
@@ -72,6 +73,15 @@ public class Serializer {
 	public GameInfo deserializeGameInfo(String str) {
 		try {
 			return mapper.readValue(str, GameInfo.class);
+		} catch(IOException e) {
+			Corn.log(Level.SEVERE, e.getMessage());
+		}
+		return null;
+	}
+	
+	public Game deserializeGame(String str) {
+		try {
+			return mapper.readValue(str, Game.class);
 		} catch(IOException e) {
 			Corn.log(Level.SEVERE, e.getMessage());
 		}
