@@ -21,9 +21,6 @@ import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.User;
-import com.floorcorn.tickettoride.relational.GameDTO;
-import com.floorcorn.tickettoride.relational.UserDTO;
-
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -195,7 +192,7 @@ public class ServerModel {
 			userDAO.startTransaction();
 			IUserDTO userDTO = ServerFacade.daoFactory.getUserDTOInstance();
 			userDTO.setID(newUser.getUserID());
-			if(userDAO.create(new UserDTO())) {
+			if(userDAO.create(userDTO)) {
 				userDAO.endTransaction(true);
 			} else {
 				userDAO.endTransaction(false);
