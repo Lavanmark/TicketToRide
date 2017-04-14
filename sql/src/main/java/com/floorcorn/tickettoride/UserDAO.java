@@ -1,7 +1,4 @@
-package com.floorcorn.tickettoride.relational;
-
-import com.floorcorn.tickettoride.IUserDAO;
-import com.floorcorn.tickettoride.IUserDTO;
+package com.floorcorn.tickettoride;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

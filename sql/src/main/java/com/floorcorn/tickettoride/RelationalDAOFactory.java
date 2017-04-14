@@ -1,12 +1,4 @@
-package com.floorcorn.tickettoride.relational;
-
-import com.floorcorn.tickettoride.ICommandDAO;
-import com.floorcorn.tickettoride.ICommandDTO;
-import com.floorcorn.tickettoride.IDAOFactory;
-import com.floorcorn.tickettoride.IGameDAO;
-import com.floorcorn.tickettoride.IGameDTO;
-import com.floorcorn.tickettoride.IUserDAO;
-import com.floorcorn.tickettoride.IUserDTO;
+package com.floorcorn.tickettoride;
 
 import java.io.File;
 import java.sql.Connection;

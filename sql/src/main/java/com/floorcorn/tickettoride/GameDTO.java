@@ -1,6 +1,4 @@
-package com.floorcorn.tickettoride.relational;
-
-import com.floorcorn.tickettoride.IGameDTO;
+package com.floorcorn.tickettoride;
 
 /**
  * Created by Michael on 4/12/2017.

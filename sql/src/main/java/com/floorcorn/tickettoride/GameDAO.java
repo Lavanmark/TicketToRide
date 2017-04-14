@@ -1,7 +1,4 @@
-package com.floorcorn.tickettoride.relational;
-
-import com.floorcorn.tickettoride.IGameDAO;
-import com.floorcorn.tickettoride.IGameDTO;
+package com.floorcorn.tickettoride;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

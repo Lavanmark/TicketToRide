@@ -1,4 +1,4 @@
-package com.floorcorn.tickettoride.relational;
+package com.floorcorn.tickettoride;
 
 
 import org.junit.Before;
@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
+
 
 /**
  * Created by Michael on 4/13/2017.
