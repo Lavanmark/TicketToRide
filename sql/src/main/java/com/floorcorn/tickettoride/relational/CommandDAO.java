@@ -3,9 +3,6 @@ package com.floorcorn.tickettoride.relational;
 import com.floorcorn.tickettoride.ICommandDAO;
 import com.floorcorn.tickettoride.ICommandDTO;
 
-import java.io.Writer;
-import java.sql.Blob;
-import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

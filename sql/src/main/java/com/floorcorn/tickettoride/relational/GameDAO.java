@@ -26,11 +26,10 @@ public class GameDAO implements IGameDAO {
 
     @Override
     public boolean create(IGameDTO dto) {
-        String sql = "INSERT INTO checkpoints(GameID, Data) VALUES(?, ?)";
+        String sql = "INSERT INTO checkpoints(Data) VALUES(?)";
 
         try(PreparedStatement statement = this.connection.prepareStatement(sql)){
-            statement.setInt(1, dto.getID());
-            statement.setString(2, dto.getData());
+            statement.setString(1, dto.getData());
 
             statement.executeUpdate();
 

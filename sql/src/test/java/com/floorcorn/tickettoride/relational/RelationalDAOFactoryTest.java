@@ -1,5 +1,6 @@
 package com.floorcorn.tickettoride.relational;
 
+
 import com.floorcorn.tickettoride.ICommandDAO;
 import com.floorcorn.tickettoride.IGameDAO;
 import com.floorcorn.tickettoride.IGameDTO;
@@ -10,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -19,16 +19,12 @@ import static org.junit.Assert.*;
  */
 public class RelationalDAOFactoryTest {
     RelationalDAOFactory DAOFactory;
+
     @Before
-    public void setup(){
+    public void setup() {
         DAOFactory = new RelationalDAOFactory();
-        /*DAOFactory.getCommandDAOInstance().connect();
-        DAOFactory.getCommandDAOInstance().clear();
-        DAOFactory.getGameDAOInstance().connect();
-        DAOFactory.getGameDAOInstance().clear();
-        DAOFactory.getUserDAOInstance().connect();
-        DAOFactory.getUserDAOInstance().clear();*/
     }
+
     @Test
     public void getUserDAOInstance() throws Exception {
         IUserDAO userDAO = DAOFactory.getUserDAOInstance();
@@ -56,7 +52,7 @@ public class RelationalDAOFactoryTest {
         userDTO.setPassword("passwerd");
 
         assertTrue(userDAO.update(userDTO));
-        assertEquals(1,userDAO.getAll().size());
+        assertEquals(1, userDAO.getAll().size());
         assertEquals("Billy", userDAO.getAll().get(0).getUserName());
         assertEquals("Billy Jones", userDAO.getAll().get(0).getFullName());
         assertEquals("passwerd", userDAO.getAll().get(0).getPassword());
@@ -157,14 +153,12 @@ public class RelationalDAOFactoryTest {
         dao.clear();
 
         GameDTO dto = new GameDTO();
-        dto.setID(1);
         dto.setData("asdfasdfasdfasdfasdf");
 
         /** Test insert 1 game **/
         assertTrue(dao.create(dto));
         assertEquals(1, dao.getAll().size());
         assertEquals("asdfasdfasdfasdfasdf", dao.getAll().get(0).getData());
-        assertEquals(1, dao.getAll().get(0).getID());
 
         /** Test update 1 game **/
         dto.setData("This data actually makes sense");
@@ -178,29 +172,23 @@ public class RelationalDAOFactoryTest {
         /** Test insert multiple games **/
         GameDTO secondDto = new GameDTO();
         secondDto.setData("Second DTO data");
-        secondDto.setID(2);
 
         assertTrue(dao.create(dto));
         assertTrue(dao.create(secondDto));
         assertEquals("This data actually makes sense", dao.getAll().get(0).getData());
         assertEquals("Second DTO data", dao.getAll().get(1).getData());
-        assertEquals(1, dao.getAll().get(0).getID());
-        assertEquals(2, dao.getAll().get(1).getID());
 
         /** Test insert and get 20 games **/
         dao.clear();
-        for(int i = 0; i < 20; i++){
+        for (int i = 0; i < 20; i++) {
             GameDTO nextDTO = new GameDTO();
             nextDTO.setData("Data " + i);
-            nextDTO.setID(i);
             assertTrue(dao.create(nextDTO));
         }
 
         ArrayList<IGameDTO> results = (ArrayList) dao.getAll();
-        for(int i = 0; i < 20; i++){
+        for (int i = 0; i < 20; i++) {
             assertEquals("Data " + i, results.get(i).getData());
-            assertEquals(i, results.get(i).getID());
         }
     }
-
 }
