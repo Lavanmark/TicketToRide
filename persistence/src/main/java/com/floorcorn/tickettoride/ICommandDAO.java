@@ -8,4 +8,6 @@ public interface ICommandDAO extends IDAO{
     boolean update(ICommandDTO dto);
     List<ICommandDTO> getAll();
     boolean delete(ICommandDTO dto);
+    List<ICommandDTO> getAllForGame(int gameID);
+    boolean deleteAllForGame(int gameID);
 }

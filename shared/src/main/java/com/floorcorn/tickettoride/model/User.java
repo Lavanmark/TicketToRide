@@ -64,24 +64,6 @@ public class User {
 	}
 
 	/**
-	 * Constructor that creates a User object with the provided username, password,
-	 * fullname, and userID number.
-	 * @param username username for the new User
-	 * @param password password for the new User
-	 * @param fullName fullname of the new User
-     * @param userID id for the new User.
-	 *
-	 * @pre none of the parameters are null
-	 * @post a new User is created with the given username, password, fullname, and userID
-     */
-	public User(String username, String password, String fullName, int userID) {
-		this.username = username;
-		this.password = password;
-		this.fullName = fullName;
-		this.userID = userID;
-	}
-
-	/**
 	 * A copy constructor for a new User.
 	 * @param user the User object to be copied.
 	 *
@@ -166,6 +148,10 @@ public class User {
 	 */
 	public int getUserID() {
 		return userID;
+	}
+	
+	public void setUserID(int id) {
+		userID = id;
 	}
 
 	/**
