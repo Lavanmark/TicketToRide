@@ -196,20 +196,24 @@ public class CommandManager {
 	private void checkGameUpdate(Game game) {
 		if(gameDAO != null && commandDAO != null && game != null && ServerFacade.max_commands > -1
 				&& game.getCommands().size() > ServerFacade.max_commands) {
-			
 			//Store game before so that it is saved before we delete the commands.
 			ServerFacade.daoFactory.startTransaction();
 			IGameDTO gameDTO = ServerFacade.daoFactory.getGameDTOInstance();
 			gameDTO.setID(game.getGameID());
 			gameDTO.setData(Serializer.getInstance().serialize(game));
-			gameDAO.update(gameDTO);
-			ServerFacade.daoFactory.endTransaction(true);
-			
-			ServerFacade.daoFactory.startTransaction();
-			if(commandDAO.deleteAllForGame(game.getGameID()))
-				ServerFacade.daoFactory.endTransaction(true);
-			else
+			if(!gameDAO.update(gameDTO)) {
 				ServerFacade.daoFactory.endTransaction(false);
+				Corn.log(Level.SEVERE, "Could not update game!");
+				return;
+			}
+			
+			if(!commandDAO.deleteAllForGame(game.getGameID())) {
+				ServerFacade.daoFactory.endTransaction(false);
+				Corn.log(Level.SEVERE, "Could not delete commands for game!");
+				return;
+			}
+			
+			ServerFacade.daoFactory.endTransaction(true);
 			
 			//Do this last
 			game.clearCommands();
