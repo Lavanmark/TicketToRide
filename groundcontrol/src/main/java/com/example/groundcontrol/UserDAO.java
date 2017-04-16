@@ -2,6 +2,8 @@ package com.example.groundcontrol;
 
 import com.floorcorn.tickettoride.IUserDAO;
 import com.floorcorn.tickettoride.IUserDTO;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -10,6 +12,9 @@ import java.util.List;
  */
 
 public class UserDAO implements IUserDAO {
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("message");
+
     @Override
     public boolean create(IUserDTO dto) {
         return false;

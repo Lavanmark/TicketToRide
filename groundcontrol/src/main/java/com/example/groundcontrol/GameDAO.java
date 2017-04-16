@@ -2,6 +2,8 @@ package com.example.groundcontrol;
 
 import com.floorcorn.tickettoride.IGameDAO;
 import com.floorcorn.tickettoride.IGameDTO;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -10,6 +12,10 @@ import java.util.List;
  */
 
 public class GameDAO implements IGameDAO {
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("message");
+
+
     @Override
     public boolean create(IGameDTO dto) {
         return false;

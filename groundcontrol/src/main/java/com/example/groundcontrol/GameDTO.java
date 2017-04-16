@@ -7,23 +7,26 @@ import com.floorcorn.tickettoride.IGameDTO;
  */
 
 public class GameDTO implements IGameDTO {
+    private String data;
+    private int ID;
+
     @Override
     public String getData() {
-        return null;
+        return data;
     }
 
     @Override
     public void setData(String data) {
-
+        this.data = data;
     }
 
     @Override
     public int getID() {
-        return 0;
+        return this.ID;
     }
 
     @Override
     public void setID(int id) {
-
+        this.ID = id;
     }
 }

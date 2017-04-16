@@ -7,43 +7,48 @@ import com.floorcorn.tickettoride.IUserDTO;
  */
 
 public class UserDTO implements IUserDTO {
+    private String username;
+    private String password;
+    private String fullName;
+    private int ID;
+
     @Override
     public String getUserName() {
-        return null;
+        return username;
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getFullName() {
-        return null;
+        return fullName;
     }
 
     @Override
     public void setUserName(String userName) {
-
+        this.username = userName;
     }
 
     @Override
     public void setPassword(String password) {
-
+        this.password = password;
     }
 
     @Override
     public void setFullName(String fullName) {
-
+        this.fullName = fullName;
     }
 
     @Override
     public int getID() {
-        return 0;
+        return this.ID;
     }
 
     @Override
     public void setID(int id) {
-
+        this.ID = id;
     }
 }

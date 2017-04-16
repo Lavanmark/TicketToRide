@@ -14,9 +14,6 @@ import java.util.List;
  */
 
 public class CommandDAO implements ICommandDAO {
-   // private DatabaseReference mDatabase;
-   // private String mUserId;
-
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("message");
 
