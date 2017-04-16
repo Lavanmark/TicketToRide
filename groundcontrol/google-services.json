@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "251946055492",
+    "firebase_url": "https://nasa-3cb56.firebaseio.com",
+    "project_id": "nasa-3cb56",
+    "storage_bucket": "nasa-3cb56.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251946055492:android:79043e1f2dff1ce8",
+        "android_client_info": {
+          "package_name": "com.floorcorn.tickettoride"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251946055492-js2h7krplna24uku6s2um5ud2m4a2u04.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD70FGrt_JPXLH98J68E0fKpFtY73RvCpU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251946055492:android:1c5574fbde71feed",
+        "android_client_info": {
+          "package_name": "com.example.groundcontrol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251946055492-js2h7krplna24uku6s2um5ud2m4a2u04.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD70FGrt_JPXLH98J68E0fKpFtY73RvCpU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
