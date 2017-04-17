@@ -1,6 +1,16 @@
 package com.floorcorn.tickettoride.commands;
 
 
+import com.floorcorn.tickettoride.ICommandDAO;
+import com.floorcorn.tickettoride.ICommandDTO;
+import com.floorcorn.tickettoride.IDAOFactory;
+import com.floorcorn.tickettoride.IGameDAO;
+import com.floorcorn.tickettoride.IGameDTO;
+import com.floorcorn.tickettoride.IUserDAO;
+import com.floorcorn.tickettoride.RelationalDAOFactory;
+import com.floorcorn.tickettoride.Serializer;
+import com.floorcorn.tickettoride.ServerFacade;
+import com.floorcorn.tickettoride.exceptions.CommandRequestException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Game;
@@ -19,11 +29,27 @@ import java.util.logging.Level;
 
 public class CommandManager {
 
-	public ArrayList<ICommand> getCommandsSince(User user, Game game, int lastCommand) throws GameActionException {
+	private ICommandDAO commandDAO;
+	private IGameDAO gameDAO;
+	
+	public CommandManager(IDAOFactory factory) {
+		if(factory != null) {
+			commandDAO = factory.getCommandDAOInstance();
+			gameDAO = factory.getGameDAOInstance();
+		}
+	}
+	
+	public ArrayList<ICommand> getCommandsSince(User user, Game game, int lastCommand) throws GameActionException, CommandRequestException {
 		if(game == null)
 			throw new GameActionException("No game to get commands from!");
 		if(!game.isPlayer(user.getUserID()))
 			throw new GameActionException("User is not a player!");
+		if(!game.getCommands().isEmpty()) {
+			if(game.getCommands().get(0).getCmdID() > lastCommand + 1) {//TODO might need to be just lastcommand
+				throw new CommandRequestException("Commands reset! Request game instead.");
+			}
+		}
+		
 		ArrayList<ICommand> commands = game.getCommands();
 
 		if(lastCommand >= game.getLatestCommandID())
@@ -37,10 +63,14 @@ public class CommandManager {
 			ICommand cmd = li.next();
 			newList.add(cmd.getCmdFor(user));
 		}
+		
+		//Update commands and game if needed.
+		checkGameUpdate(game);
+		
 		return newList;
 	}
 
-	public ArrayList<ICommand> doCommand(User user, Game game, ICommand command) throws GameActionException {
+	public ArrayList<ICommand> doCommand(User user, Game game, ICommand command) throws GameActionException, CommandRequestException {
 		if(game == null)
 			throw new GameActionException("No game to get commands from!");
 		if(!game.isPlayer(user.getUserID()))
@@ -108,6 +138,10 @@ public class CommandManager {
 			if(reaction.execute(game))
 				game.addCommand(reaction);
 		}
+		
+		//Store new commands in database
+		reactions.add(command);
+		addCommandsToDB(reactions);
 
 		return getCommandsSince(user, game, lastCommandClient);
 	}
@@ -135,26 +169,55 @@ public class CommandManager {
 		startTurn.setGameID(game.getGameID());
 		startTurn.execute(game);
 		game.addCommand(startTurn);
+		
+		List<ICommand> commands = new ArrayList<>();
+		commands.add(init);
+		commands.add(faceUp);
+		commands.add(startTurn);
+		
+		addCommandsToDB(commands);
+		checkGameUpdate(game);
 	}
 	
-	private void cando() {
-//		boolean cando = false;
-//		for(int i = game.getCommands().size() - 1; i >= 0; i--) {
-//			if(game.getCommands().get(i) instanceof StartTurnCmd) {
-//				cando = true;
-//				break;
-//			}
-//			if(game.getCommands().get(i) instanceof ClaimRouteCmd) {
-//				cando = false;
-//				break;
-//			}
-//			if(game.getCommands().get(i) instanceof DrawDestinationCmd) {
-//				cando = false;
-//				break;
-//			}
-//		}
-//
-//		if(!cando) //TODO maybe not?
-//			return new ArrayList<>();
+	private void addCommandsToDB(List<ICommand> commands) {
+		if(commandDAO != null) {
+			ServerFacade.daoFactory.startTransaction();
+			for(ICommand cmd : commands) {
+				ICommandDTO cmdDTO = ServerFacade.daoFactory.getCommandDTOInstance();
+				cmdDTO.setGameID(cmd.getGameID());
+				cmdDTO.setID(cmd.getCmdID());
+				cmdDTO.setData(Serializer.getInstance().serialize(cmd));
+				commandDAO.create(cmdDTO);
+			}
+			ServerFacade.daoFactory.endTransaction(true);
+		}
 	}
+	
+	private void checkGameUpdate(Game game) {
+		if(gameDAO != null && commandDAO != null && game != null && ServerFacade.max_commands > -1
+				&& game.getCommands().size() > ServerFacade.max_commands) {
+			//Store game before so that it is saved before we delete the commands.
+			ServerFacade.daoFactory.startTransaction();
+			IGameDTO gameDTO = ServerFacade.daoFactory.getGameDTOInstance();
+			gameDTO.setID(game.getGameID());
+			gameDTO.setData(Serializer.getInstance().serialize(game));
+			if(!gameDAO.update(gameDTO)) {
+				ServerFacade.daoFactory.endTransaction(false);
+				Corn.log(Level.SEVERE, "Could not update game!");
+				return;
+			}
+			
+			if(!commandDAO.deleteAllForGame(game.getGameID())) {
+				ServerFacade.daoFactory.endTransaction(false);
+				Corn.log(Level.SEVERE, "Could not delete commands for game!");
+				return;
+			}
+			
+			ServerFacade.daoFactory.endTransaction(true);
+			
+			//Do this last
+			game.clearCommands();
+		}
+	}
+	
 }

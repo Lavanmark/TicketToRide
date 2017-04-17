@@ -10,8 +10,10 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/persistence" />
             <option value="$PROJECT_DIR$/server" />
             <option value="$PROJECT_DIR$/shared" />
+            <option value="$PROJECT_DIR$/sql" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -34,6 +34,8 @@ public class Game {
 
 	@JsonIgnore
 	private ArrayList<ICommand> commands = new ArrayList<>();
+	
+	private int lastCommand = ICommand.NO_CMD_ID;
 
 	private Board board = null;
 
@@ -52,7 +54,7 @@ public class Game {
 		this.board = new Board(game.getBoard());
 	}
 
-	public Game(String name, int size, int gameID) {
+	public Game(String name, int size) {
 		this.name = name;
 		if(size < 2) size = 2;
 		if(size > 5) size = 5;
@@ -60,7 +62,6 @@ public class Game {
 		playerListMutex.lock();
 		this.playerList = new ArrayList<>();
 		playerListMutex.unlock();
-		this.gameID = gameID;
 		this.commands = new ArrayList<>();
 		this.board = new Board(new MapFactory().getMarsRoutes(), (gameSize > 3));
 		this.board.setDeckManager(new DeckManager(true));
@@ -98,8 +99,14 @@ public class Game {
 	}
 
 	public void addCommand(ICommand command) {
-		if(command.getCmdID() > getLatestCommandID())
+		if(command.getCmdID() > getLatestCommandID()) {
 			this.commands.add(command);
+			lastCommand = command.getCmdID();
+		}
+	}
+	
+	public void clearCommands() {
+		this.commands.clear();
 	}
 
 
@@ -108,9 +115,7 @@ public class Game {
 	 * @return int ID of the last command
 	 */
 	public int getLatestCommandID() {
-		if(commands.size() <= 0)
-			return ICommand.NO_CMD_ID;
-		return commands.get(commands.size() - 1).getCmdID();
+		return lastCommand;
 	}
 
 	/**
@@ -330,6 +335,10 @@ public class Game {
 
 	public int getGameID() {
 		return gameID;
+	}
+	
+	public void setGameID(int id) {
+		gameID = id;
 	}
 
 	public ArrayList<Player> getPlayerList() {

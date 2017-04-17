@@ -5,7 +5,9 @@ import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.CommandRequestException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.exceptions.GameCreationException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.interfaces.IServer;
 import com.floorcorn.tickettoride.model.Game;
@@ -25,7 +27,12 @@ public class ServerFacade implements IServer {
 
 	private ServerModel model;
 	private CommandManager commandManager;
-
+	
+	public static IDAOFactory daoFactory = null;
+	
+	//If max_commands == -1 then store unlimited commands
+	public static int max_commands = -1;
+	
 	private static ServerFacade instance = null;
 	public static ServerFacade getInstance() {
 		if(instance == null)
@@ -33,8 +40,8 @@ public class ServerFacade implements IServer {
 		return instance;
 	}
 	private ServerFacade() {
-		model = new ServerModel();
-		commandManager = new CommandManager();
+		model = new ServerModel(daoFactory);
+		commandManager = new CommandManager(daoFactory);
 	}
 
 	@Override
@@ -59,7 +66,7 @@ public class ServerFacade implements IServer {
 	}
 
 	@Override
-	public ArrayList<ICommand> getCommandsSince(User user, int gameID, int lastCommand) throws BadUserException, GameActionException {
+	public ArrayList<ICommand> getCommandsSince(User user, int gameID, int lastCommand) throws BadUserException, GameActionException, CommandRequestException {
 		if((user = model.authenticate(user.getToken())) != null) {
 			return commandManager.getCommandsSince(user, model.getGame(gameID), lastCommand);
 		}
@@ -67,7 +74,7 @@ public class ServerFacade implements IServer {
 	}
 
 	@Override
-	public ArrayList<ICommand> doCommand(User user, ICommand command) throws BadUserException, GameActionException {
+	public ArrayList<ICommand> doCommand(User user, ICommand command) throws BadUserException, GameActionException, CommandRequestException {
 		if((user = model.authenticate(user.getToken())) != null) {
 			return commandManager.doCommand(user, model.getGame(command.getGameID()), command);
 		}
@@ -82,7 +89,7 @@ public class ServerFacade implements IServer {
 	}
 
 	@Override
-	public GameInfo createGame(User user, String name, int gameSize) throws BadUserException {
+	public GameInfo createGame(User user, String name, int gameSize) throws BadUserException, GameCreationException {
 		if(model.authenticate(user.getToken()) != null)
 			return model.addGame(name, gameSize);
 		throw new BadUserException("Could not Authenticate User!");

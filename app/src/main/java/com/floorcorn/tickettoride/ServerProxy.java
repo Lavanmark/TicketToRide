@@ -6,7 +6,9 @@ import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Message;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.CommandRequestException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
+import com.floorcorn.tickettoride.exceptions.GameCreationException;
 import com.floorcorn.tickettoride.exceptions.UserCreationException;
 import com.floorcorn.tickettoride.interfaces.IServer;
 import com.floorcorn.tickettoride.model.Game;
@@ -57,7 +59,7 @@ public class ServerProxy implements IServer {
 	}
 
 	@Override
-	public ArrayList<ICommand> getCommandsSince(User user, int gameID, int lastCommand) throws BadUserException, GameActionException {
+	public ArrayList<ICommand> getCommandsSince(User user, int gameID, int lastCommand) throws BadUserException, GameActionException, CommandRequestException {
 		Results res = clientComm.send(GET_COMMANDS, new CommandRequest(gameID, lastCommand), user);
 		if(res.isSuccess()){
 			return (ArrayList<ICommand>) res.getResult();
@@ -65,11 +67,13 @@ public class ServerProxy implements IServer {
 			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()));
 		else if(res.getException(GameActionException.class.getSimpleName()) != null)
 			throw new GameActionException(res.getException(GameActionException.class.getSimpleName()));
+		else if(res.getException(CommandRequestException.class.getSimpleName()) != null)
+			throw new CommandRequestException(res.getException(CommandRequestException.class.getSimpleName()));
 		return null;
 	}
 
 	@Override
-	public ArrayList<ICommand> doCommand(User user, ICommand command) throws BadUserException, GameActionException {
+	public ArrayList<ICommand> doCommand(User user, ICommand command) throws BadUserException, GameActionException, CommandRequestException {
 		Results res = clientComm.send(SEND_COMMAND, command, user);
 		if(res.isSuccess()){
 			return (ArrayList<ICommand>) res.getResult();
@@ -77,6 +81,8 @@ public class ServerProxy implements IServer {
 			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()));
 		else if(res.getException(GameActionException.class.getSimpleName()) != null)
 			throw new GameActionException(res.getException(GameActionException.class.getSimpleName()));
+		else if(res.getException(CommandRequestException.class.getSimpleName()) != null)
+			throw new CommandRequestException(res.getException(CommandRequestException.class.getSimpleName()));
 		return null;
 	}
 
@@ -91,12 +97,14 @@ public class ServerProxy implements IServer {
 	}
 
 	@Override
-	public GameInfo createGame(User user, String name, int gameSize) throws BadUserException {
+	public GameInfo createGame(User user, String name, int gameSize) throws BadUserException, GameCreationException {
 		Results res = clientComm.send(CREATE_GAME, new GameInfo(name, gameSize), user);
 		if(res.isSuccess()) {
 			return (GameInfo) res.getResult();
 		} else if(res.getException(BadUserException.class.getSimpleName()) != null)
 			throw new BadUserException(res.getException(BadUserException.class.getSimpleName()));
+		else if(res.getException(GameCreationException.class.getSimpleName()) != null)
+			throw new GameCreationException(res.getException(GameCreationException.class.getSimpleName()));
 		return null;
 	}
 

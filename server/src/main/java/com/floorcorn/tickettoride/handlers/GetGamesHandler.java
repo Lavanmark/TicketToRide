@@ -41,8 +41,9 @@ public class GetGamesHandler extends HandlerBase {
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			sendResponseBody(httpExchange, results);
-		} catch(IOException e) {
-			Corn.log(Level.SEVERE, e.getStackTrace());
+		} catch(Exception e) {
+			Corn.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
 		}
 	}

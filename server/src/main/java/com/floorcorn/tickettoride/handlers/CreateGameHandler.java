@@ -4,6 +4,7 @@ import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.communication.Results;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
+import com.floorcorn.tickettoride.exceptions.GameCreationException;
 import com.floorcorn.tickettoride.exceptions.SerializerException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.GameInfo;
@@ -51,7 +52,7 @@ public class CreateGameHandler extends HandlerBase {
 				gi = ServerFacade.getInstance().createGame(new User(token), gi.getName(), gi.getGameSize());
 				results = new Results(true, gi);
 				Corn.log("Created game with id: " + gi.getGameID());
-			} catch(BadUserException | SerializerException e) {
+			} catch(BadUserException | SerializerException | GameCreationException e) {
 				Corn.log(Level.SEVERE, e.getMessage());
 				results = new Results(false, e);
 			}
