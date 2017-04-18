@@ -9,6 +9,8 @@ import com.floorcorn.tickettoride.model.User;
  */
 
 public class StartTurnCmd extends StartTurnCmdData {
+    private StartTurnCmd(){}
+    
     public StartTurnCmd(Player player){
         this.player = player;
     }

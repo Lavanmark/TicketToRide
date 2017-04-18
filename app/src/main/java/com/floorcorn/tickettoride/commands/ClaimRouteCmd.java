@@ -1,6 +1,5 @@
 package com.floorcorn.tickettoride.commands;
 
-import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.Route;

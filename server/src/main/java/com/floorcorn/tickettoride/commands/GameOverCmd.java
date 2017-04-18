@@ -12,6 +12,8 @@ import java.util.List;
  */
 
 public class GameOverCmd extends GameOverCmdData {
+    private GameOverCmd(){}
+    
     public GameOverCmd(List<Player> playerList){
         this.playerList = new ArrayList<>(playerList);
     }

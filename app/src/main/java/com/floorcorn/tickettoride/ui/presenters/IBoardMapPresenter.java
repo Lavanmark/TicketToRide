@@ -1,32 +1,19 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
 import android.content.Context;
-import android.widget.Toast;
 
-import com.floorcorn.tickettoride.R;
-import com.floorcorn.tickettoride.UIFacade;
-import com.floorcorn.tickettoride.communication.GameChatLog;
-import com.floorcorn.tickettoride.communication.Message;
-import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.Route;
-import com.floorcorn.tickettoride.model.TrainCard;
-import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
-import com.floorcorn.tickettoride.states.IState;
-import com.floorcorn.tickettoride.states.PreTurnState;
 import com.floorcorn.tickettoride.ui.views.IBoardmapView;
 import com.floorcorn.tickettoride.ui.views.IView;
-import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * Created by Michael on 3/15/2017.
