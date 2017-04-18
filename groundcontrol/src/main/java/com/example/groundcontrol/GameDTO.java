@@ -28,5 +28,7 @@ public class GameDTO implements IGameDTO {
     @Override
     public void setID(int id) {
         this.ID = id;
+        if(data != null && data.contains("GameID\":-1"))
+            data = data.replace("GameID\":-1", "GameID\":"+String.valueOf(id));
     }
 }
