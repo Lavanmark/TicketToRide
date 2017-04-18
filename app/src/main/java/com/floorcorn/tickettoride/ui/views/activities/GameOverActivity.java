@@ -40,10 +40,10 @@ public class GameOverActivity extends AppCompatActivity implements IGameOverView
 
 	@Override
 	public void onStop() {
+		super.onStop();
 		presenter.unregister();
 		presenter.stopPolling();
 		backToGameList();
-		super.onStop();
 	}
 	
 	private void backToGameList() {
@@ -56,7 +56,7 @@ public class GameOverActivity extends AppCompatActivity implements IGameOverView
 			this.presenter = (IGameOverPresenter) presenter;
 	}
 
-
+	@Override
 	public void setPlayerList(List<Player> players) {
 		LinearLayout ll = (LinearLayout) findViewById(R.id.gameOverPlayerList);
 		ll.removeAllViews();

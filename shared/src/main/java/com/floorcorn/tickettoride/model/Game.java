@@ -5,10 +5,10 @@ import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.exceptions.BadUserException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.log.Corn;
-import java.util.concurrent.locks.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
 /**
@@ -23,6 +23,7 @@ public class Game {
 	public static final int INITIAL_TRAIN_CARDS = 4;
 
 	private int gameID = NO_GAME_ID;
+	@JsonIgnore
 	public ReentrantLock playerListMutex = new ReentrantLock();
 	private ArrayList<Player> playerList = null;
 	private int gameSize = -1;
@@ -50,8 +51,10 @@ public class Game {
 		this.playerList = new ArrayList<>(game.getPlayerList());
 		playerListMutex.unlock();
 		this.finished = game.isFinished();
+		this.lastCommand = game.lastCommand;
 		this.commands = new ArrayList<>(game.getCommands());
 		this.board = new Board(game.getBoard());
+		this.longestRoute = game.longestRoute;
 	}
 
 	public Game(String name, int size) {

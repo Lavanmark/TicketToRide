@@ -1,16 +1,9 @@
 package com.floorcorn.tickettoride.states;
 
-import com.floorcorn.tickettoride.exceptions.BadUserException;
-import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.Route;
-import com.floorcorn.tickettoride.model.TrainCardColor;
-import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenterStateful;
-import com.floorcorn.tickettoride.ui.views.IBoardmapView;
-
-import java.util.List;
 
 /**
  * Created by Michael on 3/15/2017.

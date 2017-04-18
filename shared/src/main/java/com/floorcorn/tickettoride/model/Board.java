@@ -1,6 +1,5 @@
 package com.floorcorn.tickettoride.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.log.Corn;
 
@@ -40,7 +39,6 @@ public class Board {
 	/**
 	 * DeckManager object that manages the cards and drawing card stuff.
 	 */
-	@JsonIgnore
     private DeckManager deckManager;
 
 	/**

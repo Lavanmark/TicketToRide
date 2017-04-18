@@ -1,9 +1,6 @@
 package com.floorcorn.tickettoride.commands;
 
-import com.floorcorn.tickettoride.exceptions.GameActionException;
-import com.floorcorn.tickettoride.model.Board;
 import com.floorcorn.tickettoride.model.Game;
-import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.User;
 
 /**
@@ -11,7 +8,7 @@ import com.floorcorn.tickettoride.model.User;
  */
 
 public class SetFaceUpDeckCmd extends SetFaceUpDeckCmdData {
-
+	
 	public SetFaceUpDeckCmd(){}
 
 	@Override

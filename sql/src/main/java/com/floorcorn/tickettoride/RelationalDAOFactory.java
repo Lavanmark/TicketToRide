@@ -41,6 +41,10 @@ public class RelationalDAOFactory implements IDAOFactory {
     /******************************************************************************************/
 
     public RelationalDAOFactory(){
+        File f = new File("." + File.separator + "plugins" + File.separator + "db");
+        if(!f.exists())
+            f.mkdirs();
+        
         startTransaction();
         this.createDatabaseTables();
         endTransaction(true);

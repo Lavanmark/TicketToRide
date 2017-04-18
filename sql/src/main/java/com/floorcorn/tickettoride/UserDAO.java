@@ -1,7 +1,5 @@
 package com.floorcorn.tickettoride;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -71,13 +69,13 @@ public class UserDAO implements IUserDAO {
     @Override
     public List<IUserDTO> getAll() {
         String sql = "SELECT ID, Username, Password, FullName FROM users ORDER BY ID";
-
-        try(Statement statement = RelationalDAOFactory.connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql)){
+        try {
+            Statement statement = RelationalDAOFactory.connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
             return parseResultsSet(resultSet);
         } catch (SQLException e){
             System.err.println(e.getMessage());
-            return null;
+            return new ArrayList<>();
         }
     }
 

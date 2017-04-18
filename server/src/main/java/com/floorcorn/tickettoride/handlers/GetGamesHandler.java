@@ -35,7 +35,8 @@ public class GetGamesHandler extends HandlerBase {
 				results = new Results(true, games);
 				Corn.log("Game list of " + games.size() + " returned to client.");
 			} catch(BadUserException e) {
-				Corn.log(Level.SEVERE, e.getStackTrace());
+				Corn.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
 				results = new Results(false, e);
 			}
 

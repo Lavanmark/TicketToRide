@@ -4,7 +4,6 @@ import com.floorcorn.tickettoride.log.Corn;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,12 +23,13 @@ public class Player {
 
 	//non info
 	private boolean turn = false;
+	public boolean drewOneCard = false;
 	private int score = 0;
 	private int trainCarsLeft = Game.INITIAL_TRAIN_CARS;
 	private int totalTrainCards = 0;
 	private int totalDestinationCards = 0;
 	private List<DestinationCard> destinationCards = null;
-	private Map<TrainCardColor, Integer> trainCards = null;
+	private EnumMap<TrainCardColor, Integer> trainCards = null;
 	private List<Route> routesClaimed = null;
 	private int longestRoute = 0;
 
@@ -49,8 +49,12 @@ public class Player {
 		this.totalDestinationCards = player.getTotalDestinationCards();
 		this.longestRoute = player.getLongestRoute();
 		this.destinationCards = new ArrayList<>(player.getDestinationCards());
-		this.trainCards = new EnumMap<>(player.getTrainCards());
+		this.trainCards = new EnumMap<>(TrainCardColor.class);
+		for(TrainCardColor color : player.getTrainCards().keySet()) {
+			trainCards.put(color, player.getTrainCards().get(color));
+		}
 		this.routesClaimed = new ArrayList<>(player.getRoutesClaimed());
+		this.drewOneCard = player.drewOneCard;
 	}
 
 	public Player(int userID, String name, int gameID, PlayerColor color) {
@@ -68,6 +72,7 @@ public class Player {
 		this.destinationCards = new ArrayList<>();
 		this.trainCards = new EnumMap<>(TrainCardColor.class);
 		this.routesClaimed = new ArrayList<>();
+		this.drewOneCard = false;
 	}
 
 	public PlayerInfo getPlayerInfo() {
