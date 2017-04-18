@@ -7,29 +7,22 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.util.SortedListAdapterCallback;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
-import com.floorcorn.tickettoride.model.Board;
 import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.Route;
-import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.TrainCardColor;
-import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
 
@@ -54,6 +47,7 @@ public class ClaimRouteDrawer extends BMDrawer {
 
     public ClaimRouteDrawer(AppCompatActivity activity, IBoardMapPresenter presenter) {
         super(activity, presenter);
+        allRoutes = new ArrayList<>();
         assert activity instanceof BoardmapActivity;
         parentActivity = (BoardmapActivity) activity;
 
@@ -78,6 +72,8 @@ public class ClaimRouteDrawer extends BMDrawer {
     }
 
     public void setList(List<Route> routes) {
+        allRoutes.clear();
+        allRoutes.addAll(routes);
         if (isOpen())
             routeAdapter.swapList(displayedList);
     }
@@ -97,7 +93,8 @@ public class ClaimRouteDrawer extends BMDrawer {
 
         routeRecyclerView = (RecyclerView) parentActivity.findViewById(R.id.route_recycler);
         assert routeRecyclerView != null;
-        this.allRoutes = parentPresenter.getRoutes();
+        this.allRoutes.clear();
+        allRoutes.addAll(parentPresenter.getRoutes());
         this.displayedList = allRoutes;
         setupRecyclerView(routeRecyclerView, allRoutes);
 
@@ -127,14 +124,15 @@ public class ClaimRouteDrawer extends BMDrawer {
     }
 
     private void listAll(){
-        allRoutes = parentPresenter.getRoutes();
+        allRoutes.clear();
+        allRoutes.addAll(parentPresenter.getRoutes());
         displayedList = allRoutes;
         routeAdapter.swapList(displayedList);
     }
 
     private void filter(String text){
-        List<Route> temp = new ArrayList<Route>();
-        for(Route d: allRoutes){
+        List<Route> temp = new ArrayList<>();
+        for(Route d : allRoutes){
             if(d.getEnglish().contains(text.toLowerCase())){
                 temp.add(d);
             }
@@ -181,7 +179,7 @@ public class ClaimRouteDrawer extends BMDrawer {
 
     public void openWildRouteDialog(Route r) {
         final Route toClaim = r;
-        final List<String> eligibleColors = new ArrayList<String>();
+        final List<String> eligibleColors = new ArrayList<>();
         Player p = parentPresenter.getGame().getPlayer(parentPresenter.getUser().getUserID());
         Map<TrainCardColor, Integer> trainCards = p.getTrainCards();
         int num_wilds = 0;
@@ -201,7 +199,7 @@ public class ClaimRouteDrawer extends BMDrawer {
         CharSequence[] eligibleArray = new CharSequence[eligibleColors.size()];
         int i = 0;
         for (String c: eligibleColors) {
-            eligibleArray[i] = (CharSequence) c;
+            eligibleArray[i] = c;
             i++;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);

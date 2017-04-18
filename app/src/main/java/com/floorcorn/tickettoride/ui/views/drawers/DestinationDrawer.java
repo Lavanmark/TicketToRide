@@ -10,16 +10,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
-import com.floorcorn.tickettoride.model.DestinationCard;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 import com.floorcorn.tickettoride.ui.views.activities.BoardmapActivity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Tyler on 3/22/2017.

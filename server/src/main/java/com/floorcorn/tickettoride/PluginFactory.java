@@ -1,15 +1,10 @@
 package com.floorcorn.tickettoride;
 
-import com.floorcorn.tickettoride.model.City;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URLClassLoader;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by Tyler on 4/12/2017.

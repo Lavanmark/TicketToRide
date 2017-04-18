@@ -7,6 +7,7 @@ dependencies {
     compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
     compile files('../plugins/sql.jar')
     compile files('../plugins/libs/sqlite-jdbc-3.16.1.jar')
+    compile files('../plugins/groundcontrol.jar')
 }
 
 

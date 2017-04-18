@@ -2,7 +2,6 @@ package com.floorcorn.tickettoride.commands;
 
 import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.Player;
-import com.floorcorn.tickettoride.model.TrainCard;
 import com.floorcorn.tickettoride.model.User;
 
 /**
@@ -28,8 +27,10 @@ public class DrawTrainCardCmd extends DrawTrainCardCmdData {
     public boolean execute(Game game) {
         if(drawingPlayer.isCensoredPlayer())
             game.updatePlayer(drawingPlayer);
-        else
+        else {
+            drawingPlayer.drewOneCard = firstDraw;
             return game.addCard(drawingPlayer, cardDrawn);
+        }
         return true;
     }
 }

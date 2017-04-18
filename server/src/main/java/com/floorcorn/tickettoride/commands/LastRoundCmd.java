@@ -9,6 +9,8 @@ import com.floorcorn.tickettoride.model.User;
  */
 
 public class LastRoundCmd extends LastRoundCmdData {
+    private LastRoundCmd(){}
+    
     public LastRoundCmd(Player player){
         this.lastPlayerID = player.getPlayerID();
     }

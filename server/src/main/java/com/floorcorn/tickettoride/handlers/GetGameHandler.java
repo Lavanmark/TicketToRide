@@ -49,6 +49,7 @@ public class GetGameHandler extends HandlerBase {
 				if (gi == null)
 					throw new SerializerException("Serializer returned null");
 				Game game = ServerFacade.getInstance().getGame(new User(token), gi.getGameID());
+				game.getBoard().setDeckManager(null);
 				results = new Results(true, game);
 				Corn.log("Game: " + game.getGameID() + " returned to user.");
 			} catch(BadUserException | SerializerException e) {

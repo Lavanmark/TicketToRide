@@ -1,12 +1,13 @@
 package com.floorcorn.tickettoride.states;
 
-import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.TestPresenters.MockBoardMapPresenter;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Michael on 3/22/2017.

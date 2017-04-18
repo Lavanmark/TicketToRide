@@ -56,8 +56,9 @@ public class GetCommandsHandler extends HandlerBase {
 			
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			sendResponseBody(httpExchange, results);
-		} catch(IOException e) {
+		} catch(Exception e) {
 			Corn.log(Level.SEVERE, e.getStackTrace());
+			e.printStackTrace();
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
 		}
 	}
