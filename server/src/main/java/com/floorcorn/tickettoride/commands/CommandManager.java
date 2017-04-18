@@ -6,15 +6,12 @@ import com.floorcorn.tickettoride.ICommandDTO;
 import com.floorcorn.tickettoride.IDAOFactory;
 import com.floorcorn.tickettoride.IGameDAO;
 import com.floorcorn.tickettoride.IGameDTO;
-import com.floorcorn.tickettoride.IUserDAO;
-import com.floorcorn.tickettoride.RelationalDAOFactory;
 import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
 import com.floorcorn.tickettoride.exceptions.CommandRequestException;
 import com.floorcorn.tickettoride.exceptions.GameActionException;
 import com.floorcorn.tickettoride.log.Corn;
 import com.floorcorn.tickettoride.model.Game;
-import com.floorcorn.tickettoride.model.Player;
 import com.floorcorn.tickettoride.model.User;
 
 import java.util.ArrayList;
@@ -45,9 +42,11 @@ public class CommandManager {
 		if(!game.isPlayer(user.getUserID()))
 			throw new GameActionException("User is not a player!");
 		if(!game.getCommands().isEmpty()) {
-			if(game.getCommands().get(0).getCmdID() > lastCommand + 1) {//TODO might need to be just lastcommand
+			if(game.getCommands().get(0).getCmdID() > lastCommand) {
 				throw new CommandRequestException("Commands reset! Request game instead.");
 			}
+		} else if(game.getLatestCommandID() > lastCommand){
+			throw new CommandRequestException("Commands reset! Request game instead.");
 		}
 		
 		ArrayList<ICommand> commands = game.getCommands();
@@ -56,12 +55,13 @@ public class CommandManager {
 			return new ArrayList<>();
 
 
-		ListIterator<ICommand> li = commands.listIterator(lastCommand + 1);
+		ListIterator<ICommand> li = commands.listIterator();
 
 		ArrayList<ICommand> newList = new ArrayList<>();
 		while(li.hasNext()) {
 			ICommand cmd = li.next();
-			newList.add(cmd.getCmdFor(user));
+			if(cmd.getCmdID() > lastCommand)
+				newList.add(cmd.getCmdFor(user));
 		}
 		
 		//Update commands and game if needed.

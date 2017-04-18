@@ -2,12 +2,9 @@ package com.floorcorn.tickettoride.ui.views.drawers;
 
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.floorcorn.tickettoride.R;
-import com.floorcorn.tickettoride.ui.presenters.BoardmapPresenter;
 import com.floorcorn.tickettoride.ui.presenters.IBoardMapPresenter;
 
 /**

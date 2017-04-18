@@ -2,7 +2,6 @@ package com.floorcorn.tickettoride.serverModel;
 
 import com.floorcorn.tickettoride.ICommandDAO;
 import com.floorcorn.tickettoride.ICommandDTO;
-import com.floorcorn.tickettoride.IDAO;
 import com.floorcorn.tickettoride.IDAOFactory;
 import com.floorcorn.tickettoride.IGameDAO;
 import com.floorcorn.tickettoride.IGameDTO;
@@ -10,6 +9,7 @@ import com.floorcorn.tickettoride.IUserDAO;
 import com.floorcorn.tickettoride.IUserDTO;
 import com.floorcorn.tickettoride.Serializer;
 import com.floorcorn.tickettoride.ServerFacade;
+import com.floorcorn.tickettoride.commands.ClaimRouteCmd;
 import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.communication.GameChatLog;
 import com.floorcorn.tickettoride.communication.Message;
@@ -21,6 +21,7 @@ import com.floorcorn.tickettoride.model.Game;
 import com.floorcorn.tickettoride.model.GameInfo;
 import com.floorcorn.tickettoride.model.PlayerColor;
 import com.floorcorn.tickettoride.model.User;
+
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -90,10 +91,15 @@ public class ServerModel {
 					for(ICommand cmd : unorderedCmds) {
 						if(cmd.getCmdID() <= game.getLatestCommandID())
 							continue;
-						cmd.execute(game);
+						if(cmd instanceof ClaimRouteCmd)
+							((ClaimRouteCmd)cmd).reloadExecute(game);
+						else
+							cmd.execute(game);
 						game.addCommand(cmd);
 					}
 					games.add(game);
+					GameChatLog gameChatLog = new GameChatLog();
+					chatManager.addGameChatLog(game.getGameID(), gameChatLog);
 				}
 			}
 			ServerFacade.daoFactory.endTransaction(false);
@@ -130,7 +136,7 @@ public class ServerModel {
 	 */
 	public User authenticate(String token) throws BadUserException {
 		for(User u : users) {
-			if(u.getToken().equals(token))
+			if(token.equals(u.getToken()))
 				return u;
 		}
 		throw new BadUserException("Invalid user token!");
@@ -285,7 +291,7 @@ public class ServerModel {
 	}
 
 	public Set<GameInfo> getGames() {
-		Set<GameInfo> gameInfos = new HashSet<GameInfo>();
+		Set<GameInfo> gameInfos = new HashSet<>();
 		for(Game g : games) {
 			gameInfos.add(g.getGameInfo());
 		}

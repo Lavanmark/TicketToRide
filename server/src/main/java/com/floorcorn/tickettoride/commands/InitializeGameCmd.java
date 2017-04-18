@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 public class InitializeGameCmd extends InitializeGameCmdData {
 
+	private InitializeGameCmd(){}
+	
 	public InitializeGameCmd(ArrayList<Player> players) {
 		this.players = players;
 	}

@@ -1,6 +1,5 @@
 package com.floorcorn.tickettoride.ui.presenters;
 
-import com.floorcorn.tickettoride.ClientCommunicator;
 import com.floorcorn.tickettoride.UIFacade;
 import com.floorcorn.tickettoride.model.User;
 import com.floorcorn.tickettoride.ui.views.ILoginView;

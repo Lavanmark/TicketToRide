@@ -63,6 +63,7 @@ public class BoardmapPresenter
         this.game = UIFacade.getInstance().getCurrentGame();
         this.user = UIFacade.getInstance().getUser();
         setDestCardsToDiscard(new DestinationCard[3]);
+        this.setState(new PreTurnState());
 
         register();
     }
@@ -98,27 +99,7 @@ public class BoardmapPresenter
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof Game) {
-            game = (Game) arg;
-            if (!game.hasStarted()) {
-                view.checkStarted();
-            } else {
-                view.checkStarted();
-	            if(game.isFinished()) {
-		            view.showGameOver();
-		            return;
-	            }
-                view.setFaceUpTrainCards();
-                view.setPlayerTrainCardList(game.getPlayer(user.getUserID()).getTrainCards());
-                view.setPlayerDestinationCardList(game.getPlayer(user.getUserID()).getDestinationCards());
-                view.setClaimRoutesList(game.getRoutes());
-                if (destCardsToDiscard == null || destCardsToDiscard[0] == null)
-                    view.setDestinationCardChoices();
-                //initialize state to PreTurn state for all players
-                if (state == null)
-                    setState(new PreTurnState());
-                //if waiting for your turn, check if it is your turn
-                state.setTurn(this, game.getPlayer(user.getUserID()));
-            }
+            setGame((Game) arg);
         }
         if (arg instanceof GameChatLog) {
             view.setChatLog((GameChatLog) arg);
@@ -143,6 +124,26 @@ public class BoardmapPresenter
     @Override
     public void setGame(Game game) {
         this.game = game;
+        if (!game.hasStarted()) {
+            view.checkStarted();
+        } else {
+            view.checkStarted();
+            if(game.isFinished()) {
+                view.showGameOver();
+                return;
+            }
+            view.setFaceUpTrainCards();
+            view.setPlayerTrainCardList(game.getPlayer(user.getUserID()).getTrainCards());
+            view.setPlayerDestinationCardList(game.getPlayer(user.getUserID()).getDestinationCards());
+            view.setClaimRoutesList(game.getRoutes());
+            if (destCardsToDiscard == null || destCardsToDiscard[0] == null)
+                view.setDestinationCardChoices();
+            //initialize state to PreTurn state for all players
+            if (state == null)
+                setState(new PreTurnState());
+            //if waiting for your turn, check if it is your turn
+            state.setTurn(this, game.getPlayer(user.getUserID()));
+        }
     }
 
     @Override
@@ -262,6 +263,7 @@ public class BoardmapPresenter
     @Override
     public void startPollingCommands() {
         stopPolling();
+        setGame(UIFacade.getInstance().getCurrentGame());
         UIFacade.getInstance().pollCurrentGameParts(view);
     }
 

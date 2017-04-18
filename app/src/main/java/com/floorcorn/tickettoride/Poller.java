@@ -1,6 +1,5 @@
 package com.floorcorn.tickettoride;
 
-import com.floorcorn.tickettoride.clientModel.ClientModel;
 import com.floorcorn.tickettoride.commands.CommandManager;
 import com.floorcorn.tickettoride.commands.ICommand;
 import com.floorcorn.tickettoride.communication.GameChatLog;
@@ -80,7 +79,8 @@ public class Poller {
 					public void run() {
 						if(commandManager.currentGameID() > -1) {
 							try {
-								//System.out.println("getting commands");
+//								System.out.println("getting commands since " + commandManager.getLastCommandExecuted());
+//								System.out.println("Usera: " +commandManager.getUser().getUserID());
 								ArrayList<ICommand> commands = serverProxy.getCommandsSince(commandManager.getUser(), commandManager.currentGameID(), commandManager.getLastCommandExecuted());
 								if(commands == null) {
 									stopPollingAll();

@@ -23,7 +23,6 @@ public class GameOverPresenter implements IGameOverPresenter, Observer{
 	public GameOverPresenter() {
 		UIFacade.getInstance().registerObserver(this);
 		game = UIFacade.getInstance().getCurrentGame();
-		
 	}
 
 	@Override

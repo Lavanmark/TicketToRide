@@ -27,6 +27,11 @@ public class ClaimRouteCmd extends ClaimRouteCmdData {
         cmd.setGameID(this.gameID);
         return cmd;
     }
+    
+    public void reloadExecute(Game game){
+        game.updatePlayer(claimingPlayer);
+        game.getBoard().updateRoute(routeToClaim);
+    }
 
     @Override
     public boolean execute(Game game) {

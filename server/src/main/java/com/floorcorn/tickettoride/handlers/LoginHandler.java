@@ -38,14 +38,16 @@ public class LoginHandler extends HandlerBase {
 				results = new Results(true, userInfo);
 				Corn.log("User " + userInfo.getUsername() + " has logged in.");
 			} catch(BadUserException | SerializerException e) {
-				Corn.log(Level.SEVERE, e.getStackTrace());
+				Corn.log(Level.SEVERE, e.getMessage());
+				e.printStackTrace();
 				results = new Results(false, e);
 			}
 
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			sendResponseBody(httpExchange, results);
-		} catch(IOException e){
-			Corn.log(Level.SEVERE, e.getStackTrace());
+		} catch(Exception e){
+			Corn.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
 			httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
 		}
 	}

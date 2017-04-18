@@ -2,7 +2,6 @@ package com.floorcorn.tickettoride.commands;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.floorcorn.tickettoride.model.Game;
-import com.floorcorn.tickettoride.model.TrainCardColor;
 import com.floorcorn.tickettoride.model.User;
 
 /**
