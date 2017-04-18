@@ -11,3 +11,4 @@
 *.lck
 *.1
 *.db
+/plugins/.GCDB
