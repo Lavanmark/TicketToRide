@@ -3,10 +3,14 @@ package com.example.groundcontrol;
 import com.floorcorn.tickettoride.ICommandDAO;
 import com.floorcorn.tickettoride.ICommandDTO;
 import com.google.firebase.auth.*;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,22 +19,45 @@ import java.util.List;
 
 public class CommandDAO implements ICommandDAO {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("message");
+    DatabaseReference myRef = database.getReference();
 
     @Override
     public boolean create(ICommandDTO dto) {
+        String gameID = new StringBuffer(dto.getGameID()).toString();
+        String ID = new StringBuffer(dto.getID()).toString();
+        //String string = dto.getData();
 
-        return false;
+        myRef.child(gameID).child(ID).setValue(dto);
+        return true;
     }
 
     @Override
     public boolean update(ICommandDTO dto) {
-        return false;
+        String gameID = new StringBuffer(dto.getGameID()).toString();
+        String ID = new StringBuffer(dto.getID()).toString();
+
+        myRef.child(gameID).child(ID).setValue(dto);
+        return true;
     }
 
     @Override
     public List<ICommandDTO> getAll() {
-        return null;
+        String gameID = new StringBuffer(dto.getGameID()).toString();
+        List<ICommandDTO> list = new ArrayList<ICommandDTO>();
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot child: dataSnapshot.getChildren()){
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        })
     }
 
     @Override
