@@ -70,6 +70,7 @@ public class ServerModel {
 			for(IGameDTO gameDTO : gameDTOList) {
 				Game game = Serializer.getInstance().deserializeGame(gameDTO.getData());
 				if(game != null) {
+					game.setGameID(gameDTO.getID());
 					List<ICommandDTO> cmdDTOs = commandDAO.getAllForGame(game.getGameID());
 					if(cmdDTOs == null)
 						continue;

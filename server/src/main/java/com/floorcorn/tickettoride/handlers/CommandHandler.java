@@ -53,13 +53,12 @@ public class CommandHandler extends HandlerBase {
 		        Corn.log("Command executed and " + commands.size() + " commands returned to client.");
 	        } catch(BadUserException | GameActionException | SerializerException | CommandRequestException e) {
 		        Corn.log(Level.SEVERE, e.getMessage());
-		        e.printStackTrace();
 		        results = new Results(false, e);
 	        }
 
 	        httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 	        sendResponseBody(httpExchange, results);
-        } catch(Exception e) {
+        } catch(IOException e) {
 	        Corn.log(Level.SEVERE, e.getMessage());
 	        e.printStackTrace();
             httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
